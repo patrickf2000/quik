@@ -14,6 +14,8 @@
 void confirm(std::vector<Token> actual, std::vector<Token> expected) {
 	if (actual.size() != expected.size()) {
 		std::cout << "Error: Sizes do not match!" << std::endl;
+		std::cout << "Actual: " << actual.size() << std::endl;
+		std::cout << "Expected: " << expected.size() << std::endl;
 		std::exit(1);
 	}
 
@@ -23,6 +25,8 @@ void confirm(std::vector<Token> actual, std::vector<Token> expected) {
 		
 		if (t1.type != t2.type) {
 			std::cout << "Error: Types do not match!" << std::endl;
+			std::cout << "Actual: " << t1.type << std::endl;
+			std::cout << "Expected: " << t2.type << std::endl;
 			std::exit(1);
 		}
 		

@@ -1,2 +1,8 @@
 include stdio
 INCLUDE~ID>stdio~
+
+fn main
+FUNC_DEC~ID>main~
+
+fn main()
+FUNC_DEC~ID>main~LEFT_PAREN~RIGHT_PAREN~
