@@ -1,0 +1,5 @@
+include stdio
+
+fn main()
+	puts("Hello, world!")
+end
