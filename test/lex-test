@@ -6,3 +6,9 @@ FUNC_DEC~ID>main~
 
 fn main()
 FUNC_DEC~ID>main~LEFT_PAREN~RIGHT_PAREN~
+
+puts(x)
+ID>puts~LEFT_PAREN~ID>x~RIGHT_PAREN~
+
+puts((x))
+ID>puts~LEFT_PAREN~LEFT_PAREN~ID>x~RIGHT_PAREN~RIGHT_PAREN~
