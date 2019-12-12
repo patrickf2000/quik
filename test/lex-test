@@ -12,3 +12,9 @@ ID>puts~LEFT_PAREN~ID>x~RIGHT_PAREN~
 
 puts((x))
 ID>puts~LEFT_PAREN~LEFT_PAREN~ID>x~RIGHT_PAREN~RIGHT_PAREN~
+
+puts("Hello!")
+ID>puts~LEFT_PAREN~STRING>Hello!~RIGHT_PAREN~
+
+end
+END~

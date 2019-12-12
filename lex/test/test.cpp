@@ -16,6 +16,11 @@ void confirm(std::vector<Token> actual, std::vector<Token> expected) {
 		std::cout << "Error: Sizes do not match!" << std::endl;
 		std::cout << "Actual: " << actual.size() << std::endl;
 		std::cout << "Expected: " << expected.size() << std::endl;
+		std::cout << std::endl;
+		
+		for (auto t : actual) {
+			std::cout << t.type << std::endl;
+		}
 		std::exit(1);
 	}
 
@@ -77,7 +82,7 @@ void test(bool verbose) {
 			
 				if (contains(current, '>')) {
 					std::string type = strtok((char *)current.c_str(), ">");
-					t.id = strtok(NULL, " ");
+					t.id = strtok(NULL, ">");
 					t.type = str2type(type);
 				} else {
 					t.type = str2type(current);

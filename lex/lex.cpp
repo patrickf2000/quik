@@ -7,16 +7,32 @@ bool is_separator(char c) {
 	
 	return false;
 }
-#include <iostream>
+
 //Tokenize a string
 std::vector<Token> tokenize(std::string line) {
 	line += " ";	//No purpose, makes my life easier :)
 	
 	std::vector<Token> tokens;
 	std::string current = "";
+	bool in_quote = false;
 	
 	for (auto c : line) {
-		if (is_separator(c)) {
+		if (c == '\"' && in_quote) {
+			Token t;
+			t.type = TokenType::STRING;
+			t.id = current.c_str();
+			tokens.push_back(t);
+			
+			current = "";
+			in_quote = false;
+			continue;
+		} else if (c == '\"') {
+			in_quote = true;
+			continue;
+		} else if (in_quote) {
+			current += c;
+			continue;
+		} else if (is_separator(c)) {
 			Token t;
 			
 			if (current == "include") {
@@ -24,6 +40,9 @@ std::vector<Token> tokenize(std::string line) {
 				tokens.push_back(t);
 			} else if (current == "fn") {
 				t.type = TokenType::FUNC_DEC;
+				tokens.push_back(t);
+			} else if (current == "end") {
+				t.type = TokenType::END;
 				tokens.push_back(t);
 			} else if (current.size() > 0) {
 				t.type = TokenType::ID;
@@ -57,5 +76,7 @@ TokenType str2type(std::string in) {
 	else if (in == "FUNC_DEC") return TokenType::FUNC_DEC;
 	else if (in == "LEFT_PAREN") return TokenType::LEFT_PAREN;
 	else if (in == "RIGHT_PAREN") return TokenType::RIGHT_PAREN;
+	else if (in == "STRING") return TokenType::STRING;
+	else if (in == "END") return TokenType::END;
 	return TokenType::NONE;
 }
