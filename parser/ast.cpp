@@ -2,8 +2,6 @@
 
 #include "ast.hh"
 
-class AstNode;
-
 //The include AST type
 AstInclude::AstInclude() {
 	type = AstType::Include;
