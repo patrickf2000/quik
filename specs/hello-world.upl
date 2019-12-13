@@ -1,5 +1,3 @@
-include stdio
-
-fn main()
-	puts("Hello, world!")
+fn main
+	println("Hello, world!")
 end
