@@ -60,9 +60,11 @@ AstNode *build_node(Line ln) {
 		if (tokens.at(1).type == TokenType::LEFT_PAREN) {
 			std::string name = first.id;
 			std::vector<Token> args;
+			Token last;
 			
 			for (int i = 2; i<tokens.size(); i++) {
 				auto t = tokens.at(i);
+				last = t;
 			
 				if (t.type == TokenType::RIGHT_PAREN) {
 					break;
@@ -71,6 +73,10 @@ AstNode *build_node(Line ln) {
 				}
 				
 				args.push_back(t);
+			}
+			
+			if (last.type != TokenType::RIGHT_PAREN) {
+				syntax_error(ln, "No closing token");
 			}
 			
 			AstFuncCall *call = new AstFuncCall(name, args);
