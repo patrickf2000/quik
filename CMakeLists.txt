@@ -16,6 +16,7 @@ set(LEX_TEST_SRC
 
 set(PARSER_SRC
 	parser/ast.cpp
+	parser/parse.cpp
 )
 
 set(PARSER_TEST_SRC

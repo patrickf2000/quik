@@ -2,6 +2,27 @@
 
 #include "ast.hh"
 
+class AstNode;
+
+//The include AST type
+AstInclude::AstInclude() {
+	type = AstType::Include;
+}
+
+AstInclude::AstInclude(std::string path) {
+	include = path;
+	type = AstType::Include;
+}
+
+std::string AstInclude::get_include() {
+	return include;
+}
+
+void AstInclude::set_include(std::string path) {
+	include = path;
+}
+
+//Returns an AST type as a string (debugging purposes)
 std::string ast2str(AstType type) {
 	switch (type) {
 		case AstType::Global: return "Global";
@@ -13,6 +34,7 @@ std::string ast2str(AstType type) {
 	return "NONE";
 }
 
+//Prints an AST tree
 void print_tree(AstNode *node, int indent) {
 	for (int i = 0; i<indent; i++) {
 		std::cout << "  ";

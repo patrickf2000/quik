@@ -1,33 +1,31 @@
 #include <iostream>
+#include <string>
+#include <fstream>
+
+#include <lex.hh>
 #include <ast.hh>
 
+#include "parse.hh"
+
 int main(int argc, char *argv[]) {
-	AstNode *file = new AstNode(AstType::Global);
+	std::vector<std::string> contents;
+	contents.push_back("include stdio");
+	contents.push_back("include stdlib");
+	contents.push_back("fn main");
+	contents.push_back("puts(\"Hello, world!\")");
+	contents.push_back("puts(\"UPL!!\")");
+	contents.push_back("end");
 	
-	AstNode *i1 = new AstNode(AstType::Include);
-	AstNode *i2 = new AstNode(AstType::Include);
+	for (auto ln : contents) {
+		auto tokens = tokenize(ln);
+		AstNode *node = build_node(tokens);
+		
+		if (node != nullptr) {
+			print_tree(node);
+			delete node;
+		}
+	}
 	
-	AstNode *fmain = new AstNode(AstType::FuncDec);
-	AstNode *fc1 = new AstNode(AstType::FuncCall);
-	AstNode *fc2 = new AstNode(AstType::FuncCall);
-	
-	file->children.push_back(i1);
-	file->children.push_back(i2);
-	file->children.push_back(fmain);
-	
-	fmain->children.push_back(fc1);
-	fmain->children.push_back(fc2);
-	
-	print_tree(file);
-	
-	delete fc1;
-	delete fc2;
-	
-	delete fmain;
-	delete i1;
-	delete i2;
-	
-	delete file;
-	
+	//AstNode *file = new AstNode(AstType::Global);
 	return 0;
 }
