@@ -6,7 +6,6 @@
 #include <cstdlib>
 #include <string.h>
 
-#include "test.hh"
 #include "../strutils.hh"
 #include "../lex.hh"
 
@@ -102,3 +101,13 @@ void test(bool verbose) {
 	std::cout << std::endl;
 }
 
+int main(int argc, char **argv) {
+	/*if (argc <= 1) {
+		std::cout << "Fatal error: No input file specified." << std::endl;
+		std::exit(1);
+	}*/
+
+	test(false);
+	
+	return 0;
+}
