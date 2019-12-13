@@ -11,10 +11,16 @@ set(PARSER_SRC
 	parser/strutils.cpp
 )
 
+set(COMPILER_SRC
+	compiler/main.cpp
+)
+
 add_library(uplparser ${PARSER_SRC})
 
 add_executable(lxtest parser/test/lex_test.cpp)
 add_executable(parser_test parser/test/parser_test.cpp)
+add_executable(uplc ${COMPILER_SRC})
 
 target_link_libraries(lxtest uplparser)
 target_link_libraries(parser_test uplparser)
+target_link_libraries(uplc uplparser)
