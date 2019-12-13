@@ -5,6 +5,7 @@ include_directories(parser)
 
 set(PARSER_SRC
 	parser/ast.cpp
+	parser/build.cpp
 	parser/lex.cpp
 	parser/parse.cpp
 	parser/strutils.cpp
