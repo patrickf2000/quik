@@ -82,3 +82,23 @@ AstNode *build_node(std::vector<Token> tokens) {
 
 	return nullptr;
 }
+
+//Builds a tree from a given list of nodes
+int build_tree(std::vector<AstNode *> nodes, AstNode *top, int index) {
+	int i = index;
+	
+	for (; i<nodes.size(); i++) {
+		auto c = nodes.at(i);
+		
+		if (c->type == AstType::FuncDec) {
+			top->children.push_back(c);
+			i = build_tree(nodes, c, i+1);
+		} else if (c->type == AstType::End) {
+			return i;
+		} else {
+			top->children.push_back(c);
+		}
+	}
+	
+	return i;
+}
