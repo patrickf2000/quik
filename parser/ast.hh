@@ -13,6 +13,7 @@ enum AstType {
 	End
 };
 
+//The base of all our nodes
 class AstNode {
 public:
 	explicit AstNode() {}
@@ -21,12 +22,17 @@ public:
 	std::vector<AstNode *> children;
 };
 
+//Represents a file to be included
 class AstInclude : public AstNode {
 public:
-	explicit AstInclude();
-	explicit AstInclude(std::string path);
-	std::string get_include();
-	void set_include(std::string path);
+	explicit AstInclude() { type = AstType::Include; }
+	explicit AstInclude(std::string path) {
+		type = AstType::Include;
+		include = path;
+	}
+	
+	std::string get_include() { return include; }
+	void set_include(std::string path) { include = path; }
 private:
 	std::string include;
 };

@@ -2,24 +2,6 @@
 
 #include "ast.hh"
 
-//The include AST type
-AstInclude::AstInclude() {
-	type = AstType::Include;
-}
-
-AstInclude::AstInclude(std::string path) {
-	include = path;
-	type = AstType::Include;
-}
-
-std::string AstInclude::get_include() {
-	return include;
-}
-
-void AstInclude::set_include(std::string path) {
-	include = path;
-}
-
 //Returns an AST type as a string (debugging purposes)
 std::string ast2str(AstType type) {
 	switch (type) {
