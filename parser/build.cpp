@@ -43,7 +43,7 @@ AstNode *build_ast(std::vector<Line> lines) {
 	std::vector<AstNode *> nodes;
 	
 	for (auto ln : lines) {
-		auto n = build_node(ln.tokens);
+		auto n = build_node(ln);
 		
 		if (n == nullptr) {
 			syntax_error(ln, "Unknown input");

@@ -12,21 +12,19 @@ void syntax_error(Line ln, std::string msg) {
 }
 
 //Builds an AST node from a string of tokens
-AstNode *build_node(std::vector<Token> tokens) {
+AstNode *build_node(Line ln) {
+	auto tokens = ln.tokens;
 	auto first = tokens.at(0);
 	
 	//Build an include node
 	if (first.type == TokenType::INCLUDE) {
 		if (tokens.size() != 2) {
-			std::cout << "Error at include: invalid size." << std::endl;
-			std::exit(1);
+			syntax_error(ln, "Invalid size.");
 		}
 		
 		Token id = tokens.at(1);
 		if (id.type != TokenType::ID) {
-			std::cout << "Syntax Error: Second element of an include statement "
-				<< "should be an ID." << std::endl;
-			std::exit(1);
+			syntax_error(ln, "Second element of an include statement should be an ID.");
 		}
 	
 		AstInclude *node = new AstInclude(id.id);
@@ -36,15 +34,12 @@ AstNode *build_node(std::vector<Token> tokens) {
 	//TODO: We need arguments
 	} else if (first.type == TokenType::FUNC_DEC) {
 		if (tokens.size() < 2) {
-			std::cout << "Syntax element: Invalid size for function declaration." << std::endl;
-			std::exit(1);
+			syntax_error(ln, "Invalid size.");
 		}
 		
 		Token id = tokens.at(1);
 		if (id.type != TokenType::ID) {
-			std::cout << "Syntax Error: Second element of an include statement "
-				<< "should be an ID." << std::endl;
-			std::exit(1);
+			syntax_error(ln, "No function name specified!");
 		}
 		
 		AstFuncDec *fd = new AstFuncDec(id.id);
@@ -58,8 +53,7 @@ AstNode *build_node(std::vector<Token> tokens) {
 	//Handle if the first node is an ID
 	} else if (first.type == TokenType::ID) {
 		if (tokens.size() < 2) {
-			std::cout << "Invalid syntax: ID only" << std::endl;
-			std::exit(1);
+			syntax_error(ln, "Only an ID was specified!");
 		}
 		
 		//Build a function call
