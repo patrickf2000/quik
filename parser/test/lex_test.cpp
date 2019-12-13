@@ -40,12 +40,12 @@ void confirm(std::vector<Token> actual, std::vector<Token> expected) {
 
 //Tests our lexical function
 //To simplify things, we use an external test file
-void test(bool verbose) {
+void test(const char *path, bool verbose) {
 	std::cout << "Lexical test..." << std::endl;
 	std::vector<std::string> content;
 	
 	//First, load the test file
-	std::ifstream reader("../test/lex-test");
+	std::ifstream reader(path);
 	if (reader.is_open()) {
 		std::string ln = "";
 		
@@ -102,12 +102,12 @@ void test(bool verbose) {
 }
 
 int main(int argc, char **argv) {
-	/*if (argc <= 1) {
+	if (argc <= 1) {
 		std::cout << "Fatal error: No input file specified." << std::endl;
 		std::exit(1);
-	}*/
+	}
 
-	test(false);
+	test(argv[1], false);
 	
 	return 0;
 }
