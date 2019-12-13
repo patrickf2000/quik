@@ -86,6 +86,54 @@ AstNode *build_node(Line ln) {
 		} else if (tokens.at(1).type == TokenType::ASSIGN) {
 			std::cout << "VAR!" << std::endl;
 		}
+		
+	//Build variable declarations
+	//Build a byte assignment
+	} else if (first.type == TokenType::T_BYTE) {
+	
+	} else if (first.type == TokenType::T_CHAR) {
+	
+	} else if (first.type == TokenType::T_SHORT) {
+	
+	} else if (first.type == TokenType::T_INT) {
+		//Start with basic syntax checking
+		if (tokens.size() != 4) {
+			syntax_error(ln, "Missing elements in declaration!");
+		}
+		
+		Token id = tokens.at(1);
+		Token ival = tokens.at(3);
+		
+		if (id.type != TokenType::ID) {
+			syntax_error(ln, "A name must be specified for a variable.");
+		}
+		
+		if (tokens.at(2).type != TokenType::ASSIGN) {
+			syntax_error(ln, "Expected \'=\'");
+		}
+		
+		AstVarDec *vd = new AstVarDec(id.id);
+		
+		if (ival.type == TokenType::NO) {
+			int no = std::stoi(ival.id);
+			AstInt *i = new AstInt(no);
+			vd->children.push_back(i);
+		} else {
+			AstID *i = new AstID(ival.id);
+			vd->children.push_back(i);
+		}
+		
+		return vd;
+	} else if (first.type == TokenType::T_LONG) {
+	
+	} else if (first.type == TokenType::T_FLOAT) {
+	
+	} else if (first.type == TokenType::T_BOOL) {
+	
+	} else if (first.type == TokenType::T_STR) {
+	
+	} else if (first.type == TokenType::VAR) {
+	
 	}
 
 	return nullptr;
