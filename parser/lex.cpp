@@ -7,7 +7,9 @@
 
 bool is_separator(char c) {
 	if (c == ' ' || c == '(' || c == ')'
-		|| c == '=') {
+		|| c == '=' || c == ','
+		|| c == '+' || c == '-' || c == '*' || c == '/'
+		|| c == '%') {
 		return true;
 	}
 	
@@ -152,6 +154,26 @@ std::vector<Token> tokenize(std::string line) {
 				Token t;
 				t.type = TokenType::ASSIGN;
 				tokens.push_back(t);
+			} else if (c == '+') {
+				Token t;
+				t.type = TokenType::PLUS;
+				tokens.push_back(t);
+			} else if (c == '-') {
+				Token t;
+				t.type = TokenType::MINUS;
+				tokens.push_back(t);
+			} else if (c == '*') {
+				Token t;
+				t.type = TokenType::MUL;
+				tokens.push_back(t);
+			} else if (c == '/') {
+				Token t;
+				t.type = TokenType::DIV;
+				tokens.push_back(t);
+			} else if (c == '%') {
+				Token t;
+				t.type = TokenType::MOD;
+				tokens.push_back(t);
 			}
 		} else {
 			current += c;
@@ -186,5 +208,10 @@ TokenType str2type(std::string in) {
 	else if (in == "DEC") return TokenType::DEC;
 	else if (in == "B_TRUE") return TokenType::B_TRUE;
 	else if (in == "B_FALSE") return TokenType::B_FALSE;
+	else if (in == "PLUS") return TokenType::PLUS;
+	else if (in == "MINUS") return TokenType::MINUS;
+	else if (in == "MUL") return TokenType::MUL;
+	else if (in == "DIV") return TokenType::DIV;
+	else if (in == "MOD") return TokenType::MOD;
 	return TokenType::NONE;
 }

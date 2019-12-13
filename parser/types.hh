@@ -28,6 +28,13 @@ enum TokenType {
 	ASSIGN,
 	COMMA,
 	
+	//Operator
+	PLUS,
+	MINUS,
+	MUL,
+	DIV,
+	MOD,
+	
 	//Other stuff
 	ID,
 	

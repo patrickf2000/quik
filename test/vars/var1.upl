@@ -4,4 +4,6 @@ fn main
 	int x = 6
 	int y = 4
 	int z = x
+	
+	int answer = x + y * 3
 end
