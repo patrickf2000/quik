@@ -32,128 +32,143 @@ AstVarDec *basic_var_dec(Line ln) {
 	return vd;
 }
 
+//Translates a token type to a datatype
+DataType ttype2dtype(TokenType t) {
+	switch (t) {
+		case TokenType::T_BYTE: return DataType::Byte;
+		case TokenType::T_CHAR: return DataType::Char;
+		case TokenType::T_SHORT: return DataType::Short;
+		case TokenType::T_INT: return DataType::Int;
+		case TokenType::T_LONG: return DataType::Long;
+		case TokenType::T_FLOAT: return DataType::Float;
+		case TokenType::T_BOOL: return DataType::Bool;
+		case TokenType::T_STR: return DataType::Str;
+	}
+	
+	return DataType::None;
+}
+
 //Builds an AST node from a string of tokens
 AstNode *build_node(Line ln) {
 	auto tokens = ln.tokens;
 	auto first = tokens.at(0);
 	
 	//Build an include node
-	if (first.type == TokenType::INCLUDE) {
-		if (tokens.size() != 2) {
-			syntax_error(ln, "Invalid size.");
+	switch (first.type) {
+		case TokenType::INCLUDE: {
+			if (tokens.size() != 2) {
+				syntax_error(ln, "Invalid size.");
+			}
+			
+			Token id = tokens.at(1);
+			if (id.type != TokenType::ID) {
+				syntax_error(ln, "Second element of an include statement should be an ID.");
+			}
+		
+			AstInclude *node = new AstInclude(id.id);
+			return node;
 		}
 		
-		Token id = tokens.at(1);
-		if (id.type != TokenType::ID) {
-			syntax_error(ln, "Second element of an include statement should be an ID.");
+		//Build a function declaration node
+		//TODO: We need arguments
+		case TokenType::FUNC_DEC: {
+			if (tokens.size() < 2) {
+				syntax_error(ln, "Invalid size.");
+			}
+			
+			Token id = tokens.at(1);
+			if (id.type != TokenType::ID) {
+				syntax_error(ln, "No function name specified!");
+			}
+			
+			AstFuncDec *fd = new AstFuncDec(id.id);
+			return fd;
 		}
 	
-		AstInclude *node = new AstInclude(id.id);
-		return node;
-		
-	//Build a function declaration node
-	//TODO: We need arguments
-	} else if (first.type == TokenType::FUNC_DEC) {
-		if (tokens.size() < 2) {
-			syntax_error(ln, "Invalid size.");
+		//Build an End statement
+		case TokenType::END: {
+			AstNode *node = new AstNode(AstType::End);
+			return node;
 		}
 		
-		Token id = tokens.at(1);
-		if (id.type != TokenType::ID) {
-			syntax_error(ln, "No function name specified!");
-		}
-		
-		AstFuncDec *fd = new AstFuncDec(id.id);
-		return fd;
-	
-	//Build an End statement
-	} else if (first.type == TokenType::END) {
-		AstNode *node = new AstNode(AstType::End);
-		return node;
-		
-	//Handle if the first node is an ID
-	} else if (first.type == TokenType::ID) {
-		if (tokens.size() < 2) {
-			syntax_error(ln, "Only an ID was specified!");
-		}
-		
-		//Build a function call
-		if (tokens.at(1).type == TokenType::LEFT_PAREN) {
-			std::string name = first.id;
-			std::vector<Token> args;
-			Token last;
+		//Handle if the first node is an ID
+		case TokenType::ID: {
+			if (tokens.size() < 2) {
+				syntax_error(ln, "Only an ID was specified!");
+			}
 			
-			for (int i = 2; i<tokens.size(); i++) {
-				auto t = tokens.at(i);
-				last = t;
-			
-				if (t.type == TokenType::RIGHT_PAREN) {
-					break;
-				} else if (t.type == TokenType::COMMA) {
-					continue;
+			//Build a function call
+			if (tokens.at(1).type == TokenType::LEFT_PAREN) {
+				std::string name = first.id;
+				std::vector<Token> args;
+				Token last;
+				
+				for (int i = 2; i<tokens.size(); i++) {
+					auto t = tokens.at(i);
+					last = t;
+				
+					if (t.type == TokenType::RIGHT_PAREN) {
+						break;
+					} else if (t.type == TokenType::COMMA) {
+						continue;
+					}
+					
+					args.push_back(t);
 				}
 				
-				args.push_back(t);
-			}
-			
-			if (last.type != TokenType::RIGHT_PAREN) {
-				syntax_error(ln, "No closing token");
-			}
-			
-			AstFuncCall *call = new AstFuncCall(name, args);
-			return call;
-			
-		//Build an assignment
-		} else if (tokens.at(1).type == TokenType::ASSIGN) {
-			std::cout << "VAR!" << std::endl;
-		}
-		
-	//Build variable declarations
-	//Build a byte assignment
-	} else if (first.type == TokenType::T_BYTE) {
-	
-	} else if (first.type == TokenType::T_CHAR) {
-	
-	} else if (first.type == TokenType::T_SHORT) {
-	
-	} else if (first.type == TokenType::T_INT) {
-		auto vd = basic_var_dec(ln);
-		vd->set_type(DataType::Int);
-		
-		for (int i = 3; i<tokens.size(); i++) {
-			Token t = tokens.at(i);
-			
-			if (t.type == TokenType::NO) {
-				int no = std::stoi(t.id);
-				AstInt *i = new AstInt(no);
-				vd->children.push_back(i);
-			} else if (t.type == TokenType::PLUS) {
-				vd->children.push_back(new AstNode(AstType::Add));
-			} else if (t.type == TokenType::MINUS) {
-				vd->children.push_back(new AstNode(AstType::Sub));
-			} else if (t.type == TokenType::MUL) {
-				vd->children.push_back(new AstNode(AstType::Mul));
-			} else if (t.type == TokenType::DIV) {
-				vd->children.push_back(new AstNode(AstType::Div));
-			} else if (t.type == TokenType::MOD) {
-				vd->children.push_back(new AstNode(AstType::Mod));
-			} else {
-				AstID *i = new AstID(t.id);
-				vd->children.push_back(i);
+				if (last.type != TokenType::RIGHT_PAREN) {
+					syntax_error(ln, "No closing token");
+				}
+				
+				AstFuncCall *call = new AstFuncCall(name, args);
+				return call;
+				
+			//Build an assignment
+			} else if (tokens.at(1).type == TokenType::ASSIGN) {
+				std::cout << "VAR!" << std::endl;
+				return nullptr;
 			}
 		}
 		
-		return vd;
-	} else if (first.type == TokenType::T_LONG) {
-	
-	} else if (first.type == TokenType::T_FLOAT) {
-	
-	} else if (first.type == TokenType::T_BOOL) {
-	
-	} else if (first.type == TokenType::T_STR) {
-	
-	} else if (first.type == TokenType::VAR) {
-	
+		//Build variable declarations
+		//Build a byte assignment
+		case TokenType::T_BYTE:
+		case TokenType::T_CHAR:
+		case TokenType::T_SHORT:
+		case TokenType::T_INT:
+		case TokenType::T_LONG:
+		case TokenType::T_FLOAT:
+		case TokenType::T_BOOL:
+		case TokenType::T_STR:
+		case TokenType::VAR: {
+			auto vd = basic_var_dec(ln);
+			vd->set_type(ttype2dtype(first.type));
+			
+			for (int i = 3; i<tokens.size(); i++) {
+				Token t = tokens.at(i);
+				
+				if (t.type == TokenType::NO) {
+					int no = std::stoi(t.id);
+					AstInt *i = new AstInt(no);
+					vd->children.push_back(i);
+				} else if (t.type == TokenType::PLUS) {
+					vd->children.push_back(new AstNode(AstType::Add));
+				} else if (t.type == TokenType::MINUS) {
+					vd->children.push_back(new AstNode(AstType::Sub));
+				} else if (t.type == TokenType::MUL) {
+					vd->children.push_back(new AstNode(AstType::Mul));
+				} else if (t.type == TokenType::DIV) {
+					vd->children.push_back(new AstNode(AstType::Div));
+				} else if (t.type == TokenType::MOD) {
+					vd->children.push_back(new AstNode(AstType::Mod));
+				} else {
+					AstID *i = new AstID(t.id);
+					vd->children.push_back(i);
+				}
+			}
+			
+			return vd;
+		}
 	}
 
 	return nullptr;

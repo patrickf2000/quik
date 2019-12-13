@@ -48,6 +48,7 @@ enum TokenType {
 };
 
 enum class DataType {
+	None,
 	Byte,
 	Char,
 	Short,
