@@ -17,7 +17,14 @@ enum AstType {
 	//Variable stuff
 	VarDec,
 	Id,
-	Int
+	Int,
+	
+	//Operator
+	Add,
+	Sub,
+	Mul,
+	Div,
+	Mod
 };
 
 //The base of all our nodes

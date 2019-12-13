@@ -118,15 +118,28 @@ AstNode *build_node(Line ln) {
 	
 	} else if (first.type == TokenType::T_INT) {
 		auto vd = basic_var_dec(ln);
-		Token ival = tokens.at(3);
 		
-		if (ival.type == TokenType::NO) {
-			int no = std::stoi(ival.id);
-			AstInt *i = new AstInt(no);
-			vd->children.push_back(i);
-		} else {
-			AstID *i = new AstID(ival.id);
-			vd->children.push_back(i);
+		for (int i = 3; i<tokens.size(); i++) {
+			Token t = tokens.at(i);
+			
+			if (t.type == TokenType::NO) {
+				int no = std::stoi(t.id);
+				AstInt *i = new AstInt(no);
+				vd->children.push_back(i);
+			} else if (t.type == TokenType::PLUS) {
+				vd->children.push_back(new AstNode(AstType::Add));
+			} else if (t.type == TokenType::MINUS) {
+				vd->children.push_back(new AstNode(AstType::Sub));
+			} else if (t.type == TokenType::MUL) {
+				vd->children.push_back(new AstNode(AstType::Mul));
+			} else if (t.type == TokenType::DIV) {
+				vd->children.push_back(new AstNode(AstType::Div));
+			} else if (t.type == TokenType::MOD) {
+				vd->children.push_back(new AstNode(AstType::Mod));
+			} else {
+				AstID *i = new AstID(t.id);
+				vd->children.push_back(i);
+			}
 		}
 		
 		return vd;
