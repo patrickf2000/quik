@@ -11,6 +11,27 @@ void syntax_error(Line ln, std::string msg) {
 	std::exit(1);
 }
 
+//This performs common checking on variable declarations
+AstVarDec *basic_var_dec(Line ln) {
+	if (ln.tokens.size() < 4) {
+		syntax_error(ln, "Missing elements in declaration!");
+	}
+
+	Token id = ln.tokens.at(1);
+	Token ival = ln.tokens.at(3);
+
+	if (id.type != TokenType::ID) {
+		syntax_error(ln, "A name must be specified for a variable.");
+	}
+
+	if (ln.tokens.at(2).type != TokenType::ASSIGN) {
+		syntax_error(ln, "Expected \'=\'");
+	}
+
+	AstVarDec *vd = new AstVarDec(id.id);
+	return vd;
+}
+
 //Builds an AST node from a string of tokens
 AstNode *build_node(Line ln) {
 	auto tokens = ln.tokens;
@@ -96,23 +117,8 @@ AstNode *build_node(Line ln) {
 	} else if (first.type == TokenType::T_SHORT) {
 	
 	} else if (first.type == TokenType::T_INT) {
-		//Start with basic syntax checking
-		if (tokens.size() != 4) {
-			syntax_error(ln, "Missing elements in declaration!");
-		}
-		
-		Token id = tokens.at(1);
+		auto vd = basic_var_dec(ln);
 		Token ival = tokens.at(3);
-		
-		if (id.type != TokenType::ID) {
-			syntax_error(ln, "A name must be specified for a variable.");
-		}
-		
-		if (tokens.at(2).type != TokenType::ASSIGN) {
-			syntax_error(ln, "Expected \'=\'");
-		}
-		
-		AstVarDec *vd = new AstVarDec(id.id);
 		
 		if (ival.type == TokenType::NO) {
 			int no = std::stoi(ival.id);
