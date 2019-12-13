@@ -47,6 +47,17 @@ enum TokenType {
 	B_FALSE
 };
 
+enum class DataType {
+	Byte,
+	Char,
+	Short,
+	Int,
+	Long,
+	Float,
+	Bool,
+	Str
+};
+
 struct Token {
 	TokenType type;
 	std::string id;

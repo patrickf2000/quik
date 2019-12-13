@@ -24,6 +24,22 @@ std::string ast2str(AstType type) {
 	return "NONE";
 }
 
+//Returns a data type as a string (debugging purposes)
+std::string type2str(DataType type) {
+	switch (type) {
+		case DataType::Byte: return "Byte";
+		case DataType::Char: return "Char";
+		case DataType::Short: return "Short";
+		case DataType::Int: return "Int";
+		case DataType::Long: return "Long";
+		case DataType::Float: return "Float";
+		case DataType::Bool: return "Bool";
+		case DataType::Str: return "Str";
+	}
+	
+	return "NONE";
+}
+
 //Prints an AST tree
 void print_tree(AstNode *node, int indent) {
 	for (int i = 0; i<indent; i++) {
@@ -48,7 +64,8 @@ void print_tree(AstNode *node, int indent) {
 		std::cout << ">";
 	} else if (node->type == AstType::VarDec) {
 		AstVarDec *vd = dynamic_cast<AstVarDec *>(node);
-		std::cout << " [" << vd->get_name() << "]";
+		std::cout << " [" << vd->get_name() << "] ("
+			<< type2str(vd->get_type()) << ")";
 		
 	//values
 	} else if (node->type == AstType::Int) {

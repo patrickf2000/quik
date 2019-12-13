@@ -97,6 +97,11 @@ public:
 		type = AstType::VarDec;
 		name = n;
 	}
+	
+	DataType get_type() { return dtype; }
+	void set_type(DataType t) { dtype = t; }
+private:
+	DataType dtype;
 };
 
 //The ID type

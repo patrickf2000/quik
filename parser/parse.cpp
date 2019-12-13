@@ -118,6 +118,7 @@ AstNode *build_node(Line ln) {
 	
 	} else if (first.type == TokenType::T_INT) {
 		auto vd = basic_var_dec(ln);
+		vd->set_type(DataType::Int);
 		
 		for (int i = 3; i<tokens.size(); i++) {
 			Token t = tokens.at(i);
