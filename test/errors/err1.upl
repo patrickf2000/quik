@@ -1,0 +1,5 @@
+include
+
+fn main
+	println("yo")
+end

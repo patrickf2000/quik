@@ -1,0 +1,7 @@
+fn
+	println("Say hello!")
+end
+
+fn main()
+	sayHello()
+end

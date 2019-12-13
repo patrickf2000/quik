@@ -1,0 +1,15 @@
+fn sayHello
+	println("Hello!!!")
+end
+
+fn sayALot
+	println("hi")
+	println("How are you?")
+	println("Good!")
+end
+
+fn main
+	println("Main!")
+	sayHello()
+	sayALot()
+end
