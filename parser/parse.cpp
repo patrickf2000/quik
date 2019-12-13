@@ -2,6 +2,14 @@
 #include <cstdlib>
 
 #include "parse.hh"
+#include "types.hh"
+
+//Throws a syntax error and exits the program
+void syntax_error(Line ln, std::string msg) {
+	std::cout << "Syntax Error: " << msg << std::endl;
+	std::cout << "[" << ln.no << "] " << ln.original << std::endl;
+	std::exit(1);
+}
 
 //Builds an AST node from a string of tokens
 AstNode *build_node(std::vector<Token> tokens) {

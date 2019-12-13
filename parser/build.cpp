@@ -46,9 +46,7 @@ AstNode *build_ast(std::vector<Line> lines) {
 		auto n = build_node(ln.tokens);
 		
 		if (n == nullptr) {
-			std::cout << "Syntax Error: Unknown input" << std::endl;
-			std::cout << "[" << ln.no << "] " << ln.original << std::endl;
-			std::exit(1);
+			syntax_error(ln, "Unknown input");
 		} else {
 			nodes.push_back(n);
 		}
