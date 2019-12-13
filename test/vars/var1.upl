@@ -1,4 +1,6 @@
 fn main
+	println("Hello!")
+
 	int x = 6
 	int y = 4
 	int z = x

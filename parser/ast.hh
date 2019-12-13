@@ -30,6 +30,15 @@ public:
 	std::vector<AstNode *> children;
 };
 
+//The base class for nodes that have a string attribute
+class AstAttrNode : public AstNode {
+public:
+	std::string get_name() { return name; }
+	void set_name(std::string n) { name = n; }
+protected:
+	std::string name = "";
+};
+
 //Represents a file to be included
 class AstInclude : public AstNode {
 public:
@@ -47,22 +56,17 @@ private:
 
 //The function declaration type
 //TODO: Arguments
-class AstFuncDec : public AstNode {
+class AstFuncDec : public AstAttrNode {
 public:
 	explicit AstFuncDec() { type = AstType::FuncDec; }
 	explicit AstFuncDec(std::string n) {
 		type = AstType::FuncDec;
 		name = n;
 	}
-	
-	std::string get_name() { return name; }
-	void set_name(std::string n) { name = n; }
-private:
-	std::string name = "";
 };
 
 //The function call type
-class AstFuncCall : public AstNode {
+class AstFuncCall : public AstAttrNode {
 public:
 	explicit AstFuncCall() { type = AstType::FuncCall; }
 	explicit AstFuncCall(std::string n, std::vector<Token> ar) {
@@ -71,45 +75,31 @@ public:
 		args = ar;
 	}
 	
-	std::string get_name() { return name; }
-	void set_name(std::string n) { name = n; }
-	
 	std::vector<Token> get_args() { return args; }
 	void set_args(std::vector<Token> ar) { args = ar; }
 private:
-	std::string name;
 	std::vector<Token> args;
 };
 
 //Variable declaration
 //initial value go as children
-class AstVarDec : public AstNode {
+class AstVarDec : public AstAttrNode {
 public:
 	explicit AstVarDec() { type = AstType::VarDec; }
 	explicit AstVarDec(std::string n) {
 		type = AstType::VarDec;
 		name = n;
 	}
-	
-	std::string get_name() { return name; }
-	void set_name(std::string n) { name = n; }
-private:
-	std::string name;
 };
 
 //The ID type
-class AstID : public AstNode {
+class AstID : public AstAttrNode {
 public:
 	explicit AstID() { type = AstType::Id; }
 	explicit AstID(std::string n) {
 		type = AstType::Id;
 		name = n;
 	}
-	
-	std::string get_name() { return name; }
-	void set_name(std::string n) { name = n; }
-private:
-	std::string name;
 };
 
 //The Integer type
