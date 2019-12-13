@@ -11,6 +11,17 @@ enum TokenType {
 	FUNC_DEC,
 	END,
 	
+	//Type keywords
+	T_BYTE,
+	T_CHAR,
+	T_SHORT,
+	T_INT,
+	T_LONG,
+	T_FLOAT,
+	T_BOOL,
+	T_STR,
+	VAR,
+	
 	//Symbols
 	LEFT_PAREN,
 	RIGHT_PAREN,
@@ -19,7 +30,14 @@ enum TokenType {
 	
 	//Other stuff
 	ID,
-	STRING
+	
+	//Values
+	STRING,
+	NO,
+	CHAR,
+	DEC,
+	B_TRUE,
+	B_FALSE
 };
 
 struct Token {

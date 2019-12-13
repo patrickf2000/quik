@@ -17,10 +17,10 @@ float pi = 3.14
 T_FLOAT~ID>pi~ASSIGN~DEC>3.14~
 
 bool x = true
-T_BOOL~ID>x~ASSIGN~BOOL>true~
+T_BOOL~ID>x~ASSIGN~B_TRUE~
 
 bool x = false
-T_BOOL~ID>x~ASSIGN~BOOL>false~
+T_BOOL~ID>x~ASSIGN~B_FALSE~
 
 str s = "Hello!"
 T_STR~ID>s~ASSIGN~STRING>Hello!~
