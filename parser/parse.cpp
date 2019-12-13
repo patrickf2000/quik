@@ -46,6 +46,38 @@ AstNode *build_node(std::vector<Token> tokens) {
 	} else if (first.type == TokenType::END) {
 		AstNode *node = new AstNode(AstType::End);
 		return node;
+		
+	//Handle if the first node is an ID
+	} else if (first.type == TokenType::ID) {
+		if (tokens.size() < 2) {
+			std::cout << "Invalid syntax: ID only" << std::endl;
+			std::exit(1);
+		}
+		
+		//Build a function call
+		if (tokens.at(1).type == TokenType::LEFT_PAREN) {
+			std::string name = first.id;
+			std::vector<Token> args;
+			
+			for (int i = 2; i<tokens.size(); i++) {
+				auto t = tokens.at(i);
+			
+				if (t.type == TokenType::RIGHT_PAREN) {
+					break;
+				} else if (t.type == TokenType::COMMA) {
+					continue;
+				}
+				
+				args.push_back(t);
+			}
+			
+			AstFuncCall *call = new AstFuncCall(name, args);
+			return call;
+			
+		//Build an assignment
+		} else if (tokens.at(1).type == TokenType::ASSIGN) {
+			std::cout << "VAR!" << std::endl;
+		}
 	}
 
 	return nullptr;

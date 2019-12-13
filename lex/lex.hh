@@ -14,6 +14,8 @@ enum TokenType {
 	//Symbols
 	LEFT_PAREN,
 	RIGHT_PAREN,
+	ASSIGN,
+	COMMA,
 	
 	//Other stuff
 	ID,
