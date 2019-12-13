@@ -42,7 +42,7 @@ enum TokenType {
 
 struct Token {
 	TokenType type;
-	const char *id;
+	std::string id;
 };
 
 struct Line {

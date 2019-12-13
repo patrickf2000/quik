@@ -133,7 +133,7 @@ std::vector<Token> tokenize(std::string line) {
 					t.type = TokenType::ID;
 				}
 				
-				t.id = current.c_str();
+				t.id = current;
 				tokens.push_back(t);
 			}
 			

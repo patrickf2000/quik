@@ -18,6 +18,7 @@ class AstNode {
 public:
 	explicit AstNode() {}
 	explicit AstNode(AstType t) { type = t; }
+	virtual ~AstNode() {}
 	AstType type;
 	std::vector<AstNode *> children;
 };

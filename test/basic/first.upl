@@ -1,3 +1,5 @@
+include stdio
+
 fn main
 	println("Hello, world!")
 end
