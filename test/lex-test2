@@ -1,0 +1,29 @@
+byte x = 1
+T_BYTE~ID>x~ASSIGN~NO>1~
+
+char x = 'a'
+T_CHAR~ID>x~ASSIGN~CHAR>a~
+
+short x = 1
+T_SHORT~ID>x~ASSIGN~NO>1~
+
+int x = 32
+T_INT~ID>x~ASSIGN~NO>32~
+
+long x = 64
+T_LONG~ID>x~ASSIGN~NO>64~
+
+float pi = 3.14
+T_FLOAT~ID>pi~ASSIGN~DEC>3.14~
+
+bool x = true
+T_BOOL~ID>x~ASSIGN~BOOL>true~
+
+bool x = false
+T_BOOL~ID>x~ASSIGN~BOOL>false~
+
+str s = "Hello!"
+T_STR~ID>s~ASSIGN~STRING>Hello!~
+
+var x = 32
+VAR~ID>x~ASSIGN~NO>32~
