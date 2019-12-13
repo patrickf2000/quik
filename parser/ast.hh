@@ -7,7 +7,8 @@ enum AstType {
 	Global,
 	Include,
 	FuncDec,
-	FuncCall
+	FuncCall,
+	End
 };
 
 class AstNode {

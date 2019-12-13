@@ -41,6 +41,11 @@ AstNode *build_node(std::vector<Token> tokens) {
 		
 		AstFuncDec *fd = new AstFuncDec(id.id);
 		return fd;
+	
+	//Build an End statement
+	} else if (first.type == TokenType::END) {
+		AstNode *node = new AstNode(AstType::End);
+		return node;
 	}
 
 	return nullptr;
