@@ -19,6 +19,14 @@ void Asm_x86::assemble(AstNode *top) {
 			assemble(node);
 		} else if (node->type == AstType::VarDec) {
 			build_var_dec(node);
+		} else if (node->type == AstType::FuncCall) {
+			AstFuncCall *fc = dynamic_cast<AstFuncCall *>(node);
+		
+			if (fc->get_name() == "println") {
+				build_println(fc);
+			} else {
+			
+			}
 		}
 	}
 }
@@ -29,11 +37,41 @@ void Asm_x86::build_function(AstNode *node) {
 	
 	std::string ln = fd->get_name();
 	if (ln == "main") {
+		in_main = true;
 		ln = "_start";
+	} else {
+		in_main = false;
 	}
 	
 	ln += ":";
 	sec_text.push_back(ln);
+}
+
+//Assembles a println call
+void Asm_x86::build_println(AstFuncCall *fc) {
+	//Push the info we need back
+	extern_data.push_back("extern printf");
+	
+	//TODO: Add some conditional so we don't push everything
+	sec_data.push_back("int_fmt db \"%d\",10,0");
+	sec_data.push_back("str_fmt db \"%s\",10,0");
+	sec_data.push_back("flt_fmt db \"%f\",10,0");
+	
+	//Add the code
+	for (auto t : fc->get_args()) {
+		switch (t.type) {
+			case TokenType::STRING: {
+				std::string name = "STR_" + std::to_string(str_index);
+				sec_data.push_back(name + " db \"" + t.id + "\",0");
+				++str_index;
+				
+				sec_text.push_back("push dword " + name);
+				sec_text.push_back("push dword str_fmt");
+				sec_text.push_back("call printf");
+				sec_text.push_back("");
+			} break;
+		}
+	}
 }
 
 //Assembles a variable declaration
