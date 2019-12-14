@@ -19,7 +19,7 @@ void find_variables(AstNode *top) {
 			Var v;
 			v.name = vd->get_name();
 			v.type = vd->get_type();
-			scope->vars.push_back(v);
+			scope->vars[vd->get_name()] = v;
 		}
 	}
 }

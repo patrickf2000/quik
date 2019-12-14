@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <string>
+#include <map>
 
 #include <lex.hh>
 
@@ -58,7 +59,7 @@ protected:
 class AstScope : public AstNode {
 public:
 	AstScope() { type = AstType::Scope; }
-	std::vector<Var> vars;
+	std::map<std::string, Var> vars;
 };
 
 //Represents a file to be included

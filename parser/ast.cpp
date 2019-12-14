@@ -54,7 +54,7 @@ void print_tree(AstNode *node, int indent) {
 		if (scope->vars.size() > 0) {
 			std::cout << " <";
 			for (auto v : scope->vars) {
-				std::cout << "{" << v.name << "} ";
+				std::cout << "{" << v.second.name << "} ";
 			}
 			std::cout << ">";
 		}
