@@ -2,6 +2,7 @@ int global_x = 20
 int global_y = 10
 
 fn print_global
+	println("Our global variables: ")
 	println(global_x)
 	println(global_y)
 end

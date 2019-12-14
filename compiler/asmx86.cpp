@@ -76,6 +76,10 @@ void Asm_x86::build_println(AstFuncCall *fc) {
 	
 	//Add the code
 	for (auto node : fc->children) {
+		//Align the call stack
+		if (!in_main)
+			sec_text.push_back("push eax");
+		
 		switch (node->type) {
 			//Hard-coded string
 			case AstType::Str: {
@@ -88,7 +92,6 @@ void Asm_x86::build_println(AstFuncCall *fc) {
 				sec_text.push_back("push dword " + name);
 				sec_text.push_back("push dword str_fmt");
 				sec_text.push_back("call printf");
-				sec_text.push_back("");
 			} break;
 			
 			//Variable
@@ -124,9 +127,14 @@ void Asm_x86::build_println(AstFuncCall *fc) {
 					
 				sec_text.push_back("push dword " + fmt);
 				sec_text.push_back("call printf");
-				sec_text.push_back("");
 			} break;
 		}
+		
+		//Finish aligning the call stack
+		if (!in_main)
+			sec_text.push_back("add esp, 12");
+		
+		sec_text.push_back("");
 	}
 }
 
@@ -209,7 +217,7 @@ void Asm_x86::write() {
 //Invoke system commands to build the final executable
 void Asm_x86::build() {
 	//TODO: Fix this
-	system(std::string("nasm -f elf32 " + path + " -o /tmp/out.o").c_str());
-	system("gcc -m32 /tmp/out.o -o out");
+	system(std::string("nasm -g -f elf32 " + path + " -o /tmp/out.o").c_str());
+	system("gcc -g -m32 /tmp/out.o -o out");
 }
 
