@@ -14,5 +14,5 @@ fn main
 	println("Hello!")
 	println(z)
 	
-	exit()
+	print_global()
 end

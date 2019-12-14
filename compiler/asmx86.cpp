@@ -29,7 +29,7 @@ void Asm_x86::assemble(AstNode *top) {
 			if (fc->get_name() == "println") {
 				build_println(fc);
 			} else {
-			
+				build_func_call(fc);
 			}
 		} else if (node->type == AstType::Return) {
 			build_ret(node);
@@ -50,6 +50,13 @@ void Asm_x86::build_function(AstNode *node) {
 	
 	ln += ":";
 	sec_text.push_back(ln);
+}
+
+//Assembles a function call
+//TODO: This needs a lot of love
+void Asm_x86::build_func_call(AstFuncCall *fc) {
+	sec_text.push_back("call " + fc->get_name());
+	sec_text.push_back("");	
 }
 
 //Assembles a println call
