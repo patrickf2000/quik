@@ -7,7 +7,7 @@
 
 bool is_separator(char c) {
 	if (c == ' ' || c == '(' || c == ')'
-		|| c == '=' || c == ','
+		|| c == '=' || c == ',' || c == ':'
 		|| c == '+' || c == '-' || c == '*' || c == '/'
 		|| c == '%') {
 		return true;
@@ -150,6 +150,14 @@ std::vector<Token> tokenize(std::string line) {
 				Token t;
 				t.type = TokenType::RIGHT_PAREN;
 				tokens.push_back(t);
+			} else if (c == ',') {
+				Token t;
+				t.type = TokenType::COMMA;
+				tokens.push_back(t);
+			} else if (c == ':') {
+				Token t;
+				t.type = TokenType::COLON;
+				tokens.push_back(t);
 			} else if (c == '=') {
 				Token t;
 				t.type = TokenType::ASSIGN;
@@ -213,5 +221,6 @@ TokenType str2type(std::string in) {
 	else if (in == "MUL") return TokenType::MUL;
 	else if (in == "DIV") return TokenType::DIV;
 	else if (in == "MOD") return TokenType::MOD;
+	else if (in == "COLON") return TokenType::COLON;
 	return TokenType::NONE;
 }

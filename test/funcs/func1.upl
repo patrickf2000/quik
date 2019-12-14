@@ -1,0 +1,10 @@
+fn print_int(x:int)
+	println(x)
+end
+
+fn main
+	int x = 20
+
+	println("Printing a number:")
+	print_int(x)
+end

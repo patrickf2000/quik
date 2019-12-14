@@ -18,3 +18,12 @@ ID>puts~LEFT_PAREN~STRING>Hello!~RIGHT_PAREN~
 
 end
 END~
+
+x:int
+ID>x~COLON~T_INT~
+
+fn func(x:int)
+FUNC_DEC~ID>func~LEFT_PAREN~ID>x~COLON~T_INT~RIGHT_PAREN~
+
+fn func(x:int, y:int)
+FUNC_DEC~ID>func~LEFT_PAREN~ID>x~COLON~T_INT~COMMA~ID>y~COLON~T_INT~RIGHT_PAREN~

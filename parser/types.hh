@@ -27,6 +27,7 @@ enum TokenType {
 	RIGHT_PAREN,
 	ASSIGN,
 	COMMA,
+	COLON,
 	
 	//Operator
 	PLUS,
