@@ -89,7 +89,38 @@ void Asm_x86::build_println(AstFuncCall *fc) {
 			
 			//Variable
 			case AstType::Id: {
-				//AstID *id = dynamic_cast<AstID *>(node);
+				AstID *id = dynamic_cast<AstID *>(node);
+				Var v = current_scope->vars[id->get_name()];
+				
+				std::string name = v.name;
+				std::string p2 = "";
+				std::string fmt = "";
+				
+				switch (v.type) {
+					case DataType::Byte:
+					case DataType::Char:
+					case DataType::Short:
+					case DataType::Bool:
+					case DataType::Int: {
+							name = "[" + v.name + "]";
+							fmt = "int_fmt"; 
+						} break;
+					case DataType::Long:
+					case DataType::Float: {
+						name = "[" + v.name + "+4]";
+						p2 = "[" + v.name + "]";
+						fmt = "str_fmt";
+					} break;
+					case DataType::Str:	fmt = "str_fmt";		
+				}
+				
+				sec_text.push_back("push dword " + name);
+				if (p2 != "")
+					sec_text.push_back("push dword " + p2);
+					
+				sec_text.push_back("push dword " + fmt);
+				sec_text.push_back("call printf");
+				sec_text.push_back("");
 			} break;
 		}
 	}
