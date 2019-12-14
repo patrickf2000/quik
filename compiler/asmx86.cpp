@@ -55,7 +55,12 @@ void Asm_x86::build_var_dec(AstNode *node) {
 	auto first = vd->children.at(0);
 	
 	if (first->type == AstType::Id) {
-	
+		AstID *id = dynamic_cast<AstID *>(first);
+		ln += "0";
+		
+		sec_text.push_back("mov eax, [" + id->get_name() + "]");
+		sec_text.push_back("mov [" + vd->get_name() + "], eax");
+		sec_text.push_back("");
 	} else {
 		if (first->type == AstType::Int) {
 			AstInt *i = dynamic_cast<AstInt *>(first);
