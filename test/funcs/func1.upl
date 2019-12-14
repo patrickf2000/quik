@@ -1,5 +1,7 @@
-fn print_int(x:int)
-	println(x)
+int global_y = 100
+
+fn print_int(no:int)
+	println(no)
 end
 
 fn main

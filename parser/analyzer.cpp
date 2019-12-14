@@ -10,8 +10,14 @@ void find_variables(AstNode *top) {
 
 	for (auto node : top->children) {
 		if (node->type == AstType::FuncDec) {
-			AstScope *next = dynamic_cast<AstScope *>(node->children.at(0));
+			AstFuncDec *fd = dynamic_cast<AstFuncDec *>(node);
+			AstScope *next = dynamic_cast<AstScope *>(fd->children.at(0));
 			next->vars = scope->vars;
+			
+			for (auto v : fd->args) {
+				next->vars[v.name] = v;
+			}
+			
 			find_variables(next);
 		} else if (node->type == AstType::VarDec) {
 			AstVarDec *vd = dynamic_cast<AstVarDec *>(node);
