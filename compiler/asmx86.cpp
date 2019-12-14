@@ -25,6 +25,11 @@ void Asm_x86::assemble(AstNode *top) {
 		
 			if (fc->get_name() == "println") {
 				build_println(fc);
+			} else if (fc->get_name() == "exit") {
+				sec_text.push_back("mov eax, 1");
+				sec_text.push_back("mov ebx, 0");
+				sec_text.push_back("int 0x80");
+				sec_text.push_back("");
 			} else {
 			
 			}
