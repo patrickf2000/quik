@@ -19,7 +19,12 @@ private:
 	std::vector<std::string> sec_data;
 	std::vector<std::string> sec_text;
 	std::vector<std::string> extern_data;
+	
+	//Control variables
 	bool in_main = false;
 	bool use_printf = false;
 	int str_index = 1;
+	
+	//Scope data
+	AstScope *current_scope;
 };

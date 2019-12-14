@@ -14,8 +14,11 @@ Asm_x86::Asm_x86(std::string p) {
 
 //Iterate through the tree and assemble
 void Asm_x86::assemble(AstNode *top) {
+	current_scope = top;
+
 	for (auto node : top->children) {
 		if (node->type == AstType::Scope) {
+			current_scope = node;
 			assemble(node);
 		} else if (node->type == AstType::FuncDec) {
 			build_function(node);
@@ -72,6 +75,7 @@ void Asm_x86::build_println(AstFuncCall *fc) {
 	//Add the code
 	for (auto node : fc->children) {
 		switch (node->type) {
+			//Hard-coded string
 			case AstType::Str: {
 				AstString *str = dynamic_cast<AstString *>(node);
 			
@@ -83,6 +87,11 @@ void Asm_x86::build_println(AstFuncCall *fc) {
 				sec_text.push_back("push dword str_fmt");
 				sec_text.push_back("call printf");
 				sec_text.push_back("");
+			} break;
+			
+			//Variable
+			case AstType::Id: {
+				//AstID *id = dynamic_cast<AstID *>(node);
 			} break;
 		}
 	}
