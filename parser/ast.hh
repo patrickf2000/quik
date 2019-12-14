@@ -5,8 +5,9 @@
 
 #include <lex.hh>
 
+//Denotes the types of our nodes so we can upcast
 enum AstType {
-	Global,
+	Scope,
 	Include,
 	
 	//Function stuff
@@ -28,6 +29,12 @@ enum AstType {
 	Mod
 };
 
+//Holds variable information
+struct Var {
+	std::string name;
+	DataType type;
+};
+
 //The base of all our nodes
 class AstNode {
 public:
@@ -45,6 +52,13 @@ public:
 	void set_name(std::string n) { name = n; }
 protected:
 	std::string name = "";
+};
+
+//Represents a scope
+class AstScope : public AstNode {
+public:
+	AstScope() { type = AstType::Scope; }
+	std::vector<Var> vars;
 };
 
 //Represents a file to be included

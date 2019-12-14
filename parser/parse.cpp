@@ -192,8 +192,10 @@ int build_tree(std::vector<AstNode *> nodes, AstNode *top, int index) {
 		auto c = nodes.at(i);
 		
 		if (c->type == AstType::FuncDec) {
+			AstScope *s = new AstScope;
 			top->children.push_back(c);
-			i = build_tree(nodes, c, i+1);
+			c->children.push_back(s);
+			i = build_tree(nodes, s, i+1);
 		} else if (c->type == AstType::End) {
 			return i;
 		} else {

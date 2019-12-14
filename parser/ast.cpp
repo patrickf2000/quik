@@ -5,7 +5,7 @@
 //Returns an AST type as a string (debugging purposes)
 std::string ast2str(AstType type) {
 	switch (type) {
-		case AstType::Global: return "Global";
+		case AstType::Scope: return "Scope";
 		case AstType::Include: return "Include";
 		case AstType::FuncDec: return "FuncDec";
 		case AstType::FuncCall: return "FuncCall";

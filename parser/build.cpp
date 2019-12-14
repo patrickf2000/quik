@@ -39,7 +39,7 @@ std::vector<Line> load_source(const char *path) {
 
 //Takes each line and builds the AST
 AstNode *build_ast(std::vector<Line> lines) {
-	AstNode *top = new AstNode(AstType::Global);
+	AstNode *top = new AstNode(AstType::Scope);
 	std::vector<AstNode *> nodes;
 	
 	for (auto ln : lines) {

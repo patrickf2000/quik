@@ -15,7 +15,9 @@ Asm_x86::Asm_x86(std::string p) {
 //Iterate through the tree and assemble
 void Asm_x86::assemble(AstNode *top) {
 	for (auto node : top->children) {
-		if (node->type == AstType::FuncDec) {
+		if (node->type == AstType::Scope) {
+			assemble(node);
+		} else if (node->type == AstType::FuncDec) {
 			build_function(node);
 			assemble(node);
 		} else if (node->type == AstType::VarDec) {
