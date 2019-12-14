@@ -57,11 +57,8 @@ void print_tree(AstNode *node, int indent) {
 			<< "]";
 	} else if (node->type == AstType::FuncCall) {
 		AstFuncCall *fc = dynamic_cast<AstFuncCall *>(node);
-		std::cout << " [" << fc->get_name() << "] <";
-		for (auto a : fc->get_args()) {
-			std::cout << "{" << a.id << "}";
-		}
-		std::cout << ">";
+		std::cout << " [" << fc->get_name() << "]";
+		
 	} else if (node->type == AstType::VarDec) {
 		AstVarDec *vd = dynamic_cast<AstVarDec *>(node);
 		std::cout << " [" << vd->get_name() << "] ("
@@ -72,6 +69,8 @@ void print_tree(AstNode *node, int indent) {
 		std::cout << " " << dynamic_cast<AstInt *>(node)->get_val();
 	} else if (node->type == AstType::Id) {
 		std::cout << " " << dynamic_cast<AstID *>(node)->get_name();
+	} else if (node->type == AstType::Str) {
+		std::cout << " " << dynamic_cast<AstString *>(node)->get_val();
 	}
 	
 	std::cout << std::endl;

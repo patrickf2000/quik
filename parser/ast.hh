@@ -18,6 +18,7 @@ enum AstType {
 	VarDec,
 	Id,
 	Int,
+	Str,
 	
 	//Operator
 	Add,
@@ -127,6 +128,21 @@ public:
 	void set_val(int i) { no = i; }
 private:
 	int no = 0;
+};
+
+//The string type
+class AstString : public AstNode {
+public:
+	explicit AstString() { type = AstType::Str; }
+	explicit AstString(std::string s) {
+		type = AstType::Str;
+		val = s;
+	}
+	
+	std::string get_val() { return val; }
+	void set_val(std::string s) { val = s; }
+private:
+	std::string val = "";
 };
 
 //Debugging stuff
