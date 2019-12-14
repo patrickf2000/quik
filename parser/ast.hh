@@ -77,16 +77,10 @@ public:
 class AstFuncCall : public AstAttrNode {
 public:
 	explicit AstFuncCall() { type = AstType::FuncCall; }
-	explicit AstFuncCall(std::string n, std::vector<Token> ar) {
+	explicit AstFuncCall(std::string n) {
 		type = AstType::FuncCall;
 		name = n;
-		args = ar;
 	}
-	
-	std::vector<Token> get_args() { return args; }
-	void set_args(std::vector<Token> ar) { args = ar; }
-private:
-	std::vector<Token> args;
 };
 
 //Variable declaration

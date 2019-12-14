@@ -58,7 +58,7 @@ void Asm_x86::build_println(AstFuncCall *fc) {
 	sec_data.push_back("flt_fmt db \"%f\",10,0");
 	
 	//Add the code
-	for (auto t : fc->get_args()) {
+	/*for (auto t : fc->get_args()) {
 		switch (t.type) {
 			case TokenType::STRING: {
 				std::string name = "STR_" + std::to_string(str_index);
@@ -71,7 +71,7 @@ void Asm_x86::build_println(AstFuncCall *fc) {
 				sec_text.push_back("");
 			} break;
 		}
-	}
+	}*/
 }
 
 //Assembles a variable declaration

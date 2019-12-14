@@ -100,7 +100,7 @@ AstNode *build_node(Line ln) {
 			//Build a function call
 			if (tokens.at(1).type == TokenType::LEFT_PAREN) {
 				std::string name = first.id;
-				std::vector<Token> args;
+				AstFuncCall *call = new AstFuncCall(name);
 				Token last;
 				
 				for (int i = 2; i<tokens.size(); i++) {
@@ -111,16 +111,26 @@ AstNode *build_node(Line ln) {
 						break;
 					} else if (t.type == TokenType::COMMA) {
 						continue;
-					}
+					} else if (t.type == TokenType::STRING) {
+						AstString *v_str = new AstString(t.id);
+						call->children.push_back(v_str);
+					} else if (t.type == TokenType::NO) {
+						AstInt *v_int = new AstInt(std::stoi(t.id));
+						call->children.push_back(v_int);
+					} else if (t.type == TokenType::DEC) {
 					
-					args.push_back(t);
+					} else if (t.type == TokenType::CHAR) {
+					
+					} else if (t.type == TokenType::ID) {
+						AstID *v_id = new AstID(t.id);
+						call->children.push_back(v_id);
+					}
 				}
 				
 				if (last.type != TokenType::RIGHT_PAREN) {
 					syntax_error(ln, "No closing token");
 				}
 				
-				AstFuncCall *call = new AstFuncCall(name, args);
 				return call;
 				
 			//Build an assignment
