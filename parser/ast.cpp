@@ -64,9 +64,16 @@ void print_tree(AstNode *node, int indent) {
 			<< dynamic_cast<AstInclude *>(node)->get_include()
 			<< "]";
 	} else if (node->type == AstType::FuncDec) {
-		std::cout << " [" 
-			<< dynamic_cast<AstFuncDec *>(node)->get_name()
-			<< "]";
+		AstFuncDec *fd = dynamic_cast<AstFuncDec *>(node);
+		std::cout << " ["  << fd->get_name() << "] ";
+			
+		if (fd->args.size() > 0) {
+			std::cout << " <";
+			for (auto v : fd->args) {
+				std::cout << "{" << v.name << "} ";
+			}
+			std::cout << ">";
+		}
 	} else if (node->type == AstType::FuncCall) {
 		AstFuncCall *fc = dynamic_cast<AstFuncCall *>(node);
 		std::cout << " [" << fc->get_name() << "]";

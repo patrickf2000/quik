@@ -82,6 +82,48 @@ AstNode *build_node(Line ln) {
 			}
 			
 			AstFuncDec *fd = new AstFuncDec(id.id);
+			
+			//Generic syntax check
+			if (tokens.size() > 2) {
+				//Make sure we start and end with parantheses
+				auto t1 = tokens.at(2).type;
+				auto t2 = tokens.at(tokens.size() - 1).type;
+				
+				if (t1 != TokenType::LEFT_PAREN || t2 != TokenType::RIGHT_PAREN) {
+					syntax_error(ln, "Expected opening or closing parantheses.");
+				}
+				
+				//Iterate through and build our info
+				TokenType last;
+				Var v;
+				
+				for (int i = 3; i<tokens.size(); i++) {
+					auto t = tokens.at(i);
+					
+					if (t.type == TokenType::RIGHT_PAREN) {
+						fd->args.push_back(v);
+						break;
+					} else if (t.type == TokenType::COLON) {
+						if (last != TokenType::ID) {
+							syntax_error(ln, "Invalid parameter syntax");
+						}
+						continue;
+					} else if (t.type == TokenType::COMMA) {
+						if (v.type == DataType::None) {
+							syntax_error(ln, "No datatype specified in parameter");
+						}
+						
+						fd->args.push_back(v);
+					} else if (t.type == TokenType::ID) {
+						v.name = t.id;
+					} else if (last == TokenType::COLON) {
+						v.type = ttype2dtype(t.type);
+					}
+						
+					last = t.type;
+				}
+			}
+			
 			return fd;
 		}
 	

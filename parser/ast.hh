@@ -79,7 +79,6 @@ private:
 };
 
 //The function declaration type
-//TODO: Arguments
 class AstFuncDec : public AstAttrNode {
 public:
 	explicit AstFuncDec() { type = AstType::FuncDec; }
@@ -87,6 +86,8 @@ public:
 		type = AstType::FuncDec;
 		name = n;
 	}
+	
+	std::vector<Var> args;
 };
 
 //The function call type
