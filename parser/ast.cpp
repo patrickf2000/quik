@@ -48,7 +48,17 @@ void print_tree(AstNode *node, int indent) {
 	}
 	std::cout << ast2str(node->type);
 	
-	if (node->type == AstType::Include) {
+	if (node->type == AstType::Scope) {
+		AstScope *scope = dynamic_cast<AstScope *>(node);
+		
+		if (scope->vars.size() > 0) {
+			std::cout << " <";
+			for (auto v : scope->vars) {
+				std::cout << "{" << v.name << "} ";
+			}
+			std::cout << ">";
+		}
+	} else if (node->type == AstType::Include) {
 		std::cout << " [" 
 			<< dynamic_cast<AstInclude *>(node)->get_include()
 			<< "]";

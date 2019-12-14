@@ -3,7 +3,10 @@ project(upl)
 
 include_directories(parser)
 
+add_compile_options(-g -std=c++11)
+
 set(PARSER_SRC
+	parser/analyzer.cpp
 	parser/ast.cpp
 	parser/build.cpp
 	parser/lex.cpp

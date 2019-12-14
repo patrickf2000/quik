@@ -6,6 +6,7 @@
 #include "build.hh"
 #include "strutils.hh"
 #include "parse.hh"
+#include "analyzer.hh"
 
 //Load the source file and run it through lex
 std::vector<Line> load_source(const char *path) {
@@ -39,7 +40,7 @@ std::vector<Line> load_source(const char *path) {
 
 //Takes each line and builds the AST
 AstNode *build_ast(std::vector<Line> lines) {
-	AstNode *top = new AstNode(AstType::Scope);
+	AstScope *top = new AstScope;
 	std::vector<AstNode *> nodes;
 	
 	for (auto ln : lines) {
@@ -53,5 +54,6 @@ AstNode *build_ast(std::vector<Line> lines) {
 	}
 	
 	build_tree(nodes, top);
+	find_variables(top);
 	return top;
 }
