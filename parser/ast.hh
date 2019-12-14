@@ -15,6 +15,7 @@ enum AstType {
 	FuncDec,
 	FuncCall,
 	End,
+	Return,
 	
 	//Variable stuff
 	VarDec,
@@ -96,6 +97,12 @@ public:
 		type = AstType::FuncCall;
 		name = n;
 	}
+};
+
+//The return keyword
+class AstReturn : public AstNode {
+public:
+	AstReturn() { type = AstType::Return; }
 };
 
 //Variable declaration

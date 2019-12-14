@@ -23,3 +23,20 @@ void find_variables(AstNode *top) {
 		}
 	}
 }
+
+//Scans the tree and adds empty return statements to
+// functions that don't have any (needed for the backend)
+void check_return(AstNode *top) {
+	for (auto node : top->children) {
+		if (node->type == AstType::FuncDec && node->children.size() > 0) {
+			auto scope = node->children.at(0);
+			auto children = scope->children;
+			auto last = children.at(children.size()-1);
+			
+			if (last->type != AstType::Return) {
+				AstReturn *ret = new AstReturn;
+				scope->children.push_back(ret);
+			}
+		}
+	}
+}

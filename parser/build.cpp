@@ -55,5 +55,6 @@ AstNode *build_ast(std::vector<Line> lines) {
 	
 	build_tree(nodes, top);
 	find_variables(top);
+	check_return(top);
 	return top;
 }

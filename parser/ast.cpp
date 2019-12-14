@@ -9,6 +9,7 @@ std::string ast2str(AstType type) {
 		case AstType::Include: return "Include";
 		case AstType::FuncDec: return "FuncDec";
 		case AstType::FuncCall: return "FuncCall";
+		case AstType::Return: return "Return";
 		case AstType::End: return "End";
 		case AstType::VarDec: return "VarDec";
 		case AstType::Int: return "Int";
