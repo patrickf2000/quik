@@ -18,6 +18,7 @@ int main(int argc, char *argv[]) {
 	Asm_x86 builder("/tmp/out.asm");
 	builder.assemble(node);
 	builder.write();
+	builder.build();
 	
 	return 0;
 }

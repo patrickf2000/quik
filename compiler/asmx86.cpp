@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <types.hh>
+#include <cstdlib>
 
 #include "asmx86.hh"
 
@@ -8,7 +9,7 @@
 Asm_x86::Asm_x86(std::string p) {
 	path = p;
 	
-	extern_data.push_back("global _start");
+	extern_data.push_back("global main");
 }
 
 //Iterate through the tree and assemble
@@ -38,7 +39,6 @@ void Asm_x86::build_function(AstNode *node) {
 	std::string ln = fd->get_name();
 	if (ln == "main") {
 		in_main = true;
-		ln = "_start";
 	} else {
 		in_main = false;
 	}
@@ -135,3 +135,11 @@ void Asm_x86::write() {
 		writer << l << std::endl;
 	}
 }
+
+//Invoke system commands to build the final executable
+void Asm_x86::build() {
+	//TODO: Fix this
+	system(std::string("nasm -f elf32 " + path + " -o /tmp/out.o").c_str());
+	system("gcc -m32 /tmp/out.o -o out");
+}
+

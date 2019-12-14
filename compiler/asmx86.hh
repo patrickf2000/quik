@@ -13,6 +13,7 @@ public:
 	void build_println(AstFuncCall *fc);
 	void build_var_dec(AstNode *node);
 	void write();
+	void build();
 private:
 	std::string path = "";
 	std::vector<std::string> sec_data;
