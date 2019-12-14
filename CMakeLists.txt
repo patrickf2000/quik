@@ -13,6 +13,7 @@ set(PARSER_SRC
 
 set(COMPILER_SRC
 	compiler/main.cpp
+	compiler/asmx86.cpp
 )
 
 add_library(uplparser ${PARSER_SRC})
