@@ -20,5 +20,6 @@ private:
 	std::vector<std::string> sec_text;
 	std::vector<std::string> extern_data;
 	bool in_main = false;
+	bool use_printf = false;
 	int str_index = 1;
 };

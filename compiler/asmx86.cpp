@@ -49,20 +49,27 @@ void Asm_x86::build_function(AstNode *node) {
 
 //Assembles a println call
 void Asm_x86::build_println(AstFuncCall *fc) {
-	//Push the info we need back
-	extern_data.push_back("extern printf");
-	
-	//TODO: Add some conditional so we don't push everything
-	sec_data.push_back("int_fmt db \"%d\",10,0");
-	sec_data.push_back("str_fmt db \"%s\",10,0");
-	sec_data.push_back("flt_fmt db \"%f\",10,0");
+	//We wrap this as a conditional in case this built-in is never called
+	if (!use_printf) {
+		//Push the info we need back
+		extern_data.push_back("extern printf");
+		
+		//TODO: Add some conditional so we don't push everything
+		sec_data.push_back("int_fmt db \"%d\",10,0");
+		sec_data.push_back("str_fmt db \"%s\",10,0");
+		sec_data.push_back("flt_fmt db \"%f\",10,0");
+		
+		use_printf = true;
+	}
 	
 	//Add the code
-	/*for (auto t : fc->get_args()) {
-		switch (t.type) {
-			case TokenType::STRING: {
+	for (auto node : fc->children) {
+		switch (node->type) {
+			case AstType::Str: {
+				AstString *str = dynamic_cast<AstString *>(node);
+			
 				std::string name = "STR_" + std::to_string(str_index);
-				sec_data.push_back(name + " db \"" + t.id + "\",0");
+				sec_data.push_back(name + " db \"" + str->get_val() + "\",0");
 				++str_index;
 				
 				sec_text.push_back("push dword " + name);
@@ -71,7 +78,7 @@ void Asm_x86::build_println(AstFuncCall *fc) {
 				sec_text.push_back("");
 			} break;
 		}
-	}*/
+	}
 }
 
 //Assembles a variable declaration
