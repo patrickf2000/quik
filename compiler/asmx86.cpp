@@ -28,14 +28,11 @@ void Asm_x86::assemble(AstNode *top) {
 		
 			if (fc->get_name() == "println") {
 				build_println(fc);
-			} else if (fc->get_name() == "exit") {
-				sec_text.push_back("mov eax, 1");
-				sec_text.push_back("mov ebx, 0");
-				sec_text.push_back("int 0x80");
-				sec_text.push_back("");
 			} else {
 			
 			}
+		} else if (node->type == AstType::Return) {
+			build_ret(node);
 		}
 	}
 }
@@ -124,6 +121,20 @@ void Asm_x86::build_println(AstFuncCall *fc) {
 			} break;
 		}
 	}
+}
+
+//Builds the return statements
+void Asm_x86::build_ret(AstNode *node) {
+	if (in_main) {
+		sec_text.push_back("mov eax, 1");
+		sec_text.push_back("mov ebx, 0");
+		sec_text.push_back("int 0x80");
+		sec_text.push_back("");
+	} else {
+		sec_text.push_back("ret");
+	}
+	
+	sec_text.push_back("");
 }
 
 //Assembles a variable declaration

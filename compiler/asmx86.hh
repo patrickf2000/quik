@@ -11,6 +11,7 @@ public:
 	void assemble(AstNode *top);
 	void build_function(AstNode *node);
 	void build_println(AstFuncCall *fc);
+	void build_ret(AstNode *node);
 	void build_var_dec(AstNode *node);
 	void write();
 	void build();
