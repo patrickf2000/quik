@@ -50,11 +50,64 @@ void Asm_x86::build_function(AstNode *node) {
 	
 	ln += ":";
 	sec_text.push_back(ln);
+	
+	//Build the arguments
+	for (auto v : fd->args) {
+		//Pop the arguments into the variables
+		sec_text.push_back("mov eax, [esp+4]");
+		
+		if (v.type == DataType::Str)
+			sec_text.push_back("mov " + v.name + ", eax");
+		else
+			sec_text.push_back("mov [" + v.name + "], eax");
+	
+		//Declare the function arguments in assembly
+		AstVarDec *vd = new AstVarDec(v.name);
+		vd->set_type(v.type);
+		
+		if (v.type == DataType::Str) {
+			vd->children.push_back(new AstString);
+		} else if (v.type == DataType::Bool) {
+			//TODO: Replace
+			vd->children.push_back(new AstNode);
+		} else {
+			vd->children.push_back(new AstInt(0));
+		}
+		
+		build_var_dec(vd);
+		sec_text.push_back("");
+	}
 }
 
 //Assembles a function call
-//TODO: This needs a lot of love
 void Asm_x86::build_func_call(AstFuncCall *fc) {
+	for (auto node : fc->children) {
+		switch (node->type) {
+			//An ID-> Means we have a variable
+			case AstType::Id: {
+				AstID *id = dynamic_cast<AstID *>(node);
+				Var v = current_scope->vars[id->get_name()];
+				std::string ln = "push dword ";
+			
+				switch (v.type) {
+					case DataType::Byte:
+					case DataType::Char:
+					case DataType::Short:
+					case DataType::Bool:
+					case DataType::Int: ln += "[" + v.name + "]"; break;
+					case DataType::Long:
+					case DataType::Float: {
+							ln += "[" + v.name + "+4]";
+							ln += "[" + v.name + "]";
+						} break;
+					case DataType::Str: ln += v.name; break;
+				}
+				
+				sec_text.push_back(ln);
+			} break;
+		}
+	}
+
 	sec_text.push_back("call " + fc->get_name());
 	sec_text.push_back("");	
 }

@@ -107,6 +107,8 @@ AstNode *build_node(Line ln) {
 						if (last != TokenType::ID) {
 							syntax_error(ln, "Invalid parameter syntax");
 						}
+						
+						last = t.type;
 						continue;
 					} else if (t.type == TokenType::COMMA) {
 						if (v.type == DataType::None) {
