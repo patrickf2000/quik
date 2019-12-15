@@ -10,6 +10,7 @@ public:
 	Asm_x86(std::string p);
 	void assemble(AstNode *top);
 	void build_function(AstNode *node);
+	void build_extern_func(AstNode *node);
 	void build_func_call(AstFuncCall *fc);
 	void build_println(AstFuncCall *fc);
 	void build_ret(AstNode *node);

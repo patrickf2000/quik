@@ -21,6 +21,8 @@ void Asm_x86::assemble(AstNode *top) {
 		} else if (node->type == AstType::FuncDec) {
 			build_function(node);
 			assemble(node);
+		} else if (node->type == AstType::ExternFunc) {
+			build_extern_func(node);
 		} else if (node->type == AstType::VarDec) {
 			build_var_dec(node);
 		} else if (node->type == AstType::FuncCall) {
@@ -83,6 +85,14 @@ void Asm_x86::build_function(AstNode *node) {
 		build_var_dec(vd);
 		sec_text.push_back("");
 	}
+}
+
+//Assembles an external function
+void Asm_x86::build_extern_func(AstNode *node) {
+	AstExternFunc *fd = dynamic_cast<AstExternFunc *>(node);
+	std::string ln = "extern " + fd->get_name();
+	
+	extern_data.push_back(ln);
 }
 
 //Assembles a function call
