@@ -62,9 +62,9 @@ void Asm_x86::build_function(AstNode *node) {
 		arg_access += 4;
 		sec_text.push_back(mov_ln);
 		
-		if (v.type == DataType::Str)
+		/*if (v.type == DataType::Str)
 			sec_text.push_back("mov " + v.name + ", eax");
-		else
+		else*/
 			sec_text.push_back("mov [" + v.name + "], eax");
 	
 		//Declare the function arguments in assembly
@@ -248,6 +248,9 @@ void Asm_x86::build_var_dec(AstNode *node) {
 		if (first->type == AstType::Int) {
 			AstInt *i = dynamic_cast<AstInt *>(first);
 			ln += std::to_string(i->get_val());
+		} else if (first->type == AstType::Str) {
+			AstString *i = dynamic_cast<AstString *>(first);
+			ln += "\"" + i->get_val() + "\",0";
 		}
 	}
 	

@@ -205,6 +205,9 @@ AstNode *build_node(Line ln) {
 					int no = std::stoi(t.id);
 					AstInt *i = new AstInt(no);
 					vd->children.push_back(i);
+				} else if (t.type == TokenType::STRING) {
+					AstString *i = new AstString(t.id);
+					vd->children.push_back(i);
 				} else if (t.type == TokenType::PLUS) {
 					vd->children.push_back(new AstNode(AstType::Add));
 				} else if (t.type == TokenType::MINUS) {
