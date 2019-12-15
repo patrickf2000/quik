@@ -129,6 +129,17 @@ void Asm_x86::build_func_call(AstFuncCall *fc) {
 				AstInt *no = dynamic_cast<AstInt *>(node);
 				sec_text.push_back("push " + std::to_string(no->get_val()));
 			} break;
+			
+			//A string
+			case AstType::Str: {
+				AstString *str = dynamic_cast<AstString *>(node);
+				
+				std::string name = "STR_" + std::to_string(str_index);
+				sec_data.push_back(name + " db \"" + str->get_val() + "\",0");
+				++str_index;
+				
+				sec_text.push_back("push dword " + name);
+			} break;
 		}
 	}
 
