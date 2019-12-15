@@ -1,9 +1,9 @@
-fn print_str(s:str)
+func print_str(s:str)
 	println("Your string:")
 	println(s)
 end
 
-fn main
+func main
 	str my_str = "Hello!"
 	print_str(my_str)
 end

@@ -1,14 +1,14 @@
-fn sayHello
+func sayHello
 	println("Hello!!!")
 end
 
-fn sayALot
+func sayALot
 	println("hi")
 	println("How are you?")
 	println("Good!")
 end
 
-fn main
+func main
 	println("Main!")
 	sayHello()
 	sayALot()

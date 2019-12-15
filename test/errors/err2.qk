@@ -1,7 +1,7 @@
-fn
+func
 	println("Say hello!")
 end
 
-fn main()
+func main()
 	sayHello()
 end

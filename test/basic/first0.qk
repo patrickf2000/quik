@@ -1,13 +1,13 @@
 int global_x = 20
 int global_y = 10
 
-fn print_global
+func print_global
 	println("Our global variables: ")
 	println(global_x)
 	println(global_y)
 end
 
-fn main
+func main
 	int x = 5
 	int y = 6
 	int z = x

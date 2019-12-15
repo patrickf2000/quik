@@ -1,10 +1,10 @@
 include stdio
 INCLUDE~ID>stdio~
 
-fn main
+func main
 FUNC_DEC~ID>main~
 
-fn main()
+func main()
 FUNC_DEC~ID>main~LEFT_PAREN~RIGHT_PAREN~
 
 puts(x)
@@ -22,8 +22,8 @@ END~
 x:int
 ID>x~COLON~T_INT~
 
-fn func(x:int)
+func func(x:int)
 FUNC_DEC~ID>func~LEFT_PAREN~ID>x~COLON~T_INT~RIGHT_PAREN~
 
-fn func(x:int, y:int)
+func func(x:int, y:int)
 FUNC_DEC~ID>func~LEFT_PAREN~ID>x~COLON~T_INT~COMMA~ID>y~COLON~T_INT~RIGHT_PAREN~
