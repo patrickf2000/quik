@@ -69,6 +69,10 @@ std::vector<Token> tokenize(std::string line) {
 			current += c;
 			continue;
 			
+		//If we have a comment, we drop the rest of the line
+		} else if (c == '#') {
+			return tokens;
+			
 		//Check to see if we have a separator
 		//If we do, that signifies we have at least one
 		// new token

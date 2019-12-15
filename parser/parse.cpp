@@ -51,6 +51,9 @@ DataType ttype2dtype(TokenType t) {
 //Builds an AST node from a string of tokens
 AstNode *build_node(Line ln) {
 	auto tokens = ln.tokens;
+	if (tokens.size() == 0)
+		return nullptr;
+		
 	auto first = tokens.at(0);
 	
 	//Build an include node

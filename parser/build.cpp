@@ -23,7 +23,7 @@ std::vector<Line> load_source(const char *path) {
 	
 	while (std::getline(reader, ln)) {
 		ln = trim(ln);
-		if (ln.length() > 0) {
+		if (ln.length() > 0 && ln[0] != '#') {
 			Line l;
 			l.no = ln_no;
 			l.original = ln;
