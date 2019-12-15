@@ -81,7 +81,7 @@ std::vector<Token> tokenize(std::string line) {
 				tokens.push_back(t);
 				
 			//Function keywords
-			} else if (current == "fn") {
+			} else if (current == "func") {
 				t.type = TokenType::FUNC_DEC;
 				tokens.push_back(t);
 			} else if (current == "end") {

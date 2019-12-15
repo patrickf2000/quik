@@ -1,5 +1,5 @@
 include stdio
 
-fn main
+func main
 	println("Hello, world!")
 end
