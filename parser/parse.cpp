@@ -11,6 +11,22 @@ void syntax_error(Line ln, std::string msg) {
 	std::exit(1);
 }
 
+//Translates a token type to a datatype
+DataType ttype2dtype(TokenType t) {
+	switch (t) {
+		case TokenType::T_BYTE: return DataType::Byte;
+		case TokenType::T_CHAR: return DataType::Char;
+		case TokenType::T_SHORT: return DataType::Short;
+		case TokenType::T_INT: return DataType::Int;
+		case TokenType::T_LONG: return DataType::Long;
+		case TokenType::T_FLOAT: return DataType::Float;
+		case TokenType::T_BOOL: return DataType::Bool;
+		case TokenType::T_STR: return DataType::Str;
+	}
+	
+	return DataType::None;
+}
+
 //This performs common checking on variable declarations
 AstVarDec *basic_var_dec(Line ln) {
 	if (ln.tokens.size() < 4) {
@@ -32,20 +48,76 @@ AstVarDec *basic_var_dec(Line ln) {
 	return vd;
 }
 
-//Translates a token type to a datatype
-DataType ttype2dtype(TokenType t) {
-	switch (t) {
-		case TokenType::T_BYTE: return DataType::Byte;
-		case TokenType::T_CHAR: return DataType::Char;
-		case TokenType::T_SHORT: return DataType::Short;
-		case TokenType::T_INT: return DataType::Int;
-		case TokenType::T_LONG: return DataType::Long;
-		case TokenType::T_FLOAT: return DataType::Float;
-		case TokenType::T_BOOL: return DataType::Bool;
-		case TokenType::T_STR: return DataType::Str;
+//Builds a variable declaration
+//This is separate because the extern token requires it, with only
+// minor changes.
+AstFuncDec *build_func_dec(Line ln) {
+	auto tokens = ln.tokens;
+	bool is_extern = false;
+
+	//Perform checks
+	if (tokens.at(0).type == TokenType::EXTERN) {
+		is_extern = true;
+		tokens.erase(tokens.begin());
 	}
 	
-	return DataType::None;
+	if (tokens.size() < 2) {
+		syntax_error(ln, "Invalid size.");
+	}
+
+	Token id = tokens.at(1);
+	if (id.type != TokenType::ID) {
+		syntax_error(ln, "No function name specified!");
+	}
+	
+	AstFuncDec *fd = new AstFuncDec(id.id);
+	if (is_extern)
+		fd = new AstExternFunc(id.id);
+
+	//Generic syntax check
+	if (tokens.size() > 2) {
+		//Make sure we start and end with parantheses
+		auto t1 = tokens.at(2).type;
+		auto t2 = tokens.at(tokens.size() - 1).type;
+		
+		if (t1 != TokenType::LEFT_PAREN || t2 != TokenType::RIGHT_PAREN) {
+			syntax_error(ln, "Expected opening or closing parantheses.");
+		}
+		
+		//Iterate through and build our info
+		TokenType last;
+		Var v;
+		
+		for (int i = 3; i<tokens.size(); i++) {
+			auto t = tokens.at(i);
+			
+			if (t.type == TokenType::RIGHT_PAREN) {
+				fd->args.push_back(v);
+				break;
+			} else if (t.type == TokenType::COLON) {
+				if (last != TokenType::ID) {
+					syntax_error(ln, "Invalid parameter syntax");
+				}
+				
+				last = t.type;
+				continue;
+			} else if (t.type == TokenType::COMMA) {
+				if (v.type == DataType::None) {
+					syntax_error(ln, "No datatype specified in parameter");
+				}
+				
+				fd->args.push_back(v);
+			} else if (t.type == TokenType::ID) {
+				v.name = t.id;
+			} else if (last == TokenType::COLON) {
+				v.type = ttype2dtype(t.type);
+			}
+				
+			last = t.type;
+		}
+	}
+
+	return fd;
 }
 
 //Builds an AST node from a string of tokens
@@ -73,64 +145,8 @@ AstNode *build_node(Line ln) {
 		}
 		
 		//Build a function declaration node
-		//TODO: We need arguments
-		case TokenType::FUNC_DEC: {
-			if (tokens.size() < 2) {
-				syntax_error(ln, "Invalid size.");
-			}
-			
-			Token id = tokens.at(1);
-			if (id.type != TokenType::ID) {
-				syntax_error(ln, "No function name specified!");
-			}
-			
-			AstFuncDec *fd = new AstFuncDec(id.id);
-			
-			//Generic syntax check
-			if (tokens.size() > 2) {
-				//Make sure we start and end with parantheses
-				auto t1 = tokens.at(2).type;
-				auto t2 = tokens.at(tokens.size() - 1).type;
-				
-				if (t1 != TokenType::LEFT_PAREN || t2 != TokenType::RIGHT_PAREN) {
-					syntax_error(ln, "Expected opening or closing parantheses.");
-				}
-				
-				//Iterate through and build our info
-				TokenType last;
-				Var v;
-				
-				for (int i = 3; i<tokens.size(); i++) {
-					auto t = tokens.at(i);
-					
-					if (t.type == TokenType::RIGHT_PAREN) {
-						fd->args.push_back(v);
-						break;
-					} else if (t.type == TokenType::COLON) {
-						if (last != TokenType::ID) {
-							syntax_error(ln, "Invalid parameter syntax");
-						}
-						
-						last = t.type;
-						continue;
-					} else if (t.type == TokenType::COMMA) {
-						if (v.type == DataType::None) {
-							syntax_error(ln, "No datatype specified in parameter");
-						}
-						
-						fd->args.push_back(v);
-					} else if (t.type == TokenType::ID) {
-						v.name = t.id;
-					} else if (last == TokenType::COLON) {
-						v.type = ttype2dtype(t.type);
-					}
-						
-					last = t.type;
-				}
-			}
-			
-			return fd;
-		}
+		case TokenType::EXTERN:
+		case TokenType::FUNC_DEC: return build_func_dec(ln);
 	
 		//Build an End statement
 		case TokenType::END: {

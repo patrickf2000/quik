@@ -2,3 +2,8 @@
 # Test the extern keyword using the stdlib exit
 
 extern func exit(code:int)
+
+func main
+	println("Hello, world!")
+	exit(3)
+end

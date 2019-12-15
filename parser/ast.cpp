@@ -7,6 +7,7 @@ std::string ast2str(AstType type) {
 	switch (type) {
 		case AstType::Scope: return "Scope";
 		case AstType::Include: return "Include";
+		case AstType::ExternFunc:
 		case AstType::FuncDec: return "FuncDec";
 		case AstType::FuncCall: return "FuncCall";
 		case AstType::Return: return "Return";
@@ -63,8 +64,12 @@ void print_tree(AstNode *node, int indent) {
 		std::cout << " [" 
 			<< dynamic_cast<AstInclude *>(node)->get_include()
 			<< "]";
-	} else if (node->type == AstType::FuncDec) {
+	} else if (node->type == AstType::FuncDec || node->type == AstType::ExternFunc) {
 		AstFuncDec *fd = dynamic_cast<AstFuncDec *>(node);
+		if (node->type == AstType::ExternFunc) {
+			std::cout << " EXT";
+		}
+		
 		std::cout << " ["  << fd->get_name() << "] ";
 			
 		if (fd->args.size() > 0) {

@@ -13,6 +13,7 @@ enum AstType {
 	
 	//Function stuff
 	FuncDec,
+	ExternFunc,
 	FuncCall,
 	End,
 	Return,
@@ -86,8 +87,18 @@ public:
 		type = AstType::FuncDec;
 		name = n;
 	}
-	
+
 	std::vector<Var> args;
+};
+
+//Extern function declarations
+class AstExternFunc : public AstFuncDec {
+public:
+	explicit AstExternFunc() { type = AstType::ExternFunc; }
+	explicit AstExternFunc(std::string n) {
+		type = AstType::ExternFunc;
+		name = n;
+	}
 };
 
 //The function call type
