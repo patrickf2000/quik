@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.0)
-project(upl)
+project(quik)
 
 include_directories(parser)
 
@@ -19,12 +19,12 @@ set(COMPILER_SRC
 	compiler/asmx86.cpp
 )
 
-add_library(uplparser ${PARSER_SRC})
+add_library(qkparser ${PARSER_SRC})
 
 add_executable(lxtest parser/test/lex_test.cpp)
 add_executable(parser_test parser/test/parser_test.cpp)
-add_executable(uplc ${COMPILER_SRC})
+add_executable(quikc ${COMPILER_SRC})
 
-target_link_libraries(lxtest uplparser)
-target_link_libraries(parser_test uplparser)
-target_link_libraries(uplc uplparser)
+target_link_libraries(lxtest qkparser)
+target_link_libraries(parser_test qkparser)
+target_link_libraries(quikc qkparser)
