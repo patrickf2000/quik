@@ -113,6 +113,12 @@ void Asm_x86::build_func_call(AstFuncCall *fc) {
 				
 				sec_text.push_back(ln);
 			} break;
+			
+			//An Int
+			case AstType::Int: {
+				AstInt *no = dynamic_cast<AstInt *>(node);
+				sec_text.push_back("push " + std::to_string(no->get_val()));
+			} break;
 		}
 	}
 

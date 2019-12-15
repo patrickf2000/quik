@@ -20,4 +20,8 @@ fn main
 	int n1 = 21
 	int n2 = 22
 	print_two(n1,n2)
+	
+	println("Raw pass test:")
+	print_int(100)
+	print_two(100, n1)
 end
