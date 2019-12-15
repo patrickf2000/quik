@@ -1,0 +1,10 @@
+# for2.qk
+# Prints out each character in a string
+
+func main
+	str hello = "Hello!"
+
+	for s in hello
+		println(s)
+	end
+end

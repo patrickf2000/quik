@@ -1,0 +1,22 @@
+# loop.qk
+# Tests the loop keyword
+
+func main
+	int x = 0
+
+	loop
+		if (x == 10)
+			println("Goodbye!")
+			break
+		end
+		
+		x++
+		println(x)
+	end
+
+	x = 0
+
+	loop 5
+		println(x)
+	end
+end

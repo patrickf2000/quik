@@ -1,0 +1,28 @@
+# parallel1.qk
+
+default_error func err1
+	println("A general error occurred!")
+	exit 1
+end
+
+parallel func count1()
+	for (x=0) to 10
+		println(x)
+	end
+end
+
+parallel func count2()
+	for (x=10) to 20
+		println(x)
+	end
+end
+
+func main
+	println("Starting the threads:")
+
+	count1()
+	count2()
+
+	println("Done!")
+end
+

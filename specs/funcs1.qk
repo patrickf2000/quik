@@ -1,0 +1,8 @@
+func sayHello
+	println "Hello!"
+end
+
+func main
+	println("Calling the function:")
+	sayHello()
+end

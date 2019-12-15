@@ -1,0 +1,6 @@
+# hello-world.qk
+# The hello world program
+
+func main
+	println("Hello, world!")
+end

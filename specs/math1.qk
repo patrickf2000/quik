@@ -1,0 +1,7 @@
+# math1.qk
+# Examples of math
+
+func main
+	int answer = 2 ^ 4 - 2 / 6
+	println("Answer: " + answer)
+end

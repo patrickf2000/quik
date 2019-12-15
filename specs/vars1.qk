@@ -1,0 +1,31 @@
+# vars1.qk
+# Gives an example of our datatypes
+
+# Integers
+int no1 = 20
+int8 = 4
+int16 = 20
+int32 = 100
+int64 = 4500
+
+# Booleans
+bool t = true
+bool f = false
+
+# Floating point
+dec pi = 3.14
+dec no = 1000.3
+
+# Characters
+char s = 'A'
+char z = 50
+
+# Strings
+str hello = "Hello"
+
+# Automatically derived types
+auto no = 324
+auto what = true
+auto t = 'T'
+auto pii = 33.114444
+char yo = "Yo!!"

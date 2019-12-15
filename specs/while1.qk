@@ -1,0 +1,16 @@
+# while1.qk
+# Provides an example of a while loop
+
+func count(max:int)
+	int x = 0
+	
+	while (x < max)
+		println(x)
+	end
+	
+	println("Done")
+end
+
+func main
+	count(10)
+end

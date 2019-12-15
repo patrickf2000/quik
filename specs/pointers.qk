@@ -1,0 +1,13 @@
+# pointers.qk
+# Example of pointers
+
+func out_number(int &x)
+	int n = *x
+	println("Addr: " + x)
+	println("No: " + n)
+end
+
+func main
+	int x = 14
+	out_number(&x)
+end
