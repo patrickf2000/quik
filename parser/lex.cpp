@@ -88,6 +88,9 @@ std::vector<Token> tokenize(std::string line) {
 			} else if (current == "func") {
 				t.type = TokenType::FUNC_DEC;
 				tokens.push_back(t);
+			} else if (current == "extern") {
+				t.type = TokenType::EXTERN;
+				tokens.push_back(t);
 			} else if (current == "end") {
 				t.type = TokenType::END;
 				tokens.push_back(t);
@@ -226,5 +229,6 @@ TokenType str2type(std::string in) {
 	else if (in == "DIV") return TokenType::DIV;
 	else if (in == "MOD") return TokenType::MOD;
 	else if (in == "COLON") return TokenType::COLON;
+	else if (in == "EXTERN") return TokenType::EXTERN;
 	return TokenType::NONE;
 }

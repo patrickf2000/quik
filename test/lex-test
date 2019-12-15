@@ -22,8 +22,11 @@ END~
 x:int
 ID>x~COLON~T_INT~
 
-func func(x:int)
-FUNC_DEC~ID>func~LEFT_PAREN~ID>x~COLON~T_INT~RIGHT_PAREN~
+func myFunc(x:int)
+FUNC_DEC~ID>myFunc~LEFT_PAREN~ID>x~COLON~T_INT~RIGHT_PAREN~
 
-func func(x:int, y:int)
-FUNC_DEC~ID>func~LEFT_PAREN~ID>x~COLON~T_INT~COMMA~ID>y~COLON~T_INT~RIGHT_PAREN~
+func myFunc(x:int, y:int)
+FUNC_DEC~ID>myFunc~LEFT_PAREN~ID>x~COLON~T_INT~COMMA~ID>y~COLON~T_INT~RIGHT_PAREN~
+
+extern func exit(code:int)
+EXTERN~FUNC_DEC~ID>exit~LEFT_PAREN~ID>code~COLON~T_INT~RIGHT_PAREN~

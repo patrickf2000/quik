@@ -9,6 +9,7 @@ enum TokenType {
 	//Keywords
 	INCLUDE,
 	FUNC_DEC,
+	EXTERN,
 	END,
 	
 	//Type keywords

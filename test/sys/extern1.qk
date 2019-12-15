@@ -1,0 +1,4 @@
+# extern1.qk
+# Test the extern keyword using the stdlib exit
+
+extern func exit(code:int)
