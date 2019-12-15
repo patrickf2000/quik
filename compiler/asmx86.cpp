@@ -52,9 +52,15 @@ void Asm_x86::build_function(AstNode *node) {
 	sec_text.push_back(ln);
 	
 	//Build the arguments
+	int arg_access = 4;
+	
 	for (auto v : fd->args) {
 		//Pop the arguments into the variables
-		sec_text.push_back("mov eax, [esp+4]");
+		std::string mov_ln = "mov eax, [esp+";
+		mov_ln += std::to_string(arg_access) + "]";
+		
+		arg_access += 4;
+		sec_text.push_back(mov_ln);
 		
 		if (v.type == DataType::Str)
 			sec_text.push_back("mov " + v.name + ", eax");
@@ -81,7 +87,9 @@ void Asm_x86::build_function(AstNode *node) {
 
 //Assembles a function call
 void Asm_x86::build_func_call(AstFuncCall *fc) {
-	for (auto node : fc->children) {
+	for (int i = fc->children.size()-1; i>=0; i--) {
+		auto node = fc->children.at(i);
+	
 		switch (node->type) {
 			//An ID-> Means we have a variable
 			case AstType::Id: {

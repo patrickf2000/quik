@@ -4,9 +4,20 @@ fn print_int(no:int)
 	println(no)
 end
 
+fn print_two(no1:int, no2:int)
+	println("")
+	println("The numbers are:")
+	println(no1)
+	println(no2)
+end
+
 fn main
 	int x = 20
 
 	println("Printing a number:")
 	print_int(x)
+	
+	int n1 = 21
+	int n2 = 22
+	print_two(n1,n2)
 end
