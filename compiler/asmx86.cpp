@@ -25,6 +25,8 @@ void Asm_x86::assemble(AstNode *top) {
 			build_extern_func(node);
 		} else if (node->type == AstType::VarDec) {
 			build_var_dec(node);
+		} else if (node->type == AstType::VarAssign) {
+			build_var_assign(node);
 		} else if (node->type == AstType::FuncCall) {
 			AstFuncCall *fc = dynamic_cast<AstFuncCall *>(node);
 		
@@ -276,6 +278,29 @@ void Asm_x86::build_var_dec(AstNode *node) {
 	}
 	
 	sec_data.push_back(ln);
+}
+
+//Builds a variable assignment
+void Asm_x86::build_var_assign(AstNode *node) {
+	AstVarAssign *va = dynamic_cast<AstVarAssign *>(node);
+	
+	if (va->children.size() == 1) {
+		auto child = va->children.at(0);
+		
+		switch (child->type) {
+			//Integers
+			case AstType::Int: {
+				AstInt *i = dynamic_cast<AstInt *>(child);
+				auto val = std::to_string(i->get_val());
+			
+				sec_text.push_back("mov eax, " + val);
+				sec_text.push_back("mov [" + va->get_name() + "], eax");
+				sec_text.push_back("");
+			} break;
+		}
+	} else {
+		//TODO: ?
+	}
 }
 
 //Write out the final product

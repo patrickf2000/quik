@@ -15,6 +15,7 @@ public:
 	void build_println(AstFuncCall *fc);
 	void build_ret(AstNode *node);
 	void build_var_dec(AstNode *node);
+	void build_var_assign(AstNode *node);
 	void write();
 	void build();
 private:
