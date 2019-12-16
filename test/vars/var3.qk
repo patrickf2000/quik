@@ -1,0 +1,12 @@
+func main
+	int x = 5
+	int y = 6 * x
+	
+	println("Y:")
+	println(y)
+	
+	int z = y % 2
+	
+	println("Z:")
+	println(z)
+end

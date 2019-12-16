@@ -297,16 +297,25 @@ void Asm_x86::build_var_assign(AstNode *node) {
 		} break;
 	}
 	
+	//Iterate through all the children
 	for (int i = 1; i<va->children.size(); i+=2) {
 		auto current = va->children.at(i);
 		auto next = va->children.at(i+1);
 		std::string ln = "";
 		
+		bool is_mod = false;
+		bool is_div = false;
+		
 		switch (current->type) {
 			case AstType::Add: ln += "add eax, "; break;
 			case AstType::Sub: ln += "sub eax, "; break;
-			
-			//TODO: Add rest
+			case AstType::Mul: ln += "imul eax, "; break;
+			case AstType::Mod: is_mod = true;
+			case AstType::Div: is_div = true; break;
+		}
+		
+		if (is_div) {
+			ln = "mov ebx, ";
 		}
 		
 		switch (next->type) {
@@ -322,6 +331,15 @@ void Asm_x86::build_var_assign(AstNode *node) {
 		}
 		
 		sec_text.push_back(ln);
+		
+		if (is_div) {
+			sec_text.push_back("cdq");
+			sec_text.push_back("div ebx");
+		}
+		
+		if (is_mod) {
+			sec_text.push_back("mov eax, edx");
+		}
 	}
 	
 	sec_text.push_back("mov [" + va->get_name() + "], eax");
