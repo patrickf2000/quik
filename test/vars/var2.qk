@@ -1,12 +1,15 @@
 func main
 	int x = 5
+	int y = 0
 	
 	println("Before:")
 	println(x)
 	
 	x = 6
+	y = x
 	
 	println("")
 	println("After")
 	println(x)
+	println(y)
 end

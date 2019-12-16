@@ -297,6 +297,15 @@ void Asm_x86::build_var_assign(AstNode *node) {
 				sec_text.push_back("mov [" + va->get_name() + "], eax");
 				sec_text.push_back("");
 			} break;
+			
+			//Other variables
+			case AstType::Id: {
+				AstID *id = dynamic_cast<AstID *>(child);
+				
+				sec_text.push_back("mov eax, [" + id->get_name() + "]");
+				sec_text.push_back("mov [" + va->get_name() + "], eax");
+				sec_text.push_back("");
+			} break;
 		}
 	} else {
 		//TODO: ?
