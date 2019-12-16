@@ -48,6 +48,35 @@ AstVarDec *basic_var_dec(Line ln) {
 	return vd;
 }
 
+//Translates each part into tokens for variable declarations and assignments
+void build_var_parts(AstVarDec *vd, int start, std::vector<Token> tokens) {
+	for (int i = start; i<tokens.size(); i++) {
+		Token t = tokens.at(i);
+		
+		if (t.type == TokenType::NO) {
+			int no = std::stoi(t.id);
+			AstInt *i = new AstInt(no);
+			vd->children.push_back(i);
+		} else if (t.type == TokenType::STRING) {
+			AstString *i = new AstString(t.id);
+			vd->children.push_back(i);
+		} else if (t.type == TokenType::PLUS) {
+			vd->children.push_back(new AstNode(AstType::Add));
+		} else if (t.type == TokenType::MINUS) {
+			vd->children.push_back(new AstNode(AstType::Sub));
+		} else if (t.type == TokenType::MUL) {
+			vd->children.push_back(new AstNode(AstType::Mul));
+		} else if (t.type == TokenType::DIV) {
+			vd->children.push_back(new AstNode(AstType::Div));
+		} else if (t.type == TokenType::MOD) {
+			vd->children.push_back(new AstNode(AstType::Mod));
+		} else {
+			AstID *i = new AstID(t.id);
+			vd->children.push_back(i);
+		}
+	}
+}
+
 //Builds a variable declaration
 //This is separate because the extern token requires it, with only
 // minor changes.
@@ -198,8 +227,13 @@ AstNode *build_node(Line ln) {
 				
 			//Build an assignment
 			} else if (tokens.at(1).type == TokenType::ASSIGN) {
-				std::cout << "VAR!" << std::endl;
-				return nullptr;
+				if (tokens.size() < 3) {
+					syntax_error(ln, "Missing elements.");
+				}
+			
+				AstVarAssign *va = new AstVarAssign(tokens.at(0).id);
+				build_var_parts(va, 2, tokens);
+				return va;
 			}
 		}
 		
@@ -217,31 +251,7 @@ AstNode *build_node(Line ln) {
 			auto vd = basic_var_dec(ln);
 			vd->set_type(ttype2dtype(first.type));
 			
-			for (int i = 3; i<tokens.size(); i++) {
-				Token t = tokens.at(i);
-				
-				if (t.type == TokenType::NO) {
-					int no = std::stoi(t.id);
-					AstInt *i = new AstInt(no);
-					vd->children.push_back(i);
-				} else if (t.type == TokenType::STRING) {
-					AstString *i = new AstString(t.id);
-					vd->children.push_back(i);
-				} else if (t.type == TokenType::PLUS) {
-					vd->children.push_back(new AstNode(AstType::Add));
-				} else if (t.type == TokenType::MINUS) {
-					vd->children.push_back(new AstNode(AstType::Sub));
-				} else if (t.type == TokenType::MUL) {
-					vd->children.push_back(new AstNode(AstType::Mul));
-				} else if (t.type == TokenType::DIV) {
-					vd->children.push_back(new AstNode(AstType::Div));
-				} else if (t.type == TokenType::MOD) {
-					vd->children.push_back(new AstNode(AstType::Mod));
-				} else {
-					AstID *i = new AstID(t.id);
-					vd->children.push_back(i);
-				}
-			}
+			build_var_parts(vd, 3, tokens);
 			
 			return vd;
 		}

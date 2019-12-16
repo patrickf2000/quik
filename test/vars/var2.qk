@@ -1,0 +1,12 @@
+func main
+	int x = 5
+	
+	println("Before:")
+	println(x)
+	
+	x = 6
+	
+	println("")
+	println("After")
+	println(x)
+end

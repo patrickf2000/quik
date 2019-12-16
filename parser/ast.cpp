@@ -13,6 +13,7 @@ std::string ast2str(AstType type) {
 		case AstType::Return: return "Return";
 		case AstType::End: return "End";
 		case AstType::VarDec: return "VarDec";
+		case AstType::VarAssign: return "VarAssign";
 		case AstType::Int: return "Int";
 		case AstType::Id: return "ID";
 		case AstType::Str: return "Str";
@@ -83,7 +84,7 @@ void print_tree(AstNode *node, int indent) {
 		AstFuncCall *fc = dynamic_cast<AstFuncCall *>(node);
 		std::cout << " [" << fc->get_name() << "]";
 		
-	} else if (node->type == AstType::VarDec) {
+	} else if (node->type == AstType::VarDec || node->type == AstType::VarAssign) {
 		AstVarDec *vd = dynamic_cast<AstVarDec *>(node);
 		std::cout << " [" << vd->get_name() << "] ("
 			<< type2str(vd->get_type()) << ")";

@@ -20,6 +20,7 @@ enum AstType {
 	
 	//Variable stuff
 	VarDec,
+	VarAssign,
 	Id,
 	Int,
 	Str,
@@ -131,6 +132,16 @@ public:
 	void set_type(DataType t) { dtype = t; }
 private:
 	DataType dtype;
+};
+
+//Variable assignment/operation
+class AstVarAssign : public AstVarDec {
+public:
+	explicit AstVarAssign() { type = AstType::VarAssign; }
+	explicit AstVarAssign(std::string n) {
+		type = AstType::VarAssign;
+		name = n;
+	}
 };
 
 //The ID type
