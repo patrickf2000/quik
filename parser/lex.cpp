@@ -136,6 +136,12 @@ std::vector<Token> tokenize(std::string line) {
 			} else if (current == "if") {
 				t.type = TokenType::IF;
 				tokens.push_back(t);
+			} else if (current == "elif") {
+				t.type = TokenType::ELIF;
+				tokens.push_back(t);
+			} else if (current == "else") {
+				t.type = TokenType::ELSE;
+				tokens.push_back(t);
 				
 			//Booleans
 			} else if (current == "true") {
@@ -250,5 +256,7 @@ TokenType str2type(std::string in) {
 	else if (in == "EXTERN") return TokenType::EXTERN;
 	else if (in == "IF") return TokenType::IF;
 	else if (in == "EQUALS") return TokenType::EQUALS;
+	else if (in == "ELIF") return TokenType::ELIF;
+	else if (in == "ELSE") return TokenType::ELSE;
 	return TokenType::NONE;
 }

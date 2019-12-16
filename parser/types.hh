@@ -12,6 +12,8 @@ enum TokenType {
 	EXTERN,
 	END,
 	IF,
+	ELIF,
+	ELSE,
 	
 	//Type keywords
 	T_BYTE,
