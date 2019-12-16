@@ -6,6 +6,7 @@
 #include <ast.hh>
 #include <build.hh>
 
+#include "utils.hh"
 #include "asmx86.hh"
 
 void help() {
@@ -68,14 +69,23 @@ int main(int argc, char *argv[]) {
 		}
 	}
 	
+	for (auto f : inputs) {
+		auto path = get_path(f);
+		auto base = get_basename(f);
+		
+		std::cout << "In: " << f << std::endl;
+		std::cout << "Path: " << path << std::endl;
+		std::cout << "Base: " << base << std::endl << std::endl;
+	}
+	
 	//Build the AST
-	auto lines = load_source(inputs.at(0).c_str());
+	/*auto lines = load_source(inputs.at(0).c_str());
 	AstNode *node = build_ast(lines);
 	
 	Asm_x86 builder("/tmp/out.asm");
 	builder.assemble(node);
 	builder.write();
-	builder.build();
+	builder.build();*/
 	
 	return 0;
 }
