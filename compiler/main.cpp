@@ -69,13 +69,17 @@ int main(int argc, char *argv[]) {
 		}
 	}
 	
-	for (auto f : inputs) {
-		auto path = get_path(f);
-		auto base = get_basename(f);
+	//Iterate through each input and work on each file
+	Asm_x86 builder;
+	
+	for (auto path : inputs) {
+		auto lines = load_source(path.c_str());
+		AstNode *node = build_ast(lines);
 		
-		std::cout << "In: " << f << std::endl;
-		std::cout << "Path: " << path << std::endl;
-		std::cout << "Base: " << base << std::endl << std::endl;
+		builder.assemble(path, node);
+		builder.write();
+		
+		delete node;
 	}
 	
 	//Build the AST

@@ -4,23 +4,28 @@
 #include <cstdlib>
 
 #include "asmx86.hh"
+#include "utils.hh"
 
 //Set things up
-Asm_x86::Asm_x86(std::string p) {
-	path = p;
-	
+Asm_x86::Asm_x86() {
 	extern_data.push_back("global main");
 }
 
 //Iterate through the tree and assemble
-void Asm_x86::assemble(AstNode *top) {
+void Asm_x86::assemble(std::string p, AstNode *top) {
+	if (p != "") {
+		std::string base = get_basename(p);
+		path = "/tmp/" + base + ".asm";
+		asm_files.push_back(base);
+	}
+
 	for (auto node : top->children) {
 		if (node->type == AstType::Scope) {
 			current_scope = dynamic_cast<AstScope *>(node);
-			assemble(node);
+			assemble("", node);
 		} else if (node->type == AstType::FuncDec) {
 			build_function(node);
-			assemble(node);
+			assemble("", node);
 		} else if (node->type == AstType::ExternFunc) {
 			build_extern_func(node);
 		} else if (node->type == AstType::VarDec) {

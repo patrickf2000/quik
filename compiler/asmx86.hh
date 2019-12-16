@@ -7,8 +7,8 @@
 
 class Asm_x86 {
 public:
-	Asm_x86(std::string p);
-	void assemble(AstNode *top);
+	Asm_x86();
+	void assemble(std::string p, AstNode *top);
 	void build_function(AstNode *node);
 	void build_extern_func(AstNode *node);
 	void build_func_call(AstFuncCall *fc);
@@ -20,6 +20,7 @@ public:
 	void build();
 private:
 	std::string path = "";
+	std::vector<std::string> asm_files;
 	std::vector<std::string> sec_data;
 	std::vector<std::string> sec_text;
 	std::vector<std::string> extern_data;
