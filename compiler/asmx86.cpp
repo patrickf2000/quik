@@ -6,11 +6,6 @@
 #include "asmx86.hh"
 #include "utils.hh"
 
-//Set things up
-Asm_x86::Asm_x86() {
-	extern_data.push_back("global main");
-}
-
 //Iterate through the tree and assemble
 void Asm_x86::assemble(std::string p, AstNode *top) {
 	if (p != "") {
@@ -51,6 +46,8 @@ void Asm_x86::build_function(AstNode *node) {
 	AstFuncDec *fd = dynamic_cast<AstFuncDec *>(node);
 	
 	std::string ln = fd->get_name();
+	extern_data.push_back("global " + ln);
+	
 	if (ln == "main") {
 		in_main = true;
 	} else {

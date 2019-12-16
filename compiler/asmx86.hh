@@ -7,7 +7,6 @@
 
 class Asm_x86 {
 public:
-	Asm_x86();
 	void assemble(std::string p, AstNode *top);
 	void build_function(AstNode *node);
 	void build_extern_func(AstNode *node);
