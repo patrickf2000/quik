@@ -121,7 +121,10 @@ AstFuncDec *build_func_dec(Line ln) {
 			auto t = tokens.at(i);
 			
 			if (t.type == TokenType::RIGHT_PAREN) {
-				fd->args.push_back(v);
+				if (v.name != "" && v.type != DataType::None) {
+					fd->args.push_back(v);
+				}
+				
 				break;
 			} else if (t.type == TokenType::COLON) {
 				if (last != TokenType::ID) {

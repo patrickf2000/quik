@@ -84,14 +84,5 @@ int main(int argc, char *argv[]) {
 	
 	builder.build();
 	
-	//Build the AST
-	/*auto lines = load_source(inputs.at(0).c_str());
-	AstNode *node = build_ast(lines);
-	
-	Asm_x86 builder("/tmp/out.asm");
-	builder.assemble(node);
-	builder.write();
-	builder.build();*/
-	
 	return 0;
 }

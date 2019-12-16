@@ -1,8 +1,6 @@
 #Hello World
 # The ever classic hello world program
 
-include stdio
-
-func main
+func main()
 	println("Hello, world!")
 end
