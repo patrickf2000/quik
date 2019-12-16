@@ -16,7 +16,7 @@ void Asm_x86::assemble(std::string p, AstNode *top) {
 	if (p != "") {
 		std::string base = get_basename(p);
 		path = "/tmp/" + base + ".asm";
-		asm_files.push_back(base);
+		asm_files.push_back(path);
 	}
 
 	for (auto node : top->children) {
@@ -376,12 +376,24 @@ void Asm_x86::write() {
 		}
 		writer << l << std::endl;
 	}
+	
+	//Clear the lists
+	sec_data.clear();
+	sec_text.clear();
+	extern_data.clear();
+	use_printf = false;
 }
 
 //Invoke system commands to build the final executable
 void Asm_x86::build() {
 	//TODO: Fix this
-	system(std::string("nasm -g -f elf32 " + path + " -o /tmp/out.o").c_str());
-	system("gcc -g -m32 /tmp/out.o -o out");
+	for (auto p : asm_files) {
+		auto o_out = get_basename(p);
+		o_out = "/tmp/" + o_out + ".o";
+		
+		system(std::string("nasm -g -f elf32 " + p + " -o " + o_out).c_str());
+	}
+	
+	system("gcc -g -m32 /tmp/*.o -o out");
 }
 

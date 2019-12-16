@@ -1,0 +1,6 @@
+extern func sayHello
+
+func main
+	println("Main!")
+	sayHello()
+end

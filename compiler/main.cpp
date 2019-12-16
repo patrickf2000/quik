@@ -82,6 +82,8 @@ int main(int argc, char *argv[]) {
 		delete node;
 	}
 	
+	builder.build();
+	
 	//Build the AST
 	/*auto lines = load_source(inputs.at(0).c_str());
 	AstNode *node = build_ast(lines);
