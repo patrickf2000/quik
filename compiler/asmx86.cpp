@@ -260,13 +260,15 @@ void Asm_x86::build_var_dec(AstNode *node) {
 	
 	auto first = vd->children.at(0);
 	
-	if (first->type == AstType::Id) {
-		AstID *id = dynamic_cast<AstID *>(first);
+	if (first->type == AstType::Id || vd->children.size() > 1) {
+		/*AstID *id = dynamic_cast<AstID *>(first);
 		ln += "0";
 		
 		sec_text.push_back("mov eax, [" + id->get_name() + "]");
 		sec_text.push_back("mov [" + vd->get_name() + "], eax");
-		sec_text.push_back("");
+		sec_text.push_back("");*/
+		ln += "0";
+		build_var_assign(node);
 	} else {
 		if (first->type == AstType::Int) {
 			AstInt *i = dynamic_cast<AstInt *>(first);
@@ -282,9 +284,8 @@ void Asm_x86::build_var_dec(AstNode *node) {
 
 //Builds a variable assignment
 void Asm_x86::build_var_assign(AstNode *node) {
-	AstVarAssign *va = dynamic_cast<AstVarAssign *>(node);
-	
-	auto child = va->children.at(0);
+	AstAttrNode *va = dynamic_cast<AstAttrNode *>(node);
+	auto child = node->children.at(0);
 		
 	switch (child->type) {
 		//Integers

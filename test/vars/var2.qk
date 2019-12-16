@@ -1,7 +1,6 @@
 func math
 	int n1 = 5
-	int n2 = 0
-	n2 = 20 + n1 -1
+	int n2 = 20 + n1 -1
 	
 	println("")
 	println("N2: (Should be 24)")
