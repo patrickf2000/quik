@@ -11,6 +11,7 @@ enum TokenType {
 	FUNC_DEC,
 	EXTERN,
 	END,
+	IF,
 	
 	//Type keywords
 	T_BYTE,
@@ -36,6 +37,10 @@ enum TokenType {
 	MUL,
 	DIV,
 	MOD,
+	
+	//Boolean operators
+	EQUALS,
+	NOT_EQUALS,
 	
 	//Other stuff
 	ID,

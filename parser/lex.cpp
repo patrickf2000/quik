@@ -40,8 +40,16 @@ std::vector<Token> tokenize(std::string line) {
 	std::vector<Token> tokens;
 	std::string current = "";
 	bool in_quote = false;
+	bool skip_next = false;
 	
-	for (auto c : line) {
+	for (int i = 0; i<line.length(); i++) {
+		char c = line[i];
+	
+		if (skip_next) {
+			skip_next = false;
+			continue;
+		}
+	
 		//First, check against double quotes
 		if ((c == '\"' || c == '\'') && in_quote) {
 			Token t;
@@ -124,6 +132,11 @@ std::vector<Token> tokenize(std::string line) {
 				t.type = TokenType::VAR;
 				tokens.push_back(t);
 				
+			//Conditional stuff
+			} else if (current == "if") {
+				t.type = TokenType::IF;
+				tokens.push_back(t);
+				
 			//Booleans
 			} else if (current == "true") {
 				t.type = TokenType::B_TRUE;
@@ -165,6 +178,11 @@ std::vector<Token> tokenize(std::string line) {
 				Token t;
 				t.type = TokenType::COLON;
 				tokens.push_back(t);
+			} else if (c == '=' && line[i+1] == '=') {
+				Token t;
+				t.type = TokenType::EQUALS;
+				tokens.push_back(t);
+				skip_next = true;
 			} else if (c == '=') {
 				Token t;
 				t.type = TokenType::ASSIGN;
@@ -230,5 +248,7 @@ TokenType str2type(std::string in) {
 	else if (in == "MOD") return TokenType::MOD;
 	else if (in == "COLON") return TokenType::COLON;
 	else if (in == "EXTERN") return TokenType::EXTERN;
+	else if (in == "IF") return TokenType::IF;
+	else if (in == "EQUALS") return TokenType::EQUALS;
 	return TokenType::NONE;
 }
