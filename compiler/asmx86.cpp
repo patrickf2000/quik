@@ -383,14 +383,18 @@ void Asm_x86::write() {
 
 //Invoke system commands to build the final executable
 void Asm_x86::build() {
+	std::string gcc_line = "gcc -g -m32 ";
+
 	//TODO: Fix this
 	for (auto p : asm_files) {
 		auto o_out = get_basename(p);
 		o_out = "/tmp/" + o_out + ".o";
+		gcc_line += o_out + " ";
 		
 		system(std::string("nasm -g -f elf32 " + p + " -o " + o_out).c_str());
 	}
 	
-	system("gcc -g -m32 /tmp/*.o -o out");
+	gcc_line += " -o out";
+	system(gcc_line.c_str());
 }
 
