@@ -284,32 +284,53 @@ void Asm_x86::build_var_dec(AstNode *node) {
 void Asm_x86::build_var_assign(AstNode *node) {
 	AstVarAssign *va = dynamic_cast<AstVarAssign *>(node);
 	
-	if (va->children.size() == 1) {
-		auto child = va->children.at(0);
+	auto child = va->children.at(0);
 		
-		switch (child->type) {
-			//Integers
-			case AstType::Int: {
-				AstInt *i = dynamic_cast<AstInt *>(child);
-				auto val = std::to_string(i->get_val());
+	switch (child->type) {
+		//Integers
+		case AstType::Int: {
+			AstInt *i = dynamic_cast<AstInt *>(child);
+			auto val = std::to_string(i->get_val());
+		
+			sec_text.push_back("mov eax, " + val);
+		} break;
+		
+		//Other variables
+		case AstType::Id: {
+			AstID *id = dynamic_cast<AstID *>(child);
+			sec_text.push_back("mov eax, [" + id->get_name() + "]");
+		} break;
+	}
+	
+	for (int i = 1; i<va->children.size(); i+=2) {
+		auto current = va->children.at(i);
+		auto next = va->children.at(i+1);
+		std::string ln = "";
+		
+		switch (current->type) {
+			case AstType::Add: ln += "add eax, "; break;
+			case AstType::Sub: ln += "sub eax, "; break;
 			
-				sec_text.push_back("mov eax, " + val);
-				sec_text.push_back("mov [" + va->get_name() + "], eax");
-				sec_text.push_back("");
+			//TODO: Add rest
+		}
+		
+		switch (next->type) {
+			case AstType::Int: {
+				AstInt *i = dynamic_cast<AstInt *>(next);
+				ln += std::to_string(i->get_val());
 			} break;
 			
-			//Other variables
 			case AstType::Id: {
-				AstID *id = dynamic_cast<AstID *>(child);
-				
-				sec_text.push_back("mov eax, [" + id->get_name() + "]");
-				sec_text.push_back("mov [" + va->get_name() + "], eax");
-				sec_text.push_back("");
+				AstID *id = dynamic_cast<AstID *>(next);
+				ln += "[" + id->get_name() + "]";
 			} break;
 		}
-	} else {
-		//TODO: ?
+		
+		sec_text.push_back(ln);
 	}
+	
+	sec_text.push_back("mov [" + va->get_name() + "], eax");
+	sec_text.push_back("");
 }
 
 //Write out the final product

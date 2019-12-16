@@ -1,3 +1,13 @@
+func math
+	int n1 = 5
+	int n2 = 0
+	n2 = 20 + n1 -1
+	
+	println("")
+	println("N2: (Should be 24)")
+	println(n2)
+end
+
 func main
 	int x = 5
 	int y = 0
@@ -12,4 +22,6 @@ func main
 	println("After")
 	println(x)
 	println(y)
+	
+	math()
 end
