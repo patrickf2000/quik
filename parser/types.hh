@@ -76,7 +76,11 @@ enum class DataType {
 enum class CondOp {
 	None,
 	Equals,
-	NotEquals
+	NotEquals,
+	Greater,
+	GreaterEq,
+	Less,
+	LessEq
 };
 
 struct Token {

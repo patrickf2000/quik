@@ -1,0 +1,17 @@
+func main()
+	if (x == y)
+	
+	elif (x != y)
+	
+	elif (x > y)
+	
+	elif (x < y)
+	
+	elif (x >= y)
+	
+	elif (x <= y)
+	
+	else
+	
+	end
+end

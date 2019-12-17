@@ -212,6 +212,10 @@ AstCond *build_conditional(Line ln) {
 	switch (op) {
 		case TokenType::EQUALS: cond->set_op(CondOp::Equals); break;
 		case TokenType::NOT_EQUAL: cond->set_op(CondOp::NotEquals); break;
+		case TokenType::GREATER: cond->set_op(CondOp::Greater); break;
+		case TokenType::GREATER_EQ: cond->set_op(CondOp::GreaterEq); break;
+		case TokenType::LESS: cond->set_op(CondOp::Less); break;
+		case TokenType::LESS_EQ: cond->set_op(CondOp::LessEq); break;
 	}
 	
 	return cond;

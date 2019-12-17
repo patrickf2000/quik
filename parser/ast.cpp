@@ -53,6 +53,10 @@ std::string op2str(CondOp op) {
 	switch (op) {
 		case CondOp::Equals: return "==";
 		case CondOp::NotEquals: return "!=";
+		case CondOp::Greater: return ">";
+		case CondOp::GreaterEq: return ">=";
+		case CondOp::Less: return "<";
+		case CondOp::LessEq: return "<=";
 	}
 	
 	return "NONE";
