@@ -45,6 +45,7 @@ AstNode *build_ast(std::vector<Line> lines) {
 	
 	for (auto ln : lines) {
 		auto n = build_node(ln);
+		//n.ln = ln;
 		
 		if (n == nullptr) {
 			syntax_error(ln, "Unknown input");

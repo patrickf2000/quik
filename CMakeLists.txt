@@ -12,6 +12,7 @@ set(PARSER_SRC
 	parser/lex.cpp
 	parser/parse.cpp
 	parser/strutils.cpp
+	parser/syntax.cpp
 )
 
 set(COMPILER_SRC

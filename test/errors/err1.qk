@@ -1,5 +1,0 @@
-include
-
-func main
-	println("yo")
-end

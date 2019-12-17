@@ -1,7 +1,0 @@
-func
-	println("Say hello!")
-end
-
-func main()
-	sayHello()
-end

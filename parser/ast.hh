@@ -56,6 +56,7 @@ public:
 	virtual ~AstNode() {}
 	AstType type;
 	std::vector<AstNode *> children;
+	//Line ln;
 };
 
 //The base class for nodes that have a string attribute
