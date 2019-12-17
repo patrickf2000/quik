@@ -8,4 +8,6 @@ func main()
 	elif (x == 7)
 		println("Equal in elif")
 	end
+	
+	println("Done")
 end
