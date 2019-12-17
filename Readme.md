@@ -17,4 +17,6 @@ Functions are working; you can implement them and push arguments, but you cannot
 
 Comparisons are working between integers. Full If/else if/else is supported, both linearly and nested.
 
+Basic while loops seem to be working (only with integers though).
+
 The compiler is currently capable of calling some external C functions via the extern keyword. Additionally, you can compile multiple files into one executable.
