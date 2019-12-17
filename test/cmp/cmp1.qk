@@ -1,10 +1,23 @@
 func main()
 	int x = 10
+	int y = 10
+	println(x)
+	println("")
 	
 	if (x == 10)
 		println("Equal to 10!")
-	else
+		
+		if (x == y)
+			println("No!!")
+		end
+	elif (x != 10)
 		println("Not equal!")
+		
+		if (x > 20)
+			println("Greater than 20")
+		elif (x < 20)
+			println("Less than 20")
+		end
 	end
 	
 	println("Done")
