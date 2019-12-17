@@ -51,7 +51,7 @@ AstNode *build_ast(std::vector<Line> lines) {
 		} else {
 			//This inserts an end statement before an elif statement
 			//TODO: Rethink this solution
-			if (n->type == AstType::Elif) {
+			if (n->type == AstType::Elif || n->type == AstType::Else) {
 				AstNode *end = new AstNode(AstType::End);
 				nodes.push_back(end);
 			}

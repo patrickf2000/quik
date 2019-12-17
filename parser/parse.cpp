@@ -254,6 +254,10 @@ AstNode *build_node(Line ln) {
 		//Build conditional statements
 		case TokenType::IF:
 		case TokenType::ELIF: return build_conditional(ln);
+		case TokenType::ELSE: {
+			AstElse *node = new AstElse;
+			return node;
+		}
 		
 		//Handle if the first node is an ID
 		case TokenType::ID: {
@@ -344,7 +348,7 @@ int build_tree(std::vector<AstNode *> nodes, AstNode *top, int index, bool in_if
 			top->children.push_back(c);
 			c->children.push_back(s);
 			i = build_tree(nodes, s, i+1);
-		} else if (c->type == AstType::If || c->type == AstType::Elif) {
+		} else if (c->type == AstType::If || c->type == AstType::Elif || c->type == AstType::Else) {
 			top->children.push_back(c);
 			i = build_tree(nodes, c, i+1, true);
 		} else if (c->type == AstType::End) {

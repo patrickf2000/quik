@@ -11,11 +11,15 @@ func main()
 			println("L2")
 		elif (x == 11)
 			println("L3")
+		else
+			println("ORR???")
 		end
 		
 		println("done")
 	elif (x == 7)
 		println("Equal in elif")
+	else
+		println("All done.")
 	end
 	
 	println("Done")
