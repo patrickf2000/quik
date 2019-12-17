@@ -7,6 +7,7 @@
 #include "strutils.hh"
 #include "parse.hh"
 #include "analyzer.hh"
+#include "syntax.hh"
 
 //Load the source file and run it through lex
 std::vector<Line> load_source(const char *path) {
@@ -45,7 +46,7 @@ AstNode *build_ast(std::vector<Line> lines) {
 	
 	for (auto ln : lines) {
 		auto n = build_node(ln);
-		//n.ln = ln;
+		n->ln = ln;
 		
 		if (n == nullptr) {
 			syntax_error(ln, "Unknown input");
@@ -66,5 +67,11 @@ AstNode *build_ast(std::vector<Line> lines) {
 	find_assign(top);
 	find_cond(top);
 	check_return(top);
+	
+	//Perform syntax checking
+	SyntaxCheck check;
+	check.check_global(top);
+	check.evaluate();		//TODO: Something else rather than bomb out in function?
+	
 	return top;
 }

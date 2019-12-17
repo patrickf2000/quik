@@ -5,10 +5,12 @@
 #include "types.hh"
 
 //Throws a syntax error and exits the program
-void syntax_error(Line ln, std::string msg) {
+void syntax_error(Line ln, std::string msg, bool exit) {
 	std::cout << "Syntax Error: " << msg << std::endl;
 	std::cout << "[" << ln.no << "] " << ln.original << std::endl;
-	std::exit(1);
+	
+	if (exit)
+		std::exit(1);
 }
 
 //Translates a token type to a datatype
