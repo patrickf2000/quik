@@ -65,7 +65,7 @@ protected:
 };
 
 //Represents a scope
-class AstScope : public AstNode {
+class AstScope : public AstAttrNode {
 public:
 	AstScope() { type = AstType::Scope; }
 	std::map<std::string, Var> vars;

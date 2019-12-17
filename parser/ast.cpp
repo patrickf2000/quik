@@ -73,6 +73,8 @@ void print_tree(AstNode *node, int indent, bool nl) {
 	if (node->type == AstType::Scope) {
 		AstScope *scope = dynamic_cast<AstScope *>(node);
 		
+		std::cout << " [" << scope->get_name() << "]";
+		
 		if (scope->vars.size() > 0) {
 			std::cout << " <";
 			for (auto v : scope->vars) {

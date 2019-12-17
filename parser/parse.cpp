@@ -348,9 +348,14 @@ int build_tree(std::vector<AstNode *> nodes, AstNode *top, int index, bool in_if
 		auto c = nodes.at(i);
 		
 		if (c->type == AstType::FuncDec) {
+			AstFuncDec *fd = dynamic_cast<AstFuncDec *>(c);
+		
 			AstScope *s = new AstScope;
+			s->set_name(fd->get_name());
+			
 			top->children.push_back(c);
 			c->children.push_back(s);
+			
 			i = build_tree(nodes, s, i+1);
 		} else if (c->type == AstType::If || c->type == AstType::Elif || c->type == AstType::Else) {
 			top->children.push_back(c);
