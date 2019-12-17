@@ -333,9 +333,8 @@ AstNode *build_node(Line ln) {
 }
 
 //Builds a tree from a given list of nodes
-int build_tree(std::vector<AstNode *> nodes, AstNode *top, int index) {
+int build_tree(std::vector<AstNode *> nodes, AstNode *top, int index, bool in_if) {
 	int i = index;
-	int layer = 1;
 	
 	for (; i<nodes.size(); i++) {
 		auto c = nodes.at(i);
@@ -345,14 +344,13 @@ int build_tree(std::vector<AstNode *> nodes, AstNode *top, int index) {
 			top->children.push_back(c);
 			c->children.push_back(s);
 			i = build_tree(nodes, s, i+1);
-		} else if (c->type == AstType::If) {
+		} else if (c->type == AstType::If || (c->type == AstType::Elif && !in_if)) {
 			top->children.push_back(c);
-			++layer;
+			i = build_tree(nodes, c, i+1, true);
 		} else if (c->type == AstType::End) {
-			if (layer == 1)
-				return i;
-				
-			--layer;
+			return i;
+		} else if (c->type == AstType::Elif && in_if) {
+			return i-1;
 		} else {
 			top->children.push_back(c);
 		}
