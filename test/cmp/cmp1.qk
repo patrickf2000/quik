@@ -12,6 +12,8 @@ func main()
 		elif (x == 11)
 			println("L3")
 		end
+		
+		println("done")
 	elif (x == 7)
 		println("Equal in elif")
 	end

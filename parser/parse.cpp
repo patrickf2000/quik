@@ -344,13 +344,11 @@ int build_tree(std::vector<AstNode *> nodes, AstNode *top, int index, bool in_if
 			top->children.push_back(c);
 			c->children.push_back(s);
 			i = build_tree(nodes, s, i+1);
-		} else if (c->type == AstType::If || (c->type == AstType::Elif && !in_if)) {
+		} else if (c->type == AstType::If || c->type == AstType::Elif) {
 			top->children.push_back(c);
 			i = build_tree(nodes, c, i+1, true);
 		} else if (c->type == AstType::End) {
 			return i;
-		} else if (c->type == AstType::Elif && in_if) {
-			return i-1;
 		} else {
 			top->children.push_back(c);
 		}
