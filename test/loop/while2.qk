@@ -8,8 +8,6 @@ func main()
 	while (x != 11)
 		if (x == 5)
 			println("Half way!!")
-		else
-			println("")
 		end
 		
 		println(x)
