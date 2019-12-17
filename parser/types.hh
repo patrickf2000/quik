@@ -14,6 +14,7 @@ enum TokenType {
 	IF,
 	ELIF,
 	ELSE,
+	WHILE,
 	
 	//Type keywords
 	T_BYTE,

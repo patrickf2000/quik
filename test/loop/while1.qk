@@ -1,0 +1,14 @@
+# while1.qk
+# A while loop example
+
+func main()
+	int x = 1
+	println("Counting to 10...")
+	
+	while (x != 11)
+		println(x)
+		x = x + 1
+	end
+	
+	println("Done")
+end

@@ -143,6 +143,11 @@ std::vector<Token> tokenize(std::string line) {
 				t.type = TokenType::ELSE;
 				tokens.push_back(t);
 				
+			//Loops
+			} else if (current == "while") {
+				t.type = TokenType::WHILE;
+				tokens.push_back(t);
+				
 			//Booleans
 			} else if (current == "true") {
 				t.type = TokenType::B_TRUE;
@@ -291,5 +296,6 @@ TokenType str2type(std::string in) {
 	else if (in == "LESS") return TokenType::LESS;
 	else if (in == "GREATER_EQ") return TokenType::GREATER_EQ;
 	else if (in == "LESS_EQ") return TokenType::LESS_EQ;
+	else if (in == "WHILE") return TokenType::WHILE;
 	return TokenType::NONE;
 }
