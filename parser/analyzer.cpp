@@ -4,32 +4,31 @@
 #include "types.hh"
 
 //Analyzes the tree and renames all ids to observe scope
+void reset_name(AstNode *node, std::string name, std::map<std::string, Var> *vars) {
+	AstAttrNode *id = dynamic_cast<AstAttrNode *>(node);
+	if (vars->find(id->get_name()) == vars->end()) {
+		std::string n = name + "_" + id->get_name();
+		id->set_name(n);
+	}
+}
+
 void find_id2(AstNode *top, std::string name, std::map<std::string, Var> *vars) {
 	for (auto node : top->children) {
-		if (node->type == AstType::Id || node->type == AstType::VarDec || node->type == AstType::VarAssign) {
-			AstAttrNode *id = dynamic_cast<AstAttrNode *>(node);
-			if (vars->find(id->get_name()) == vars->end()) {
-				std::string n = name + "_" + id->get_name();
-				id->set_name(n);
-			}
-		} else if (node->type == AstType::If || node->type == AstType::Elif) {
-			AstCond *cond = dynamic_cast<AstCond *>(node);
+		switch (node->type) {
+			case AstType::Id:
+			case AstType::VarDec:
+			case AstType::VarAssign: reset_name(node, name, vars); break;
 			
-			if (cond->lval->type == AstType::Id) {
-				AstAttrNode *lval = dynamic_cast<AstAttrNode *>(cond->lval);
-				if (vars->find(lval->get_name()) == vars->end()) {
-					std::string n = name + "_" + lval->get_name();
-					lval->set_name(n);
-				}
-			}
-			
-			if (cond->rval->type == AstType::Id) {
-				AstAttrNode *rval = dynamic_cast<AstAttrNode *>(cond->rval);
-				if (vars->find(rval->get_name()) == vars->end()) {
-					std::string n = name + "_" + rval->get_name();
-					rval->set_name(n);
-				}
-			}
+			case AstType::If:
+			case AstType::Elif: {
+				AstCond *cond = dynamic_cast<AstCond *>(node);
+				
+				if (cond->lval->type == AstType::Id)
+					reset_name(cond->lval, name, vars);
+				
+				if (cond->rval->type == AstType::Id)
+					reset_name(cond->rval, name, vars);
+			} break;
 		}
 		
 		if (node->children.size() > 0) {
@@ -46,16 +45,19 @@ void find_id(AstNode *top) {
 	AstScope *scope = dynamic_cast<AstScope *>(top);
 
 	for (auto node : top->children) {
-		if (node->type == AstType::VarDec) {
-			AstVarDec *vd = dynamic_cast<AstVarDec *>(node);
-		
-			Var v;
-			v.name = vd->get_name();
-			v.type = vd->get_type();
-			scope->vars[vd->get_name()] = v;
-		} else if (node->type == AstType::FuncDec) {
-			AstScope *child = dynamic_cast<AstScope *>(node->children.at(0));
-			find_id2(child, child->get_name(), &scope->vars);
+		switch (node->type) {
+			case AstType::VarDec: {
+				AstVarDec *vd = dynamic_cast<AstVarDec *>(node);
+			
+				Var v;
+				v.name = vd->get_name();
+				v.type = vd->get_type();
+				scope->vars[vd->get_name()] = v;
+			} break;
+			case AstType::FuncDec: {
+				AstScope *child = dynamic_cast<AstScope *>(node->children.at(0));
+				find_id2(child, child->get_name(), &scope->vars);
+			} break;
 		}
 	}
 	
