@@ -15,45 +15,55 @@ void Asm_x86::assemble(std::string p, AstNode *top) {
 	}
 
 	for (auto node : top->children) {
-		if (node->type == AstType::Scope) {
-			current_scope = dynamic_cast<AstScope *>(node);
-			assemble("", node);
-		} else if (node->type == AstType::FuncDec) {
-			build_function(node);
-			assemble("", node);
-		} else if (node->type == AstType::ExternFunc) {
-			build_extern_func(node);
-		} else if (node->type == AstType::VarDec) {
-			build_var_dec(node);
-		} else if (node->type == AstType::VarAssign) {
-			build_var_assign(node);
-		} else if (node->type == AstType::FuncCall) {
-			AstFuncCall *fc = dynamic_cast<AstFuncCall *>(node);
-		
-			if (fc->get_name() == "println") {
-				build_println(fc);
-			} else {
-				build_func_call(fc);
+		switch (node->type) {
+			case AstType::Scope: {
+				current_scope = dynamic_cast<AstScope *>(node);
+				assemble("", node);
+			} break;
+			
+			case AstType::FuncDec: {
+				build_function(node);
+				assemble("", node);
+			} break;
+			
+			case AstType::ExternFunc: build_extern_func(node); break;
+			case AstType::VarDec: build_var_dec(node); break;
+			case AstType::VarAssign: build_var_assign(node); break;
+			
+			case AstType::FuncCall: {
+				AstFuncCall *fc = dynamic_cast<AstFuncCall *>(node);
+			
+				if (fc->get_name() == "println") {
+					build_println(fc);
+				} else {
+					build_func_call(fc);
+				}
+			} break;
+			
+			case AstType::If: {
+				if (node->type == AstType::If) {
+					std::string lbl = "L" + std::to_string(lbl_index);
+					top_lbls.push(lbl);
+					++lbl_index;	
+				}
 			}
-		} else if (node->type == AstType::If || node->type == AstType::Elif || node->type == AstType::Else) {
-			if (node->type == AstType::If) {
-				std::string lbl = "L" + std::to_string(lbl_index);
-				top_lbls.push(lbl);
-				++lbl_index;	
-			}
+			case AstType::Elif:
+			case AstType::Else: {
+				build_cond(node);
+				assemble("", node);
+				
+				sec_text.push_back("jmp " + top_lbls.top());
+				
+				sec_text.push_back(labels.top() + ":");
+				labels.pop();
+			} break;
 			
-			build_cond(node);
-			assemble("", node);
+			case AstType::EndIf: {
+				sec_text.push_back(top_lbls.top() + ":");
+				top_lbls.pop();
+			} break;
 			
-			sec_text.push_back("jmp " + top_lbls.top());
-			
-			sec_text.push_back(labels.top() + ":");
-			labels.pop();
-		} else if (node->type == AstType::EndIf) {
-			sec_text.push_back(top_lbls.top() + ":");
-			top_lbls.pop();
-		} else if (node->type == AstType::Return) {
-			build_ret(node);
+			case AstType::Return: build_ret(node); break;
 		}
 	}
 }
