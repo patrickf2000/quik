@@ -22,6 +22,7 @@ enum AstType {
 	If,
 	Elif,
 	Else,
+	EndIf,
 	
 	//Variable stuff
 	VarDec,

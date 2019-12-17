@@ -8,4 +8,6 @@ func main()
 	else
 		println("IDK")
 	end
+	
+	println("Done")
 end

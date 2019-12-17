@@ -49,8 +49,7 @@ AstNode *build_ast(std::vector<Line> lines) {
 		if (n == nullptr) {
 			syntax_error(ln, "Unknown input");
 		} else {
-			//This inserts an end statement before an elif statement
-			//TODO: Rethink this solution
+			//This inserts an end statement before an elif statementn
 			if (n->type == AstType::Elif || n->type == AstType::Else) {
 				AstNode *end = new AstNode(AstType::End);
 				nodes.push_back(end);
@@ -63,6 +62,7 @@ AstNode *build_ast(std::vector<Line> lines) {
 	build_tree(nodes, top);
 	find_variables(top);
 	find_assign(top);
+	find_cond(top);
 	check_return(top);
 	return top;
 }

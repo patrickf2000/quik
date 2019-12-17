@@ -8,6 +8,8 @@ func main()
 		println("Equal to 10!")
 		
 		if (x == y)
+			println("Yes!")
+		else
 			println("No!!")
 		end
 	elif (x != 10)

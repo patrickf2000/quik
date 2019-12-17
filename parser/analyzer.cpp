@@ -53,6 +53,38 @@ void find_assign(AstNode *top) {
 		}
 	}
 }
+#include <iostream>
+#include "ast.hh"
+//Finds conditional nodes, and adds end-if blocks
+void find_cond(AstNode *top) {
+	for (int i = 0; i<top->children.size(); i++) {
+		auto node = top->children.at(i);
+		
+		if (node->type == AstType::FuncDec) {
+			AstFuncDec *fd = dynamic_cast<AstFuncDec *>(node);
+			AstScope *next = dynamic_cast<AstScope *>(fd->children.at(0));
+			
+			find_cond(next);
+		} else if (node->type == AstType::If || node->type == AstType::Elif || node->type == AstType::Else) {
+			if (node->type == AstType::If || node->type == AstType::Elif) {
+				find_cond(node);
+			}
+		
+			if (i+1 >= top->children.size()) {
+				AstNode *end = new AstNode(AstType::EndIf);
+				top->children.insert(top->children.begin()+i+1, end);
+				
+				continue;
+			}
+			
+			auto next = top->children.at(i+1);
+			if (next->type != AstType::Elif && next->type != AstType::Else) {
+				AstNode *end = new AstNode(AstType::EndIf);
+				top->children.insert(top->children.begin()+i+1, end);
+			}
+		}
+	}
+}
 
 //Scans the tree and adds empty return statements to
 // functions that don't have any (needed for the backend)

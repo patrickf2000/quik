@@ -21,6 +21,7 @@ std::string ast2str(AstType type) {
 		case AstType::If: return "If";
 		case AstType::Elif: return "Elif";
 		case AstType::Else: return "Else";
+		case AstType::EndIf: return "EndIf";
 		
 		case AstType::Add: return "OP: +";
 		case AstType::Sub: return "OP: -";
