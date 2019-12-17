@@ -24,6 +24,9 @@ enum AstType {
 	Else,
 	EndIf,
 	
+	//Loop stuff
+	While,
+	
 	//Variable stuff
 	VarDec,
 	VarAssign,
@@ -151,6 +154,12 @@ public:
 class AstElse : public AstNode {
 public:
 	AstElse() { type = AstType::Else; }
+};
+
+//The while keyword
+class AstWhile : public AstCond {
+public:
+	AstWhile() { type = AstType::While; }
 };
 
 //Variable declaration

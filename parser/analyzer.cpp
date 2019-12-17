@@ -124,10 +124,10 @@ void find_cond(AstNode *top) {
 		auto node = top->children.at(i);
 		
 		if (node->type == AstType::FuncDec) {
-			AstFuncDec *fd = dynamic_cast<AstFuncDec *>(node);
-			AstScope *next = dynamic_cast<AstScope *>(fd->children.at(0));
-			
+			AstScope *next = dynamic_cast<AstScope *>(node->children.at(0));
 			find_cond(next);
+		} else if (node->type == AstType::While) {
+			find_cond(node);
 		} else if (node->type == AstType::If || node->type == AstType::Elif || node->type == AstType::Else) {
 			if (node->type == AstType::If || node->type == AstType::Elif) {
 				find_cond(node);

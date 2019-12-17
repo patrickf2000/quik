@@ -174,8 +174,10 @@ AstCond *build_conditional(Line ln) {
 	
 	if (type == TokenType::IF) {
 		cond = new AstIf;
-	} else {
+	} else if (type == TokenType::ELIF) {
 		cond = new AstElif;
+	} else if (type == TokenType::WHILE) {
+		cond = new AstWhile;
 	}
 	
 	//Extract the needed tokens
@@ -262,6 +264,9 @@ AstNode *build_node(Line ln) {
 			AstElse *node = new AstElse;
 			return node;
 		}
+		
+		//Build loops
+		case TokenType::WHILE: return build_conditional(ln);
 		
 		//Handle if the first node is an ID
 		case TokenType::ID: {
@@ -357,7 +362,8 @@ int build_tree(std::vector<AstNode *> nodes, AstNode *top, int index, bool in_if
 			c->children.push_back(s);
 			
 			i = build_tree(nodes, s, i+1);
-		} else if (c->type == AstType::If || c->type == AstType::Elif || c->type == AstType::Else) {
+		} else if (c->type == AstType::If || c->type == AstType::Elif 
+				|| c->type == AstType::Else || c->type == AstType::While) {
 			top->children.push_back(c);
 			i = build_tree(nodes, c, i+1, true);
 		} else if (c->type == AstType::End) {
