@@ -74,24 +74,27 @@ void find_variables(AstNode *top) {
 	AstScope *scope = dynamic_cast<AstScope *>(top);
 
 	for (auto node : top->children) {
-		if (node->type == AstType::FuncDec) {
-			AstFuncDec *fd = dynamic_cast<AstFuncDec *>(node);
-			AstScope *next = dynamic_cast<AstScope *>(fd->children.at(0));
-			next->vars = scope->vars;
+		switch (node->type) {
+			case AstType::FuncDec: {
+				AstFuncDec *fd = dynamic_cast<AstFuncDec *>(node);
+				AstScope *next = dynamic_cast<AstScope *>(fd->children.at(0));
+				next->vars = scope->vars;
+				
+				for (auto v : fd->args) {
+					next->vars[v.name] = v;
+				}
+				
+				find_variables(next);
+			} break;
 			
-			for (auto v : fd->args) {
-				next->vars[v.name] = v;
-			}
+			case AstType::VarDec: {
+				AstVarDec *vd = dynamic_cast<AstVarDec *>(node);
 			
-			find_variables(next);
-		} else if (node->type == AstType::VarDec) {
-			AstVarDec *vd = dynamic_cast<AstVarDec *>(node);
-		
-			Var v;
-			v.name = vd->get_name();
-			v.type = vd->get_type();
-			scope->vars[vd->get_name()] = v;
-		}
+				Var v;
+				v.name = vd->get_name();
+				v.type = vd->get_type();
+				scope->vars[vd->get_name()] = v;
+			} break;
 	}
 }
 
@@ -105,16 +108,14 @@ void find_assign(AstNode *top) {
 	AstScope *scope = dynamic_cast<AstScope *>(top);
 
 	for (auto node : top->children) {
-		if (node->type == AstType::FuncDec) {
-			AstFuncDec *fd = dynamic_cast<AstFuncDec *>(node);
-			AstScope *next = dynamic_cast<AstScope *>(fd->children.at(0));
+		switch (node->type) {
+			case AstType::FuncDec: find_assign(node->children.at(0)); break;
+			case AstType::VarAssign: {
+				AstVarAssign *va = dynamic_cast<AstVarAssign *>(node);
 			
-			find_assign(next);
-		} else if (node->type == AstType::VarAssign) {
-			AstVarAssign *va = dynamic_cast<AstVarAssign *>(node);
-		
-			Var v = scope->vars[va->get_name()];
-			va->set_type(v.type);
+				Var v = scope->vars[va->get_name()];
+				va->set_type(v.type);
+			} break;
 		}
 	}
 }
