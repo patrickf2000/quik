@@ -63,6 +63,22 @@ void Asm_x86::assemble(std::string p, AstNode *top) {
 				top_lbls.pop();
 			} break;
 			
+			case AstType::While: {
+				std::string top_lbl = "L" + std::to_string(lbl_index);
+				++lbl_index;
+				labels.push(top_lbl);
+				
+				std::string cmp_lbl = "L" + std::to_string(lbl_index);
+				++lbl_index;
+				labels.push(cmp_lbl);
+				
+				sec_text.push_back("jmp " + cmp_lbl);
+				sec_text.push_back(top_lbl + ":");
+				
+				assemble("", node);
+				build_while(node);
+			} break;
+			
 			case AstType::Return: build_ret(node); break;
 		}
 	}
@@ -397,6 +413,43 @@ void Asm_x86::build_cond(AstNode *node) {
 		sec_text.push_back(ln);
 		sec_text.push_back("");
 	}
+}
+
+//Generates assembly for a while loop
+void Asm_x86::build_while(AstNode *node) {
+	AstCond *cond = dynamic_cast<AstCond *>(node);
+
+	//Set up the labels
+	auto cmp_lbl = labels.top();
+	labels.pop();
+	
+	auto lbl = labels.top();
+	labels.pop();
+	
+	sec_text.push_back(cmp_lbl + ":");
+	
+	//Position the lval
+	std::string ln = "mov eax, " + type2asm(cond->lval);
+	sec_text.push_back(ln);
+	
+	//Position the rval
+	ln = "cmp eax, " + type2asm(cond->rval);
+	sec_text.push_back(ln);
+	
+	//Comparison
+	switch (cond->get_op()) {
+		case CondOp::Equals: ln = "je "; break;
+		case CondOp::NotEquals: ln = "jne "; break;
+		case CondOp::Greater: ln = "jg "; break;
+		case CondOp::GreaterEq: ln = "jge "; break;
+		case CondOp::Less: ln = "jl "; break;
+		case CondOp::LessEq: ln = "jle "; break;
+	}
+	
+	ln += lbl;
+
+	sec_text.push_back(ln);
+	sec_text.push_back("");
 }
 
 //Write out the final product

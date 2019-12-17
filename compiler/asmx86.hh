@@ -17,6 +17,7 @@ public:
 	void build_var_dec(AstNode *node);
 	void build_var_assign(AstNode *node);
 	void build_cond(AstNode *node);
+	void build_while(AstNode *node);
 	void write();
 	void build();
 protected:

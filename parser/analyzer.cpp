@@ -20,7 +20,8 @@ void find_id2(AstNode *top, std::string name, std::map<std::string, Var> *vars) 
 			case AstType::VarAssign: reset_name(node, name, vars); break;
 			
 			case AstType::If:
-			case AstType::Elif: {
+			case AstType::Elif: 
+			case AstType::While: {
 				AstCond *cond = dynamic_cast<AstCond *>(node);
 				
 				if (cond->lval->type == AstType::Id)
