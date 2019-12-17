@@ -211,7 +211,7 @@ AstCond *build_conditional(Line ln) {
 	//The operator
 	switch (op) {
 		case TokenType::EQUALS: cond->set_op(CondOp::Equals); break;
-		case TokenType::NOT_EQUALS: cond->set_op(CondOp::NotEquals); break;
+		case TokenType::NOT_EQUAL: cond->set_op(CondOp::NotEquals); break;
 	}
 	
 	return cond;

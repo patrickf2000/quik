@@ -42,7 +42,12 @@ enum TokenType {
 	
 	//Boolean operators
 	EQUALS,
-	NOT_EQUALS,
+	NOT_EQUAL,
+	NOT,
+	GREATER,
+	LESS,
+	GREATER_EQ,
+	LESS_EQ,
 	
 	//Other stuff
 	ID,

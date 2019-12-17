@@ -9,7 +9,7 @@ bool is_separator(char c) {
 	if (c == ' ' || c == '(' || c == ')'
 		|| c == '=' || c == ',' || c == ':'
 		|| c == '+' || c == '-' || c == '*' || c == '/'
-		|| c == '%') {
+		|| c == '%' || c == '!' || c == '>' || c == '<') {
 		return true;
 	}
 	
@@ -193,6 +193,33 @@ std::vector<Token> tokenize(std::string line) {
 				Token t;
 				t.type = TokenType::ASSIGN;
 				tokens.push_back(t);
+			} else if (c == '!' && line[i+1] == '=') {
+				Token t;
+				t.type = TokenType::NOT_EQUAL;
+				tokens.push_back(t);
+				skip_next = true;
+			} else if (c == '!') {
+				Token t;
+				t.type = TokenType::NOT;
+				tokens.push_back(t);
+			} else if (c == '>' && line[i+1] == '=') {
+				Token t;
+				t.type = TokenType::GREATER_EQ;
+				tokens.push_back(t);
+				skip_next = true;
+			} else if (c == '>') {
+				Token t;
+				t.type = TokenType::GREATER;
+				tokens.push_back(t);
+			} else if (c == '<' && line[i+1] == '=') {
+				Token t;
+				t.type = TokenType::LESS_EQ;
+				tokens.push_back(t);
+				skip_next = true;
+			} else if (c == '<') {
+				Token t;
+				t.type = TokenType::LESS;
+				tokens.push_back(t);
 			} else if (c == '+') {
 				Token t;
 				t.type = TokenType::PLUS;
@@ -256,7 +283,13 @@ TokenType str2type(std::string in) {
 	else if (in == "EXTERN") return TokenType::EXTERN;
 	else if (in == "IF") return TokenType::IF;
 	else if (in == "EQUALS") return TokenType::EQUALS;
+	else if (in == "NOT_EQUAL") return TokenType::NOT_EQUAL;
 	else if (in == "ELIF") return TokenType::ELIF;
 	else if (in == "ELSE") return TokenType::ELSE;
+	else if (in == "NOT") return TokenType::NOT;
+	else if (in == "GREATER") return TokenType::GREATER;
+	else if (in == "LESS") return TokenType::LESS;
+	else if (in == "GREATER_EQ") return TokenType::GREATER_EQ;
+	else if (in == "LESS_EQ") return TokenType::LESS_EQ;
 	return TokenType::NONE;
 }
