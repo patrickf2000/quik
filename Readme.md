@@ -19,4 +19,6 @@ Comparisons are working between integers. Full If/else if/else is supported, bot
 
 Basic while loops seem to be working (only with integers though).
 
+Some pretty base syntax checking is supported; there is an internal framework within the parser for further functions as the program matures.
+
 The compiler is currently capable of calling some external C functions via the extern keyword. Additionally, you can compile multiple files into one executable.
