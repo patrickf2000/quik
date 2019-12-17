@@ -1,25 +1,10 @@
-# Basic comparison
-
 func main()
-	int x = 7
-
-	if (5 == 6)
-		println("Equal!")
-		
-		if (x == 10)
-			println("L1")
-			println("L2")
-		elif (x == 11)
-			println("L3")
-		else
-			println("ORR???")
-		end
-		
-		println("done")
-	elif (x == 7)
-		println("Equal in elif")
+	int x = 10
+	
+	if (x == 10)
+		println("Equal to 10!")
 	else
-		println("All done.")
+		println("Not equal!")
 	end
 	
 	println("Done")

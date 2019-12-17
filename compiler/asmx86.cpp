@@ -35,6 +35,12 @@ void Asm_x86::assemble(std::string p, AstNode *top) {
 			} else {
 				build_func_call(fc);
 			}
+		} else if (node->type == AstType::If || node->type == AstType::Elif) {
+			build_cond(node);
+			assemble("", node);
+			
+			sec_text.push_back(labels.top() + ":");
+			labels.pop();
 		} else if (node->type == AstType::Return) {
 			build_ret(node);
 		}
@@ -320,18 +326,7 @@ void Asm_x86::build_var_assign(AstNode *node) {
 			ln = "mov ebx, ";
 		}
 		
-		switch (next->type) {
-			case AstType::Int: {
-				AstInt *i = dynamic_cast<AstInt *>(next);
-				ln += std::to_string(i->get_val());
-			} break;
-			
-			case AstType::Id: {
-				AstID *id = dynamic_cast<AstID *>(next);
-				ln += "[" + id->get_name() + "]";
-			} break;
-		}
-		
+		ln += type2asm(next);
 		sec_text.push_back(ln);
 		
 		if (is_div) {
@@ -345,6 +340,39 @@ void Asm_x86::build_var_assign(AstNode *node) {
 	}
 	
 	sec_text.push_back("mov [" + va->get_name() + "], eax");
+	sec_text.push_back("");
+}
+
+//Generates assembly for a conditional statement
+void Asm_x86::build_cond(AstNode *node) {
+	AstCond *cond = dynamic_cast<AstCond *>(node);
+
+	//Set up the labels
+	std::string lbl = "L" + std::to_string(lbl_index);
+	++lbl_index;
+	labels.push(lbl);
+	
+	//Position the lval
+	std::string ln = "mov eax, " + type2asm(cond->lval);
+	sec_text.push_back(ln);
+	
+	//Position the rval
+	ln = "cmp eax, " + type2asm(cond->rval);
+	sec_text.push_back(ln);
+	
+	//Comparison
+	switch (cond->get_op()) {
+		case CondOp::Equals: ln = "jne "; break;
+		case CondOp::NotEquals: ln = "je "; break;
+		case CondOp::Greater: ln = "jl "; break;
+		case CondOp::GreaterEq: ln = "jle "; break;
+		case CondOp::Less: ln = "jg "; break;
+		case CondOp::LessEq: ln = "jge "; break;
+	}
+	
+	ln += lbl;
+	
+	sec_text.push_back(ln);
 	sec_text.push_back("");
 }
 
@@ -397,4 +425,24 @@ void Asm_x86::build() {
 	gcc_line += " -o out";
 	system(gcc_line.c_str());
 }
+
+//Converts a node to an assembly type
+std::string Asm_x86::type2asm(AstNode *node) {
+	std::string ln = "";
+	
+	switch (node->type) {
+		case AstType::Int: {
+			AstInt *i = dynamic_cast<AstInt *>(node);
+			ln = std::to_string(i->get_val());
+		} break;
+		
+		case AstType::Id: {
+			AstID *id = dynamic_cast<AstID *>(node);
+			ln = "[" + id->get_name() + "]";
+		} break;
+	}
+	
+	return ln;
+}
+
 
