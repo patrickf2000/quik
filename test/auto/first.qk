@@ -1,0 +1,17 @@
+extern func puts(s:str)
+
+func print_two(x:int, y:int)
+	println(x)
+	println(y)
+end
+
+func print_no(x:int)
+	println(x)
+end
+
+func main()
+	puts("Hello!")
+	print_no(10)
+	print_two(1,1)
+end
+
