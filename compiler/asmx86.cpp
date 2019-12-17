@@ -35,12 +35,23 @@ void Asm_x86::assemble(std::string p, AstNode *top) {
 			} else {
 				build_func_call(fc);
 			}
-		} else if (node->type == AstType::If || node->type == AstType::Elif) {
+		} else if (node->type == AstType::If || node->type == AstType::Elif || node->type == AstType::Else) {
+			if (node->type == AstType::If) {
+				std::string lbl = "L" + std::to_string(lbl_index);
+				top_lbls.push(lbl);
+				++lbl_index;	
+			}
+			
 			build_cond(node);
 			assemble("", node);
 			
+			sec_text.push_back("jmp " + top_lbls.top());
+			
 			sec_text.push_back(labels.top() + ":");
 			labels.pop();
+		} else if (node->type == AstType::EndIf) {
+			sec_text.push_back(top_lbls.top() + ":");
+			top_lbls.pop();
 		} else if (node->type == AstType::Return) {
 			build_ret(node);
 		}
@@ -352,28 +363,30 @@ void Asm_x86::build_cond(AstNode *node) {
 	++lbl_index;
 	labels.push(lbl);
 	
-	//Position the lval
-	std::string ln = "mov eax, " + type2asm(cond->lval);
-	sec_text.push_back(ln);
+	if (node->type != AstType::Else) {
+		//Position the lval
+		std::string ln = "mov eax, " + type2asm(cond->lval);
+		sec_text.push_back(ln);
+		
+		//Position the rval
+		ln = "cmp eax, " + type2asm(cond->rval);
+		sec_text.push_back(ln);
+		
+		//Comparison
+		switch (cond->get_op()) {
+			case CondOp::Equals: ln = "jne "; break;
+			case CondOp::NotEquals: ln = "je "; break;
+			case CondOp::Greater: ln = "jl "; break;
+			case CondOp::GreaterEq: ln = "jle "; break;
+			case CondOp::Less: ln = "jg "; break;
+			case CondOp::LessEq: ln = "jge "; break;
+		}
+		
+		ln += lbl;
 	
-	//Position the rval
-	ln = "cmp eax, " + type2asm(cond->rval);
-	sec_text.push_back(ln);
-	
-	//Comparison
-	switch (cond->get_op()) {
-		case CondOp::Equals: ln = "jne "; break;
-		case CondOp::NotEquals: ln = "je "; break;
-		case CondOp::Greater: ln = "jl "; break;
-		case CondOp::GreaterEq: ln = "jle "; break;
-		case CondOp::Less: ln = "jg "; break;
-		case CondOp::LessEq: ln = "jge "; break;
+		sec_text.push_back(ln);
+		sec_text.push_back("");
 	}
-	
-	ln += lbl;
-	
-	sec_text.push_back(ln);
-	sec_text.push_back("");
 }
 
 //Write out the final product

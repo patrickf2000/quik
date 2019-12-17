@@ -1,6 +1,6 @@
 func main()
-	int x = 10
-	int y = 10
+	int x = 11
+	int y = 1
 	println(x)
 	println("")
 	

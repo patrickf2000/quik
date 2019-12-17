@@ -36,6 +36,7 @@ private:
 	//Needed for conditionals and loops
 	int lbl_index = 1;
 	std::stack<std::string> labels;
+	std::stack<std::string> top_lbls;
 	
 	//Scope data
 	AstScope *current_scope;
