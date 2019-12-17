@@ -18,6 +18,10 @@ std::string ast2str(AstType type) {
 		case AstType::Id: return "ID";
 		case AstType::Str: return "Str";
 		
+		case AstType::If: return "If";
+		case AstType::Elif: return "Elif";
+		case AstType::Else: return "Else";
+		
 		case AstType::Add: return "OP: +";
 		case AstType::Sub: return "OP: -";
 		case AstType::Mul: return "OP: *";
@@ -39,6 +43,16 @@ std::string type2str(DataType type) {
 		case DataType::Float: return "Float";
 		case DataType::Bool: return "Bool";
 		case DataType::Str: return "Str";
+	}
+	
+	return "NONE";
+}
+
+//Returns an operator to string (debugging)
+std::string op2str(CondOp op) {
+	switch (op) {
+		case CondOp::Equals: return "==";
+		case CondOp::NotEquals: return "!=";
 	}
 	
 	return "NONE";
@@ -88,6 +102,10 @@ void print_tree(AstNode *node, int indent) {
 		AstVarDec *vd = dynamic_cast<AstVarDec *>(node);
 		std::cout << " [" << vd->get_name() << "] ("
 			<< type2str(vd->get_type()) << ")";
+			
+	} else if (node->type == AstType::If || node->type == AstType::Elif) {
+		AstCond *cond = dynamic_cast<AstCond *>(node);
+		std::cout << " <" << op2str(cond->get_op()) << ">";
 		
 	//values
 	} else if (node->type == AstType::Int) {

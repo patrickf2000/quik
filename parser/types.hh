@@ -68,6 +68,12 @@ enum class DataType {
 	Str
 };
 
+enum class CondOp {
+	None,
+	Equals,
+	NotEquals
+};
+
 struct Token {
 	TokenType type;
 	std::string id;

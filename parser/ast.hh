@@ -18,6 +18,11 @@ enum AstType {
 	End,
 	Return,
 	
+	//Conditional stuff
+	If,
+	Elif,
+	Else,
+	
 	//Variable stuff
 	VarDec,
 	VarAssign,
@@ -116,6 +121,32 @@ public:
 class AstReturn : public AstNode {
 public:
 	AstReturn() { type = AstType::Return; }
+};
+
+//The base class for conditionals
+class AstCond : public AstNode {
+public:
+	CondOp get_op() { return op; }
+	void set_op(CondOp o) { op = o; }
+private:
+	CondOp op;
+};
+
+//The If keyword
+class AstIf : public AstCond {
+public:
+	AstIf() { type = AstType::If; }
+};
+
+class AstElif : public AstCond {
+public:
+	AstElif() { type = AstType::Elif; }
+};
+
+//The else keyword
+class AstElse : public AstNode {
+public:
+	AstElse() { type = AstType::Else; }
 };
 
 //Variable declaration

@@ -1,9 +1,11 @@
 # Basic comparison
 
 func main()
+	int x = 7
+
 	if (5 == 6)
 		println("Equal!")
-	else
-		println("Not equal!")
+	elif (x == 7)
+		println("Equal in elif")
 	end
 end

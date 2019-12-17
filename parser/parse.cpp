@@ -152,6 +152,71 @@ AstFuncDec *build_func_dec(Line ln) {
 	return fd;
 }
 
+//Builds a conditional statement
+AstCond *build_conditional(Line ln) {
+	auto tokens = ln.tokens;
+	auto type = tokens.at(0).type;
+	
+	//Make sure the syntax is correct
+	if (tokens.size() != 6) {
+		syntax_error(ln, "Incorrect conditional syntax.");
+	}
+	
+	auto t1 = tokens.at(1).type;
+	auto t2 = tokens.at(5).type;
+	
+	if (t1 != TokenType::LEFT_PAREN || t2 != TokenType::RIGHT_PAREN) {
+		syntax_error(ln, "Incorrect conditional syntax.");
+	}
+	
+	//Create the right type
+	AstCond *cond = new AstCond;
+	
+	if (type == TokenType::IF) {
+		cond = new AstIf;
+	} else {
+		cond = new AstElif;
+	}
+	
+	//Extract the needed tokens
+	auto lval = tokens.at(2);
+	auto op = tokens.at(3).type;
+	auto rval = tokens.at(4);
+	
+	//TODO: Is there a way we can clean this up?
+	//Parse the left value
+	switch (lval.type) {
+		case TokenType::ID: {
+			AstID *id = new AstID(lval.id);
+			cond->children.push_back(id);
+		} break;
+		case TokenType::NO: {
+			AstInt *i = new AstInt(std::stoi(lval.id));
+			cond->children.push_back(i);
+		} break;
+	}
+	
+	//Right value
+	switch (rval.type) {
+		case TokenType::ID: {
+			AstID *id = new AstID(rval.id);
+			cond->children.push_back(id);
+		} break;
+		case TokenType::NO: {
+			AstInt *i = new AstInt(std::stoi(rval.id));
+			cond->children.push_back(i);
+		} break;
+	}
+	
+	//The operator
+	switch (op) {
+		case TokenType::EQUALS: cond->set_op(CondOp::Equals); break;
+		case TokenType::NOT_EQUALS: cond->set_op(CondOp::NotEquals); break;
+	}
+	
+	return cond;
+}
+
 //Builds an AST node from a string of tokens
 AstNode *build_node(Line ln) {
 	auto tokens = ln.tokens;
@@ -185,6 +250,10 @@ AstNode *build_node(Line ln) {
 			AstNode *node = new AstNode(AstType::End);
 			return node;
 		}
+		
+		//Build conditional statements
+		case TokenType::IF:
+		case TokenType::ELIF: return build_conditional(ln);
 		
 		//Handle if the first node is an ID
 		case TokenType::ID: {
