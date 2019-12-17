@@ -128,6 +128,9 @@ class AstCond : public AstNode {
 public:
 	CondOp get_op() { return op; }
 	void set_op(CondOp o) { op = o; }
+	
+	AstNode *lval;
+	AstNode *rval;
 private:
 	CondOp op;
 };
@@ -217,4 +220,4 @@ private:
 
 //Debugging stuff
 std::string ast2str(AstType type);
-void print_tree(AstNode *node, int indent = 0);
+void print_tree(AstNode *node, int indent = 0, bool nl=true);

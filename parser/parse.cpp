@@ -188,11 +188,11 @@ AstCond *build_conditional(Line ln) {
 	switch (lval.type) {
 		case TokenType::ID: {
 			AstID *id = new AstID(lval.id);
-			cond->children.push_back(id);
+			cond->lval = id;
 		} break;
 		case TokenType::NO: {
 			AstInt *i = new AstInt(std::stoi(lval.id));
-			cond->children.push_back(i);
+			cond->lval = i;
 		} break;
 	}
 	
@@ -200,11 +200,11 @@ AstCond *build_conditional(Line ln) {
 	switch (rval.type) {
 		case TokenType::ID: {
 			AstID *id = new AstID(rval.id);
-			cond->children.push_back(id);
+			cond->rval = id;
 		} break;
 		case TokenType::NO: {
 			AstInt *i = new AstInt(std::stoi(rval.id));
-			cond->children.push_back(i);
+			cond->rval = i;
 		} break;
 	}
 	
@@ -346,6 +346,7 @@ int build_tree(std::vector<AstNode *> nodes, AstNode *top, int index) {
 			c->children.push_back(s);
 			i = build_tree(nodes, s, i+1);
 		} else if (c->type == AstType::If) {
+			top->children.push_back(c);
 			++layer;
 		} else if (c->type == AstType::End) {
 			if (layer == 1)

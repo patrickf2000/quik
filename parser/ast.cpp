@@ -59,7 +59,7 @@ std::string op2str(CondOp op) {
 }
 
 //Prints an AST tree
-void print_tree(AstNode *node, int indent) {
+void print_tree(AstNode *node, int indent, bool nl) {
 	for (int i = 0; i<indent; i++) {
 		std::cout << "  ";
 	}
@@ -105,7 +105,11 @@ void print_tree(AstNode *node, int indent) {
 			
 	} else if (node->type == AstType::If || node->type == AstType::Elif) {
 		AstCond *cond = dynamic_cast<AstCond *>(node);
-		std::cout << " <" << op2str(cond->get_op()) << ">";
+		std::cout << " <" << op2str(cond->get_op()) << "> [{";
+		print_tree(cond->lval, 0, false);
+		std::cout << "} {";
+		print_tree(cond->rval, 0, false);
+		std::cout << "}]";
 		
 	//values
 	} else if (node->type == AstType::Int) {
@@ -116,7 +120,8 @@ void print_tree(AstNode *node, int indent) {
 		std::cout << " " << dynamic_cast<AstString *>(node)->get_val();
 	}
 	
-	std::cout << std::endl;
+	if (nl)
+		std::cout << std::endl;
 
 	if (node->children.size() > 0) {
 		for (auto c : node->children) {
