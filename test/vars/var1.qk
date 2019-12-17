@@ -6,4 +6,5 @@ func main
 	int z = x
 	
 	int answer = x + y * 3
+	println(answer)
 end

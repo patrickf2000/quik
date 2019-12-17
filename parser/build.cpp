@@ -60,6 +60,7 @@ AstNode *build_ast(std::vector<Line> lines) {
 	}
 	
 	build_tree(nodes, top);
+	find_id(top);
 	find_variables(top);
 	find_assign(top);
 	find_cond(top);
