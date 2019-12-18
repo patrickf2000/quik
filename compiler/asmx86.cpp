@@ -299,7 +299,19 @@ void Asm_x86::build_ret(AstNode *node) {
 	
 	if (node->children.size() == 1) {
 		auto child = node->children.at(0);
-		sec_text.push_back("mov eax, " + type2asm(child));
+		if (child->type == AstType::Float) {
+			type2flt(child);
+		} else if (child->type == AstType::Id) {
+			AstID *id = dynamic_cast<AstID *>(child);
+			Var v = current_scope->vars[id->get_name()];
+			
+			if (v.type == DataType::Float)
+				type2flt(child);
+			else
+				sec_text.push_back("mov eax, " + type2asm(child));
+		} else {
+			sec_text.push_back("mov eax, " + type2asm(child));
+		}
 	}
 	
 	sec_text.push_back("ret");
@@ -439,7 +451,7 @@ void Asm_x86::build_flt_assign(AstNode *node) {
 		switch (current->type) {
 			case AstType::Add: sec_text.push_back("fadd st0, st1"); break;
 			case AstType::Sub: sec_text.push_back("fsubp st1, st0"); break;
-			case AstType::Mul: sec_text.push_back("fmul st0, st1"); break;
+			case AstType::Mul: sec_text.push_back("fmulp st1, st0"); break;
 			case AstType::Div: sec_text.push_back("fdivp st1, st0"); break;
 		}
 	}
@@ -595,6 +607,11 @@ void Asm_x86::type2flt(AstNode *node) {
 		case AstType::Id: {
 			AstID *id = dynamic_cast<AstID *>(node);
 			sec_text.push_back("fld qword [" + id->get_name() + "]");
+		} break;
+		
+		case AstType::FuncCall: {
+			AstFuncCall *fc = dynamic_cast<AstFuncCall *>(node);
+			build_func_call(fc);
 		} break;
 		
 		//TODO: Is there a better way we can do this?

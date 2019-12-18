@@ -3,10 +3,18 @@ func double(no:int)
 	return answer
 end
 
+func dec_double(no:float)
+	float answer = no * no
+	return answer
+end
+
 func main()
 	int x = 1 + double(9) + 10 + double(2) * 2
 	println(x)
 	
-	int y = double(100)
+	int y = double(x)
 	println(y)
+	
+	float z = 2.1 + dec_double(3.14) + 1.1
+	println(z)
 end
