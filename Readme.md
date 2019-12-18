@@ -11,7 +11,7 @@ The backend generates Intel x86 assembly code. The code is intended to be assemb
 
 ### What is working?
 
-The integer datatype and its operations are pretty well supported. Other variables have varying degrees of support beyond lexical analysis, but not much.
+The integer and floating-point datatypes and their operations are pretty well supported. Other variables have varying degrees of support beyond lexical analysis, but not much.
 
 Functions are working; you can implement them and push arguments, but you cannot currently retrieve anything.
 
