@@ -373,7 +373,6 @@ void Asm_x86::build_var_assign(AstNode *node) {
 		case AstType::FuncCall: {
 			AstFuncCall *fc = dynamic_cast<AstFuncCall *>(child);
 			build_func_call(fc);
-			//sec_text.push_back("mov [" + va->get_name() + "], eax");
 		} break;
 	}
 	
@@ -403,11 +402,11 @@ void Asm_x86::build_var_assign(AstNode *node) {
 			AstFuncCall *fc = dynamic_cast<AstFuncCall *>(next);
 			build_func_call(fc);
 			ln += "[" + va->get_name() + "]";
-			sec_text.push_back(ln);
 		} else {
 			ln += type2asm(next);
-			sec_text.push_back(ln);
 		}
+		
+		sec_text.push_back(ln);
 		
 		if (is_div) {
 			sec_text.push_back("cdq");

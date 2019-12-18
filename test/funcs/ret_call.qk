@@ -6,4 +6,7 @@ end
 func main()
 	int x = 1 + double(9) + 10 + double(2) * 2
 	println(x)
+	
+	int y = double(100)
+	println(y)
 end
