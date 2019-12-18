@@ -200,8 +200,7 @@ void Asm_x86::build_println(AstFuncCall *fc) {
 	if (!use_printf) {
 		//Push the info we need back
 		extern_data.push_back("extern printf");
-		
-		//TODO: Add some conditional so we don't push everything
+
 		sec_data.push_back("int_fmt db \"%d\",10,0");
 		sec_data.push_back("str_fmt db \"%s\",10,0");
 		sec_data.push_back("flt_fmt db \"%f\",10,0");
@@ -251,7 +250,7 @@ void Asm_x86::build_println(AstFuncCall *fc) {
 					case DataType::Float: {
 						name = "[" + v.name + "+4]";
 						p2 = "[" + v.name + "]";
-						fmt = "str_fmt";
+						fmt = "flt_fmt";
 					} break;
 					case DataType::Str:	fmt = "str_fmt";		
 				}
@@ -315,6 +314,9 @@ void Asm_x86::build_var_dec(AstNode *node) {
 		} else if (first->type == AstType::Str) {
 			AstString *i = dynamic_cast<AstString *>(first);
 			ln += "\"" + i->get_val() + "\",0";
+		} else if (first->type == AstType::Float) {
+			AstFloat *i = dynamic_cast<AstFloat *>(first);
+			ln += std::to_string(i->get_val());
 		}
 	}
 	
