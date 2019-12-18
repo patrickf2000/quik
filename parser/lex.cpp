@@ -102,6 +102,9 @@ std::vector<Token> tokenize(std::string line) {
 			} else if (current == "end") {
 				t.type = TokenType::END;
 				tokens.push_back(t);
+			} else if (current == "return") {
+				t.type = TokenType::RETURN;
+				tokens.push_back(t);
 				
 			//Variable types
 			} else if (current == "byte") {
@@ -297,5 +300,6 @@ TokenType str2type(std::string in) {
 	else if (in == "GREATER_EQ") return TokenType::GREATER_EQ;
 	else if (in == "LESS_EQ") return TokenType::LESS_EQ;
 	else if (in == "WHILE") return TokenType::WHILE;
+	else if (in == "RETURN") return TokenType::RETURN;
 	return TokenType::NONE;
 }

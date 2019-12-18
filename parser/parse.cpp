@@ -263,6 +263,38 @@ AstNode *build_node(Line ln) {
 			return node;
 		}
 		
+		//Build a return statement
+		case TokenType::RETURN: {
+			AstReturn *node = new AstReturn;
+			
+			if (tokens.size() > 2) {
+				syntax_error(ln, "Too many arguments in return statement.");
+			} else if (tokens.size() == 2) {
+				auto t = tokens.at(1);
+				
+				switch (t.type) {
+					case TokenType::ID: {
+						AstID *id = new AstID(t.id);
+						node->children.push_back(id);
+					} break;
+					
+					case TokenType::NO: {
+						int val = std::stoi(t.id);
+						AstInt *i = new AstInt(val);
+						node->children.push_back(i);
+					} break;
+					
+					case TokenType::DEC: {
+						double val = std::stod(t.id);
+						AstFloat *f = new AstFloat(val);
+						node->children.push_back(f);
+					} break;
+				}
+			}
+			
+			return node;
+		}
+		
 		//Build conditional statements
 		case TokenType::IF:
 		case TokenType::ELIF: return build_conditional(ln);

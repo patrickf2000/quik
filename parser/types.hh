@@ -15,6 +15,7 @@ enum TokenType {
 	ELIF,
 	ELSE,
 	WHILE,
+	RETURN,
 	
 	//Type keywords
 	T_BYTE,

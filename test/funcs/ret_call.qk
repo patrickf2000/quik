@@ -1,0 +1,9 @@
+func double(no:int)
+	int answer = no * no
+	return answer
+end
+
+func main()
+	int x = double(2)
+	println(x)
+end
