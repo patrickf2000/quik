@@ -402,9 +402,10 @@ void Asm_x86::build_flt_assign(AstNode *node) {
 		type2flt(next);
 		
 		switch (current->type) {
-			case AstType::Add: {
-				sec_text.push_back("fadd st0, st1");
-			} break;
+			case AstType::Add: sec_text.push_back("fadd st0, st1"); break;
+			case AstType::Sub: sec_text.push_back("fsubp st1, st0"); break;
+			case AstType::Mul: sec_text.push_back("fmul st0, st1"); break;
+			case AstType::Div: sec_text.push_back("fdivp st1, st0"); break;
 		}
 	}
 	
