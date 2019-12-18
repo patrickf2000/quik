@@ -104,17 +104,18 @@ void Asm_x86::build_function(AstNode *node) {
 	int arg_access = 4;
 	
 	for (auto v : fd->args) {
-		//Pop the arguments into the variables
-		std::string mov_ln = "mov eax, [esp+";
-		mov_ln += std::to_string(arg_access) + "]";
-		
-		arg_access += 4;
-		sec_text.push_back(mov_ln);
-		
-		/*if (v.type == DataType::Str)
-			sec_text.push_back("mov " + v.name + ", eax");
-		else*/
+		if (v.type == DataType::Float) {
+			sec_text.push_back("fstp qword [" + v.name + "]");
+		} else {
+			//Pop the arguments into the variables
+			std::string mov_ln = "mov eax, [esp+";
+			mov_ln += std::to_string(arg_access) + "]";
+			
+			arg_access += 4;
+			sec_text.push_back(mov_ln);
+
 			sec_text.push_back("mov [" + v.name + "], eax");
+		}
 	
 		//Declare the function arguments in assembly
 		AstVarDec *vd = new AstVarDec(v.name);
@@ -125,6 +126,8 @@ void Asm_x86::build_function(AstNode *node) {
 		} else if (v.type == DataType::Bool) {
 			//TODO: Replace
 			vd->children.push_back(new AstNode);
+		} else if (v.type == DataType::Float) {
+			vd->children.push_back(new AstFloat(0.0));
 		} else {
 			vd->children.push_back(new AstInt(0));
 		}
@@ -152,20 +155,22 @@ void Asm_x86::build_func_call(AstFuncCall *fc) {
 			case AstType::Id: {
 				AstID *id = dynamic_cast<AstID *>(node);
 				Var v = current_scope->vars[id->get_name()];
-				std::string ln = "push dword ";
+				std::string ln = "";
 			
 				switch (v.type) {
 					case DataType::Byte:
 					case DataType::Char:
 					case DataType::Short:
 					case DataType::Bool:
-					case DataType::Int: ln += "[" + v.name + "]"; break;
+					case DataType::Int: {
+						ln = "push dword ";
+						ln += "[" + v.name + "]"; 
+					} break;
 					case DataType::Long:
 					case DataType::Float: {
-							ln += "[" + v.name + "+4]";
-							ln += "[" + v.name + "]";
+							ln = "fld qword [" + v.name + "]";
 						} break;
-					case DataType::Str: ln += v.name; break;
+					case DataType::Str: ln = "push dword " + v.name; break;
 				}
 				
 				sec_text.push_back(ln);
@@ -176,6 +181,9 @@ void Asm_x86::build_func_call(AstFuncCall *fc) {
 				AstInt *no = dynamic_cast<AstInt *>(node);
 				sec_text.push_back("push " + std::to_string(no->get_val()));
 			} break;
+			
+			//A float
+			case AstType::Float: type2flt(node); break;
 			
 			//A string
 			case AstType::Str: {
@@ -210,6 +218,8 @@ void Asm_x86::build_println(AstFuncCall *fc) {
 	
 	//Add the code
 	for (auto node : fc->children) {
+		bool was_flt = false;
+	
 		//Align the call stack
 		if (!in_main)
 			sec_text.push_back("push eax");
@@ -251,6 +261,7 @@ void Asm_x86::build_println(AstFuncCall *fc) {
 						name = "[" + v.name + "+4]";
 						p2 = "[" + v.name + "]";
 						fmt = "flt_fmt";
+						was_flt = true;
 					} break;
 					case DataType::Str:	fmt = "str_fmt";		
 				}
@@ -265,8 +276,12 @@ void Asm_x86::build_println(AstFuncCall *fc) {
 		}
 		
 		//Finish aligning the call stack
-		if (!in_main)
-			sec_text.push_back("add esp, 12");
+		if (!in_main) {
+			if (was_flt)
+				sec_text.push_back("add esp, 16");
+			else
+				sec_text.push_back("add esp, 12");
+		}
 		
 		sec_text.push_back("");
 	}
