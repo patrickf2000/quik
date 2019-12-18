@@ -561,6 +561,19 @@ void Asm_x86::type2flt(AstNode *node) {
 			sec_text.push_back("fld qword [" + id->get_name() + "]");
 		} break;
 		
+		//TODO: Is there a better way we can do this?
+		case AstType::Int: {
+			AstInt *f = dynamic_cast<AstInt *>(node);
+			
+			std::string name = "FLT_" + std::to_string(str_index);
+			std::string lbl = name + " dq " + std::to_string(f->get_val());
+			lbl += ".0";
+			++str_index;
+			
+			sec_data.push_back(lbl);
+			sec_text.push_back("fld qword [" + name + "]");
+		} break;
+		
 		case AstType::Float: {
 			AstFloat *f = dynamic_cast<AstFloat *>(node);
 			
@@ -570,7 +583,7 @@ void Asm_x86::type2flt(AstNode *node) {
 			
 			sec_data.push_back(lbl);
 			sec_text.push_back("fld qword [" + name + "]");
-		}
+		} break;
 	}
 }
 
