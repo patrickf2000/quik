@@ -294,10 +294,15 @@ void Asm_x86::build_ret(AstNode *node) {
 		sec_text.push_back("mov ebx, 0");
 		sec_text.push_back("int 0x80");
 		sec_text.push_back("");
-	} else {
-		sec_text.push_back("ret");
+		return;
 	}
 	
+	if (node->children.size() == 1) {
+		auto child = node->children.at(0);
+		sec_text.push_back("mov eax, " + type2asm(child));
+	}
+	
+	sec_text.push_back("ret");
 	sec_text.push_back("");
 }
 
@@ -319,7 +324,8 @@ void Asm_x86::build_var_dec(AstNode *node) {
 	
 	auto first = vd->children.at(0);
 	
-	if (first->type == AstType::Id || vd->children.size() > 1) {
+	if (first->type == AstType::Id || first->type == AstType::FuncCall 
+			|| vd->children.size() > 1) {
 		ln += "0";
 		build_var_assign(node);
 	} else {
@@ -362,6 +368,13 @@ void Asm_x86::build_var_assign(AstNode *node) {
 			AstID *id = dynamic_cast<AstID *>(child);
 			sec_text.push_back("mov eax, [" + id->get_name() + "]");
 		} break;
+		
+		//Function calls
+		case AstType::FuncCall: {
+			AstFuncCall *fc = dynamic_cast<AstFuncCall *>(child);
+			build_func_call(fc);
+			//sec_text.push_back("mov [" + va->get_name() + "], eax");
+		} break;
 	}
 	
 	//Iterate through all the children
@@ -385,8 +398,16 @@ void Asm_x86::build_var_assign(AstNode *node) {
 			ln = "mov ebx, ";
 		}
 		
-		ln += type2asm(next);
-		sec_text.push_back(ln);
+		if (next->type == AstType::FuncCall) {
+			sec_text.push_back("mov [" + va->get_name() + "], eax");
+			AstFuncCall *fc = dynamic_cast<AstFuncCall *>(next);
+			build_func_call(fc);
+			ln += "[" + va->get_name() + "]";
+			sec_text.push_back(ln);
+		} else {
+			ln += type2asm(next);
+			sec_text.push_back(ln);
+		}
 		
 		if (is_div) {
 			sec_text.push_back("cdq");
