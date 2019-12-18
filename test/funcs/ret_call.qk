@@ -4,6 +4,6 @@ func double(no:int)
 end
 
 func main()
-	int x = double(2)
+	int x = double(2) + 1
 	println(x)
 end

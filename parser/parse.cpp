@@ -29,6 +29,45 @@ DataType ttype2dtype(TokenType t) {
 	return DataType::None;
 }
 
+//Builds a function call
+AstFuncCall *build_func_call(Line ln) {
+	auto tokens = ln.tokens;
+	std::string name = tokens.at(0).id;
+	AstFuncCall *call = new AstFuncCall(name);
+	Token last;
+
+	for (int i = 2; i<tokens.size(); i++) {
+		auto t = tokens.at(i);
+		last = t;
+
+		if (t.type == TokenType::RIGHT_PAREN) {
+			break;
+		} else if (t.type == TokenType::COMMA) {
+			continue;
+		} else if (t.type == TokenType::STRING) {
+			AstString *v_str = new AstString(t.id);
+			call->children.push_back(v_str);
+		} else if (t.type == TokenType::NO) {
+			AstInt *v_int = new AstInt(std::stoi(t.id));
+			call->children.push_back(v_int);
+		} else if (t.type == TokenType::DEC) {
+			AstFloat *v_flt = new AstFloat(std::stod(t.id));
+			call->children.push_back(v_flt);
+		} else if (t.type == TokenType::CHAR) {
+		
+		} else if (t.type == TokenType::ID) {
+			AstID *v_id = new AstID(t.id);
+			call->children.push_back(v_id);
+		}
+	}
+
+	if (last.type != TokenType::RIGHT_PAREN) {
+		syntax_error(ln, "No closing token");
+	}
+
+	return call;
+}
+
 //This performs common checking on variable declarations
 AstVarDec *basic_var_dec(Line ln) {
 	if (ln.tokens.size() < 4) {
@@ -55,30 +94,49 @@ void build_var_parts(AstVarDec *vd, int start, std::vector<Token> tokens) {
 	for (int i = start; i<tokens.size(); i++) {
 		Token t = tokens.at(i);
 		
-		if (t.type == TokenType::NO) {
-			int no = std::stoi(t.id);
-			AstInt *i = new AstInt(no);
-			vd->children.push_back(i);
-		} else if (t.type == TokenType::DEC) {
-			double no = std::stod(t.id);
-			AstFloat *i = new AstFloat(no);
-			vd->children.push_back(i);
-		} else if (t.type == TokenType::STRING) {
-			AstString *i = new AstString(t.id);
-			vd->children.push_back(i);
-		} else if (t.type == TokenType::PLUS) {
-			vd->children.push_back(new AstNode(AstType::Add));
-		} else if (t.type == TokenType::MINUS) {
-			vd->children.push_back(new AstNode(AstType::Sub));
-		} else if (t.type == TokenType::MUL) {
-			vd->children.push_back(new AstNode(AstType::Mul));
-		} else if (t.type == TokenType::DIV) {
-			vd->children.push_back(new AstNode(AstType::Div));
-		} else if (t.type == TokenType::MOD) {
-			vd->children.push_back(new AstNode(AstType::Mod));
+		if (tokens[i+1].type == TokenType::LEFT_PAREN) {
+			std::vector<Token> sub_tokens;
+			
+			for (int j = i; j<tokens.size(); j++) {
+				sub_tokens.push_back(tokens.at(j));
+			
+				if (tokens[j].type == TokenType::RIGHT_PAREN) {
+					i = j;
+					break;
+				}
+			}
+			
+			Line l;
+			l.tokens = sub_tokens;
+			
+			AstFuncCall *call = build_func_call(l);
+			vd->children.push_back(call);
 		} else {
-			AstID *i = new AstID(t.id);
-			vd->children.push_back(i);
+			if (t.type == TokenType::NO) {
+				int no = std::stoi(t.id);
+				AstInt *i = new AstInt(no);
+				vd->children.push_back(i);
+			} else if (t.type == TokenType::DEC) {
+				double no = std::stod(t.id);
+				AstFloat *i = new AstFloat(no);
+				vd->children.push_back(i);
+			} else if (t.type == TokenType::STRING) {
+				AstString *i = new AstString(t.id);
+				vd->children.push_back(i);
+			} else if (t.type == TokenType::PLUS) {
+				vd->children.push_back(new AstNode(AstType::Add));
+			} else if (t.type == TokenType::MINUS) {
+				vd->children.push_back(new AstNode(AstType::Sub));
+			} else if (t.type == TokenType::MUL) {
+				vd->children.push_back(new AstNode(AstType::Mul));
+			} else if (t.type == TokenType::DIV) {
+				vd->children.push_back(new AstNode(AstType::Div));
+			} else if (t.type == TokenType::MOD) {
+				vd->children.push_back(new AstNode(AstType::Mod));
+			} else {
+				AstID *i = new AstID(t.id);
+				vd->children.push_back(i);
+			}
 		}
 	}
 }
@@ -314,40 +372,7 @@ AstNode *build_node(Line ln) {
 			
 			//Build a function call
 			if (tokens.at(1).type == TokenType::LEFT_PAREN) {
-				std::string name = first.id;
-				AstFuncCall *call = new AstFuncCall(name);
-				Token last;
-				
-				for (int i = 2; i<tokens.size(); i++) {
-					auto t = tokens.at(i);
-					last = t;
-				
-					if (t.type == TokenType::RIGHT_PAREN) {
-						break;
-					} else if (t.type == TokenType::COMMA) {
-						continue;
-					} else if (t.type == TokenType::STRING) {
-						AstString *v_str = new AstString(t.id);
-						call->children.push_back(v_str);
-					} else if (t.type == TokenType::NO) {
-						AstInt *v_int = new AstInt(std::stoi(t.id));
-						call->children.push_back(v_int);
-					} else if (t.type == TokenType::DEC) {
-						AstFloat *v_flt = new AstFloat(std::stod(t.id));
-						call->children.push_back(v_flt);
-					} else if (t.type == TokenType::CHAR) {
-					
-					} else if (t.type == TokenType::ID) {
-						AstID *v_id = new AstID(t.id);
-						call->children.push_back(v_id);
-					}
-				}
-				
-				if (last.type != TokenType::RIGHT_PAREN) {
-					syntax_error(ln, "No closing token");
-				}
-				
-				return call;
+				return build_func_call(ln);
 				
 			//Build an assignment
 			} else if (tokens.at(1).type == TokenType::ASSIGN) {
