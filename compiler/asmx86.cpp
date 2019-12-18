@@ -325,7 +325,12 @@ void Asm_x86::build_var_dec(AstNode *node) {
 
 //Builds a variable assignment
 void Asm_x86::build_var_assign(AstNode *node) {
-	AstAttrNode *va = dynamic_cast<AstAttrNode *>(node);
+	AstVarDec *va = dynamic_cast<AstVarDec *>(node);
+	if (va->get_type() == DataType::Float) {
+		build_flt_assign(node);
+		return;
+	}
+	
 	auto child = node->children.at(0);
 		
 	switch (child->type) {
@@ -379,6 +384,31 @@ void Asm_x86::build_var_assign(AstNode *node) {
 	}
 	
 	sec_text.push_back("mov [" + va->get_name() + "], eax");
+	sec_text.push_back("");
+}
+
+//Builds a floating-point variable assignment
+void Asm_x86::build_flt_assign(AstNode *node) {
+	AstAttrNode *va = dynamic_cast<AstAttrNode *>(node);
+	auto child = va->children.at(0);
+	
+	type2flt(child);
+	
+	//Iterate through the children
+	for (int i = 1; i<va->children.size(); i+=2) {
+		auto current = va->children.at(i);
+		auto next = va->children.at(i+1);
+		
+		type2flt(next);
+		
+		switch (current->type) {
+			case AstType::Add: {
+				sec_text.push_back("fadd st0, st1");
+			} break;
+		}
+	}
+	
+	sec_text.push_back("fstp qword [" + va->get_name() + "]");
 	sec_text.push_back("");
 }
 
@@ -521,6 +551,27 @@ std::string Asm_x86::type2asm(AstNode *node) {
 	}
 	
 	return ln;
+}
+
+//Converts a node to floating-point Assembly type
+void Asm_x86::type2flt(AstNode *node) {
+	switch (node->type) {
+		case AstType::Id: {
+			AstID *id = dynamic_cast<AstID *>(node);
+			sec_text.push_back("fld qword [" + id->get_name() + "]");
+		} break;
+		
+		case AstType::Float: {
+			AstFloat *f = dynamic_cast<AstFloat *>(node);
+			
+			std::string name = "FLT_" + std::to_string(str_index);
+			std::string lbl = name + " dq " + std::to_string(f->get_val());
+			++str_index;
+			
+			sec_data.push_back(lbl);
+			sec_text.push_back("fld qword [" + name + "]");
+		}
+	}
 }
 
 

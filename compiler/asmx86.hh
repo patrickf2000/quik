@@ -16,12 +16,14 @@ public:
 	void build_ret(AstNode *node);
 	void build_var_dec(AstNode *node);
 	void build_var_assign(AstNode *node);
+	void build_flt_assign(AstNode *node);
 	void build_cond(AstNode *node);
 	void build_while(AstNode *node);
 	void write();
 	void build();
 protected:
 	std::string type2asm(AstNode *node);
+	void type2flt(AstNode *node);
 private:
 	std::string path = "";
 	std::vector<std::string> asm_files;
