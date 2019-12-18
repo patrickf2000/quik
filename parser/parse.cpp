@@ -59,6 +59,10 @@ void build_var_parts(AstVarDec *vd, int start, std::vector<Token> tokens) {
 			int no = std::stoi(t.id);
 			AstInt *i = new AstInt(no);
 			vd->children.push_back(i);
+		} else if (t.type == TokenType::DEC) {
+			double no = std::stod(t.id);
+			AstFloat *i = new AstFloat(no);
+			vd->children.push_back(i);
 		} else if (t.type == TokenType::STRING) {
 			AstString *i = new AstString(t.id);
 			vd->children.push_back(i);
@@ -297,7 +301,8 @@ AstNode *build_node(Line ln) {
 						AstInt *v_int = new AstInt(std::stoi(t.id));
 						call->children.push_back(v_int);
 					} else if (t.type == TokenType::DEC) {
-					
+						AstFloat *v_flt = new AstFloat(std::stod(t.id));
+						call->children.push_back(v_flt);
 					} else if (t.type == TokenType::CHAR) {
 					
 					} else if (t.type == TokenType::ID) {

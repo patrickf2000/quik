@@ -32,6 +32,7 @@ enum AstType {
 	VarAssign,
 	Id,
 	Int,
+	Float,
 	Str,
 	
 	//Operator
@@ -212,6 +213,21 @@ public:
 	void set_val(int i) { no = i; }
 private:
 	int no = 0;
+};
+
+//The float type
+class AstFloat : public AstNode {
+public:
+	explicit AstFloat() { type = AstType::Float; }
+	explicit AstFloat(double n) {
+		type = AstType::Float;
+		no = n;
+	}
+	
+	double get_val() { return no; }
+	void set_val(double n) { no = n; }
+private:
+	double no = 0;
 };
 
 //The string type
