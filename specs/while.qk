@@ -1,0 +1,35 @@
+# while.qk
+# Provides an example of a while loop
+
+# Count up to 10
+func count_up
+	println("Counting to 10...")
+	
+	int x = 1
+	while (x <= 10)
+		println(x)
+		x = x + 1
+	end
+	
+	println("Done")
+	println("")
+end
+
+# Count up by two
+func count_by_two
+	println("Counting to 10 by 2...")
+	
+	int x = 0
+	while (x <= 10)
+		println(x)
+		x = x + 2
+	end
+	
+	println("Done")
+	println("")
+end
+
+func main
+	count_up()
+	count_by_two()
+end

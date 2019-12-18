@@ -1,0 +1,38 @@
+# prime-factor.qk
+# Checks to see if a number is a prime factor
+
+# Returns 1 if prime, 0 if not
+func is_prime(no:int)
+	int found = 1
+	int index = 2
+	
+	while (index < no)
+		int mod = no % index
+		
+		if (mod == 0)
+			found = 0
+			
+			# Until we get break :)
+			index = no
+		end
+		
+		index = index + 1
+	end
+	
+	return found
+end
+
+func main
+	# Change me! :)
+	int x = 11
+	int ret = is_prime(x)
+	
+	println("Your number:")
+	println(x)
+	
+	if (ret == 1)
+		println("It is prime!!")
+	else
+		println("Not prime!")
+	end
+end
