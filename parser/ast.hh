@@ -37,6 +37,7 @@ enum AstType {
 	Str,
 	ArrayDec,
 	ArrayAccess,
+	ArrayAssign,
 	
 	//Operator
 	Add,
@@ -286,6 +287,18 @@ public:
 		type = AstType::ArrayAccess;
 		name = n;
 	}
+};
+
+//Array assignment
+class AstArrayAssign : public AstAttrNode {
+public:
+	explicit AstArrayAssign() { type = AstType::ArrayAssign; }
+	explicit AstArrayAssign(std::string n) {
+		type = AstType::ArrayAssign;
+		name = n;
+	}
+	
+	AstNode *index;
 };
 
 //Debugging stuff

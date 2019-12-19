@@ -1,0 +1,13 @@
+func main
+	int[5] numbers = 1, 7, 2, 4, 1
+	int x = numbers[2]
+	
+	println("Element at index 2:")
+	println(x)
+	
+	numbers[2] = 3
+	x = numbers[2]
+	
+	println("Element after change:")
+	println(x)
+end

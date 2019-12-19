@@ -96,7 +96,7 @@ AstVarDec *basic_var_dec(Line ln) {
 }
 
 //Translates each part into tokens for variable declarations and assignments
-void build_var_parts(AstVarDec *vd, int start, std::vector<Token> tokens) {
+void build_var_parts(AstNode *vd, int start, std::vector<Token> tokens) {
 	for (int i = start; i<tokens.size(); i++) {
 		Token t = tokens.at(i);
 		
@@ -501,6 +501,37 @@ AstNode *build_node(Line ln) {
 		case TokenType::ID: {
 			if (tokens.size() < 2) {
 				syntax_error(ln, "Only an ID was specified!");
+			}
+			
+			//Check for an array assignment
+			if (tokens.size() >= 6) {
+				auto t1 = tokens.at(1).type;
+				auto t2 = tokens.at(3).type;
+				auto t3 = tokens.at(4).type;
+				
+				if (t1 == TokenType::L_BRACKET && t2 == TokenType::R_BRACKET
+					&& t3 == TokenType::ASSIGN) {
+					Token index = tokens.at(2);
+					AstArrayAssign *assign = new AstArrayAssign(first.id);
+					
+					switch (index.type) {
+						case TokenType::ID: {
+							AstID *id = new AstID(index.id);
+							assign->index = id;
+						} break;
+						
+						case TokenType::NO: {
+							int val = std::stoi(index.id);
+							AstInt *i = new AstInt(val);
+							assign->index = i;
+						} break;
+						
+						default: syntax_error(ln, "Invalid array access.");
+					}
+					
+					build_var_parts(assign, 5, tokens);
+					return assign;
+				}
 			}
 			
 			//Build a function call

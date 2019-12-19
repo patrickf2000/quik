@@ -21,6 +21,7 @@ std::string ast2str(AstType type) {
 		case AstType::Str: return "Str";
 		case AstType::ArrayDec: return "ArrayDec";
 		case AstType::ArrayAccess: return "ArrayAccess";
+		case AstType::ArrayAssign: return "ArrayAssign";
 		
 		case AstType::If: return "If";
 		case AstType::Elif: return "Elif";
@@ -129,9 +130,27 @@ void print_tree(AstNode *node, int indent, bool nl) {
 		std::cout << " {" << arr->get_size() << ":";
 		std::cout << type2str(arr->get_type()) << "}";
 		
-	} else if (node->type == AstType::ArrayAccess) {
-		AstArrayAcc *acc = dynamic_cast<AstArrayAcc *>(node);
+	} else if (node->type == AstType::ArrayAccess || node->type == AstType::ArrayAssign) {
+		AstAttrNode *acc = dynamic_cast<AstAttrNode *>(node);
 		std::cout << " [" << acc->get_name() << "]";
+		
+		if (node->type == AstType::ArrayAssign) {
+			auto assign = dynamic_cast<AstArrayAssign *>(node);
+			std::cout << " {";
+		
+			auto index = assign->index;
+			switch (index->type) {
+				case AstType::Id: {
+					std::cout << dynamic_cast<AstID *>(index)->get_name();
+				} break;
+				
+				case AstType::Int: {
+					std::cout << dynamic_cast<AstInt *>(index)->get_val();
+				}
+			}
+			
+			std::cout << "}";
+		}
 		
 	//values
 	} else if (node->type == AstType::Int) {
