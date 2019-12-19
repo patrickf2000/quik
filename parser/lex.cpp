@@ -7,6 +7,7 @@
 
 bool is_separator(char c) {
 	if (c == ' ' || c == '(' || c == ')'
+		|| c == '[' || c == ']'
 		|| c == '=' || c == ',' || c == ':'
 		|| c == '+' || c == '-' || c == '*' || c == '/'
 		|| c == '%' || c == '!' || c == '>' || c == '<') {
@@ -184,6 +185,14 @@ std::vector<Token> tokenize(std::string line) {
 				Token t;
 				t.type = TokenType::RIGHT_PAREN;
 				tokens.push_back(t);
+			} else if (c == '[') {
+				Token t;
+				t.type = TokenType::L_BRACKET;
+				tokens.push_back(t);
+			} else if (c == ']') {
+				Token t;
+				t.type = TokenType::R_BRACKET;
+				tokens.push_back(t);
 			} else if (c == ',') {
 				Token t;
 				t.type = TokenType::COMMA;
@@ -248,6 +257,10 @@ std::vector<Token> tokenize(std::string line) {
 				Token t;
 				t.type = TokenType::MOD;
 				tokens.push_back(t);
+			} else if (c == ',') {
+				Token t;
+				t.type = TokenType::COMMA;
+				tokens.push_back(t);
 			}
 		} else {
 			current += c;
@@ -301,5 +314,7 @@ TokenType str2type(std::string in) {
 	else if (in == "LESS_EQ") return TokenType::LESS_EQ;
 	else if (in == "WHILE") return TokenType::WHILE;
 	else if (in == "RETURN") return TokenType::RETURN;
+	else if (in == "L_BRACKET") return TokenType::L_BRACKET;
+	else if (in == "R_BRACKET") return TokenType::R_BRACKET;
 	return TokenType::NONE;
 }

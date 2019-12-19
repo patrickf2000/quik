@@ -31,6 +31,8 @@ enum TokenType {
 	//Symbols
 	LEFT_PAREN,
 	RIGHT_PAREN,
+	L_BRACKET,
+	R_BRACKET,
 	ASSIGN,
 	COMMA,
 	COLON,
