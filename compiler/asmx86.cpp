@@ -468,7 +468,35 @@ void Asm_x86::build_flt_assign(AstNode *node) {
 
 //Builds an array declaration
 void Asm_x86::build_arr_dec(AstNode *node) {
-
+	AstArrayDec *ard = dynamic_cast<AstArrayDec *>(node);
+	std::string ln = ard->get_name() + " ";
+	
+	switch (ard->get_type()) {
+		case DataType::Byte:
+		case DataType::Char:
+		case DataType::Str: ln += "db "; break;
+		case DataType::Short: ln += "dw "; break;
+		case DataType::Bool:
+		case DataType::Int: ln += "dd "; break;
+		case DataType::Float:
+		case DataType::Long: ln += "dq "; break;
+	}
+	
+	for (int i = 0; i<ard->children.size(); i++) {
+		auto child = ard->children.at(i);
+		
+		switch (child->type) {
+			case AstType::Int: {
+				AstInt *i = dynamic_cast<AstInt *>(child);
+				ln += std::to_string(i->get_val());
+			} break;
+		}
+		
+		if (i+1 < ard->children.size())
+			ln += ",";
+	}
+	
+	sec_data.push_back(ln);
 }
 
 //Generates assembly for a conditional statement
