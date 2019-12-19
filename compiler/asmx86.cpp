@@ -124,8 +124,7 @@ void Asm_x86::build_function(AstNode *node) {
 		if (v.type == DataType::Str) {
 			vd->children.push_back(new AstString);
 		} else if (v.type == DataType::Bool) {
-			//TODO: Replace
-			vd->children.push_back(new AstNode);
+			vd->children.push_back(new AstBool(false));
 		} else if (v.type == DataType::Float) {
 			vd->children.push_back(new AstFloat(0.0));
 		} else {
@@ -326,9 +325,9 @@ void Asm_x86::build_var_dec(AstNode *node) {
 	switch (vd->get_type()) {
 		case DataType::Byte:
 		case DataType::Char:
-		case DataType::Bool:
 		case DataType::Str: ln += "db "; break;
 		case DataType::Short: ln += "dw "; break;
+		case DataType::Bool:
 		case DataType::Int: ln += "dd "; break;
 		case DataType::Long:
 		case DataType::Float: ln += "dq "; break;
@@ -350,6 +349,12 @@ void Asm_x86::build_var_dec(AstNode *node) {
 		} else if (first->type == AstType::Float) {
 			AstFloat *i = dynamic_cast<AstFloat *>(first);
 			ln += std::to_string(i->get_val());
+		} else if (first->type == AstType::Bool) {
+			AstBool *i = dynamic_cast<AstBool *>(first);
+			if (i->get_val())
+				ln += "1";
+			else
+				ln += "0";
 		}
 	}
 	
@@ -595,6 +600,14 @@ std::string Asm_x86::type2asm(AstNode *node) {
 		case AstType::Id: {
 			AstID *id = dynamic_cast<AstID *>(node);
 			ln = "[" + id->get_name() + "]";
+		} break;
+		
+		case AstType::Bool: {
+			AstBool *bl = dynamic_cast<AstBool *>(node);
+			if (bl->get_val())
+				ln += "1";
+			else
+				ln += "0";
 		} break;
 	}
 	
