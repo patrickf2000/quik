@@ -1,0 +1,24 @@
+# bool1.qk
+# Booleans
+
+func fw_bool(val:bool)
+	println("Evaluating...")
+	if (val == true)
+		println("True")
+	elif (val == false)
+		println("False!")
+	end
+end
+
+func main
+	bool x = true
+	bool y = false
+	
+	println(x)
+	println(y)
+	println("")
+	
+	fw_bool(true)
+	fw_bool(false)
+	fw_bool(x)
+end

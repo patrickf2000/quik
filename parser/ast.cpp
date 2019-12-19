@@ -15,6 +15,7 @@ std::string ast2str(AstType type) {
 		case AstType::VarDec: return "VarDec";
 		case AstType::VarAssign: return "VarAssign";
 		case AstType::Int: return "Int";
+		case AstType::Bool: return "Bool";
 		case AstType::Float: return "Float";
 		case AstType::Id: return "ID";
 		case AstType::Str: return "Str";
@@ -123,6 +124,8 @@ void print_tree(AstNode *node, int indent, bool nl) {
 	//values
 	} else if (node->type == AstType::Int) {
 		std::cout << " " << dynamic_cast<AstInt *>(node)->get_val();
+	} else if (node->type == AstType::Bool) {
+		std::cout << " " << static_cast<AstBool *>(node)->get_val();
 	} else if (node->type == AstType::Float) {
 		std::cout << " " << dynamic_cast<AstFloat *>(node)->get_val();
 	} else if (node->type == AstType::Id) {

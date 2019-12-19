@@ -53,6 +53,12 @@ AstFuncCall *build_func_call(Line ln) {
 		} else if (t.type == TokenType::DEC) {
 			AstFloat *v_flt = new AstFloat(std::stod(t.id));
 			call->children.push_back(v_flt);
+		} else if (t.type == TokenType::B_TRUE) {
+			AstBool *bl = new AstBool(true);
+			call->children.push_back(bl);
+		} else if (t.type == TokenType::B_FALSE) {
+			AstBool *bl = new AstBool(false);
+			call->children.push_back(bl);
 		} else if (t.type == TokenType::CHAR) {
 		
 		} else if (t.type == TokenType::ID) {
@@ -120,6 +126,12 @@ void build_var_parts(AstVarDec *vd, int start, std::vector<Token> tokens) {
 				double no = std::stod(t.id);
 				AstFloat *i = new AstFloat(no);
 				vd->children.push_back(i);
+			} else if (t.type == TokenType::B_TRUE) {
+				AstBool *bl = new AstBool(true);
+				vd->children.push_back(bl);
+			} else if (t.type == TokenType::B_FALSE) {
+				AstBool *bl = new AstBool(false);
+				vd->children.push_back(bl);
 			} else if (t.type == TokenType::STRING) {
 				AstString *i = new AstString(t.id);
 				vd->children.push_back(i);
@@ -260,6 +272,15 @@ AstCond *build_conditional(Line ln) {
 			AstInt *i = new AstInt(std::stoi(lval.id));
 			cond->lval = i;
 		} break;
+		
+		case TokenType::B_TRUE: {
+			AstBool *bl = new AstBool(true);
+			cond->lval = bl;
+		} break;
+		case TokenType::B_FALSE: {
+			AstBool *bl = new AstBool(false);
+			cond->lval = bl;
+		} break;
 	}
 	
 	//Right value
@@ -271,6 +292,15 @@ AstCond *build_conditional(Line ln) {
 		case TokenType::NO: {
 			AstInt *i = new AstInt(std::stoi(rval.id));
 			cond->rval = i;
+		} break;
+		
+		case TokenType::B_TRUE: {
+			AstBool *bl = new AstBool(true);
+			cond->rval = bl;
+		} break;
+		case TokenType::B_FALSE: {
+			AstBool *bl = new AstBool(false);
+			cond->rval = bl;
 		} break;
 	}
 	

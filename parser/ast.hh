@@ -32,6 +32,7 @@ enum AstType {
 	VarAssign,
 	Id,
 	Int,
+	Bool,
 	Float,
 	Str,
 	
@@ -213,6 +214,21 @@ public:
 	void set_val(int i) { no = i; }
 private:
 	int no = 0;
+};
+
+//The bool types
+class AstBool : public AstNode {
+public:
+	explicit AstBool() { type = AstType::Bool; }
+	explicit AstBool(bool b) {
+		type = AstType::Bool;
+		val = b;
+	}
+	
+	bool get_val() { return val; }
+	void set_val(bool b) { val = b; }
+private:
+	bool val = false;
 };
 
 //The float type
