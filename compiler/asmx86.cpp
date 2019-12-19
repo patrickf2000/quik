@@ -337,6 +337,7 @@ void Asm_x86::build_var_dec(AstNode *node) {
 	auto first = vd->children.at(0);
 	
 	if (first->type == AstType::Id || first->type == AstType::FuncCall 
+			|| first->type == AstType::ArrayAccess
 			|| vd->children.size() > 1) {
 		ln += "0";
 		build_var_assign(node);
@@ -391,6 +392,11 @@ void Asm_x86::build_var_assign(AstNode *node) {
 		case AstType::FuncCall: {
 			AstFuncCall *fc = dynamic_cast<AstFuncCall *>(child);
 			build_func_call(fc);
+		} break;
+		
+		//Array access
+		case AstType::ArrayAccess: {
+			build_arr_access(child);
 		} break;
 	}
 	
@@ -497,6 +503,37 @@ void Asm_x86::build_arr_dec(AstNode *node) {
 	}
 	
 	sec_data.push_back(ln);
+}
+
+//Generates assembly for an array access statement
+void Asm_x86::build_arr_access(AstNode *node) {
+	AstArrayAcc *acc = dynamic_cast<AstArrayAcc *>(node);
+	int index = 0;
+	
+	//Calculate the index
+	//For ints: 4 * (element index)
+	//TODO: Modify not to only use ints
+	auto i_child = acc->children.at(0);
+	
+	switch (i_child->type) {
+		case AstType::Int: {
+			AstInt *i = dynamic_cast<AstInt *>(i_child);
+			index = i->get_val();
+			index *= 4;
+		} break;
+		
+		case AstType::Id: {
+		
+		} break;
+	}
+	
+	//Translate
+	std::string ln = "mov eax, [";
+	ln += acc->get_name() + "+" + std::to_string(index);
+	ln += "]";
+	
+	sec_text.push_back(ln);
+	sec_text.push_back("");
 }
 
 //Generates assembly for a conditional statement
