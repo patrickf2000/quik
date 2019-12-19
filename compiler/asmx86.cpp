@@ -29,6 +29,7 @@ void Asm_x86::assemble(std::string p, AstNode *top) {
 			case AstType::ExternFunc: build_extern_func(node); break;
 			case AstType::VarDec: build_var_dec(node); break;
 			case AstType::VarAssign: build_var_assign(node); break;
+			case AstType::ArrayDec: build_arr_dec(node); break;
 			
 			case AstType::FuncCall: {
 				AstFuncCall *fc = dynamic_cast<AstFuncCall *>(node);
@@ -463,6 +464,11 @@ void Asm_x86::build_flt_assign(AstNode *node) {
 	
 	sec_text.push_back("fstp qword [" + va->get_name() + "]");
 	sec_text.push_back("");
+}
+
+//Builds an array declaration
+void Asm_x86::build_arr_dec(AstNode *node) {
+
 }
 
 //Generates assembly for a conditional statement

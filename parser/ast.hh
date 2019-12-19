@@ -35,7 +35,7 @@ enum AstType {
 	Bool,
 	Float,
 	Str,
-	Array,
+	ArrayDec,
 	
 	//Operator
 	Add,
@@ -263,9 +263,9 @@ private:
 };
 
 //The array type
-class AstArray : public AstAttrNode {
+class AstArrayDec : public AstAttrNode {
 public:
-	explicit AstArray() { type = AstType::Array; }
+	explicit AstArrayDec() { type = AstType::ArrayDec; }
 	
 	DataType get_type() { return d_type; }
 	void set_type(DataType t) { d_type = t; }

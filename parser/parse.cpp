@@ -229,11 +229,11 @@ AstFuncDec *build_func_dec(Line ln) {
 }
 
 //Build an array node
-AstArray *build_array(Line ln) {
+AstArrayDec *build_array(Line ln) {
 	auto tokens = ln.tokens;
 	auto type = tokens.at(0).type;
 
-	AstArray *arr = new AstArray;
+	AstArrayDec *arr = new AstArrayDec;
 	arr->set_type(ttype2dtype(type));
 	
 	//Syntax checking
@@ -509,7 +509,7 @@ AstNode *build_node(Line ln) {
 				auto t2 = tokens[3].type;
 				
 				if (t1 == TokenType::L_BRACKET && t2 == TokenType::R_BRACKET) {
-					AstArray *arr = build_array(ln);
+					AstArrayDec *arr = build_array(ln);
 					return arr;
 				}
 			}
