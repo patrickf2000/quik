@@ -1,10 +1,10 @@
 section .data
 	is_prime_no dd 0
-	is_prime_found dd 1
+	is_prime_prime dd 1
 	is_prime_index dd 2
 	is_prime_mod dd 0
 	main_x dd 11
-	main_ret dd 0
+	main_prime dd 0
 	int_fmt db "%d",10,0
 	str_fmt db "%s",10,0
 	flt_fmt db "%f",10,0
@@ -34,8 +34,7 @@ L1:
 	cmp eax, 0
 	jne L4
 	
-	mov eax, 0
-	mov [is_prime_found], eax
+	mov [is_prime_prime], eax
 	
 	mov eax, [is_prime_no]
 	mov [is_prime_index], eax
@@ -52,14 +51,14 @@ L2:
 	cmp eax, [is_prime_no]
 	jl L1
 	
-	mov eax, [is_prime_found]
+	mov eax, [is_prime_prime]
 	ret
 	
 main:
 	push dword [main_x]
 	call is_prime
 	
-	mov [main_ret], eax
+	mov [main_prime], eax
 	
 	push dword STR_1
 	push dword str_fmt
@@ -69,7 +68,7 @@ main:
 	push dword int_fmt
 	call printf
 	
-	mov eax, [main_ret]
+	mov eax, [main_prime]
 	cmp eax, 1
 	jne L6
 	
