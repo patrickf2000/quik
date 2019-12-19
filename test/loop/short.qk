@@ -1,0 +1,18 @@
+# short.qk
+# Tests short loops
+
+func main
+	bool less = true
+	int index = 0
+	
+	while (less)
+		if (index == 10)
+			less = true
+		end
+		
+		println(index)
+		index = index + 1
+	end
+	
+	println("Done")
+end

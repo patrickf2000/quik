@@ -1,0 +1,10 @@
+# infinite.qk
+# This will cause an infinite loop
+
+func main
+	while (true)
+		println("Looping...")
+	end
+	
+	println("Done")
+end

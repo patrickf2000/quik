@@ -234,12 +234,12 @@ AstCond *build_conditional(Line ln) {
 	auto type = tokens.at(0).type;
 	
 	//Make sure the syntax is correct
-	if (tokens.size() != 6) {
+	if (tokens.size() != 6 && tokens.size() != 4) {
 		syntax_error(ln, "Incorrect conditional syntax.");
 	}
 	
 	auto t1 = tokens.at(1).type;
-	auto t2 = tokens.at(5).type;
+	auto t2 = tokens.at(tokens.size() - 1).type;
 	
 	if (t1 != TokenType::LEFT_PAREN || t2 != TokenType::RIGHT_PAREN) {
 		syntax_error(ln, "Incorrect conditional syntax.");
@@ -257,9 +257,17 @@ AstCond *build_conditional(Line ln) {
 	}
 	
 	//Extract the needed tokens
-	auto lval = tokens.at(2);
-	auto op = tokens.at(3).type;
-	auto rval = tokens.at(4);
+	Token lval = tokens.at(2);
+	TokenType op;
+	Token rval;
+	
+	if (tokens.size() == 4) {
+		op = TokenType::EQUALS;
+		rval.type = TokenType::B_TRUE;
+	} else {
+		op = tokens.at(3).type;
+		rval = tokens.at(4);
+	}
 	
 	//TODO: Is there a way we can clean this up?
 	//Parse the left value
