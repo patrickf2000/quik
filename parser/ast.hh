@@ -35,6 +35,7 @@ enum AstType {
 	Bool,
 	Float,
 	Str,
+	Array,
 	
 	//Operator
 	Add,
@@ -259,6 +260,21 @@ public:
 	void set_val(std::string s) { val = s; }
 private:
 	std::string val = "";
+};
+
+//The array type
+class AstArray : public AstAttrNode {
+public:
+	explicit AstArray() { type = AstType::Array; }
+	
+	DataType get_type() { return d_type; }
+	void set_type(DataType t) { d_type = t; }
+	
+	int get_size() { return size; }
+	void set_size(int s) { size = s; }
+private:
+	DataType d_type;
+	int size;
 };
 
 //Debugging stuff

@@ -228,6 +228,75 @@ AstFuncDec *build_func_dec(Line ln) {
 	return fd;
 }
 
+//Build an array node
+AstArray *build_array(Line ln) {
+	auto tokens = ln.tokens;
+	auto type = tokens.at(0).type;
+
+	AstArray *arr = new AstArray;
+	arr->set_type(ttype2dtype(type));
+	
+	//Syntax checking
+	auto lb = tokens.at(1).type;
+	auto count = tokens.at(2);
+	auto rb = tokens.at(3).type;
+	auto name = tokens.at(4);
+	
+	if (lb != TokenType::L_BRACKET || rb != TokenType::R_BRACKET)
+		syntax_error(ln, "Invalid array declaration syntax.");
+		
+	if (count.type != TokenType::NO)
+		syntax_error(ln, "No or invalid size specified for array.");
+		
+	//Set the name and size
+	arr->set_name(name.id);
+	arr->set_size(std::stoi(count.id));
+	
+	//Set the elements
+	for (int i = 6; i<tokens.size(); i++) {
+		auto t = tokens.at(i);
+		
+		switch (t.type) {
+			case TokenType::NO: {
+				int no = std::stoi(t.id);
+				AstInt *i = new AstInt(no);
+				arr->children.push_back(i);
+			} break;
+			
+			case TokenType::DEC: {
+				double no = std::stod(t.id);
+				AstFloat *i = new AstFloat(no);
+				arr->children.push_back(i);
+			} break;
+			
+			case TokenType::B_TRUE: {
+				AstBool *bl = new AstBool(true);
+				arr->children.push_back(bl);
+			} break;	
+			
+			case TokenType::B_FALSE: {
+				AstBool *bl = new AstBool(false);
+				arr->children.push_back(bl);
+				
+			} break;
+			
+			case TokenType::STRING: {
+				AstString *i = new AstString(t.id);
+				arr->children.push_back(i);
+			} break;
+			
+			case TokenType::ID: {
+				AstID *id = new AstID(t.id);
+				arr->children.push_back(id);
+			} break;
+			
+			case TokenType::COMMA: continue;
+		}
+	}
+	
+	return arr;
+}
+
 //Builds a conditional statement
 AstCond *build_conditional(Line ln) {
 	auto tokens = ln.tokens;
@@ -435,6 +504,16 @@ AstNode *build_node(Line ln) {
 		case TokenType::T_BOOL:
 		case TokenType::T_STR:
 		case TokenType::VAR: {
+			if (tokens.size() > 4) {
+				auto t1 = tokens[1].type;
+				auto t2 = tokens[3].type;
+				
+				if (t1 == TokenType::L_BRACKET && t2 == TokenType::R_BRACKET) {
+					AstArray *arr = build_array(ln);
+					return arr;
+				}
+			}
+			
 			auto vd = basic_var_dec(ln);
 			vd->set_type(ttype2dtype(first.type));
 			
