@@ -2,9 +2,19 @@
 # Integer arrays
 
 func main
-	int[5] numbers = 1, 2, 3, 4, 5
+	int[5] numbers = 1, 7, 2, 4, 1
 	int x = numbers[2]
 	
 	println("Element at index 2:")
 	println(x)
+	
+	println("")
+	println("Counting all elements in array:")
+	
+	int index = 0
+	while (index < 5)
+		x = numbers[index]
+		println(x)
+		index = index + 1
+	end
 end

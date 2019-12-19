@@ -134,7 +134,7 @@ void build_var_parts(AstVarDec *vd, int start, std::vector<Token> tokens) {
 					index = new AstInt(val);
 				} break;
 				
-				case TokenType::ID: index = new AstID(index_t.id);
+				case TokenType::ID: index = new AstID(index_t.id); break;
 				default: syntax_error(l, "You can only access array elements via integers.");
 			}
 		

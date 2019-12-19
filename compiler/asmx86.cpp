@@ -514,22 +514,28 @@ void Asm_x86::build_arr_access(AstNode *node) {
 	//For ints: 4 * (element index)
 	//TODO: Modify not to only use ints
 	auto i_child = acc->children.at(0);
+	std::string ln = "mov eax, [";
+	ln += acc->get_name() + "+";
 	
 	switch (i_child->type) {
 		case AstType::Int: {
 			AstInt *i = dynamic_cast<AstInt *>(i_child);
 			index = i->get_val();
 			index *= 4;
+			ln += std::to_string(index);
 		} break;
 		
 		case AstType::Id: {
-		
+			AstID *id = dynamic_cast<AstID *>(i_child);
+			
+			sec_text.push_back("mov ebx, [" + id->get_name() + "]");
+			sec_text.push_back("imul ebx, 4");
+			
+			ln += "ebx";
 		} break;
 	}
 	
 	//Translate
-	std::string ln = "mov eax, [";
-	ln += acc->get_name() + "+" + std::to_string(index);
 	ln += "]";
 	
 	sec_text.push_back(ln);
