@@ -117,6 +117,32 @@ void build_var_parts(AstVarDec *vd, int start, std::vector<Token> tokens) {
 			
 			AstFuncCall *call = build_func_call(l);
 			vd->children.push_back(call);
+		} else if (tokens[i+1].type == TokenType::L_BRACKET) {
+			auto index_t = tokens[i+2];
+			auto rb = tokens[i+3];
+			AstNode *index = new AstNode;
+			
+			Line l;
+			l.tokens = tokens;
+			
+			if (rb.type != TokenType::R_BRACKET)
+				syntax_error(l, "Invalid array access syntax.");
+			
+			switch (index_t.type) {
+				case TokenType::NO: {
+					int val = std::stoi(index_t.id);
+					index = new AstInt(val);
+				} break;
+				
+				case TokenType::ID: index = new AstID(index_t.id);
+				default: syntax_error(l, "You can only access array elements via integers.");
+			}
+		
+			AstArrayAcc *acc = new AstArrayAcc(t.id);
+			acc->children.push_back(index);
+			vd->children.push_back(acc);
+			
+			i += 3;
 		} else {
 			if (t.type == TokenType::NO) {
 				int no = std::stoi(t.id);

@@ -36,6 +36,7 @@ enum AstType {
 	Float,
 	Str,
 	ArrayDec,
+	ArrayAccess,
 	
 	//Operator
 	Add,
@@ -275,6 +276,16 @@ public:
 private:
 	DataType d_type;
 	int size;
+};
+
+//Array access
+class AstArrayAcc : public AstAttrNode {
+public:
+	explicit AstArrayAcc() { type = AstType::ArrayAccess; }
+	explicit AstArrayAcc(std::string n) {
+		type = AstType::ArrayAccess;
+		name = n;
+	}
 };
 
 //Debugging stuff

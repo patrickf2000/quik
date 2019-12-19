@@ -20,6 +20,7 @@ std::string ast2str(AstType type) {
 		case AstType::Id: return "ID";
 		case AstType::Str: return "Str";
 		case AstType::ArrayDec: return "ArrayDec";
+		case AstType::ArrayAccess: return "ArrayAccess";
 		
 		case AstType::If: return "If";
 		case AstType::Elif: return "Elif";
@@ -127,6 +128,10 @@ void print_tree(AstNode *node, int indent, bool nl) {
 		std::cout << " [" << arr->get_name() << "]";
 		std::cout << " {" << arr->get_size() << ":";
 		std::cout << type2str(arr->get_type()) << "}";
+		
+	} else if (node->type == AstType::ArrayAccess) {
+		AstArrayAcc *acc = dynamic_cast<AstArrayAcc *>(node);
+		std::cout << " [" << acc->get_name() << "]";
 		
 	//values
 	} else if (node->type == AstType::Int) {

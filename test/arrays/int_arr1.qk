@@ -3,5 +3,6 @@
 
 func main
 	int[5] numbers = 1, 2, 3, 4, 5
-	int x = 65
+	int x = numbers[3]
+	println(x)
 end
