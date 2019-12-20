@@ -1,0 +1,16 @@
+# Tests the rand function
+extern func rand()
+
+func main()
+	int no = 0
+	int index = 0
+	
+	println("Printing 10 random numbers:")
+	println("")
+	
+	while (index < 10)
+		no = rand() % 100
+		println(no)
+		index = index + 1
+	end
+end
