@@ -290,7 +290,7 @@ public:
 };
 
 //Array assignment
-class AstArrayAssign : public AstAttrNode {
+class AstArrayAssign : public AstArrayAcc {
 public:
 	explicit AstArrayAssign() { type = AstType::ArrayAssign; }
 	explicit AstArrayAssign(std::string n) {

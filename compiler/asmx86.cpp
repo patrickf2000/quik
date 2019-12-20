@@ -28,7 +28,8 @@ void Asm_x86::assemble(std::string p, AstNode *top) {
 			
 			case AstType::ExternFunc: build_extern_func(node); break;
 			case AstType::VarDec: build_var_dec(node); break;
-			case AstType::VarAssign: build_var_assign(node); break;
+			case AstType::VarAssign: 
+			case AstType::ArrayAssign: build_var_assign(node); break;
 			case AstType::ArrayDec: build_arr_dec(node); break;
 			
 			case AstType::FuncCall: {
@@ -365,14 +366,45 @@ void Asm_x86::build_var_dec(AstNode *node) {
 
 //Builds a variable assignment
 void Asm_x86::build_var_assign(AstNode *node) {
-	AstVarDec *va = dynamic_cast<AstVarDec *>(node);
-	if (va->get_type() == DataType::Float) {
-		build_flt_assign(node);
-		return;
+	std::string dest_var = "";
+	std::vector<AstNode *> children;
+
+	//Variable assignments
+	if (node->type == AstType::VarDec || node->type == AstType::VarAssign) {
+		AstVarDec *va = dynamic_cast<AstVarDec *>(node);
+		if (va->get_type() == DataType::Float) {
+			build_flt_assign(node);
+			return;
+		}
+		
+		dest_var = "[" + va->get_name() +"]";
+		children = va->children;
+		
+	//Array assignments
+	} else if (node->type == AstType::ArrayAssign) {
+		AstArrayAssign *assign = dynamic_cast<AstArrayAssign *>(node);
+		dest_var = "[" + assign->get_name() + "+";
+		
+		//Math for int: 4 * the index
+		switch (assign->index->type) {
+			case AstType::Id: {
+			
+			} break;
+			
+			case AstType::Int: {
+				AstInt *i = dynamic_cast<AstInt *>(assign->index);
+				int val = i->get_val();
+				val *= 4;
+				dest_var += std::to_string(val) + "]";
+			} break;
+		}
+		
+		children = node->children;
 	}
 	
+	//Insert the first element
 	auto child = node->children.at(0);
-		
+			
 	switch (child->type) {
 		//Integers
 		case AstType::Int: {
@@ -401,9 +433,9 @@ void Asm_x86::build_var_assign(AstNode *node) {
 	}
 	
 	//Iterate through all the children
-	for (int i = 1; i<va->children.size(); i+=2) {
-		auto current = va->children.at(i);
-		auto next = va->children.at(i+1);
+	for (int i = 1; i<children.size(); i+=2) {
+		auto current = children.at(i);
+		auto next = children.at(i+1);
 		std::string ln = "";
 		
 		bool is_mod = false;
@@ -422,10 +454,10 @@ void Asm_x86::build_var_assign(AstNode *node) {
 		}
 		
 		if (next->type == AstType::FuncCall) {
-			sec_text.push_back("mov [" + va->get_name() + "], eax");
+			sec_text.push_back("mov " + dest_var + ", eax");
 			AstFuncCall *fc = dynamic_cast<AstFuncCall *>(next);
 			build_func_call(fc);
-			ln += "[" + va->get_name() + "]";
+			ln += dest_var;
 		} else {
 			ln += type2asm(next);
 		}
@@ -442,7 +474,7 @@ void Asm_x86::build_var_assign(AstNode *node) {
 		}
 	}
 	
-	sec_text.push_back("mov [" + va->get_name() + "], eax");
+	sec_text.push_back("mov " + dest_var + ", eax");
 	sec_text.push_back("");
 }
 
