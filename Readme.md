@@ -16,6 +16,8 @@ The specs folder contains some nice examples of the language and what it can do 
 
 The integer and floating-point datatypes and their operations are pretty well supported. Other variables have varying degrees of support beyond lexical analysis, but not much.
 
+Integer-based arrays are starting to work; things are definitely new with this, but there's enough working to give a general idea and perform a few useful tasks.
+
 Functions are working; you can implement them, call them with arguments, and get the return value (as part of a variable assignment)
 
 Comparisons are working between integers. Full If/else if/else is supported, both linearly and nested.
