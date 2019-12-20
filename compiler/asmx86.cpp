@@ -388,7 +388,11 @@ void Asm_x86::build_var_assign(AstNode *node) {
 		//Math for int: 4 * the index
 		switch (assign->index->type) {
 			case AstType::Id: {
-			
+				AstID *i = dynamic_cast<AstID *>(assign->index);
+				dest_var += "ebx]";
+				
+				sec_text.push_back("mov ebx, [" + i->get_name() + "]");
+				sec_text.push_back("imul ebx, 4");
 			} break;
 			
 			case AstType::Int: {

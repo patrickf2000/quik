@@ -1,0 +1,41 @@
+# int_arr3.qk
+# Provides an example of array access and setting
+# Todo: Clean this up in the future when we can
+
+func main
+	int[5] numbers = 1, 2, 3, 4, 5
+	int index = 0
+	int x = 0
+	
+	#Print the array the first time
+	println("Before:")
+	
+	while (index < 5)
+		x = numbers[index]
+		println(x)
+		index = index + 1
+	end
+	
+	index = 0
+	
+	# Double everything
+	while (index < 5)
+		numbers[index] = numbers[index] * 2
+		index = index + 1
+	end
+	
+	index = 0
+	
+	#Print it back out
+	println("")
+	println("After")
+	
+	while (index < 5)
+		x = numbers[index]
+		println(x)
+		index = index + 1
+	end
+	
+	println("")
+	println("Done")
+end

@@ -30,6 +30,15 @@ void find_id2(AstNode *top, std::string name, std::map<std::string, Var> *vars) 
 				if (cond->rval->type == AstType::Id)
 					reset_name(cond->rval, name, vars);
 			} break;
+			
+			case AstType::ArrayAssign: {
+				AstArrayAssign *assign = dynamic_cast<AstArrayAssign *>(node);
+				if (assign->index->type == AstType::Id) {
+					AstAttrNode *id = dynamic_cast<AstAttrNode *>(assign->index);
+					std::string n = name + "_" + id->get_name();
+					id->set_name(n);
+				}
+			} break;
 		}
 		
 		if (node->children.size() > 0) {
