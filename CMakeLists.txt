@@ -23,6 +23,7 @@ set(COMPILER_SRC
 
 set(STDLIB_SRC
 	stdlib/test.c
+	stdlib/stdio.c
 )
 
 add_library(qkparser ${PARSER_SRC})
