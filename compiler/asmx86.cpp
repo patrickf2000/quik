@@ -600,9 +600,9 @@ void Asm_x86::build_cond(AstNode *node) {
 		switch (cond->get_op()) {
 			case CondOp::Equals: ln = "jne "; break;
 			case CondOp::NotEquals: ln = "je "; break;
-			case CondOp::Greater: ln = "jl "; break;
+			case CondOp::Greater: ln = "jle "; break;
 			case CondOp::GreaterEq: ln = "jle "; break;
-			case CondOp::Less: ln = "jg "; break;
+			case CondOp::Less: ln = "jge "; break;
 			case CondOp::LessEq: ln = "jge "; break;
 		}
 		
