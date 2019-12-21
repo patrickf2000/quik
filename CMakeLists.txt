@@ -21,11 +21,18 @@ set(COMPILER_SRC
 	compiler/utils.cpp
 )
 
+set(STDLIB_SRC
+	stdlib/test.c
+)
+
 add_library(qkparser ${PARSER_SRC})
+add_library(qkstdlib SHARED ${STDLIB_SRC})
 
 add_executable(lxtest parser/test/lex_test.cpp)
 add_executable(parser_test parser/test/parser_test.cpp)
 add_executable(quikc ${COMPILER_SRC})
+
+set_target_properties(qkstdlib PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
 
 target_link_libraries(lxtest qkparser)
 target_link_libraries(parser_test qkparser)

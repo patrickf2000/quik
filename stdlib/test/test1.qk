@@ -1,0 +1,6 @@
+extern func stdlib_test()
+
+func main()
+	println("Calling test..")
+	stdlib_test()
+end

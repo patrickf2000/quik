@@ -696,7 +696,7 @@ void Asm_x86::build() {
 		system(std::string("nasm -g -f elf32 " + p + " -o " + o_out).c_str());
 	}
 	
-	gcc_line += " -o out";
+	gcc_line += " -o out -L./ -lqkstdlib";
 	system(gcc_line.c_str());
 }
 
