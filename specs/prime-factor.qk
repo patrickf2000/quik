@@ -1,6 +1,9 @@
 # prime-factor.qk
 # Checks to see if a number is a prime factor
 
+# Reference the standard library
+extern func input_int()
+
 # Returns 1 if prime, 0 if not
 func is_prime(no:int)
 	bool prime = true
@@ -23,12 +26,11 @@ func is_prime(no:int)
 end
 
 func main
-	# Change me! :)
-	int x = 11
-	bool prime = is_prime(x)
+	# Get input
+	println("Enter a number:")
+	int x = input_int()
 	
-	println("Your number:")
-	println(x)
+	bool prime = is_prime(x)
 	
 	if (prime)
 		println("It is prime!!")

@@ -3,16 +3,17 @@ section .data
 	is_prime_prime dd 1
 	is_prime_index dd 2
 	is_prime_mod dd 0
-	main_x dd 11
-	main_prime dd 0
 	int_fmt db "%d",10,0
 	str_fmt db "%s",10,0
 	flt_fmt db "%f",10,0
-	STR_1 db "Your number:",0
+	STR_1 db "Enter a number:",0
+	main_x dd 0
+	main_prime dd 0
 	STR_2 db "It is prime!!",0
 	STR_3 db "Not prime!",0
 
 section .text
+	extern input_int
 	global is_prime
 	global main
 	extern printf
@@ -55,18 +56,18 @@ L2:
 	ret
 	
 main:
-	push dword [main_x]
-	call is_prime
-	
-	mov [main_prime], eax
-	
 	push dword STR_1
 	push dword str_fmt
 	call printf
 	
+	call input_int
+	
+	mov [main_x], eax
+	
 	push dword [main_x]
-	push dword int_fmt
-	call printf
+	call is_prime
+	
+	mov [main_prime], eax
 	
 	mov eax, [main_prime]
 	cmp eax, 1

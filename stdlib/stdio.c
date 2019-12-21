@@ -7,3 +7,4 @@ int input_int()
 	scanf("%d", &x);
 	return x;
 }
+
