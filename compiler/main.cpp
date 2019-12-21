@@ -7,7 +7,7 @@
 #include <build.hh>
 
 #include "utils.hh"
-#include "asmx86.hh"
+#include "x86/asmx86.hh"
 
 void help() {
 	std::cout << "help" << std::endl;

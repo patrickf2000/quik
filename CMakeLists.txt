@@ -17,8 +17,14 @@ set(PARSER_SRC
 
 set(COMPILER_SRC
 	compiler/main.cpp
-	compiler/asmx86.cpp
 	compiler/utils.cpp
+	compiler/x86/asmx86.cpp
+	compiler/x86/x86_array.cpp
+	compiler/x86/x86_builtin.cpp
+	compiler/x86/x86_flow.cpp
+	compiler/x86/x86_funcs.cpp
+	compiler/x86/x86_utils.cpp
+	compiler/x86/x86_vars.cpp
 )
 
 set(STDLIB_SRC
