@@ -7,6 +7,7 @@
 #include <build.hh>
 
 #include "utils.hh"
+#include "types.hh"
 #include "x86/asmx86.hh"
 
 void help() {
@@ -27,8 +28,10 @@ int main(int argc, char *argv[]) {
 	}
 	
 	//Holds options
+	Config config;
+	
 	std::vector<std::string> inputs;
-	std::string output = "a.out";	// -o
+	config.out_name = "out";		// -o
 	bool obj_only = false;			// -c
 	bool no_builtin = false;		// --no-builtin
 	bool asm_only = false;			// -s, --asm-only
@@ -42,7 +45,8 @@ int main(int argc, char *argv[]) {
 		auto option = std::string(argv[i]);
 		
 		if (option == "-o") {
-		
+			config.out_name = std::string(argv[i+1]);
+			i += 2;
 		} else if (option == "-c") {
 			obj_only = true;
 		} else if (option == "--no-builtin") {
@@ -70,7 +74,7 @@ int main(int argc, char *argv[]) {
 	}
 	
 	//Iterate through each input and work on each file
-	Asm_x86 builder;
+	Asm_x86 builder(config);
 	
 	for (auto path : inputs) {
 		auto lines = load_source(path.c_str());

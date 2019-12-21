@@ -6,8 +6,12 @@
 
 #include <ast.hh>
 
+#include "../types.hh"
+
 class Asm_x86 {
 public:
+	explicit Asm_x86();
+	explicit Asm_x86(Config c);
 	void assemble(std::string p, AstNode *top);
 	void build_function(AstNode *node);
 	void build_extern_func(AstNode *node);
@@ -32,6 +36,9 @@ private:
 	std::vector<std::string> sec_data;
 	std::vector<std::string> sec_text;
 	std::vector<std::string> extern_data;
+	
+	//The config structure
+	Config config;
 	
 	//Control variables
 	bool in_main = false;

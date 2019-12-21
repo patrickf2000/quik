@@ -8,6 +8,16 @@
 #include "asmx86.hh"
 #include "../utils.hh"
 
+//The default constructor
+Asm_x86::Asm_x86() {
+	config.out_name = "out";
+}
+
+//The config constructor
+Asm_x86::Asm_x86(Config c) {
+	config = c;
+}
+
 //Iterate through the tree and assemble
 void Asm_x86::assemble(std::string p, AstNode *top) {
 	if (p != "") {
@@ -134,7 +144,9 @@ void Asm_x86::build() {
 		system(std::string("nasm -g -f elf32 " + p + " -o " + o_out).c_str());
 	}
 	
-	gcc_line += " -o out -L./ -lqkstdlib";
+	gcc_line += " -o ";
+	gcc_line += config.out_name; 
+	gcc_line += " -L./ -lqkstdlib";
 	system(gcc_line.c_str());
 }
 
