@@ -1,6 +1,6 @@
 func main
 	str s1 = "Hello!"
-	char x = s1[0]
+	char x = s1[1]
 	println(s1)
 	println(x)
 end

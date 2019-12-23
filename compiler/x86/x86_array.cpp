@@ -39,6 +39,11 @@ void Asm_x86::build_arr_dec(AstNode *node) {
 void Asm_x86::build_arr_access(AstNode *node) {
 	AstArrayAcc *acc = dynamic_cast<AstArrayAcc *>(node);
 	int index = 0;
+	int size = 4;
+	
+	Var v = current_scope->vars[acc->get_name()];
+	if (v.type == DataType::Str)
+		size = 1;
 	
 	//Calculate the index
 	//For ints: 4 * (element index)
@@ -51,7 +56,7 @@ void Asm_x86::build_arr_access(AstNode *node) {
 		case AstType::Int: {
 			AstInt *i = dynamic_cast<AstInt *>(i_child);
 			index = i->get_val();
-			index *= 4;
+			index *= size;
 			ln += std::to_string(index);
 		} break;
 		
