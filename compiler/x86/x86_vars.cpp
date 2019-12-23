@@ -56,6 +56,7 @@ void Asm_x86::build_var_dec(AstNode *node) {
 void Asm_x86::build_var_assign(AstNode *node) {
 	std::string dest_var = "";
 	std::vector<AstNode *> children;
+	bool is_char = false;
 
 	//Variable assignments
 	if (node->type == AstType::VarDec || node->type == AstType::VarAssign) {
@@ -64,6 +65,9 @@ void Asm_x86::build_var_assign(AstNode *node) {
 			build_flt_assign(node);
 			return;
 		}
+		
+		if (va->get_type() == DataType::Char)
+			is_char = true;
 		
 		dest_var = "[" + va->get_name() +"]";
 		children = va->children;
@@ -98,6 +102,17 @@ void Asm_x86::build_var_assign(AstNode *node) {
 	auto child = node->children.at(0);
 			
 	switch (child->type) {
+		//Chars
+		case AstType::Char: {
+				AstChar *ch = static_cast<AstChar *>(child);
+				char val = ch->get_val();
+				
+				std::string ln = "mov eax, \'";
+				ln += val;
+				ln += "\'";
+				sec_text.push_back(ln);
+			} break;
+			
 		//Integers
 		case AstType::Int: {
 			AstInt *i = dynamic_cast<AstInt *>(child);
@@ -166,7 +181,11 @@ void Asm_x86::build_var_assign(AstNode *node) {
 		}
 	}
 	
-	sec_text.push_back("mov " + dest_var + ", eax");
+	if (is_char)
+		sec_text.push_back("mov " + dest_var + ", al");
+	else
+		sec_text.push_back("mov " + dest_var + ", eax");
+		
 	sec_text.push_back("");
 }
 

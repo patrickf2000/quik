@@ -1,4 +1,7 @@
 func main
 	char c = 'A'
 	println(c)
+	
+	c = 'b'
+	println(c)
 end
