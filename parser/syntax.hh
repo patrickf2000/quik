@@ -14,7 +14,7 @@ class SyntaxCheck {
 public:
 	void check_global(AstNode *top);
 	void check_vars(AstNode *top, std::map<std::string, Var> vars);
-	void evaluate();
+	void evaluate(bool fail = true);
 private:
 	std::vector<Error> errors;
 };

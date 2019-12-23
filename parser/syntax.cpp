@@ -52,7 +52,7 @@ void SyntaxCheck::check_vars(AstNode *top, std::map<std::string, Var> vars) {
 }
 
 //Checks to see if we have any errors and prints them
-void SyntaxCheck::evaluate() {
+void SyntaxCheck::evaluate(bool fail) {
 	if (errors.size() == 0)
 		return;
 		
@@ -61,5 +61,6 @@ void SyntaxCheck::evaluate() {
 		std::cout << std::endl;
 	}
 	
-	std::exit(1);
+	if (fail)
+		std::exit(1);
 }

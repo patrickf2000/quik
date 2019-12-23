@@ -40,7 +40,7 @@ std::vector<Line> load_source(const char *path) {
 }
 
 //Takes each line and builds the AST
-AstNode *build_ast(std::vector<Line> lines) {
+AstNode *build_ast(std::vector<Line> lines, bool fail) {
 	AstScope *top = new AstScope;
 	std::vector<AstNode *> nodes;
 	
@@ -78,7 +78,7 @@ AstNode *build_ast(std::vector<Line> lines) {
 	SyntaxCheck check;
 	check.check_global(top);
 	check.check_vars(top, top->vars);
-	check.evaluate();		//TODO: Something else rather than bomb out in function?
+	check.evaluate(fail);		//TODO: Something else rather than bomb out in function?
 	
 	return top;
 }

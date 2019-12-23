@@ -26,7 +26,7 @@ int main(int argc, char *argv[]) {
 		print_tree(node);
 	} else {
 		auto lines = load_source(argv[1]);
-		AstNode *top = build_ast(lines);
+		AstNode *top = build_ast(lines, false);
 		print_tree(top);
 	}
 	
