@@ -1,7 +1,8 @@
 #include <map>
-#include <iostream>
+
 #include "analyzer.hh"
 #include "types.hh"
+#include "parse.hh"
 
 //Analyzes the tree and renames all ids to observe scope
 void reset_name(AstNode *node, std::string name, std::map<std::string, Var> *vars) {
@@ -132,6 +133,8 @@ void find_assign(AstNode *top) {
 
 //Finds conditional nodes, and adds end-if blocks
 void find_cond(AstNode *top) {
+	AstType last_type;
+
 	for (int i = 0; i<top->children.size(); i++) {
 		auto node = top->children.at(i);
 		
@@ -141,6 +144,10 @@ void find_cond(AstNode *top) {
 		} else if (node->type == AstType::While) {
 			find_cond(node);
 		} else if (node->type == AstType::If || node->type == AstType::Elif || node->type == AstType::Else) {
+			if (node->type == AstType::Elif && last_type != AstType::If) {
+				syntax_error(node->ln, "Elif without previous If statement.");
+			}
+		
 			if (node->type == AstType::If || node->type == AstType::Elif) {
 				find_cond(node);
 			}
@@ -158,6 +165,8 @@ void find_cond(AstNode *top) {
 				top->children.insert(top->children.begin()+i+1, end);
 			}
 		}
+		
+		last_type = node->type;
 	}
 }
 
