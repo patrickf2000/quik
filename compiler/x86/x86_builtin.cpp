@@ -9,6 +9,7 @@ void Asm_x86::build_println(AstFuncCall *fc) {
 		//Push the info we need back
 		extern_data.push_back("extern printf");
 
+		sec_data.push_back("chr_fmt db \"%c\",10,0");
 		sec_data.push_back("int_fmt db \"%d\",10,0");
 		sec_data.push_back("str_fmt db \"%s\",10,0");
 		sec_data.push_back("flt_fmt db \"%f\",10,0");
@@ -49,7 +50,10 @@ void Asm_x86::build_println(AstFuncCall *fc) {
 				
 				switch (v.type) {
 					case DataType::Byte:
-					case DataType::Char:
+					case DataType::Char: {
+							name = "[" + v.name + "]";
+							fmt = "chr_fmt"; 
+						} break;
 					case DataType::Short:
 					case DataType::Bool:
 					case DataType::Int: {

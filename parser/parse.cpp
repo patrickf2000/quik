@@ -50,6 +50,9 @@ AstFuncCall *build_func_call(Line ln) {
 		} else if (t.type == TokenType::NO) {
 			AstInt *v_int = new AstInt(std::stoi(t.id));
 			call->children.push_back(v_int);
+		} else if (t.type == TokenType::CHAR) {
+			AstChar *v_ch = new AstChar(t.id[0]);
+			call->children.push_back(v_ch);
 		} else if (t.type == TokenType::DEC) {
 			AstFloat *v_flt = new AstFloat(std::stod(t.id));
 			call->children.push_back(v_flt);
@@ -148,6 +151,10 @@ void build_var_parts(AstNode *vd, int start, std::vector<Token> tokens) {
 				int no = std::stoi(t.id);
 				AstInt *i = new AstInt(no);
 				vd->children.push_back(i);
+			} else if (t.type == TokenType::CHAR) {
+				char c = t.id[0];
+				AstChar *ch = new AstChar(c);
+				vd->children.push_back(ch);
 			} else if (t.type == TokenType::DEC) {
 				double no = std::stod(t.id);
 				AstFloat *i = new AstFloat(no);

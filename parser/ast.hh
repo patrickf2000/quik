@@ -32,6 +32,7 @@ enum AstType {
 	VarAssign,
 	Id,
 	Int,
+	Char,
 	Bool,
 	Float,
 	Str,
@@ -217,6 +218,21 @@ public:
 	void set_val(int i) { no = i; }
 private:
 	int no = 0;
+};
+
+//The char type
+class AstChar : public AstNode {
+public:
+	explicit AstChar() { type = AstType::Char; }
+	explicit AstChar(char c) {
+		type = AstType::Char;
+		ch = c;
+	}
+	
+	char get_val() { return ch; }
+	void set_val(char c) { ch = c; }
+private:
+	char ch = 0;
 };
 
 //The bool types

@@ -29,6 +29,11 @@ void Asm_x86::build_var_dec(AstNode *node) {
 		if (first->type == AstType::Int) {
 			AstInt *i = dynamic_cast<AstInt *>(first);
 			ln += std::to_string(i->get_val());
+		} else if (first->type == AstType::Char) {
+			AstChar *i = static_cast<AstChar *>(first);
+			ln += "\'";
+			ln += i->get_val();
+			ln += "\'";
 		} else if (first->type == AstType::Str) {
 			AstString *i = dynamic_cast<AstString *>(first);
 			ln += "\"" + i->get_val() + "\",0";

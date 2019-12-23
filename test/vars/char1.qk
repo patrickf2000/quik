@@ -1,0 +1,4 @@
+func main
+	char c = 'A'
+	println(c)
+end
