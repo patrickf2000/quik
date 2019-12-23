@@ -1,0 +1,6 @@
+func main
+	str s1 = "Hello!"
+	char x = main_s1[1]
+	println(s1)
+	println(x)
+end

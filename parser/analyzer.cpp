@@ -18,7 +18,9 @@ void find_id2(AstNode *top, std::string name, std::map<std::string, Var> *vars) 
 		switch (node->type) {
 			case AstType::Id:
 			case AstType::VarDec:
-			case AstType::VarAssign: reset_name(node, name, vars); break;
+			case AstType::VarAssign: 
+			case AstType::ArrayDec:
+			case AstType::ArrayAccess: reset_name(node, name, vars); break;
 			
 			case AstType::If:
 			case AstType::Elif: 
@@ -33,6 +35,7 @@ void find_id2(AstNode *top, std::string name, std::map<std::string, Var> *vars) 
 			} break;
 			
 			case AstType::ArrayAssign: {
+				reset_name(node, name, vars);
 				AstArrayAssign *assign = dynamic_cast<AstArrayAssign *>(node);
 				if (assign->index->type == AstType::Id) {
 					AstAttrNode *id = dynamic_cast<AstAttrNode *>(assign->index);
