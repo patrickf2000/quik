@@ -48,6 +48,12 @@ AstNode *build_ast(std::vector<Line> lines) {
 		auto n = build_node(ln);
 		n->ln = ln;
 		
+		if (n->children.size() > 0) {
+			for (int i = 0; i<n->children.size(); i++) {
+				n->children.at(i)->ln = ln;
+			}
+		}
+		
 		if (n == nullptr) {
 			syntax_error(ln, "Unknown input");
 		} else {
@@ -71,6 +77,7 @@ AstNode *build_ast(std::vector<Line> lines) {
 	//Perform syntax checking
 	SyntaxCheck check;
 	check.check_global(top);
+	check.check_vars(top, top->vars);
 	check.evaluate();		//TODO: Something else rather than bomb out in function?
 	
 	return top;

@@ -27,6 +27,30 @@ void SyntaxCheck::check_global(AstNode *top) {
 	}
 }
 
+//Scans from all the scopes, and makes sure there are no undeclared variables
+void SyntaxCheck::check_vars(AstNode *top, std::map<std::string, Var> vars) {
+	if (top->type == AstType::Scope) {
+		AstScope *scope = static_cast<AstScope *>(top);
+		vars = scope->vars;
+	}
+	
+	for (auto node : top->children) {
+		if (node->type == AstType::VarAssign || node->type == AstType::Id) {
+			AstAttrNode *va = static_cast<AstAttrNode *>(node);
+			if (vars.find(va->get_name()) == vars.end()) {
+				Error er;
+				er.ln = node->ln;
+				er.msg = "Use of undeclared variable.";
+				errors.push_back(er);
+			}
+		}
+		
+		if (node->children.size() > 0) {
+			check_vars(node, vars);
+		}
+	}
+}
+
 //Checks to see if we have any errors and prints them
 void SyntaxCheck::evaluate() {
 	if (errors.size() == 0)
