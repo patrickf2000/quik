@@ -1,6 +1,12 @@
 func main
-	str s1 = "Hello!"
-	char x = s1[1]
-	println(s1)
-	println(x)
+	str s = "Hello!"
+	char c1 = s[0]
+	char c2 = s[3]
+	
+	println(s)
+	println(c1)
+	println(c2)
+	
+	c2 = s[1]
+	println(c2)
 end

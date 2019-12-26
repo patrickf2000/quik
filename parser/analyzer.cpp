@@ -114,22 +114,25 @@ void find_variables(AstNode *top) {
 
 //Locates variable assignments and assigns the right type to them
 // We also make sure there are no undeclared variables here
-void find_assign(AstNode *top) {
-	if (top->type != AstType::Scope) {
-		return;
-	}
-	
-	AstScope *scope = dynamic_cast<AstScope *>(top);
-
+void find_assign(AstNode *top, AstScope *scope) {
 	for (auto node : top->children) {
 		switch (node->type) {
-			case AstType::FuncDec: find_assign(node->children.at(0)); break;
+			case AstType::FuncDec: {
+				auto child = node->children.at(0);
+				auto n_scope = dynamic_cast<AstScope *>(child);
+				find_assign(child, n_scope); 
+			} break;
 			case AstType::VarAssign: {
 				AstVarAssign *va = dynamic_cast<AstVarAssign *>(node);
 			
 				Var v = scope->vars[va->get_name()];
 				va->set_type(v.type);
 			} break;
+			default: {
+				if (node->children.size() > 0) {
+					find_assign(node, scope);
+				}
+			}
 		}
 	}
 }
