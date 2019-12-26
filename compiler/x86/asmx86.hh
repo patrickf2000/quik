@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <stack>
+#include <iostream>
 
 #include <ast.hh>
 

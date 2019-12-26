@@ -64,7 +64,10 @@ void Asm_x86::build_arr_access(AstNode *node) {
 			AstID *id = dynamic_cast<AstID *>(i_child);
 			
 			sec_text.push_back("mov ebx, [" + id->get_name() + "]");
-			sec_text.push_back("imul ebx, 4");
+			
+			std::string mul_line = "imul ebx, ";
+			mul_line += std::to_string(size);
+			sec_text.push_back(mul_line);
 			
 			ln += "ebx";
 		} break;
