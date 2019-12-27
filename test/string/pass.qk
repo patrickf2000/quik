@@ -1,0 +1,11 @@
+# Test passing a string
+
+func print_str(s:str)
+	println("Your string is:")
+	println(s)
+end
+
+func main
+	#str s = "Hello!"
+	print_str("Hello!")
+end
