@@ -1,0 +1,11 @@
+Redesign float argument passing
+	- The method of using the x87 stack only works with local functions
+	
+Include with multiple input files
+	- Include be used twice- include a control
+	
+Add print_bool function
+
+Add print_char function
+
+Check comparison for characters
