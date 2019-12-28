@@ -1,0 +1,8 @@
+extern func puts(s:str)
+
+extern func stdlib_test()
+extern func stdlib_test_ret()
+
+func test_print
+	puts("Test: Hello!")
+end
