@@ -88,3 +88,18 @@ std::string rm_quotes(std::string str) {
 	return ret;
 }
 
+//Does a string start with something?
+bool starts_with(std::string in, std::string s) {
+	std::string first = "";
+	
+	for (char c : in) {
+		if (c == ' ')
+			break;
+		first += c;
+	}
+	
+	if (first == s)
+		return true;
+	return false;
+}
+

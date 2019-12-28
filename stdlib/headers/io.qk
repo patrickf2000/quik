@@ -1,0 +1,4 @@
+extern func puts(s:str)
+extern func printf(s:str, ...)
+extern func exit(code:int)
+extern func fflush(i:int)

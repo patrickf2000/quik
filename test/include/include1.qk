@@ -1,0 +1,6 @@
+include test
+
+func main
+	stdlib_test()
+	test_print()
+end

@@ -28,7 +28,7 @@ std::vector<Line> load_source(const char *path) {
 			Line l;
 			l.no = ln_no;
 			l.original = ln;
-			l.tokens = tokenize(ln);
+			//l.tokens = tokenize(ln);
 			lines.push_back(l);
 		}
 		
@@ -36,6 +36,59 @@ std::vector<Line> load_source(const char *path) {
 	}
 	
 	reader.close();
+	
+	//Now check for includes
+	std::vector<std::string> included;
+	bool found_include = false;
+	
+	//Loop until there are no includes
+	do {
+		found_include = false;
+	
+		auto old_lines = lines;
+		lines.clear();
+		
+		for (auto l : old_lines) {
+			if (starts_with(l.original, "include")) {
+				found_include = true;
+			
+				int sp = l.original.find_first_of(" ");
+				int len = l.original.length();
+				std::string name = l.original.substr(sp+1, len);
+				included.push_back(name);
+				
+				std::string path = "/usr/local/include/quik/";
+				path += name + ".qk";
+				
+				std::ifstream reader2(path.c_str());
+				if (!reader2.is_open()) {
+					std::cout << "Fatal: Invalid include." << std::endl;
+					std::cout << l.original << std::endl;
+					std::exit(1);
+				}
+				
+				while (std::getline(reader2, ln)) {
+					ln = trim(ln);
+					if (ln.length() > 0 && ln[0] != '#') {
+						Line l2;
+						l2.original = ln;
+						lines.push_back(l2);
+					}
+				}
+				
+				reader2.close();
+			} else {
+				lines.push_back(l);
+			}
+		}
+	} while (found_include);
+	
+	//Now tokenize
+	for (int i = 0; i<lines.size(); i++) {
+		Line *l = &lines.at(i);
+		l->tokens = tokenize(l->original);
+	}
+	
 	return lines;
 }
 

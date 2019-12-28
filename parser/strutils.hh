@@ -11,6 +11,9 @@ std::string trim(std::string str);
 bool contains(std::string str, char c);
 bool contains(std::string str, std::string in);
 
-//Other functions
+//Quote functions
 bool is_quote(std::string str);
 std::string rm_quotes(std::string str);
+
+//Other functions
+bool starts_with(std::string in, std::string s);
