@@ -2,6 +2,7 @@
 #include <string>
 #include <fstream>
 #include <cstdlib>
+#include <algorithm>
 
 #include "build.hh"
 #include "strutils.hh"
@@ -55,6 +56,11 @@ std::vector<Line> load_source(const char *path) {
 				int sp = l.original.find_first_of(" ");
 				int len = l.original.length();
 				std::string name = l.original.substr(sp+1, len);
+				
+				if (std::find(included.begin(), included.end(), name) != included.end()) {
+					continue;
+				}
+				
 				included.push_back(name);
 				
 				std::string path = "/usr/local/include/quik/";
