@@ -17,7 +17,6 @@ public:
 	void build_function(AstNode *node);
 	void build_extern_func(AstNode *node);
 	void build_func_call(AstFuncCall *fc);
-	void build_println(AstFuncCall *fc);
 	void build_ret(AstNode *node);
 	void build_var_dec(AstNode *node);
 	void build_var_assign(AstNode *node);
@@ -44,7 +43,6 @@ private:
 	
 	//Control variables
 	bool in_main = false;
-	bool use_printf = false;
 	int str_index = 1;
 	
 	//Needed for conditionals and loops
