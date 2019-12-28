@@ -1,5 +1,6 @@
 # while2.qk
 # A while loop example with conditionals
+include io
 
 func main()
 	int x = 1
@@ -10,7 +11,7 @@ func main()
 			println("Half way!!")
 		end
 		
-		println(x)
+		print_int("", x)
 		x = x + 1
 	end
 	

@@ -1,4 +1,5 @@
 # Test passing a string
+include io
 
 func print_str(s:str)
 	println("Your string is:")

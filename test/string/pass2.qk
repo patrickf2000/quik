@@ -1,4 +1,4 @@
-extern func puts(s:str)
+include io
 
 func print_str(s:str)
 	puts("In print_str")

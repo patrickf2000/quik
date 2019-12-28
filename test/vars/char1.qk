@@ -1,3 +1,5 @@
+include io
+
 func main
 	char c = 'A'
 	println(c)

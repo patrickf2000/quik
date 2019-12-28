@@ -1,3 +1,5 @@
+include io
+
 func main
 	str s = "Hello!"
 	char c1 = s[0]

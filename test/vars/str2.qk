@@ -1,3 +1,5 @@
+include io
+
 func main
 	str s1 = "Hello!"
 	int len = 6

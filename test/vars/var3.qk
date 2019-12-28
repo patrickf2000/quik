@@ -1,12 +1,12 @@
+include io
+
 func main
 	int x = 5
 	int y = 6 * x
 	
-	println("Y:")
-	println(y)
+	print_int("Y: ", y)
 	
 	int z = y % 2
 	
-	println("Z:")
-	println(z)
+	print_int("Z: ", z)
 end

@@ -1,10 +1,12 @@
+include io
+
 int global_x = 20
 int global_y = 10
 
 func print_global
 	println("Our global variables: ")
-	println(global_x)
-	println(global_y)
+	print_int("", global_x)
+	print_int("", global_y)
 end
 
 func main
@@ -13,7 +15,7 @@ func main
 	int z = x
 	
 	println("Hello!")
-	println(z)
+	print_int("", z)
 	
 	print_global()
 end

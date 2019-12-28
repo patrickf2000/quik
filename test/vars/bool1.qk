@@ -1,5 +1,6 @@
 # bool1.qk
 # Booleans
+include io
 
 func print_bool(x:bool)
 	if (x == true)
@@ -18,7 +19,7 @@ func bool_loop()
 			is_done = true
 		end
 		
-		println(index)
+		print_int("", index)
 		index = index + 1
 	end
 	
@@ -29,8 +30,8 @@ func main
 	bool x = true
 	bool y = false
 	
-	println(x)
-	println(y)
+	print_int("", x)
+	print_int("", y)
 	println("")
 	
 	print_bool(x)

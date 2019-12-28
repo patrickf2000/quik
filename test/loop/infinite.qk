@@ -1,5 +1,6 @@
 # infinite.qk
 # This will cause an infinite loop
+include io
 
 func main
 	while (true)

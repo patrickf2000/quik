@@ -1,13 +1,13 @@
+include io
+
 func main
 	int[5] numbers = 1, 7, 2, 4, 1
 	int x = numbers[2]
 	
-	println("Element at index 2:")
-	println(x)
+	print_int("Element at index 2: ", x)
 	
 	numbers[2] = 58 + x
 	x = numbers[2]
 	
-	println("Element after change:")
-	println(x)
+	print_int("Element after change: ", x)
 end

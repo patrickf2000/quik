@@ -1,3 +1,5 @@
+include io
+
 extern func sayHello
 
 func main

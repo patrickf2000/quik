@@ -1,5 +1,6 @@
 # short.qk
 # Tests short loops
+include io
 
 func main
 	bool less = true
@@ -10,7 +11,7 @@ func main
 			less = true
 		end
 		
-		println(index)
+		print_int("", index)
 		index = index + 1
 	end
 	

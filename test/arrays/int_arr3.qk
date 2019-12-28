@@ -1,6 +1,7 @@
 # int_arr3.qk
 # Provides an example of array access and setting
 # Todo: Clean this up in the future when we can
+include io
 
 func main
 	int[5] numbers = 1, 2, 3, 4, 5
@@ -12,7 +13,7 @@ func main
 	
 	while (index < 5)
 		x = numbers[index]
-		println(x)
+		print_int("", x)
 		index = index + 1
 	end
 	
@@ -32,7 +33,7 @@ func main
 	
 	while (index < 5)
 		x = numbers[index]
-		println(x)
+		print_int("", x)
 		index = index + 1
 	end
 	
