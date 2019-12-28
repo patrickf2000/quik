@@ -3,6 +3,8 @@ extern func printf(s:str, ...)
 extern func exit(code:int)
 extern func fflush(i:int)
 
+extern func input_int()
+
 func print_int(msg:str, no:int)
 	printf(msg)
 	printf("%d", no)

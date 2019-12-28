@@ -4,6 +4,8 @@ section .data
 	STR_3 db "",0
 	STR_4 db "Exiting with code of 2.",0
 
+section .bss
+
 section .text
 	extern puts
 	extern system

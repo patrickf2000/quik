@@ -2,7 +2,7 @@
 # Checks to see if a number is a prime factor
 
 # Reference the standard library
-extern func input_int()
+include io
 
 # Returns 1 if prime, 0 if not
 func is_prime(no:int)

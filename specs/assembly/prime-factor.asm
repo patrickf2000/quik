@@ -1,23 +1,65 @@
 section .data
+	print_int_no dd 0
+	STR_1 db "%d",0
+	STR_2 db "",0
 	is_prime_no dd 0
 	is_prime_prime dd 1
 	is_prime_index dd 2
 	is_prime_mod dd 0
-	int_fmt db "%d",10,0
-	str_fmt db "%s",10,0
-	flt_fmt db "%f",10,0
-	STR_1 db "Enter a number:",0
+	STR_3 db "Enter a number:",0
 	main_x dd 0
 	main_prime dd 0
-	STR_2 db "It is prime!!",0
-	STR_3 db "Not prime!",0
+	STR_4 db "It is prime!!",0
+	STR_5 db "Not prime!",0
+
+section .bss
+	print_int_msg resb 100
+	println_msg resb 100
 
 section .text
+	extern puts
+	extern printf
+	extern exit
+	extern fflush
 	extern input_int
+	global print_int
+	global println
 	global is_prime
 	global main
-	extern printf
 
+print_int:
+	mov eax, [esp+4]
+	mov [print_int_msg], eax
+	
+	mov eax, [esp+8]
+	mov [print_int_no], eax
+	
+	push dword [print_int_msg]
+	call printf
+	add esp, 4
+	
+	push dword [print_int_no]
+	push dword STR_1
+	call printf
+	add esp, 4
+	add esp, 4
+	
+	push dword STR_2
+	call puts
+	add esp, 4
+	
+	ret
+	
+println:
+	mov eax, [esp+4]
+	mov [println_msg], eax
+	
+	push dword [println_msg]
+	call puts
+	add esp, 4
+	
+	ret
+	
 is_prime:
 	mov eax, [esp+4]
 	mov [is_prime_no], eax
@@ -56,9 +98,8 @@ L2:
 	ret
 	
 main:
-	push dword STR_1
-	push dword str_fmt
-	call printf
+	push dword STR_3
+	call println
 	
 	call input_int
 	
@@ -73,15 +114,13 @@ main:
 	cmp eax, 1
 	jne L6
 	
-	push dword STR_2
-	push dword str_fmt
-	call printf
+	push dword STR_4
+	call println
 	
 	jmp L5
 L6:
-	push dword STR_3
-	push dword str_fmt
-	call printf
+	push dword STR_5
+	call println
 	
 	jmp L5
 L7:

@@ -21,6 +21,6 @@ func main
 	int answer1 = add_int(2,3)
 	println(answer1)
 	
-	float answer2 = add_int(1.4, 2.33)
+	float answer2 = add_float(1.4, 2.33)
 	println(answer2)
 end

@@ -1,7 +1,6 @@
 # array.qk
 # Provides an example of arrays
-
-extern func input_int()
+include io
 
 func main
 	int[5] numbers = 0, 0, 0, 0, 0
@@ -32,7 +31,7 @@ func main
 	
 	while (index < 5)
 		x = numbers[index]
-		println(x)
+		print_int("", x)
 		index = index + 1
 	end
 	
