@@ -46,12 +46,13 @@ void Asm_x86::assemble(std::string p, AstNode *top) {
 			
 			case AstType::FuncCall: {
 				AstFuncCall *fc = dynamic_cast<AstFuncCall *>(node);
+				build_func_call(fc);
 			
-				if (fc->get_name() == "println") {
+				/*if (fc->get_name() == "println") {
 					build_println(fc);
 				} else {
 					build_func_call(fc);
-				}
+				}*/
 			} break;
 			
 			case AstType::If: {

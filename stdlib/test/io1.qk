@@ -1,0 +1,6 @@
+include io
+
+func main
+	println("I am a number")
+	print_int("Number: ", 20)
+end

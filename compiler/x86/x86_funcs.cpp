@@ -90,8 +90,13 @@ void Asm_x86::build_func_call(AstFuncCall *fc) {
 					case DataType::Long:
 					case DataType::Float: {
 							ln = "fld qword [" + v.name + "]";
-						} break;
-					case DataType::Str: ln = "push dword " + v.name; break;
+					} break;
+					case DataType::Str: {
+						if (v.is_param)
+							ln = "push dword [" + v.name + "]";
+						else
+							ln = "push dword " + v.name;
+					} break;
 				}
 				
 				sec_text.push_back(ln);

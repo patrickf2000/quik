@@ -2,3 +2,13 @@ extern func puts(s:str)
 extern func printf(s:str, ...)
 extern func exit(code:int)
 extern func fflush(i:int)
+
+func print_int(msg:str, no:int)
+	printf(msg)
+	printf("%d", no)
+	puts("")
+end
+
+func println(msg:str)
+	puts(msg)
+end
