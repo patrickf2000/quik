@@ -106,6 +106,7 @@ void find_variables(AstNode *top) {
 				Var v;
 				v.name = vd->get_name();
 				v.type = vd->get_type();
+				v.is_param = false;
 				scope->vars[vd->get_name()] = v;
 			} break;
 		}

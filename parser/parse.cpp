@@ -225,6 +225,7 @@ AstFuncDec *build_func_dec(Line ln) {
 		//Iterate through and build our info
 		TokenType last;
 		Var v;
+		v.is_param = true;
 		
 		for (int i = 3; i<tokens.size(); i++) {
 			auto t = tokens.at(i);

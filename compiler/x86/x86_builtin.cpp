@@ -67,7 +67,12 @@ void Asm_x86::build_println(AstFuncCall *fc) {
 						fmt = "flt_fmt";
 						was_flt = true;
 					} break;
-					case DataType::Str:	fmt = "str_fmt";		
+					case DataType::Str:	{
+						fmt = "str_fmt";	
+						if (v.is_param) {
+							name = "[" + v.name + "]";
+						}	
+					}	
 				}
 				
 				sec_text.push_back("push dword " + name);

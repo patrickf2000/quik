@@ -52,6 +52,7 @@ enum AstType {
 struct Var {
 	std::string name;
 	DataType type;
+	bool is_param;
 };
 
 //The base of all our nodes

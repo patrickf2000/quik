@@ -6,6 +6,7 @@ func print_str(s:str)
 end
 
 func main
-	#str s = "Hello!"
+	str s = "What is your name??"
+	print_str(s)
 	print_str("Hello!")
 end
