@@ -9,7 +9,6 @@
 //Denotes the types of our nodes so we can upcast
 enum AstType {
 	Scope,
-	Include,
 	
 	//Function stuff
 	FuncDec,
@@ -80,21 +79,6 @@ class AstScope : public AstAttrNode {
 public:
 	AstScope() { type = AstType::Scope; }
 	std::map<std::string, Var> vars;
-};
-
-//Represents a file to be included
-class AstInclude : public AstNode {
-public:
-	explicit AstInclude() { type = AstType::Include; }
-	explicit AstInclude(std::string path) {
-		type = AstType::Include;
-		include = path;
-	}
-	
-	std::string get_include() { return include; }
-	void set_include(std::string path) { include = path; }
-private:
-	std::string include;
 };
 
 //The function declaration type

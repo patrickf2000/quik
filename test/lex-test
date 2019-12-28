@@ -1,6 +1,3 @@
-include stdio
-INCLUDE~ID>stdio~
-
 func main
 FUNC_DEC~ID>main~
 

@@ -7,7 +7,6 @@ enum TokenType {
 	NONE,
 	
 	//Keywords
-	INCLUDE,
 	FUNC_DEC,
 	EXTERN,
 	END,

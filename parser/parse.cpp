@@ -438,20 +438,6 @@ AstNode *build_node(Line ln) {
 	
 	//Build an include node
 	switch (first.type) {
-		case TokenType::INCLUDE: {
-			if (tokens.size() != 2) {
-				syntax_error(ln, "Invalid size.");
-			}
-			
-			Token id = tokens.at(1);
-			if (id.type != TokenType::ID) {
-				syntax_error(ln, "Second element of an include statement should be an ID.");
-			}
-		
-			AstInclude *node = new AstInclude(id.id);
-			return node;
-		}
-		
 		//Build a function declaration node
 		case TokenType::EXTERN:
 		case TokenType::FUNC_DEC: return build_func_dec(ln);

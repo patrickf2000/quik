@@ -89,12 +89,8 @@ std::vector<Token> tokenize(std::string line) {
 			Token t;
 			
 			//Check for keywords
-			if (current == "include") {
-				t.type = TokenType::INCLUDE;
-				tokens.push_back(t);
-				
 			//Function keywords
-			} else if (current == "func") {
+			if (current == "func") {
 				t.type = TokenType::FUNC_DEC;
 				tokens.push_back(t);
 			} else if (current == "extern") {
@@ -272,8 +268,7 @@ std::vector<Token> tokenize(std::string line) {
 
 //Convert a string to a token
 TokenType str2type(std::string in) {
-	if (in == "INCLUDE") return TokenType::INCLUDE;
-	else if (in == "ID") return TokenType::ID;
+	if (in == "ID") return TokenType::ID;
 	else if (in == "FUNC_DEC") return TokenType::FUNC_DEC;
 	else if (in == "LEFT_PAREN") return TokenType::LEFT_PAREN;
 	else if (in == "RIGHT_PAREN") return TokenType::RIGHT_PAREN;
