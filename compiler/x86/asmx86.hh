@@ -35,6 +35,7 @@ private:
 	std::string path = "";
 	std::vector<std::string> asm_files;
 	std::vector<std::string> sec_data;
+	std::vector<std::string> sec_bss;
 	std::vector<std::string> sec_text;
 	std::vector<std::string> extern_data;
 	

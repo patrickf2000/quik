@@ -109,6 +109,13 @@ void Asm_x86::write() {
 	}
 	
 	writer << std::endl;
+	writer << "section .bss" << std::endl;
+	
+	for (auto l : sec_bss) {
+		writer << "\t" << l << std::endl;
+	}
+	
+	writer << std::endl;
 	writer << "section .text" << std::endl;
 	
 	for (auto l : extern_data) {

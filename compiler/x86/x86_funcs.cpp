@@ -37,20 +37,23 @@ void Asm_x86::build_function(AstNode *node) {
 		}
 	
 		//Declare the function arguments in assembly
-		AstVarDec *vd = new AstVarDec(v.name);
-		vd->set_type(v.type);
-		
 		if (v.type == DataType::Str) {
-			vd->children.push_back(new AstString);
-		} else if (v.type == DataType::Bool) {
-			vd->children.push_back(new AstBool(false));
-		} else if (v.type == DataType::Float) {
-			vd->children.push_back(new AstFloat(0.0));
+			sec_bss.push_back(v.name + " resb 100");
 		} else {
-			vd->children.push_back(new AstInt(0));
+			AstVarDec *vd = new AstVarDec(v.name);
+			vd->set_type(v.type);
+			
+			if (v.type == DataType::Bool) {
+				vd->children.push_back(new AstBool(false));
+			} else if (v.type == DataType::Float) {
+				vd->children.push_back(new AstFloat(0.0));
+			} else {
+				vd->children.push_back(new AstInt(0));
+			}
+			
+			build_var_dec(vd);
 		}
 		
-		build_var_dec(vd);
 		sec_text.push_back("");
 	}
 }

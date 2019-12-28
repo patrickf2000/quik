@@ -1,0 +1,10 @@
+extern func puts(s:str)
+
+func print_str(s:str)
+	puts("In print_str")
+end
+
+func main
+	print_str("Hello")
+	puts("In main")
+end
