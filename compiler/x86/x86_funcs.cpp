@@ -117,6 +117,13 @@ void Asm_x86::build_func_call(AstFuncCall *fc) {
 	}
 
 	sec_text.push_back("call " + fc->get_name());
+	
+	if (!in_main) {
+		for (int i = 0; i<fc->children.size(); i++) {
+			sec_text.push_back("add esp, 4");
+		}
+	}
+	
 	sec_text.push_back("");	
 }
 
