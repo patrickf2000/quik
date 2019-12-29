@@ -13,12 +13,24 @@ void Asm_x86::build_cond(AstNode *node) {
 	labels.push(lbl);
 	
 	if (node->type != AstType::Else) {
+		//Determine the register
+		std::string c_reg = "eax";
+		
+		if (cond->rval->type == AstType::Id) {
+			auto id = dynamic_cast<AstID *>(cond->rval);
+			std::string name = id->get_name();
+			Var v = current_scope->vars[name];
+			
+			if (v.type == DataType::Char)
+				c_reg = "al";
+		}
+	
 		//Position the lval
 		std::string ln = "mov eax, " + type2asm(cond->lval);
 		sec_text.push_back(ln);
 		
 		//Position the rval
-		ln = "cmp eax, " + type2asm(cond->rval);
+		ln = "cmp " + c_reg + ", " + type2asm(cond->rval);
 		sec_text.push_back(ln);
 		
 		//Comparison
