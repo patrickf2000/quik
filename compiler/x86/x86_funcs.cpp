@@ -19,46 +19,14 @@ void Asm_x86::build_function(AstNode *node) {
 	ln += ":";
 	sec_text.push_back(ln);
 	
-	//Build the arguments
-	int arg_access = 4;
+	//Setup the stack
+	//Push the base pointer, and set the base pointer
+	// as the current stack pointer
+	sec_text.push_back("push ebp");
+	sec_text.push_back("mov ebp, esp");
+	sec_text.push_back("");
 	
-	for (auto v : fd->args) {
-		if (v.type == DataType::Float) {
-			sec_text.push_back("fstp qword [" + v.name + "]");
-		} else {
-			//Pop the arguments into the variables
-			std::string mov_ln = "mov eax, [esp+";
-			mov_ln += std::to_string(arg_access) + "]";
-			
-			arg_access += 4;
-			sec_text.push_back(mov_ln);
-
-			if (v.type == DataType::Char)
-				sec_text.push_back("mov [" + v.name + "], al");
-			else
-				sec_text.push_back("mov [" + v.name + "], eax");
-		}
-	
-		//Declare the function arguments in assembly
-		if (v.type == DataType::Str) {
-			sec_bss.push_back(v.name + " resb 100");
-		} else {
-			AstVarDec *vd = new AstVarDec(v.name);
-			vd->set_type(v.type);
-			
-			if (v.type == DataType::Bool) {
-				vd->children.push_back(new AstBool(false));
-			} else if (v.type == DataType::Float) {
-				vd->children.push_back(new AstFloat(0.0));
-			} else {
-				vd->children.push_back(new AstInt(0));
-			}
-			
-			build_var_dec(vd);
-		}
-		
-		sec_text.push_back("");
-	}
+	//TODO: Build the arguments
 }
 
 //Assembles an external function
@@ -140,14 +108,6 @@ void Asm_x86::build_func_call(AstFuncCall *fc) {
 
 //Builds the return statements
 void Asm_x86::build_ret(AstNode *node) {
-	if (in_main) {
-		sec_text.push_back("mov eax, 1");
-		sec_text.push_back("mov ebx, 0");
-		sec_text.push_back("int 0x80");
-		sec_text.push_back("");
-		return;
-	}
-	
 	if (node->children.size() == 1) {
 		auto child = node->children.at(0);
 		if (child->type == AstType::Float) {
@@ -165,6 +125,7 @@ void Asm_x86::build_ret(AstNode *node) {
 		}
 	}
 	
+	sec_text.push_back("pop ebp");
 	sec_text.push_back("ret");
 	sec_text.push_back("");
 }

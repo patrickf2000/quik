@@ -1,5 +1,9 @@
 #int1.qk
 
+func func2
+	int z = 88
+end
+
 func main
 	int x = 5
 	int y = 6
