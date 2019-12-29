@@ -23,6 +23,8 @@ void Asm_x86::build_cond(AstNode *node) {
 			
 			if (v.type == DataType::Char)
 				c_reg = "al";
+		} else if (cond->rval->type == AstType::Char) {
+			c_reg = "al";
 		}
 	
 		//Position the lval

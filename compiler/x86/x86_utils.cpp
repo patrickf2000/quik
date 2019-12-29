@@ -17,6 +17,13 @@ std::string Asm_x86::type2asm(AstNode *node) {
 			ln = "[" + id->get_name() + "]";
 		} break;
 		
+		case AstType::Char: {
+			AstChar *ch = dynamic_cast<AstChar *>(node);
+			ln = "\'";
+			ln += ch->get_val();
+			ln += "\'";
+		} break;
+		
 		case AstType::Bool: {
 			AstBool *bl = dynamic_cast<AstBool *>(node);
 			if (bl->get_val())

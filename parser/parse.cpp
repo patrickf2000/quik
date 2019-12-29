@@ -383,6 +383,10 @@ AstCond *build_conditional(Line ln) {
 			AstInt *i = new AstInt(std::stoi(lval.id));
 			cond->lval = i;
 		} break;
+		case TokenType::CHAR: {
+			AstChar *ch = new AstChar(lval.id[0]);
+			cond->lval = ch;
+		} break;
 		
 		case TokenType::B_TRUE: {
 			AstBool *bl = new AstBool(true);
@@ -403,6 +407,10 @@ AstCond *build_conditional(Line ln) {
 		case TokenType::NO: {
 			AstInt *i = new AstInt(std::stoi(rval.id));
 			cond->rval = i;
+		} break;
+		case TokenType::CHAR: {
+			AstChar *ch = new AstChar(rval.id[0]);
+			cond->rval = ch;
 		} break;
 		
 		case TokenType::B_TRUE: {
