@@ -9,3 +9,9 @@ Add print_bool function
 Add print_char function
 
 When calling functions again, values not reset
+
+Add break keyword
+
+Add continue keyword
+
+Experiment with strings
