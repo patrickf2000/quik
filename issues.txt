@@ -8,4 +8,4 @@ Add print_bool function
 
 Add print_char function
 
-Check comparison for characters
+When calling functions again, values not reset

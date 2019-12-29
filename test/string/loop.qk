@@ -1,0 +1,27 @@
+include io
+
+extern func strlen(s:str)
+extern func strcpy(s1:str, s2:str)
+
+func print_char(c:char)
+	printf("%c", c)
+	puts("")
+end
+
+func main
+	str s = "key=value"
+	char c = 0
+	
+	int len = strlen(s)
+	int index = 0
+	
+	while (index < len)
+		c = s[index]
+		print_char(c)
+		index = index + 1
+		
+		if (c == '=')
+			println("Found!")
+		end
+	end
+end

@@ -33,7 +33,10 @@ void Asm_x86::build_function(AstNode *node) {
 			arg_access += 4;
 			sec_text.push_back(mov_ln);
 
-			sec_text.push_back("mov [" + v.name + "], eax");
+			if (v.type == DataType::Char)
+				sec_text.push_back("mov [" + v.name + "], al");
+			else
+				sec_text.push_back("mov [" + v.name + "], eax");
 		}
 	
 		//Declare the function arguments in assembly
