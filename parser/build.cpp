@@ -127,7 +127,6 @@ AstNode *build_ast(std::vector<Line> lines, bool fail) {
 	}
 	
 	build_tree(nodes, top);
-	find_id(top);
 	find_variables(top);
 	find_assign(top, top);
 	find_cond(top);

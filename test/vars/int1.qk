@@ -1,10 +1,6 @@
 #int1.qk
-include io
 
 func main
 	int x = 5
 	int y = 6
-	
-	print_int("", x)
-	print_int("", y)
 end
