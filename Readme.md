@@ -1,5 +1,8 @@
 ## Quik
 
+### Note
+Check the dev branch for the latest progress; the master branch may not have all the commits.
+
 ### Introduction
 This is the third version of my Quik programming language. Like the second version, its a compiler written from scratch. By why written from scratch again? The original compiler was really my first non-trival compiler, so because I was learning, it contained a lot of bad design choices, both in the language and the implementation (especially the implementation). I completely rewrote it from scratch, using better techniques, and I'm very proud of the result (especially the abstract syntax tree generator).
 
