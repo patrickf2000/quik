@@ -3,13 +3,14 @@ include io
 func double(no:int)
 	print_int(no)
 	int answer = no * no
-	#return answer
+	print_int(answer)
+	return answer
 end
 
 func main
 	int no = 5
-	print_int(no)
+	double(no)
 	
-	#int answer = double(no)
-	#print_int(answer)
+	int answer = double(no)
+	print_int(answer)
 end

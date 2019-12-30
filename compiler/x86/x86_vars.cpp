@@ -61,6 +61,13 @@ void Asm_x86::build_var_dec(AstNode *node) {
 			ln += std::to_string(ic);
 		} break;
 		
+		//Function calls
+		case AstType::FuncCall: {
+			AstFuncCall *fc = dynamic_cast<AstFuncCall *>(value);
+			build_func_call(fc);
+			ln += "eax";
+		} break;
+		
 		//TODO: Add the rest
 	}
 	
@@ -73,6 +80,7 @@ void Asm_x86::build_var_assign(AstNode *node) {
 	AstVarDec *va = static_cast<AstVarDec *>(node);
 	Var v = vars[va->get_name()];
 	std::string ln = "";
+	std::string dest_var = "[ebp-" + std::to_string(v.stack_pos) + "]";
 	
 	//Build the first element
 	auto first = va->children.at(0);
@@ -93,6 +101,12 @@ void Asm_x86::build_var_assign(AstNode *node) {
 			auto val = std::to_string(i->get_val());
 			
 			ln = "mov eax, " + val;
+		} break;
+		
+		//Function calls
+		case AstType::FuncCall: {
+			AstFuncCall *fc = dynamic_cast<AstFuncCall *>(first);
+			build_func_call(fc);
 		} break;
 	}
 	
@@ -120,10 +134,10 @@ void Asm_x86::build_var_assign(AstNode *node) {
 		}
 		
 		if (next->type == AstType::FuncCall) {
-			/*sec_text.push_back("mov " + dest_var + ", eax");
+			sec_text.push_back("mov " + dest_var + ", eax");
 			AstFuncCall *fc = dynamic_cast<AstFuncCall *>(next);
 			build_func_call(fc);
-			ln += dest_var;*/
+			ln += dest_var;
 		} else {
 			ln += type2asm(next);
 		}
@@ -153,7 +167,7 @@ void Asm_x86::build_var_assign(AstNode *node) {
 		case DataType::Str: ln += "qword "; break;
 	}
 	
-	ln += "[ebp-" + std::to_string(v.stack_pos) + "], eax";
+	ln += dest_var + ", eax";
 	
 	sec_text.push_back(ln);
 	sec_text.push_back("");
