@@ -4,35 +4,59 @@
 
 //Builds an array declaration
 void Asm_x86::build_arr_dec(AstNode *node) {
-	AstArrayDec *ard = dynamic_cast<AstArrayDec *>(node);
-	std::string ln = ard->get_name() + " ";
+	AstArrayDec *ard = static_cast<AstArrayDec *>(node);
 	
-	switch (ard->get_type()) {
+	Var v;
+	v.name = ard->get_name();
+	v.type = ard->get_type();
+	vars[ard->get_name()] = v;
+	
+	//Determine the stack position and type
+	int size = 1;
+	std::string prefix = "byte";
+	
+	switch (v.type) {
 		case DataType::Byte:
-		case DataType::Char:
-		case DataType::Str: ln += "db "; break;
-		case DataType::Short: ln += "dw "; break;
+		case DataType::Char: {
+				size = 1;
+			} break;
+			
+		case DataType::Short: {
+				size = 2;
+				prefix = "word";
+			} break;
+			
 		case DataType::Bool:
-		case DataType::Int: ln += "dd "; break;
-		case DataType::Float:
-		case DataType::Long: ln += "dq "; break;
+		case DataType::Int:
+		case DataType::Float: {
+				size = 4;
+				prefix = "dword";
+			} break;
+			
+		case DataType::Str: {
+				size = 8;
+				prefix = "qword";
+			} break;
 	}
 	
-	for (int i = 0; i<ard->children.size(); i++) {
-		auto child = ard->children.at(i);
+	//Add the initial values
+	for (auto child : ard->children) {
+		auto ln = "mov " + prefix + " [ebp-";
+		ln += std::to_string(stack_pos) + "], ";
 		
+		stack_pos += size;
+	
 		switch (child->type) {
 			case AstType::Int: {
-				AstInt *i = dynamic_cast<AstInt *>(child);
+				AstInt *i = static_cast<AstInt *>(child);
 				ln += std::to_string(i->get_val());
 			} break;
 		}
 		
-		if (i+1 < ard->children.size())
-			ln += ",";
+		sec_text.push_back(ln);
 	}
 	
-	sec_data.push_back(ln);
+	sec_text.push_back("");
 }
 
 //Generates assembly for an array access statement

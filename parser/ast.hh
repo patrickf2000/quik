@@ -52,6 +52,7 @@ struct Var {
 	std::string name;
 	DataType type;
 	int stack_pos;
+	int size;
 	bool is_param;
 };
 
