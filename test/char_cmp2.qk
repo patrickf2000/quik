@@ -1,0 +1,22 @@
+include io
+
+func main
+	char c = ';'
+	char t = ':'
+	
+	if (c == t)
+		puts("Equal")
+	else
+		puts("Not equal")
+	end
+	
+	if (c == ';')
+		puts("Equal")
+	else
+		puts("Not equal")
+	end
+end
+
+#TEST
+#Not equal
+#Equal
