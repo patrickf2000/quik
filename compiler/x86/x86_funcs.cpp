@@ -26,12 +26,14 @@ void Asm_x86::build_function(AstNode *node) {
 	sec_text.push_back("mov ebp, esp");
 	
 	//TODO: Add some logic instead of randomly assigning some large number
-	if (in_main)
+	//if (in_main)
 		sec_text.push_back("sub esp, 48");
 	
 	sec_text.push_back("");
 	
 	//Build the arguments
+	stack_pos = 4;
+	
 	for (auto v : fd->args) {
 		//Determine the stack position
 		switch (v.type) {
@@ -48,7 +50,7 @@ void Asm_x86::build_function(AstNode *node) {
 		vars[v.name] = v;
 		
 		//Move in the value
-		sec_text.push_back("mov eax, [esp-" + std::to_string(stack_pos) + "]");
+		sec_text.push_back("mov eax, [ebp+" + std::to_string(stack_pos) + "]");
 		sec_text.push_back("mov [ebp-" + std::to_string(stack_pos) + "], eax");
 		sec_text.push_back("");
 	}
@@ -151,10 +153,12 @@ void Asm_x86::build_ret(AstNode *node) {
 	stack_pos = 0;
 	vars.clear();
 	
-	if (in_main)
+	if (in_main) {
 		sec_text.push_back("leave");
-	else
+	} else {
+		sec_text.push_back("mov esp, ebp");
 		sec_text.push_back("pop ebp");
+	}
 		
 	sec_text.push_back("ret");
 	sec_text.push_back("");
