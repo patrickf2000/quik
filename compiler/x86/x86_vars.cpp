@@ -30,6 +30,7 @@ void Asm_x86::build_var_assign(AstNode *node) {
 	Var v = vars[va->get_name()];
 	std::string ln = "";
 	std::string dest_var = "[ebp-" + std::to_string(v.stack_pos) + "]";
+	bool stop = false;
 	
 	//Build the first element
 	auto first = va->children.at(0);
@@ -52,6 +53,15 @@ void Asm_x86::build_var_assign(AstNode *node) {
 			ln = "mov eax, " + val;
 		} break;
 		
+		//Characters
+		case AstType::Char: {
+			AstChar *ch = static_cast<AstChar *>(first);
+			int val = (int)ch->get_val();
+			
+			ln = "mov byte " + dest_var + ", " + std::to_string(val);
+			stop = true;
+		} break;
+		
 		//Booleans
 		case AstType::Bool: {
 			AstBool *bl = static_cast<AstBool *>(first);
@@ -71,6 +81,11 @@ void Asm_x86::build_var_assign(AstNode *node) {
 	}
 	
 	sec_text.push_back(ln);
+	
+	//In some instances, further arguments would not be appropriate
+	//In this case, we exit the function
+	if (stop)
+		return;
 	
 	//Now iterate through the reset of the children
 	for (int i = 1; i<va->children.size(); i+=2) {
