@@ -31,7 +31,27 @@ void Asm_x86::build_function(AstNode *node) {
 	
 	sec_text.push_back("");
 	
-	//TODO: Build the arguments
+	//Build the arguments
+	for (auto v : fd->args) {
+		//Determine the stack position
+		switch (v.type) {
+			case DataType::Byte:
+			case DataType::Char: stack_pos += 1; break;
+			case DataType::Short: stack_pos += 2; break;
+			case DataType::Bool:
+			case DataType::Int:
+			case DataType::Float: stack_pos += 4; break;
+			case DataType::Str: stack_pos += 8; break;
+		}
+		
+		v.stack_pos = stack_pos;
+		vars[v.name] = v;
+		
+		//Move in the value
+		sec_text.push_back("mov eax, [esp-" + std::to_string(stack_pos) + "]");
+		sec_text.push_back("mov [ebp-" + std::to_string(stack_pos) + "], eax");
+		sec_text.push_back("");
+	}
 }
 
 //Assembles an external function
@@ -112,6 +132,7 @@ void Asm_x86::build_func_call(AstFuncCall *fc) {
 //Builds the return statements
 void Asm_x86::build_ret(AstNode *node) {
 	stack_pos = 0;
+	vars.clear();
 
 	if (node->children.size() == 1) {
 		auto child = node->children.at(0);

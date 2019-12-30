@@ -4,7 +4,7 @@
 
 //Assembles a variable declaration
 void Asm_x86::build_var_dec(AstNode *node) {
-	AstVarDec *vd = dynamic_cast<AstVarDec *>(node);
+	AstVarDec *vd = static_cast<AstVarDec *>(node);
 	Var v = current_scope->vars[vd->get_name()];
 	
 	//Determine the stack position
