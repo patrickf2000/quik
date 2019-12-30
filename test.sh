@@ -1,6 +1,6 @@
 #!/bin/bash
 
-INPUT="test/$1.qk"
+INPUT="test/$1"
 expected=`./get_out.py $INPUT`
 
 build/quikc $INPUT -o build/out.bin
