@@ -46,7 +46,7 @@ void Asm_x86::build_func_call(AstFuncCall *fc) {
 			//An ID-> Means we have a variable
 			case AstType::Id: {
 				AstID *id = dynamic_cast<AstID *>(node);
-				Var v = current_scope->vars[id->get_name()];
+				Var v = vars[id->get_name()];
 				std::string ln = "";
 			
 				switch (v.type) {
@@ -55,8 +55,8 @@ void Asm_x86::build_func_call(AstFuncCall *fc) {
 					case DataType::Short:
 					case DataType::Bool:
 					case DataType::Int: {
-						ln = "push dword ";
-						ln += "[" + v.name + "]"; 
+						ln = "push dword [ebp-";
+						ln += std::to_string(v.stack_pos) + "]";
 					} break;
 					case DataType::Long:
 					case DataType::Float: {
@@ -97,10 +97,8 @@ void Asm_x86::build_func_call(AstFuncCall *fc) {
 
 	sec_text.push_back("call " + fc->get_name());
 	
-	if (!in_main) {
-		for (int i = 0; i<fc->children.size(); i++) {
-			sec_text.push_back("add esp, 4");
-		}
+	for (int i = 0; i<fc->children.size(); i++) {
+		sec_text.push_back("add esp, 4");
 	}
 	
 	sec_text.push_back("");	

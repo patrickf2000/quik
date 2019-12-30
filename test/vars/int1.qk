@@ -1,12 +1,22 @@
 #int1.qk
+include io
 
 func func2
 	int z = 88
+	print_int(z)
+	
 	char c1 = 'a'
 	int x = 4
+	
+	print_int(x)
+	
+	int y = z
+	print_int(y)
 end
 
 func main
+	func2()
+
 	int x = 5
 	int y = 6
 	

@@ -8,3 +8,8 @@ int input_int()
 	return x;
 }
 
+//Prints an integer
+void print_int(int no)
+{
+	printf("%d\n", no);
+}
