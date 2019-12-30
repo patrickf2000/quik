@@ -1,7 +1,0 @@
-# hello-world.qk
-# The classic hello world program
-include io
-
-func main
-	println("Hello, world!")
-end
