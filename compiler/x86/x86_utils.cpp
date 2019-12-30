@@ -14,7 +14,9 @@ std::string Asm_x86::type2asm(AstNode *node) {
 		
 		case AstType::Id: {
 			AstID *id = dynamic_cast<AstID *>(node);
-			ln = "[" + id->get_name() + "]";
+			Var v2 = vars[id->get_name()];
+			
+			ln = "[ebp-" + std::to_string(v2.stack_pos) + "]";
 		} break;
 		
 		case AstType::Char: {

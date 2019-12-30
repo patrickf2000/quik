@@ -98,6 +98,48 @@ void Asm_x86::build_var_assign(AstNode *node) {
 	
 	sec_text.push_back(ln);
 	
+	//Now iterate through the reset of the children
+	for (int i = 1; i<va->children.size(); i+=2) {
+		auto op = va->children.at(i);
+		auto next = va->children.at(i+1);
+		std::string ln = "";
+		
+		bool is_mod = false;
+		bool is_div = false;
+		
+		switch (op->type) {
+			case AstType::Add: ln += "add eax, "; break;
+			case AstType::Sub: ln += "sub eax, "; break;
+			case AstType::Mul: ln += "imul eax, "; break;
+			case AstType::Mod: is_mod = true;
+			case AstType::Div: is_div = true; break;
+		}
+		
+		if (is_div) {
+			ln = "mov ebx, ";
+		}
+		
+		if (next->type == AstType::FuncCall) {
+			/*sec_text.push_back("mov " + dest_var + ", eax");
+			AstFuncCall *fc = dynamic_cast<AstFuncCall *>(next);
+			build_func_call(fc);
+			ln += dest_var;*/
+		} else {
+			ln += type2asm(next);
+		}
+		
+		sec_text.push_back(ln);
+		
+		if (is_div) {
+			sec_text.push_back("cdq");
+			sec_text.push_back("div ebx");
+		}
+		
+		if (is_mod) {
+			sec_text.push_back("mov eax, edx");
+		}
+	}
+	
 	//Finally, move it back
 	ln = "mov ";
 	
