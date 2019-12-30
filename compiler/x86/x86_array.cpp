@@ -10,10 +10,12 @@ void Asm_x86::build_arr_dec(AstNode *node) {
 	v.name = ard->get_name();
 	v.type = ard->get_type();
 	v.stack_pos = stack_pos;
+	v.size = ard->children.size();
 	vars[ard->get_name()] = v;
 	
 	//Determine the stack position and type
 	int size = 1;
+	int pos = 0;
 	std::string prefix = "byte";
 	
 	switch (v.type) {
@@ -40,12 +42,15 @@ void Asm_x86::build_arr_dec(AstNode *node) {
 			} break;
 	}
 	
+	pos = size * v.size;
+	stack_pos = pos;
+	
 	//Add the initial values
 	for (auto child : ard->children) {
 		auto ln = "mov " + prefix + " [ebp-";
-		ln += std::to_string(stack_pos) + "], ";
+		ln += std::to_string(pos) + "], ";
 		
-		stack_pos += size;
+		pos -= size;
 	
 		switch (child->type) {
 			case AstType::Int: {
@@ -88,13 +93,18 @@ void Asm_x86::build_arr_access(AstNode *node) {
 		case AstType::Id: {
 			AstID *id = dynamic_cast<AstID *>(i_child);
 			
-			sec_text.push_back("mov ebx, [" + id->get_name() + "]");
+			std::string ln2 = "mov ebx, [ebp-";
+			ln2 += std::to_string(vars[id->get_name()].stack_pos);
+			ln2 += "]";
+			
+			sec_text.push_back(ln2);
 			
 			std::string mul_line = "imul ebx, ";
 			mul_line += std::to_string(size);
 			sec_text.push_back(mul_line);
 			
-			ln += "ebx";
+			ln += std::to_string((size*v.size));
+			ln += "+ebx";
 		} break;
 	}
 	
