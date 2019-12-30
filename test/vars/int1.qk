@@ -3,11 +3,13 @@
 func func2
 	int z = 88
 	char c1 = 'a'
-	char c2 = 'b'
 	int x = 4
 end
 
 func main
 	int x = 5
 	int y = 6
+	
+	int z1 = x
+	int z2 = x + y - 2
 end

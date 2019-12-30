@@ -70,7 +70,48 @@ void Asm_x86::build_var_dec(AstNode *node) {
 
 //Builds a variable assignment
 void Asm_x86::build_var_assign(AstNode *node) {
-
+	AstVarDec *va = static_cast<AstVarDec *>(node);
+	Var v = vars[va->get_name()];
+	std::string ln = "";
+	
+	//Build the first element
+	auto first = va->children.at(0);
+	
+	switch (first->type) {
+		//ID
+		case AstType::Id: {
+			AstID *id = static_cast<AstID *>(first);
+			Var v2 = vars[id->get_name()];
+			
+			ln = "mov eax, [ebp-";
+			ln += std::to_string(v2.stack_pos) + "]";
+		} break;
+		
+		//Int
+		case AstType::Int: {
+		
+		} break;
+	}
+	
+	sec_text.push_back(ln);
+	
+	//Finally, move it back
+	ln = "mov ";
+	
+	switch (v.type) {
+		case DataType::Byte:
+		case DataType::Char: ln += "byte "; break;
+		case DataType::Short: ln += "word "; break;
+		case DataType::Bool:
+		case DataType::Int:
+		case DataType::Float: ln += "dword "; break;
+		case DataType::Str: ln += "qword "; break;
+	}
+	
+	ln += "[ebp-" + std::to_string(v.stack_pos) + "], eax";
+	
+	sec_text.push_back(ln);
+	sec_text.push_back("");
 }
 
 //Builds a variable assignment
