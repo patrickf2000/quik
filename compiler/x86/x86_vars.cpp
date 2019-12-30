@@ -21,58 +21,7 @@ void Asm_x86::build_var_dec(AstNode *node) {
 	v.stack_pos = stack_pos;
 	vars[vd->get_name()] = v;
 	
-	if (node->children.size() > 1) {
-		build_var_assign(node);
-		return;
-	}
-	
-	auto value = node->children.at(0);
-	
-	if (value->type == AstType::Id) {
-		build_var_assign(node);
-		return;
-	}
-	
-	std::string ln = "mov ";
-	
-	switch (v.type) {
-		case DataType::Byte:
-		case DataType::Char: ln += "byte "; break;
-		case DataType::Short: ln += "word "; break;
-		case DataType::Bool:
-		case DataType::Int:
-		case DataType::Float: ln += "dword "; break;
-		case DataType::Str: ln += "qword "; break;
-	}
-	
-	ln += "[ebp-" + std::to_string(stack_pos) + "], ";
-	
-	switch (value->type) {
-		case AstType::Int: {
-			AstInt *i = dynamic_cast<AstInt *>(value);
-			int val = i->get_val();
-			ln += std::to_string(val);
-		} break;
-		
-		case AstType::Char: {
-			AstChar *ch = dynamic_cast<AstChar *>(value);
-			char c = ch->get_val();
-			int ic = (int)c;
-			ln += std::to_string(ic);
-		} break;
-		
-		//Function calls
-		case AstType::FuncCall: {
-			AstFuncCall *fc = dynamic_cast<AstFuncCall *>(value);
-			build_func_call(fc);
-			ln += "eax";
-		} break;
-		
-		//TODO: Add the rest
-	}
-	
-	sec_text.push_back(ln);
-	sec_text.push_back("");
+	build_var_assign(node);
 }
 
 //Builds a variable assignment

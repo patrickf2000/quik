@@ -6,8 +6,8 @@ func main
 	bool x = false
 	
 	if (x)
-		println("True")
+		puts("True")
 	else
-		println("False")
+		puts("False")
 	end
 end
