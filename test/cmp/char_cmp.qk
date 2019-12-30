@@ -1,0 +1,22 @@
+include io
+
+func main
+	char c = ':'
+	char t = ':'
+	
+	if (c == t)
+		println("Equal")
+	else
+		println("Not equal")
+	end
+	
+	println("")
+	println("Test 2")
+	println("")
+	
+	if (c == ';')
+		println("Equal")
+	else
+		println("Not equal")
+	end
+end

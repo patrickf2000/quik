@@ -1,0 +1,13 @@
+# short_cmp
+# Tests short comparisons
+include io
+
+func main
+	bool x = false
+	
+	if (x)
+		println("True")
+	else
+		println("False")
+	end
+end

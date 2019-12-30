@@ -1,0 +1,28 @@
+include io
+
+func main()
+	int x = 11
+	int y = 1
+	print_int("", x)
+	println("")
+	
+	if (x == 10)
+		println("Equal to 10!")
+		
+		if (x == y)
+			println("Yes!")
+		else
+			println("No!!")
+		end
+	elif (x != 10)
+		println("Not equal!")
+		
+		if (x > 20)
+			println("Greater than 20")
+		elif (x < 20)
+			println("Less than 20")
+		end
+	end
+	
+	println("Done")
+end
