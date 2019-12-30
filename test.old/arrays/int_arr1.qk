@@ -3,5 +3,13 @@
 include io
 
 func main
-	int[5] numbers = 1, 7, 2, 4, 1
+	int[5] numbers = 1, 7, 2, 4, 3
+	int x = 0
+	int index = 0
+	
+	while (index < 5)
+		x = numbers[index]
+		print_int(x)
+		index = index + 1
+	end
 end

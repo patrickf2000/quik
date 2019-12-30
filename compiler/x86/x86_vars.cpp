@@ -78,6 +78,11 @@ void Asm_x86::build_var_assign(AstNode *node) {
 			AstFuncCall *fc = dynamic_cast<AstFuncCall *>(first);
 			build_func_call(fc);
 		} break;
+		
+		//Array access
+		case AstType::ArrayAccess: {
+			build_arr_access(first);
+		} break;
 	}
 	
 	sec_text.push_back(ln);

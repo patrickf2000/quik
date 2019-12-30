@@ -9,6 +9,7 @@ void Asm_x86::build_arr_dec(AstNode *node) {
 	Var v;
 	v.name = ard->get_name();
 	v.type = ard->get_type();
+	v.stack_pos = stack_pos;
 	vars[ard->get_name()] = v;
 	
 	//Determine the stack position and type
@@ -65,7 +66,9 @@ void Asm_x86::build_arr_access(AstNode *node) {
 	int index = 0;
 	int size = 4;
 	
-	Var v = current_scope->vars[acc->get_name()];
+	Var v = vars[acc->get_name()];
+	index = v.stack_pos;	
+	
 	if (v.type == DataType::Str)
 		size = 1;
 	
@@ -73,15 +76,13 @@ void Asm_x86::build_arr_access(AstNode *node) {
 	//For ints: 4 * (element index)
 	//TODO: Modify not to only use ints
 	auto i_child = acc->children.at(0);
-	std::string ln = "mov eax, [";
-	ln += acc->get_name() + "+";
+	std::string ln = "mov eax, [ebp-";
 	
 	switch (i_child->type) {
 		case AstType::Int: {
 			AstInt *i = dynamic_cast<AstInt *>(i_child);
-			index = i->get_val();
-			index *= size;
-			ln += std::to_string(index);
+			int i2 = index + (i->get_val() * size);
+			ln += std::to_string(i2);
 		} break;
 		
 		case AstType::Id: {
@@ -101,6 +102,5 @@ void Asm_x86::build_arr_access(AstNode *node) {
 	ln += "]";
 	
 	sec_text.push_back(ln);
-	sec_text.push_back("");
 }
 
