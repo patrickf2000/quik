@@ -89,7 +89,10 @@ void Asm_x86::build_var_assign(AstNode *node) {
 		
 		//Int
 		case AstType::Int: {
-		
+			AstInt *i = static_cast<AstInt *>(first);
+			auto val = std::to_string(i->get_val());
+			
+			ln = "mov eax, " + val;
 		} break;
 	}
 	

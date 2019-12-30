@@ -27,4 +27,7 @@ func main
 	int z2 = x + y - 2
 	
 	print_int(z1)
+	
+	z1 = 22
+	print_int(z1)
 end
