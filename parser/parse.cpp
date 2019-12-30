@@ -250,7 +250,7 @@ AstFuncDec *build_func_dec(Line ln) {
 				
 				fd->args.push_back(v);
 			} else if (t.type == TokenType::ID) {
-				v.name = id.id + "_" + t.id;
+				v.name = t.id;
 			} else if (last == TokenType::COLON) {
 				v.type = ttype2dtype(t.type);
 			}
