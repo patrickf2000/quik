@@ -1,0 +1,20 @@
+include io
+
+func compare
+	int x = 11
+	
+	if (x == 10)
+		puts("Yes")
+	else
+		puts("No")
+	end
+end
+
+func main
+	compare()
+	puts("Done")
+end
+
+#TEST
+#No
+#Done

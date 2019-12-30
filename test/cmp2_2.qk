@@ -1,0 +1,20 @@
+include io
+
+func main
+	int x = 1
+	int y = 2
+	
+	if (x > y)
+		puts("Greater")
+	elif (x < y)
+		puts("Less")
+	else
+		puts("Equal")
+	end
+	
+	puts("Done")
+end
+
+#TEST
+#Less
+#Done

@@ -1,0 +1,17 @@
+include io
+
+func main
+	int x = 21
+	
+	if (x == 10)
+		puts("Yes")
+	else
+		puts("No")
+	end
+	
+	puts("Done")
+end
+
+#TEST
+#No
+#Done
