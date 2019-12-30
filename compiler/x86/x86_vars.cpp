@@ -5,55 +5,76 @@
 //Assembles a variable declaration
 void Asm_x86::build_var_dec(AstNode *node) {
 	AstVarDec *vd = dynamic_cast<AstVarDec *>(node);
-	std::string ln = vd->get_name() + " ";
+	Var v = current_scope->vars[vd->get_name()];
 	
-	switch (vd->get_type()) {
+	//Determine the stack position
+	switch (v.type) {
 		case DataType::Byte:
-		case DataType::Char:
-		case DataType::Str: ln += "db "; break;
-		case DataType::Short: ln += "dw "; break;
+		case DataType::Char: stack_pos += 1; break;
+		case DataType::Short: stack_pos += 2; break;
 		case DataType::Bool:
-		case DataType::Int: ln += "dd "; break;
-		case DataType::Long:
-		case DataType::Float: ln += "dq "; break;
+		case DataType::Int:
+		case DataType::Float: stack_pos += 4; break;
+		case DataType::Str: stack_pos += 8; break;
 	}
 	
-	auto first = vd->children.at(0);
+	v.stack_pos = stack_pos;
+	vars[vd->get_name()] = v;
 	
-	if (first->type == AstType::Id || first->type == AstType::FuncCall 
-			|| first->type == AstType::ArrayAccess
-			|| vd->children.size() > 1) {
-		ln += "0";
+	if (node->children.size() > 1) {
 		build_var_assign(node);
-	} else {
-		if (first->type == AstType::Int) {
-			AstInt *i = dynamic_cast<AstInt *>(first);
-			ln += std::to_string(i->get_val());
-		} else if (first->type == AstType::Char) {
-			AstChar *i = static_cast<AstChar *>(first);
-			ln += "\'";
-			ln += i->get_val();
-			ln += "\'";
-		} else if (first->type == AstType::Str) {
-			AstString *i = dynamic_cast<AstString *>(first);
-			ln += "\"" + i->get_val() + "\",0";
-		} else if (first->type == AstType::Float) {
-			AstFloat *i = dynamic_cast<AstFloat *>(first);
-			ln += std::to_string(i->get_val());
-		} else if (first->type == AstType::Bool) {
-			AstBool *i = dynamic_cast<AstBool *>(first);
-			if (i->get_val())
-				ln += "1";
-			else
-				ln += "0";
-		}
+		return;
 	}
 	
-	sec_data.push_back(ln);
+	auto value = node->children.at(0);
+	
+	if (value->type == AstType::Id) {
+		build_var_assign(node);
+		return;
+	}
+	
+	std::string ln = "mov ";
+	
+	switch (v.type) {
+		case DataType::Byte:
+		case DataType::Char: ln += "byte "; break;
+		case DataType::Short: ln += "word "; break;
+		case DataType::Bool:
+		case DataType::Int:
+		case DataType::Float: ln += "dword "; break;
+		case DataType::Str: ln += "qword "; break;
+	}
+	
+	ln += "[ebp-" + std::to_string(stack_pos) + "], ";
+	
+	switch (value->type) {
+		case AstType::Int: {
+			AstInt *i = dynamic_cast<AstInt *>(value);
+			int val = i->get_val();
+			ln += std::to_string(val);
+		} break;
+		
+		case AstType::Char: {
+			AstChar *ch = dynamic_cast<AstChar *>(value);
+			char c = ch->get_val();
+			int ic = (int)c;
+			ln += std::to_string(ic);
+		} break;
+		
+		//TODO: Add the rest
+	}
+	
+	sec_text.push_back(ln);
+	sec_text.push_back("");
 }
 
 //Builds a variable assignment
 void Asm_x86::build_var_assign(AstNode *node) {
+
+}
+
+//Builds a variable assignment
+/*void Asm_x86::build_var_assign(AstNode *node) {
 	std::string dest_var = "";
 	std::vector<AstNode *> children;
 	bool is_char = false;
@@ -187,7 +208,7 @@ void Asm_x86::build_var_assign(AstNode *node) {
 		sec_text.push_back("mov " + dest_var + ", eax");
 		
 	sec_text.push_back("");
-}
+}*/
 
 //Builds a floating-point variable assignment
 void Asm_x86::build_flt_assign(AstNode *node) {

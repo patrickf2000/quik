@@ -51,6 +51,7 @@ enum AstType {
 struct Var {
 	std::string name;
 	DataType type;
+	int stack_pos;
 	bool is_param;
 };
 

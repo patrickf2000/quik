@@ -2,6 +2,9 @@
 
 func func2
 	int z = 88
+	char c1 = 'a'
+	char c2 = 'b'
+	int x = 4
 end
 
 func main

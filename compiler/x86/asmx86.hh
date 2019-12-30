@@ -41,6 +41,10 @@ private:
 	//The config structure
 	Config config;
 	
+	//Variable stuff
+	std::map<std::string, Var> vars;
+	int stack_pos = 0;
+	
 	//Control variables
 	bool in_main = false;
 	int str_index = 1;

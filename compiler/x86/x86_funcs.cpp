@@ -108,6 +108,8 @@ void Asm_x86::build_func_call(AstFuncCall *fc) {
 
 //Builds the return statements
 void Asm_x86::build_ret(AstNode *node) {
+	stack_pos = 0;
+
 	if (node->children.size() == 1) {
 		auto child = node->children.at(0);
 		if (child->type == AstType::Float) {
