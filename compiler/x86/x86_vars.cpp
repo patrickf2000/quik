@@ -52,6 +52,17 @@ void Asm_x86::build_var_assign(AstNode *node) {
 			ln = "mov eax, " + val;
 		} break;
 		
+		//Booleans
+		case AstType::Bool: {
+			AstBool *bl = static_cast<AstBool *>(first);
+			bool val = bl->get_val();
+			
+			if (val)
+				ln = "mov eax, 1";
+			else
+				ln = "mov eax, 0";
+		} break;
+		
 		//Function calls
 		case AstType::FuncCall: {
 			AstFuncCall *fc = dynamic_cast<AstFuncCall *>(first);

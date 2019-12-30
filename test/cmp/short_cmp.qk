@@ -3,7 +3,7 @@
 include io
 
 func main
-	bool x = false
+	bool x = true
 	
 	if (x)
 		puts("True")
