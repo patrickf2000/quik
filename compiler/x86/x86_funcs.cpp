@@ -24,6 +24,10 @@ void Asm_x86::build_function(AstNode *node) {
 	// as the current stack pointer
 	sec_text.push_back("push ebp");
 	sec_text.push_back("mov ebp, esp");
+	
+	if (in_main)
+		sec_text.push_back("sub esp, 8");
+	
 	sec_text.push_back("");
 	
 	//TODO: Build the arguments
@@ -125,7 +129,11 @@ void Asm_x86::build_ret(AstNode *node) {
 		}
 	}
 	
-	sec_text.push_back("pop ebp");
+	if (in_main)
+		sec_text.push_back("leave");
+	else
+		sec_text.push_back("pop ebp");
+		
 	sec_text.push_back("ret");
 	sec_text.push_back("");
 }

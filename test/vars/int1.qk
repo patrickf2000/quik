@@ -15,11 +15,16 @@ func func2
 end
 
 func main
-	func2()
+	#func2()
 
 	int x = 5
 	int y = 6
 	
+	print_int(x)
+	print_int(y)
+	
 	int z1 = x
 	int z2 = x + y - 2
+	
+	print_int(z1)
 end
