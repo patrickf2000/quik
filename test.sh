@@ -14,3 +14,11 @@ else
 	echo "Expected: $expected"
 	echo "Actual: $actual"
 fi
+
+echo ""
+echo "Cleaning up..."
+
+rm /tmp/*.asm
+rm /tmp/*.o
+
+echo "Done"
