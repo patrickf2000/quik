@@ -26,14 +26,51 @@ void Asm_x86::build_var_dec(AstNode *node) {
 
 //Builds a variable assignment
 void Asm_x86::build_var_assign(AstNode *node) {
-	AstVarDec *va = static_cast<AstVarDec *>(node);
-	Var v = vars[va->get_name()];
+	AstAttrNode *n = static_cast<AstAttrNode *>(node);
+	Var v = vars[n->get_name()];
+	
 	std::string ln = "";
 	std::string dest_var = "[ebp-" + std::to_string(v.stack_pos) + "]";
 	bool stop = false;
+	bool is_char = false;
+	
+	//Variable assignments
+	if (node->type == AstType::VarDec || node->type == AstType::VarAssign) {
+		AstVarDec *va = dynamic_cast<AstVarDec *>(node);
+		if (va->get_type() == DataType::Float) {
+			build_flt_assign(node);
+			return;
+		}
+		
+		if (va->get_type() == DataType::Char)
+			is_char = true;
+		
+	//Array assignments
+	} else if (node->type == AstType::ArrayAssign) {
+		AstArrayAssign *assign = dynamic_cast<AstArrayAssign *>(node);
+		dest_var = "[ebp-";
+		int size = 4;
+		
+		//Math for int: 4 * the index
+		switch (assign->index->type) {
+			case AstType::Id: {
+				AstID *i = dynamic_cast<AstID *>(assign->index);
+				dest_var += "ebx]";
+				
+				sec_text.push_back("mov ebx, [" + i->get_name() + "]");
+				sec_text.push_back("imul ebx, 4");
+			} break;
+			
+			case AstType::Int: {
+				AstInt *i = dynamic_cast<AstInt *>(assign->index);
+				int val = v.stack_pos + (i->get_val() * size);
+				dest_var += std::to_string(val) + "]";
+			} break;
+		}
+	}
 	
 	//Build the first element
-	auto first = va->children.at(0);
+	auto first = node->children.at(0);
 	
 	switch (first->type) {
 		//ID
@@ -93,9 +130,9 @@ void Asm_x86::build_var_assign(AstNode *node) {
 		return;
 	
 	//Now iterate through the reset of the children
-	for (int i = 1; i<va->children.size(); i+=2) {
-		auto op = va->children.at(i);
-		auto next = va->children.at(i+1);
+	for (int i = 1; i<node->children.size(); i+=2) {
+		auto op = node->children.at(i);
+		auto next = node->children.at(i+1);
 		std::string ln = "";
 		
 		bool is_mod = false;
