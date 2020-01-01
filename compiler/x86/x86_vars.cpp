@@ -55,10 +55,15 @@ void Asm_x86::build_var_assign(AstNode *node) {
 		switch (assign->index->type) {
 			case AstType::Id: {
 				AstID *i = dynamic_cast<AstID *>(assign->index);
-				dest_var += "ebx]";
+				dest_var += std::to_string((size*v.size));
+				dest_var += "+ebx]";
 				
-				sec_text.push_back("mov ebx, [" + i->get_name() + "]");
-				sec_text.push_back("imul ebx, 4");
+				std::string ln2 = "mov ebx, [ebp-";
+				ln2 += std::to_string(v.stack_pos);
+				ln2 += "]";
+				
+				sec_text.push_back(ln2);
+				sec_text.push_back("imul ebx, " + std::to_string(size));
 			} break;
 			
 			case AstType::Int: {

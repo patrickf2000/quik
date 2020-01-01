@@ -9,11 +9,11 @@ func main
 	int x = 0
 	
 	#Print the array the first time
-	println("Before:")
+	puts("Before:")
 	
 	while (index < 5)
 		x = numbers[index]
-		print_int("", x)
+		print_int(x)
 		index = index + 1
 	end
 	
@@ -28,15 +28,15 @@ func main
 	index = 0
 	
 	#Print it back out
-	println("")
-	println("After")
+	puts("")
+	puts("After")
 	
 	while (index < 5)
 		x = numbers[index]
-		print_int("", x)
+		print_int( x)
 		index = index + 1
 	end
 	
-	println("")
-	println("Done")
+	puts("")
+	puts("Done")
 end
