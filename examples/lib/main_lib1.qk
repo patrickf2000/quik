@@ -1,0 +1,9 @@
+# build using -l lib1
+include io
+
+extern func sayHello()
+
+func main
+	puts("Calling function:")
+	sayHello()	
+end

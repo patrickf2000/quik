@@ -8,7 +8,12 @@ void Asm_x86::build_function(AstNode *node) {
 	AstFuncDec *fd = dynamic_cast<AstFuncDec *>(node);
 	
 	std::string ln = fd->get_name();
-	extern_data.push_back("global " + ln);
+	std::string global_ln = "global " + ln;
+	
+	if (config.build_lib)
+		global_ln += ":function";
+	
+	extern_data.push_back(global_ln);
 	
 	if (ln == "main") {
 		in_main = true;

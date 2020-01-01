@@ -11,6 +11,7 @@
 //The default constructor
 Asm_x86::Asm_x86() {
 	config.out_name = "out";
+	config.build_lib = false;
 }
 
 //The config constructor
@@ -135,6 +136,10 @@ void Asm_x86::write() {
 //Invoke system commands to build the final executable
 void Asm_x86::build() {
 	std::string gcc_line = "gcc -g -m32 ";
+	
+	if (config.build_lib) {
+		gcc_line += "-shared -fPIC ";
+	}
 
 	//TODO: Fix this
 	for (auto p : asm_files) {
@@ -142,12 +147,20 @@ void Asm_x86::build() {
 		o_out = "/tmp/" + o_out + ".o";
 		gcc_line += o_out + " ";
 		
-		system(std::string("nasm -g -f elf32 " + p + " -o " + o_out).c_str());
+		std::string nasm_line = "nasm -g -f elf32 ";
+		nasm_line += p + " -o " + o_out;
+		
+		system(nasm_line.c_str());
 	}
 	
 	gcc_line += " -o ";
 	gcc_line += config.out_name; 
-	gcc_line += " -L./ -lqkstdlib";
+	gcc_line += " -L./ -lqkstdlib -L./ ";
+	
+	for (auto l : config.libs) {
+		gcc_line += "-l" + l + " ";
+	}
+	
 	system(gcc_line.c_str());
 }
 

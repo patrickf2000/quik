@@ -4,7 +4,10 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 struct Config {
 	std::string out_name;
+	bool build_lib;
+	std::vector<std::string> libs;
 };

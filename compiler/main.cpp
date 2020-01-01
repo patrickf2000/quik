@@ -32,6 +32,8 @@ int main(int argc, char *argv[]) {
 	
 	std::vector<std::string> inputs;
 	config.out_name = "out";		// -o
+	config.build_lib = false;		// --lib
+									// -l
 	
 	//Iterate through and collect options
 	for (int i = 1; i<argc; i++) {
@@ -39,6 +41,11 @@ int main(int argc, char *argv[]) {
 		
 		if (option == "-o") {
 			config.out_name = std::string(argv[i+1]);
+			i += 2;
+		} else if (option == "--lib") {
+			config.build_lib = true;
+		} else if (option == "-l") {
+			config.libs.push_back(std::string(argv[i+1]));
 			i += 2;
 			
 		//Something else...
