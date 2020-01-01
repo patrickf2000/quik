@@ -32,13 +32,6 @@ int main(int argc, char *argv[]) {
 	
 	std::vector<std::string> inputs;
 	config.out_name = "out";		// -o
-	bool obj_only = false;			// -c
-	bool no_builtin = false;		// --no-builtin
-	bool asm_only = false;			// -s, --asm-only
-	bool dump_asm = false;			// -p, --print-asm
-	bool no_asm = false;			// -a, --asm
-	bool no_link = false;			// -l, --link
-	bool verbose = false;			// -v, --verbose
 	
 	//Iterate through and collect options
 	for (int i = 1; i<argc; i++) {
@@ -47,20 +40,6 @@ int main(int argc, char *argv[]) {
 		if (option == "-o") {
 			config.out_name = std::string(argv[i+1]);
 			i += 2;
-		} else if (option == "-c") {
-			obj_only = true;
-		} else if (option == "--no-builtin") {
-			no_builtin = true;
-		} else if (option == "-s" || option == "--asm-only") {
-			asm_only = true;
-		} else if (option == "-p" || option == "--print-asm") {
-			dump_asm = true;
-		} else if (option == "-a" || option == "--asm") {
-			no_asm = true;
-		} else if (option == "-l" || option == "--link") {
-			no_link = true;
-		} else if (option == "-v" || option == "--verbose") {
-			verbose = true;
 			
 		//Something else...
 		} else {
