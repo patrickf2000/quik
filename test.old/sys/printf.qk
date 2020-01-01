@@ -1,9 +1,0 @@
-extern func printf(s:str, no:int)
-extern func fflush(no:int)
-extern func puts(s:str)
-
-func main
-	printf("Your number is: %d", 5)
-	fflush(0)
-	puts("")
-end

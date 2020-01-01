@@ -1,7 +1,6 @@
 include io
 
 extern func strlen(s:str)
-extern func strcpy(s1:str, s2:str)
 
 func print_char(c:char)
 	printf("%c", c)

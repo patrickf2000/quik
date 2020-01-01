@@ -1,8 +1,0 @@
-extern func puts(s:str)
-
-func main
-	str msg = "Hello!"
-	puts(msg)
-	
-	puts("Yo!")
-end
