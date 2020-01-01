@@ -1,0 +1,13 @@
+include io
+
+func test1
+	println("Test 1- Success!!")
+end
+
+func test2(i:int)
+	println("Printing paramter:")
+	print_int(i)
+	
+	println("")
+	println("Test 2- Success")
+end

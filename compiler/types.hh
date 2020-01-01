@@ -9,5 +9,6 @@
 struct Config {
 	std::string out_name;
 	bool build_lib;
+	bool obj_only;
 	std::vector<std::string> libs;
 };

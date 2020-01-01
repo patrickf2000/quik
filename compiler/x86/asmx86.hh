@@ -27,6 +27,7 @@ public:
 	void build_while(AstNode *node);
 	void write();
 	void build();
+	void build_link();
 protected:
 	std::string type2asm(AstNode *node);
 	void type2flt(AstNode *node);

@@ -12,6 +12,7 @@
 Asm_x86::Asm_x86() {
 	config.out_name = "out";
 	config.build_lib = false;
+	config.obj_only = false;
 }
 
 //The config constructor
@@ -133,15 +134,32 @@ void Asm_x86::write() {
 	extern_data.clear();
 }
 
-//Invoke system commands to build the final executable
+//Checks to see how we wish to build
 void Asm_x86::build() {
+	if (!config.obj_only) {
+		build_link();
+		return;
+	}
+	
+	for (auto p : asm_files) {
+		auto o_out = get_basename(p);
+		o_out = "./" + o_out + ".o";
+		
+		std::string nasm_line = "nasm -g -f elf32 ";
+		nasm_line += p + " -o " + o_out;
+		
+		system(nasm_line.c_str());
+	}
+}
+
+//Invoke system commands to build the final executable
+void Asm_x86::build_link() {
 	std::string gcc_line = "gcc -g -m32 ";
 	
 	if (config.build_lib) {
 		gcc_line += "-shared -fPIC ";
 	}
 
-	//TODO: Fix this
 	for (auto p : asm_files) {
 		auto o_out = get_basename(p);
 		o_out = "/tmp/" + o_out + ".o";
