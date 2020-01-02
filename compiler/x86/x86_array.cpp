@@ -99,7 +99,19 @@ void Asm_x86::build_arr_access(AstNode *node) {
 			} break;
 			
 			case AstType::Id: {
-			
+				AstID *id = dynamic_cast<AstID *>(i_child);
+				
+				std::string ln2 = "mov ebx, [ebp-";
+				ln2 += std::to_string(vars[id->get_name()].stack_pos);
+				ln2 += "]";
+				
+				sec_text.push_back(ln2);
+				
+				std::string mul_line = "imul ebx, ";
+				mul_line += std::to_string(size);
+				sec_text.push_back(mul_line);
+				
+				ln = "mov eax, [eax+ebx]";
 			} break;
 		}
 		

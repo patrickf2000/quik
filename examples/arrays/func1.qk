@@ -4,6 +4,10 @@ include io
 func print_numbers(numbers:int[])
 	int x = numbers[2]
 	print_int(x)
+	
+	int i = 4
+	x = numbers[i]
+	print_int(x)
 end
 
 func main
