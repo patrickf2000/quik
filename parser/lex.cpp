@@ -270,11 +270,11 @@ std::vector<Token> tokenize(std::string line) {
 TokenType str2type(std::string in) {
 	if (in == "ID") return TokenType::ID;
 	else if (in == "FUNC_DEC") return TokenType::FUNC_DEC;
-	else if (in == "LEFT_PAREN") return TokenType::LEFT_PAREN;
-	else if (in == "RIGHT_PAREN") return TokenType::RIGHT_PAREN;
+	else if (in == "(") return TokenType::LEFT_PAREN;
+	else if (in == ")") return TokenType::RIGHT_PAREN;
 	else if (in == "STRING") return TokenType::STRING;
 	else if (in == "END") return TokenType::END;
-	else if (in == "COMMA") return TokenType::COMMA;
+	else if (in == ",") return TokenType::COMMA;
 	else if (in == "ASSIGN") return TokenType::ASSIGN;
 	else if (in == "T_BYTE") return TokenType::T_BYTE;
 	else if (in == "T_CHAR") return TokenType::T_CHAR;
@@ -298,8 +298,8 @@ TokenType str2type(std::string in) {
 	else if (in == "COLON") return TokenType::COLON;
 	else if (in == "EXTERN") return TokenType::EXTERN;
 	else if (in == "IF") return TokenType::IF;
-	else if (in == "EQUALS") return TokenType::EQUALS;
-	else if (in == "NOT_EQUAL") return TokenType::NOT_EQUAL;
+	else if (in == "==") return TokenType::EQUALS;
+	else if (in == "!=") return TokenType::NOT_EQUAL;
 	else if (in == "ELIF") return TokenType::ELIF;
 	else if (in == "ELSE") return TokenType::ELSE;
 	else if (in == "NOT") return TokenType::NOT;
