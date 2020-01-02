@@ -1,0 +1,17 @@
+include io
+
+func print_char(c:char)
+	printf("Char: %c\n", c)
+end
+
+func main
+	char c = 'A'
+	print_char(c)
+	
+	c = 'b'
+	print_char(c)
+end
+
+#TEST
+#Char: A
+#Char: b
