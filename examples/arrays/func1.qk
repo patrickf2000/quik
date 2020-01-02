@@ -2,8 +2,7 @@
 include io
 
 func print_numbers(numbers:int[])
-	int i = 1
-	int x = numbers[i]
+	int x = numbers[2]
 	print_int(x)
 end
 

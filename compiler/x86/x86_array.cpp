@@ -84,33 +84,54 @@ void Asm_x86::build_arr_access(AstNode *node) {
 	auto i_child = acc->children.at(0);
 	std::string ln = "mov eax, [ebp-";
 	
-	switch (i_child->type) {
-		case AstType::Int: {
-			AstInt *i = dynamic_cast<AstInt *>(i_child);
-			int i2 = index + (i->get_val() * size);
-			ln += std::to_string(i2);
-		} break;
+	//If the array is a pointer, we need to handle a little differently
+	if (v.is_param) {
+		ln += std::to_string(index) + "]";
+		sec_text.push_back(ln);
 		
-		case AstType::Id: {
-			AstID *id = dynamic_cast<AstID *>(i_child);
+		switch (i_child->type) {
+			case AstType::Int: {
+				AstInt *i = dynamic_cast<AstInt *>(i_child);
+				int i2 = i->get_val() * size;
+				
+				ln = "mov eax, [eax+" + std::to_string(i2) + "]";
+			} break;
 			
-			std::string ln2 = "mov ebx, [ebp-";
-			ln2 += std::to_string(vars[id->get_name()].stack_pos);
-			ln2 += "]";
+			case AstType::Id: {
 			
-			sec_text.push_back(ln2);
+			} break;
+		}
+		
+	//Otherwise normal
+	} else {
+		switch (i_child->type) {
+			case AstType::Int: {
+				AstInt *i = dynamic_cast<AstInt *>(i_child);
+				int i2 = index + (i->get_val() * size);
+				ln += std::to_string(i2);
+			} break;
 			
-			std::string mul_line = "imul ebx, ";
-			mul_line += std::to_string(size);
-			sec_text.push_back(mul_line);
-			
-			ln += std::to_string((size*v.size));
-			ln += "+ebx";
-		} break;
+			case AstType::Id: {
+				AstID *id = dynamic_cast<AstID *>(i_child);
+				
+				std::string ln2 = "mov ebx, [ebp-";
+				ln2 += std::to_string(vars[id->get_name()].stack_pos);
+				ln2 += "]";
+				
+				sec_text.push_back(ln2);
+				
+				std::string mul_line = "imul ebx, ";
+				mul_line += std::to_string(size);
+				sec_text.push_back(mul_line);
+				
+				ln += std::to_string((size*v.size));
+				ln += "+ebx";
+			} break;
+		}
+		
+		//Translate
+		ln += "]";
 	}
-	
-	//Translate
-	ln += "]";
 	
 	sec_text.push_back(ln);
 }

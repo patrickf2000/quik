@@ -71,6 +71,8 @@ void Asm_x86::build_extern_func(AstNode *node) {
 
 //Assembles a function call
 void Asm_x86::build_func_call(AstFuncCall *fc) {
+	int size = fc->children.size();
+
 	for (int i = fc->children.size()-1; i>=0; i--) {
 		auto node = fc->children.at(i);
 	
@@ -139,7 +141,7 @@ void Asm_x86::build_func_call(AstFuncCall *fc) {
 
 	sec_text.push_back("call " + fc->get_name());
 	
-	for (int i = 0; i<fc->children.size(); i++) {
+	for (int i = 0; i<size; i++) {
 		sec_text.push_back("add esp, 4");
 	}
 	
