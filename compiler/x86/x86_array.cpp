@@ -12,6 +12,7 @@ void Asm_x86::build_arr_dec(AstNode *node) {
 	v.stack_pos = stack_pos;
 	v.size = ard->children.size();
 	v.is_array = true;
+	v.is_param = false;
 	vars[ard->get_name()] = v;
 	
 	//Determine the stack position and type
