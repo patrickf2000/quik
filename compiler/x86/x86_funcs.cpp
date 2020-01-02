@@ -37,7 +37,8 @@ void Asm_x86::build_function(AstNode *node) {
 	sec_text.push_back("");
 	
 	//Build the arguments
-	stack_pos = 8;
+	stack_pos = 4;
+	int v_pos = 8;
 	
 	for (auto v : fd->args) {
 		v.stack_pos = stack_pos;
@@ -51,23 +52,34 @@ void Asm_x86::build_function(AstNode *node) {
 		}
 		
 		//Move in the value
-		sec_text.push_back("mov eax, [ebp+" + std::to_string(stack_pos) + "]");
+		sec_text.push_back("mov eax, [ebp+" + std::to_string(v_pos) + "]");
 		sec_text.push_back("mov [ebp-" + std::to_string(stack_pos) + "], " + reg);
 		sec_text.push_back("");
 		
 		//Determine the stack position
 		switch (v.type) {
 			case DataType::Byte:
-			case DataType::Char: stack_pos += 1; break;
-			case DataType::Short: stack_pos += 2; break;
+			case DataType::Char: {
+				v_pos += 1; 
+				stack_pos += 1;
+			} break;
+			
+			case DataType::Short: {
+				v_pos += 2; 
+				stack_pos += 2; 
+			} break;
+			
 			case DataType::Bool:
 			case DataType::Int:
 			case DataType::Str:
-			case DataType::Float: stack_pos += 4; break;
+			case DataType::Float: {
+				v_pos += 4; 
+				stack_pos += 4;
+			} break;
 		}
 	}
 	
-	stack_pos = 0;
+	//stack_pos = 0;
 }
 
 //Assembles an external function

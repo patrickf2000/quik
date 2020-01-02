@@ -44,6 +44,9 @@ void Asm_x86::build_arr_dec(AstNode *node) {
 			} break;
 	}
 	
+	//v.stack_pos = stack_pos + size;
+	//vars[ard->get_name()] = v;
+	
 	pos = size * v.size;
 	stack_pos = pos;
 	
