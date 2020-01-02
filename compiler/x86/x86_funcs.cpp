@@ -47,8 +47,8 @@ void Asm_x86::build_function(AstNode *node) {
 			case DataType::Short: stack_pos += 2; break;
 			case DataType::Bool:
 			case DataType::Int:
+			case DataType::Str:
 			case DataType::Float: stack_pos += 4; break;
-			case DataType::Str: stack_pos += 8; break;
 		}
 		
 		v.stack_pos = stack_pos;

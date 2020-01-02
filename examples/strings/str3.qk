@@ -1,0 +1,23 @@
+include io
+
+extern func strlen(s:str)
+
+func count_char(s:str)
+	int len = strlen(s)
+	int index = 0
+	char c = 0
+	
+	while (index < len)
+		c = s[index]
+		
+		printf("Char: %c", c)
+		fflush(0)
+		puts("")
+		
+		index = index + 1
+	end
+end
+
+func main
+	count_char("Hello!")
+end

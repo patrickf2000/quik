@@ -1,0 +1,12 @@
+include io
+
+func print_str(s:str)
+	puts(s)
+end
+
+func main
+	str s = "Hello!"
+	
+	print_str(s)
+	print_str("Yo!")
+end

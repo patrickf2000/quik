@@ -205,7 +205,12 @@ void Asm_x86::build_var_assign(AstNode *node) {
 		case DataType::Str: ln += "qword "; break;
 	}
 	
-	ln += dest_var + ", eax";
+	std::string reg = "eax";
+	
+	if (is_char)
+		reg = "al";
+		
+	ln += dest_var + ", " + reg;
 	
 	sec_text.push_back(ln);
 	sec_text.push_back("");
