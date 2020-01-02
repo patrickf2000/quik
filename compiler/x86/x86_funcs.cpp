@@ -87,8 +87,18 @@ void Asm_x86::build_func_call(AstFuncCall *fc) {
 					case DataType::Short:
 					case DataType::Bool:
 					case DataType::Int: {
-						ln = "push dword [ebp-";
-						ln += std::to_string(v.stack_pos) + "]";
+						if (v.is_array) {
+							int top = (4 * v.size);
+							
+							std::string ln1 = "lea eax, [ebp-";
+							ln1 += std::to_string(top) + "]";
+							sec_text.push_back(ln1);
+							
+							ln = "push eax";
+						} else {
+							ln = "push dword [ebp-";
+							ln += std::to_string(v.stack_pos) + "]";
+						}
 					} break;
 					case DataType::Long:
 					case DataType::Float: {

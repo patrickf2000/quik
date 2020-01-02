@@ -1,15 +1,10 @@
 # test passing an integer array to a function
 include io
 
-func print_numbers(numbers:int[], length:int)
-	int index = 0
-	int x = 0
-	
-	while (index < 5)
-		x = numbers[index]
-		print_int(x)
-		index = index + 1
-	end
+func print_numbers(numbers:int[])
+	int i = 1
+	int x = numbers[i]
+	print_int(x)
 end
 
 func main

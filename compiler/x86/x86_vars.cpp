@@ -6,6 +6,7 @@
 void Asm_x86::build_var_dec(AstNode *node) {
 	AstVarDec *vd = static_cast<AstVarDec *>(node);
 	Var v = current_scope->vars[vd->get_name()];
+	v.is_array = false;
 	
 	//Determine the stack position
 	switch (v.type) {
