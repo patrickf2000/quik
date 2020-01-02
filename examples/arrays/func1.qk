@@ -2,12 +2,19 @@
 include io
 
 func print_numbers(numbers:int[])
-	int x = numbers[2]
-	print_int(x)
+	int x = 0
+	int index = 0
 	
-	int i = 4
-	x = numbers[i]
+	x = numbers[1]
+	puts("Index 1:")
 	print_int(x)
+	puts("")
+	
+	while (index < 5)
+		x = numbers[index]
+		print_int(x)
+		index = index + 1
+	end
 end
 
 func main
