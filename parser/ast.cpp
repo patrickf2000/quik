@@ -99,7 +99,10 @@ void print_tree(AstNode *node, int indent, bool nl) {
 		if (fd->args.size() > 0) {
 			std::cout << " <";
 			for (auto v : fd->args) {
-				std::cout << "{" << v.name << "} ";
+				std::cout << "{" << v.name;
+				if (v.is_array)
+					std::cout << "[]";
+				std::cout << "} ";
 			}
 			std::cout << ">";
 		}

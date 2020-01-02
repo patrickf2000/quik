@@ -51,9 +51,12 @@ enum AstType {
 struct Var {
 	std::string name;
 	DataType type;
+	bool is_array;
+	bool is_param;
+	
+	//Needed for the assembler
 	int stack_pos;
 	int size;
-	bool is_param;
 };
 
 //The base of all our nodes
@@ -268,7 +271,7 @@ private:
 };
 
 //The array type
-class AstArrayDec : public AstAttrNode {
+class AstArrayDec : public AstVarDec {
 public:
 	explicit AstArrayDec() { type = AstType::ArrayDec; }
 	

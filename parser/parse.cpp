@@ -226,6 +226,7 @@ AstFuncDec *build_func_dec(Line ln) {
 		TokenType last;
 		Var v;
 		v.is_param = true;
+		v.is_array = false;
 		
 		for (int i = 3; i<tokens.size(); i++) {
 			auto t = tokens.at(i);
@@ -249,10 +250,20 @@ AstFuncDec *build_func_dec(Line ln) {
 				}
 				
 				fd->args.push_back(v);
+				v.is_array = false;
 			} else if (t.type == TokenType::ID) {
 				v.name = t.id;
 			} else if (last == TokenType::COLON) {
 				v.type = ttype2dtype(t.type);
+				
+				Token nt1 = tokens[i+1];
+				Token nt2 = tokens[i+2];
+				
+				if (nt1.type == TokenType::L_BRACKET && 
+					nt2.type == TokenType::R_BRACKET) {
+					v.is_array = true;
+					i += 2;
+				}
 			}
 				
 			last = t.type;

@@ -26,6 +26,7 @@ void find_variables(AstNode *top) {
 				find_variables(next);
 			} break;
 			
+			case AstType::ArrayDec:
 			case AstType::VarDec: {
 				AstVarDec *vd = dynamic_cast<AstVarDec *>(node);
 			
