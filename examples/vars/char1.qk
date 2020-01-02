@@ -1,9 +1,13 @@
 include io
 
+func print_char(c:char)
+	printf("Char: %c\n", c)
+end
+
 func main
 	char c = 'A'
-	println(c)
+	print_char(c)
 	
 	c = 'b'
-	println(c)
+	print_char(c)
 end
