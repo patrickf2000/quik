@@ -1,0 +1,21 @@
+include io
+
+func print_numbers(numbers:int[])
+	int x = numbers[0]
+	print_int(x)
+	
+	x = numbers[3]
+	print_int(x)
+end
+
+func main
+	int[5] list = 9, 8, 7, 6, 5
+
+	print_numbers(list)
+	puts("Done")
+end
+
+#TEST
+#9
+#6
+#Done

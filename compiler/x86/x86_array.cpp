@@ -93,12 +93,15 @@ void Asm_x86::build_arr_access(AstNode *node) {
 	switch (i_child->type) {
 		case AstType::Int: {
 			AstInt *i = dynamic_cast<AstInt *>(i_child);
-			int i2 = index + (i->get_val() * size);
+			int i2 = 0;
 			
-			if (v.is_param)
+			if (v.is_param) {
+				i2 = i->get_val() * size;
 				ln = "mov eax, [eax+" + std::to_string(i2) + "]";
-			else
+			} else {
+				i2 = index + (i->get_val() * size);
 				ln += std::to_string(i2) + "]";
+			}
 		} break;
 		
 		case AstType::Id: {
