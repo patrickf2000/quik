@@ -107,12 +107,7 @@ void Asm_x86::build_var_assign(AstNode *node) {
 		
 		//Strings
 		case AstType::Str: {
-			AstString *s = static_cast<AstString *>(first);
-		
-			std::string name = "STR_" + std::to_string(str_index);
-			std::string str = name + " db \"" + s->get_val() + "\",0";
-			++str_index;
-			sec_data.push_back(str);
+			auto name = build_string(first);
 			
 			ln = "mov dword " + dest_var + ", " + name;
 			stop = true;

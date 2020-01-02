@@ -10,14 +10,14 @@ func count_char(s:str)
 	while (index < len)
 		c = s[index]
 		
-		printf("Char: %c", c)
+		printf("Char: %c\n", c)
 		fflush(0)
-		puts("")
 		
 		index = index + 1
 	end
 end
 
 func main
+	puts("Your string:")
 	count_char("Hello!")
 end

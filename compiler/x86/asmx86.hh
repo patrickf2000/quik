@@ -31,6 +31,7 @@ public:
 protected:
 	std::string type2asm(AstNode *node);
 	void type2flt(AstNode *node);
+	std::string build_string(AstNode *node);
 private:
 	std::string path = "";
 	std::vector<std::string> asm_files;

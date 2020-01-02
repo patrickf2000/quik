@@ -77,3 +77,40 @@ void Asm_x86::type2flt(AstNode *node) {
 	}
 }
 
+//Builds a string and inserts it in the data section
+std::string Asm_x86::build_string(AstNode *node) {
+	AstString *s = static_cast<AstString *>(node);
+	
+	//Check for escape characters
+	std::string old_val = s->get_val();
+	std::string val = "\"";
+	bool done = false;
+	
+	for (int i = 0; i<old_val.length(); i++) {
+		if (old_val[i] == '\\' && old_val[i+1] == 'n') {
+			val += "\",0xA";
+			
+			if (i+2 >= old_val.length()) {
+				done = true;
+				break;
+			}
+				
+			val += ",\"";
+			i += 1;
+		} else {
+			val += old_val[i];
+		}
+	}
+	
+	if (!done)
+		val += '\"';
+		
+	//Build the final product
+	std::string name = "STR_" + std::to_string(str_index);
+	std::string str = name + " db " + val + ",0";
+	++str_index;
+	sec_data.push_back(str);
+	
+	return name;
+}
+
