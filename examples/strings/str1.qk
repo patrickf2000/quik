@@ -1,0 +1,11 @@
+include io
+
+func main
+	str s = "Hello!"
+	
+	puts("Your string:")
+	puts(s)
+	
+	s = "Yo!"
+	puts(s)
+end

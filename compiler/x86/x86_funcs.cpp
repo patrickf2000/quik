@@ -107,10 +107,8 @@ void Asm_x86::build_func_call(AstFuncCall *fc) {
 							ln = "fld qword [" + v.name + "]";
 					} break;
 					case DataType::Str: {
-						if (v.is_param)
-							ln = "push dword [" + v.name + "]";
-						else
-							ln = "push dword " + v.name;
+						ln = "push dword [ebp-";
+						ln += std::to_string(v.stack_pos) + "]";
 					} break;
 				}
 				

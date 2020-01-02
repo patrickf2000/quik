@@ -15,8 +15,8 @@ void Asm_x86::build_var_dec(AstNode *node) {
 		case DataType::Short: stack_pos += 2; break;
 		case DataType::Bool:
 		case DataType::Int:
+		case DataType::Str:
 		case DataType::Float: stack_pos += 4; break;
-		case DataType::Str: stack_pos += 8; break;
 	}
 	
 	v.stack_pos = stack_pos;
@@ -105,6 +105,19 @@ void Asm_x86::build_var_assign(AstNode *node) {
 			stop = true;
 		} break;
 		
+		//Strings
+		case AstType::Str: {
+			AstString *s = static_cast<AstString *>(first);
+		
+			std::string name = "STR_" + std::to_string(str_index);
+			std::string str = name + " db \"" + s->get_val() + "\",0";
+			++str_index;
+			sec_data.push_back(str);
+			
+			ln = "mov dword " + dest_var + ", " + name;
+			stop = true;
+		} break;
+		
 		//Booleans
 		case AstType::Bool: {
 			AstBool *bl = static_cast<AstBool *>(first);
@@ -132,8 +145,10 @@ void Asm_x86::build_var_assign(AstNode *node) {
 	
 	//In some instances, further arguments would not be appropriate
 	//In this case, we exit the function
-	if (stop)
+	if (stop) {
+		sec_text.push_back("");
 		return;
+	}
 	
 	//Now iterate through the reset of the children
 	for (int i = 1; i<node->children.size(); i+=2) {
