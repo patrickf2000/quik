@@ -4,7 +4,7 @@ for entry in "./test"/*.qk
 do
 	entry=`basename $entry`
 	echo "$entry"
-	./test.sh $entry
+	./test_i386.sh $entry
 	
 	if [ $? == 1 ] ; then
 		exit 1
