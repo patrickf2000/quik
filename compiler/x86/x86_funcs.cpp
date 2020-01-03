@@ -12,6 +12,15 @@ std::string call_regs[] = {
 	"r9"
 };
 
+std::string call_regs32[] = {
+	"edi",
+	"esi",
+	"edx",
+	"ecx",
+	"r8",
+	"r9"
+};
+
 //Assembles a function declaration
 void Asm_x86::build_function(AstNode *node) {
 	AstFuncDec *fd = static_cast<AstFuncDec *>(node);
@@ -105,8 +114,7 @@ void Asm_x86::build_func_x64(AstFuncDec *fd) {
 	sec_text.push_back("mov rbp, rsp");
 	
 	//TODO: Add some logic instead of randomly assigning some large number
-	//if (in_main)
-		//sec_text.push_back("sub rsp, 48");
+	sec_text.push_back("sub rsp, 16");
 	
 	sec_text.push_back("");
 }
@@ -206,12 +214,29 @@ void Asm_x86::build_func_call_x64(AstFuncCall *fc) {
 	
 	for (int i = size - 1; i>=0; i--) {
 		auto node = fc->children.at(i);
-		
 		std::string call_ln = "mov " + call_regs[call_index] + ", ";
-		++call_index;
 		
 		switch (node->type) {
 			//TODO: Add the reset
+			
+			//An ID
+			case AstType::Id: {
+				AstID *id = static_cast<AstID *>(node);
+				Var v = vars[id->get_name()];
+				
+				call_ln = "mov " + call_regs32[call_index] + ", ";
+				
+				//TODO: Add the rest
+				switch (v.type) {
+					case DataType::Int: {
+						std::string ln = "mov eax, [" + get_reg("bp");
+						ln += "-" + std::to_string(v.stack_pos) + "]";
+						
+						sec_text.push_back(ln);
+						sec_text.push_back(call_ln + "eax");
+					} break;
+				}
+			} break;
 			
 			//An integer
 			case AstType::Int: {
@@ -226,6 +251,8 @@ void Asm_x86::build_func_call_x64(AstFuncCall *fc) {
 				sec_text.push_back(call_ln + name);
 			} break;
 		}
+		
+		++call_index;
 	}
 	
 	sec_text.push_back("call " + fc->get_name());
@@ -255,7 +282,7 @@ void Asm_x86::build_ret(AstNode *node) {
 	vars.clear();
 	
 	if (x64) {
-		sec_text.push_back("pop rbp");
+		sec_text.push_back("leave");
 	} else {
 		if (in_main) {
 			sec_text.push_back("leave");
