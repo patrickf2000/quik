@@ -213,6 +213,13 @@ void Asm_x86::build_func_call_x64(AstFuncCall *fc) {
 		switch (node->type) {
 			//TODO: Add the reset
 			
+			//An integer
+			case AstType::Int: {
+				AstInt *i = static_cast<AstInt *>(node);
+				auto val = std::to_string(i->get_val());
+				sec_text.push_back(call_ln + val);
+			} break;
+			
 			//A string
 			case AstType::Str: {
 				auto name = build_string(node);
