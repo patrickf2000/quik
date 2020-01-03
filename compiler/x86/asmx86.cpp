@@ -14,6 +14,8 @@ Asm_x86::Asm_x86() {
 	config.build_lib = false;
 	config.obj_only = false;
 	config.arch = "x86_64";
+	
+	init_registers();
 }
 
 //The config constructor
@@ -24,6 +26,8 @@ Asm_x86::Asm_x86(Config c) {
 		x64 = true;
 	else
 		x64 = false;
+		
+	init_registers();
 }
 
 //Iterate through the tree and assemble

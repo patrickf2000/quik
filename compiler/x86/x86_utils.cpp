@@ -2,6 +2,32 @@
 //Contains backend-specific stuff
 #include "asmx86.hh"
 
+std::map<std::string, std::string> regs32;
+std::map<std::string, std::string> regs64;
+
+void Asm_x86::init_registers() {
+	regs32["ax"] = "eax";
+	regs32["bx"] = "ebx";
+	regs32["cx"] = "ecx";
+	regs32["dx"] = "edx";
+	regs32["bp"] = "ebp";
+	regs32["sp"] = "esp";
+	
+	regs64["ax"] = "rax";
+	regs64["bx"] = "rbx";
+	regs64["cx"] = "rcx";
+	regs64["dx"] = "rdx";
+	regs64["bp"] = "rbp";
+	regs64["sp"] = "rsp";
+}
+
+//Returns the proper register based on specified architecture
+std::string Asm_x86::get_reg(std::string r) {
+	if (x64)
+		return regs64[r];
+	return regs32[r];
+}
+
 //Converts a node to an assembly type
 std::string Asm_x86::type2asm(AstNode *node) {
 	std::string ln = "";

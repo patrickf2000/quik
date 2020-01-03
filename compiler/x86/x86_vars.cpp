@@ -30,8 +30,11 @@ void Asm_x86::build_var_assign(AstNode *node) {
 	AstAttrNode *n = static_cast<AstAttrNode *>(node);
 	Var v = vars[n->get_name()];
 	
+	//Construct the destination variable
+	std::string dest_var = "[" + get_reg("bp") + "-";
+	dest_var += std::to_string(v.stack_pos) + "]";
+	
 	std::string ln = "";
-	std::string dest_var = "[ebp-" + std::to_string(v.stack_pos) + "]";
 	bool stop = false;
 	bool is_char = false;
 	
@@ -49,7 +52,7 @@ void Asm_x86::build_var_assign(AstNode *node) {
 	//Array assignments
 	} else if (node->type == AstType::ArrayAssign) {
 		AstArrayAssign *assign = dynamic_cast<AstArrayAssign *>(node);
-		dest_var = "[ebp-";
+		dest_var = "[" + get_reg("bp") + "-";
 		int size = 4;
 		
 		//Math for int: 4 * the index
@@ -57,7 +60,7 @@ void Asm_x86::build_var_assign(AstNode *node) {
 			case AstType::Id: {
 				AstID *i = dynamic_cast<AstID *>(assign->index);
 				dest_var += std::to_string((size*v.size));
-				dest_var += "+ebx]";
+				dest_var += "+" + get_reg("bx") + "]";
 				
 				std::string ln2 = "mov ebx, [ebp-";
 				ln2 += std::to_string(v.stack_pos);
@@ -93,7 +96,7 @@ void Asm_x86::build_var_assign(AstNode *node) {
 			AstInt *i = static_cast<AstInt *>(first);
 			auto val = std::to_string(i->get_val());
 			
-			ln = "mov eax, " + val;
+			ln = "mov " + get_reg("ax") + ", " + val;
 		} break;
 		
 		//Characters
