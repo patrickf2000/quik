@@ -36,6 +36,7 @@ int main(int argc, char *argv[]) {
 	config.obj_only = false;		// -c
 									// -l
 	config.arch = "x86_64";			// -m <i386, x86_64>
+	bool asm_only = false;			// -s
 	
 	//Iterate through and collect options
 	for (int i = 1; i<argc; i++) {
@@ -59,6 +60,8 @@ int main(int argc, char *argv[]) {
 				std::cout << "Fatal: Unknown architecture." << std::endl;
 				return 1;
 			}
+		} else if (option == "-s") {
+			asm_only = true;
 			
 		//Something else...
 		} else {
@@ -84,7 +87,8 @@ int main(int argc, char *argv[]) {
 		delete node;
 	}
 	
-	builder.build();
+	if (!asm_only)
+		builder.build();
 	
 	return 0;
 }
