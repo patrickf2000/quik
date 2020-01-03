@@ -44,17 +44,17 @@ int main(int argc, char *argv[]) {
 		
 		if (option == "-o") {
 			config.out_name = std::string(argv[i+1]);
-			i += 2;
+			i += 1;
 		} else if (option == "--lib") {
 			config.build_lib = true;
 		} else if (option == "-c") {
 			config.obj_only = true;
 		} else if (option == "-l") {
 			config.libs.push_back(std::string(argv[i+1]));
-			i += 2;
+			i += 1;
 		} else if (option == "-m") {
 			config.arch = std::string(argv[i+1]);
-			i += 2;
+			i += 1;
 			
 			if (config.arch != "i386" && config.arch != "x86_64") {
 				std::cout << "Fatal: Unknown architecture." << std::endl;
