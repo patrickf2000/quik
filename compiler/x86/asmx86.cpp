@@ -13,11 +13,17 @@ Asm_x86::Asm_x86() {
 	config.out_name = "out";
 	config.build_lib = false;
 	config.obj_only = false;
+	config.arch = "x86_64";
 }
 
 //The config constructor
 Asm_x86::Asm_x86(Config c) {
 	config = c;
+	
+	if (config.arch == "x86_64")
+		x64 = true;
+	else
+		x64 = false;
 }
 
 //Iterate through the tree and assemble
@@ -136,6 +142,10 @@ void Asm_x86::write() {
 
 //Checks to see how we wish to build
 void Asm_x86::build() {
+	if (x64) {
+		std::cout << "64 bit!" << std::endl;
+	}
+
 	if (!config.obj_only) {
 		build_link();
 		return;

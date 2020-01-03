@@ -42,6 +42,7 @@ private:
 	
 	//The config structure
 	Config config;
+	bool x64 = true;
 	
 	//Variable stuff
 	std::map<std::string, Var> vars;

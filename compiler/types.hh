@@ -11,4 +11,5 @@ struct Config {
 	bool build_lib;
 	bool obj_only;
 	std::vector<std::string> libs;
+	std::string arch;
 };

@@ -35,6 +35,7 @@ int main(int argc, char *argv[]) {
 	config.build_lib = false;		// --lib
 	config.obj_only = false;		// -c
 									// -l
+	config.arch = "x86_64";			// -m <i386, x86_64>
 	
 	//Iterate through and collect options
 	for (int i = 1; i<argc; i++) {
@@ -50,6 +51,14 @@ int main(int argc, char *argv[]) {
 		} else if (option == "-l") {
 			config.libs.push_back(std::string(argv[i+1]));
 			i += 2;
+		} else if (option == "-m") {
+			config.arch = std::string(argv[i+1]);
+			i += 2;
+			
+			if (config.arch != "i386" && config.arch != "x86_64") {
+				std::cout << "Fatal: Unknown architecture." << std::endl;
+				return 1;
+			}
 			
 		//Something else...
 		} else {
