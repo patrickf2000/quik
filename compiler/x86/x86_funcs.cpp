@@ -5,7 +5,7 @@
 
 //Assembles a function declaration
 void Asm_x86::build_function(AstNode *node) {
-	AstFuncDec *fd = dynamic_cast<AstFuncDec *>(node);
+	AstFuncDec *fd = static_cast<AstFuncDec *>(node);
 	
 	std::string ln = fd->get_name();
 	std::string global_ln = "global " + ln;
@@ -24,6 +24,15 @@ void Asm_x86::build_function(AstNode *node) {
 	ln += ":";
 	sec_text.push_back(ln);
 	
+	//Do the architecture-specific stuff
+	if (x64)
+		build_func_x64(fd);
+	else
+		build_func_i386(fd);
+}
+
+//Build a function declaration (x86 32-bit)
+void Asm_x86::build_func_i386(AstFuncDec *fd) {
 	//Setup the stack
 	//Push the base pointer, and set the base pointer
 	// as the current stack pointer
@@ -78,8 +87,19 @@ void Asm_x86::build_function(AstNode *node) {
 			} break;
 		}
 	}
+}
+
+//Build a function declaration (x86 64-bit)
+void Asm_x86::build_func_x64(AstFuncDec *fd) {
+	//Setup the stack
+	sec_text.push_back("push rbp");
+	sec_text.push_back("mov rbp, rsp");
 	
-	//stack_pos = 0;
+	//TODO: Add some logic instead of randomly assigning some large number
+	//if (in_main)
+		sec_text.push_back("sub esp, 48");
+	
+	sec_text.push_back("");
 }
 
 //Assembles an external function
@@ -184,11 +204,15 @@ void Asm_x86::build_ret(AstNode *node) {
 	stack_pos = 0;
 	vars.clear();
 	
-	if (in_main) {
-		sec_text.push_back("leave");
+	if (x64) {
+		sec_text.push_back("pop rbp");
 	} else {
-		sec_text.push_back("mov esp, ebp");
-		sec_text.push_back("pop ebp");
+		if (in_main) {
+			sec_text.push_back("leave");
+		} else {
+			sec_text.push_back("mov esp, ebp");
+			sec_text.push_back("pop ebp");
+		}
 	}
 		
 	sec_text.push_back("ret");

@@ -14,17 +14,29 @@ public:
 	explicit Asm_x86();
 	explicit Asm_x86(Config c);
 	void assemble(std::string p, AstNode *top);
+	
+	//Function stuff
 	void build_function(AstNode *node);
+	void build_func_i386(AstFuncDec *fd);
+	void build_func_x64(AstFuncDec *fd);
 	void build_extern_func(AstNode *node);
 	void build_func_call(AstFuncCall *fc);
 	void build_ret(AstNode *node);
+	
+	//Var stuff
 	void build_var_dec(AstNode *node);
 	void build_var_assign(AstNode *node);
 	void build_flt_assign(AstNode *node);
+	
+	//Array stuff
 	void build_arr_dec(AstNode *node);
 	void build_arr_access(AstNode *node);
+	
+	//Flow stuff
 	void build_cond(AstNode *node);
 	void build_while(AstNode *node);
+	
+	//Build stuff
 	void write();
 	void build();
 	void build_link();
