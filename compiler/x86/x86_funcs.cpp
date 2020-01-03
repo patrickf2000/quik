@@ -106,7 +106,7 @@ void Asm_x86::build_func_x64(AstFuncDec *fd) {
 	
 	//TODO: Add some logic instead of randomly assigning some large number
 	//if (in_main)
-		sec_text.push_back("sub esp, 48");
+		//sec_text.push_back("sub rsp, 48");
 	
 	sec_text.push_back("");
 }

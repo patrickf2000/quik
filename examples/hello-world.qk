@@ -2,11 +2,6 @@
 # The ever classic hello world program
 include io
 
-func sayHello
-	puts("Hello!")
-end
-
 func main()
 	puts("Hello, world!")
-	sayHello()
 end

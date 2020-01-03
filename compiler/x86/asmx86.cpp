@@ -142,10 +142,6 @@ void Asm_x86::write() {
 
 //Checks to see how we wish to build
 void Asm_x86::build() {
-	if (x64) {
-		std::cout << "64 bit!" << std::endl;
-	}
-
 	if (!config.obj_only) {
 		build_link();
 		return;
@@ -155,7 +151,13 @@ void Asm_x86::build() {
 		auto o_out = get_basename(p);
 		o_out = "./" + o_out + ".o";
 		
-		std::string nasm_line = "nasm -g -f elf32 ";
+		std::string nasm_line = "nasm -g -f";
+		
+		if (x64)
+			nasm_line += " elf64 ";
+		else
+			nasm_line += " elf32 ";
+			
 		nasm_line += p + " -o " + o_out;
 		
 		system(nasm_line.c_str());
@@ -164,7 +166,12 @@ void Asm_x86::build() {
 
 //Invoke system commands to build the final executable
 void Asm_x86::build_link() {
-	std::string gcc_line = "gcc -g -m32 ";
+	std::string gcc_line = "gcc -g ";
+	
+	if (x64)
+		gcc_line += "-no-pie ";
+	else
+		gcc_line += "-m32 ";
 	
 	if (config.build_lib) {
 		gcc_line += "-shared -fPIC ";
@@ -175,7 +182,13 @@ void Asm_x86::build_link() {
 		o_out = "/tmp/" + o_out + ".o";
 		gcc_line += o_out + " ";
 		
-		std::string nasm_line = "nasm -g -f elf32 ";
+		std::string nasm_line = "nasm -g -f";
+		
+		if (x64)
+			nasm_line += " elf64 ";
+		else
+			nasm_line += " elf32 ";
+		
 		nasm_line += p + " -o " + o_out;
 		
 		system(nasm_line.c_str());
@@ -183,7 +196,9 @@ void Asm_x86::build_link() {
 	
 	gcc_line += " -o ";
 	gcc_line += config.out_name; 
-	gcc_line += " -L./ -lqkstdlib -L./ ";
+	
+	if (!x64)
+		gcc_line += " -L./ -lqkstdlib -L./ ";
 	
 	for (auto l : config.libs) {
 		gcc_line += "-l" + l + " ";
