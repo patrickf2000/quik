@@ -7,6 +7,7 @@ if [ ! -f ./build/libqkstdlib.so ] ; then
 fi
 
 sudo cp -v ./build/libqkstdlib.so /usr/local/lib
+sudo cp -v ./build/libqkstdlib32.so /usr/local/lib
 sudo ldconfig
 
 INSTALL_PATH="/usr/local/include/quik"

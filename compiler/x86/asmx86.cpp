@@ -197,8 +197,10 @@ void Asm_x86::build_link() {
 	gcc_line += " -o ";
 	gcc_line += config.out_name; 
 	
-	if (!x64)
+	if (x64)
 		gcc_line += " -L./ -lqkstdlib -L./ ";
+	else
+		gcc_line += " -L./ -lqkstdlib32 -L./ ";
 	
 	for (auto l : config.libs) {
 		gcc_line += "-l" + l + " ";
