@@ -3,6 +3,15 @@
 // declarations, calls, and controls
 #include "asmx86.hh"
 
+std::string call_regs[] = {
+	"rdi",
+	"rsi",
+	"rdx",
+	"rcx",
+	"r8",
+	"r9"
+};
+
 //Assembles a function declaration
 void Asm_x86::build_function(AstNode *node) {
 	AstFuncDec *fd = static_cast<AstFuncDec *>(node);
@@ -112,6 +121,14 @@ void Asm_x86::build_extern_func(AstNode *node) {
 
 //Assembles a function call
 void Asm_x86::build_func_call(AstFuncCall *fc) {
+	if (x64)
+		build_func_call_x64(fc);
+	else
+		build_func_call_i386(fc);
+}
+
+//Build a 32-bit function call
+void Asm_x86::build_func_call_i386(AstFuncCall *fc) {
 	int size = fc->children.size();
 
 	for (int i = fc->children.size()-1; i>=0; i--) {
@@ -180,6 +197,32 @@ void Asm_x86::build_func_call(AstFuncCall *fc) {
 	}
 	
 	sec_text.push_back("");	
+}
+
+//Build a 64-bit function call
+void Asm_x86::build_func_call_x64(AstFuncCall *fc) {
+	int size = fc->children.size();
+	int call_index = 0;
+	
+	for (int i = size - 1; i>=0; i--) {
+		auto node = fc->children.at(i);
+		
+		std::string call_ln = "mov " + call_regs[call_index] + ", ";
+		++call_index;
+		
+		switch (node->type) {
+			//TODO: Add the reset
+			
+			//A string
+			case AstType::Str: {
+				auto name = build_string(node);
+				sec_text.push_back(call_ln + name);
+			} break;
+		}
+	}
+	
+	sec_text.push_back("call " + fc->get_name());
+	sec_text.push_back("");
 }
 
 //Builds the return statements

@@ -21,6 +21,8 @@ public:
 	void build_func_x64(AstFuncDec *fd);
 	void build_extern_func(AstNode *node);
 	void build_func_call(AstFuncCall *fc);
+	void build_func_call_i386(AstFuncCall *fc);
+	void build_func_call_x64(AstFuncCall *fc);
 	void build_ret(AstNode *node);
 	
 	//Var stuff
