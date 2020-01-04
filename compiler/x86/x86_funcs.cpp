@@ -244,12 +244,10 @@ void Asm_x86::build_func_call_i386(AstFuncCall *fc) {
 
 //Build a 64-bit function call
 void Asm_x86::build_func_call_x64(AstFuncCall *fc) {
-	int size = fc->children.size();
 	int call_index = 0;
 	
-	for (int i = size - 1; i>=0; i--) {
-		auto node = fc->children.at(i);
-		std::string call_ln = "mov " + call_regs[call_index] + ", ";
+	for (auto node : fc->children) {
+		std::string call_ln = "mov " + call_regs32[call_index] + ", ";
 		
 		switch (node->type) {
 			//TODO: Add the reset
@@ -263,6 +261,16 @@ void Asm_x86::build_func_call_x64(AstFuncCall *fc) {
 				
 				//TODO: Add the rest
 				switch (v.type) {
+					//Char variables
+					case DataType::Char: {
+						std::string ln = "movsx eax, byte [" + get_reg("bp");
+						ln += "-" + std::to_string(v.stack_pos) + "]";
+						
+						sec_text.push_back(ln);
+						sec_text.push_back(call_ln + "eax");
+					} break;
+					
+					//Integer variables
 					case DataType::Int: {
 						std::string ln = "mov eax, [" + get_reg("bp");
 						ln += "-" + std::to_string(v.stack_pos) + "]";
