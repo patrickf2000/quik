@@ -1,0 +1,26 @@
+# bad_scope.qk
+# The only thing on the global scope should be function and variable declarations
+
+int global_y = 100
+global_y = 100*x
+
+if (global_y == 100)
+	println("Equal to 100!")
+end
+
+extern func puts(s:str)
+extern func exit(code:int)
+
+func print_int(no:int)
+	println(no)
+end
+
+func main
+	int x = 20
+
+	println("Printing a number:")
+	print_int(x)
+	
+	println("Raw pass test:")
+	print_int(100)
+end

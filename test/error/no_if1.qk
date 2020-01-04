@@ -1,0 +1,11 @@
+# This will throw a syntax error
+
+func main
+	int x = 10
+	
+	elif (x == 10)
+		println("Equal!")
+	else
+		println("Not equal!")
+	end
+end
