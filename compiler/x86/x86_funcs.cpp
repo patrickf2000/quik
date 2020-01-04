@@ -272,8 +272,8 @@ void Asm_x86::build_func_call_x64(AstFuncCall *fc) {
 				switch (v.type) {
 					//Char variables
 					case DataType::Char: {
-						std::string ln = "movsx eax, byte [" + get_reg("bp");
-						ln += "-" + std::to_string(v.stack_pos) + "]";
+						std::string ln = "movsx eax, byte [rbp-";
+						ln += std::to_string(v.stack_pos) + "]";
 						
 						sec_text.push_back(ln);
 						sec_text.push_back(call_ln + "eax");
@@ -291,8 +291,8 @@ void Asm_x86::build_func_call_x64(AstFuncCall *fc) {
 							call_ln = "mov " + call_regs[call_index] + ", ";
 							sec_text.push_back(call_ln + "rax");
 						} else {
-							std::string ln = "mov eax, [" + get_reg("bp");
-							ln += "-" + std::to_string(v.stack_pos) + "]";
+							std::string ln = "mov eax, [rbp-";
+							ln += std::to_string(v.stack_pos) + "]";
 							
 							sec_text.push_back(ln);
 							sec_text.push_back(call_ln + "eax");
