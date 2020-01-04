@@ -245,16 +245,22 @@ AstFuncDec *build_func_dec(Line ln) {
 				last = t.type;
 				continue;
 			} else if (t.type == TokenType::COMMA) {
-				if (v.type == DataType::None) {
+				if (v.type == DataType::None || last == TokenType::ID) {
 					syntax_error(ln, "No datatype specified in parameter");
 				}
 				
 				fd->args.push_back(v);
 				v.is_array = false;
+				v.name = "";
+				v.type = DataType::None;
 			} else if (t.type == TokenType::ID) {
 				v.name = t.id;
 			} else if (last == TokenType::COLON) {
 				v.type = ttype2dtype(t.type);
+				
+				if (v.type == DataType::None) {
+					syntax_error(ln, "Invalid parameter syntax.");
+				}
 				
 				Token nt1 = tokens[i+1];
 				Token nt2 = tokens[i+2];

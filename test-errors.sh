@@ -4,7 +4,7 @@ for entry in "./test/error"/*.qk
 do
 	entry=`basename $entry`
 	echo "$entry"
-	o=`build/quikc "./test/error/$entry" -m x86_64`
+	o=`build/quikc "./test/error/$entry" -m x86_64 -o build/out.bin`
 	
 	if [ $? == 0 ] ; then
 		echo "Fail"

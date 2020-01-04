@@ -1,0 +1,10 @@
+include io
+
+func multi(int x, char y)
+	print_int(x)
+end
+
+func main
+	char c = 'a'
+	multi(4, c)
+end
