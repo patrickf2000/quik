@@ -13,3 +13,5 @@ Add break keyword
 Add continue keyword
 
 Nested conditionals seem to have an issue
+
+**** SYNTAX CHECKING ****
