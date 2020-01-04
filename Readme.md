@@ -10,6 +10,11 @@ I wrote the entire thing from scratch. I don't intend for Quik to fill any speci
 
 Currently, the compiler is capable of generating 32-bit and 64-bit Intel Assembly code. By default, it will generate 64-bit.
 
+### The Language
+I currently don't have a document or anything with the language specs. Ok, I actually do, but its for the original versions of Quik. The specs folder contains examples of pretty much everything supported by the implementations.
+
+For some example programs and what the Assembly code looks like, see the examples folder.
+
 ### Building
 To build, you simply need CMake, a C++ compiler, and Python 3 (for testing). Quik does not use any libraries other than the standard C++ library. A compiler supporting at least the C++11 standard is necessary.
 
