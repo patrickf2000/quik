@@ -1,0 +1,8 @@
+include io
+
+func main
+	puts("Hello!")
+end
+
+#TEST
+#Hello!
