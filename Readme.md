@@ -8,7 +8,7 @@ This is the third version of my Quik programming language. Quik is a simple gene
 
 I wrote the entire thing from scratch. I don't intend for Quik to fill any special need or be the next big thing; I wrote this primarily as a learning experience, which is why I wrote the whole thing from scratch. Not to mention, its been a really fun hobby project.
 
-Currently, the compiler is only capable of generating 32-bit x86 Intel Assembly code.
+Currently, the compiler is capable of generating 32-bit and 64-bit Intel Assembly code. By default, it will generate 64-bit.
 
 ### Building
 To build, you simply need CMake, a C++ compiler, and Python 3 (for testing). Quik does not use any libraries other than the standard C++ library. A compiler supporting at least the C++11 standard is necessary.
@@ -22,7 +22,10 @@ Please note that you need to run the "install-stdlib.sh" script before trying to
 
 The generated assembly files are stored in /tmp directory. They are not removed when compiling is complete, so if you wish to see what the assembly looks like, check these out.
 
+### Testing
+There are a few Python and Bash scripts for automated testing. Note that you must manually test each architecture. The "test-all.sh" script will run all tests in the /tests directory. To test 64-bit architecture, run "./test-all.sh x64". To test 32-bit, run "./test-all.sh i386". The test script does not assume a default value; you must specify it. The test scripts will fail if one test fails. Upon success, all generated object and assembly files are removed.
+
 ### What works?
 I originally had a features list here, but removed it after I began making changes to the backend and broke a lot of stuff (these are good changes :) ).
 
-To get an idea of what works, check the test folders. These also currently function as the language specs until I write one later on dwon the line.
+To get an idea of what works, check the test folders. The example folder functions as the language specs until I write one later on.
