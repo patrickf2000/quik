@@ -117,6 +117,41 @@ void Asm_x86::build_func_x64(AstFuncDec *fd) {
 	sec_text.push_back("sub rsp, 48");
 	
 	sec_text.push_back("");
+	
+	//Build the arguments
+	stack_pos = 4;
+	int call_index = 0;
+	
+	for (auto v : fd->args) {
+		v.stack_pos = stack_pos;
+		vars[v.name] = v;
+		
+		//Determine the proper register
+		std::string reg = "eax";
+		
+		if (v.type == DataType::Char) {
+			reg = "al";
+		}
+		
+		//Move in the value
+		sec_text.push_back("mov eax, " + call_regs32[call_index]);
+		sec_text.push_back("mov [rbp-" + std::to_string(stack_pos) + "], " + reg);
+		sec_text.push_back("");
+		
+		//Determine the stack position
+		switch (v.type) {
+			case DataType::Byte:
+			case DataType::Char: stack_pos += 1; break;
+			case DataType::Short: stack_pos += 2; break;
+			case DataType::Bool:
+			case DataType::Int:
+			case DataType::Str:
+			case DataType::Float: stack_pos += 4; break;
+		}
+		
+		//Increment the call index
+		++call_index;
+	}
 }
 
 //Assembles an external function
