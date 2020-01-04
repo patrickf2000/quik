@@ -119,7 +119,7 @@ void Asm_x86::build_func_x64(AstFuncDec *fd) {
 	sec_text.push_back("");
 	
 	//Build the arguments
-	stack_pos = 4;
+	stack_pos = 8;
 	int call_index = 0;
 	
 	for (auto v : fd->args) {
@@ -134,7 +134,13 @@ void Asm_x86::build_func_x64(AstFuncDec *fd) {
 		}
 		
 		//Move in the value
-		sec_text.push_back("mov eax, " + call_regs32[call_index]);
+		if (v.is_array) {
+			sec_text.push_back("mov rax, " + call_regs[call_index]);
+			reg = "rax";
+		} else {
+			sec_text.push_back("mov eax, " + call_regs32[call_index]);
+		}
+		
 		sec_text.push_back("mov [rbp-" + std::to_string(stack_pos) + "], " + reg);
 		sec_text.push_back("");
 		
@@ -270,13 +276,24 @@ void Asm_x86::build_func_call_x64(AstFuncCall *fc) {
 						sec_text.push_back(call_ln + "eax");
 					} break;
 					
-					//Integer variables
+					//Integer variables and arrays
 					case DataType::Int: {
-						std::string ln = "mov eax, [" + get_reg("bp");
-						ln += "-" + std::to_string(v.stack_pos) + "]";
-						
-						sec_text.push_back(ln);
-						sec_text.push_back(call_ln + "eax");
+						if (v.is_array) {
+							int top = (4 * v.size);
+							
+							std::string ln1 = "lea rax, [rbp-";
+							ln1 += std::to_string(top) + "]";
+							sec_text.push_back(ln1);
+							
+							call_ln = "mov " + call_regs[call_index] + ", ";
+							sec_text.push_back(call_ln + "rax");
+						} else {
+							std::string ln = "mov eax, [" + get_reg("bp");
+							ln += "-" + std::to_string(v.stack_pos) + "]";
+							
+							sec_text.push_back(ln);
+							sec_text.push_back(call_ln + "eax");
+						}
 					} break;
 				}
 			} break;

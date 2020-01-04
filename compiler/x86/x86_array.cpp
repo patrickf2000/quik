@@ -85,10 +85,15 @@ void Asm_x86::build_arr_access(AstNode *node) {
 	//Calculate the index
 	//For ints: 4 * (element index)
 	//TODO: Modify not to only use ints
+	std::string reg = "eax";
+	if (x64)
+		reg = "rax";
+	
 	auto i_child = acc->children.at(0);
 	std::string ln = "mov eax, [" + get_reg("bp") + "-";
 	
 	if (v.is_param) {
+		ln = "mov " + reg + ", [" + get_reg("bp") + "-";
 		ln += std::to_string(index) + "]";
 		sec_text.push_back(ln);
 	}
@@ -100,7 +105,7 @@ void Asm_x86::build_arr_access(AstNode *node) {
 			
 			if (v.is_param) {
 				i2 = i->get_val() * size;
-				ln = "mov eax, [eax+" + std::to_string(i2) + "]";
+				ln = "mov eax, [" + reg + "+" + std::to_string(i2) + "]";
 			} else {
 				i2 = index + (i->get_val() * size);
 				ln += std::to_string(i2) + "]";

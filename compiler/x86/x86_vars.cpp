@@ -96,7 +96,7 @@ void Asm_x86::build_var_assign(AstNode *node) {
 			AstInt *i = static_cast<AstInt *>(first);
 			auto val = std::to_string(i->get_val());
 			
-			ln = "mov " + get_reg("ax") + ", " + val;
+			ln = "mov eax, " + val;
 		} break;
 		
 		//Characters
