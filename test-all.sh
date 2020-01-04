@@ -16,7 +16,7 @@ if [[ $arch == "i386" ]] ; then
 		echo ""
 	done
 elif [[ $arch == "x64" ]] ; then
-	for entry in "./test64"/*.qk
+	for entry in "./test"/*.qk
 	do
 		entry=`basename $entry`
 		echo "$entry"
