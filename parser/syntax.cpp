@@ -4,6 +4,8 @@
 #include "syntax.hh"
 #include "parse.hh"
 
+std::vector<Error> errors;
+
 //Checks the global scope for invalid arguments
 // Only function declarations and variable declarations are allowed
 // on the global scope
@@ -51,13 +53,19 @@ void SyntaxCheck::check_vars(AstNode *top, std::map<std::string, Var> vars) {
 	}
 }
 
+//Prints the actual syntax error
+void SyntaxCheck::syntax_error(Error err) {
+	std::cout << "Syntax Error: " << err.msg << std::endl;
+	std::cout << "[" << err.ln.no << "] " << err.ln.original << std::endl;
+}
+
 //Checks to see if we have any errors and prints them
 void SyntaxCheck::evaluate(bool fail) {
 	if (errors.size() == 0)
 		return;
 		
 	for (auto err : errors) {
-		syntax_error(err.ln, err.msg, false);
+		syntax_error(err);
 		std::cout << std::endl;
 	}
 	

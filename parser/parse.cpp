@@ -3,14 +3,14 @@
 
 #include "parse.hh"
 #include "types.hh"
+#include "syntax.hh"
 
 //Throws a syntax error and exits the program
 void syntax_error(Line ln, std::string msg, bool exit) {
-	std::cout << "Syntax Error: " << msg << std::endl;
-	std::cout << "[" << ln.no << "] " << ln.original << std::endl;
-	
-	if (exit)
-		std::exit(1);
+	Error e;
+	e.ln = ln;
+	e.msg = msg;
+	errors.push_back(e);
 }
 
 //Translates a token type to a datatype
