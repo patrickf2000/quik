@@ -115,25 +115,46 @@ void Asm_x86::build_arr_access(AstNode *node) {
 		case AstType::Id: {
 			AstID *id = dynamic_cast<AstID *>(i_child);
 			
-			std::string ln2 = "mov ebx, [" + get_reg("bp") + "-";
-			ln2 += std::to_string(vars[id->get_name()].stack_pos);
-			ln2 += "]";
-			
-			sec_text.push_back(ln2);
-			
-			std::string mul_line = "imul ebx, ";
-			mul_line += std::to_string(size);
-			sec_text.push_back(mul_line);
-			
-			if (v.is_param) {
-				ln = "mov eax, [eax+ebx]";
-			} else {
-				ln += std::to_string((size*v.size));
+			//64-bit version
+			if (x64) {
+				std::string ln2 = "mov eax, [rbp-";
+				ln2 += std::to_string(vars[id->get_name()].stack_pos);
+				ln2 += "]";
 				
-				if (x64)
-					ln += "+rbx]";
-				else
-					ln += "+ebx]";
+				sec_text.push_back(ln2);
+				sec_text.push_back("cdqe");
+				sec_text.push_back("mov rbx, rax");
+				
+				ln2 = "mov rax, [rbp-" + std::to_string(index) + "]";
+				sec_text.push_back(ln2);
+				
+				sec_text.push_back("imul rbx, " + std::to_string(size));
+				sec_text.push_back("add rax, rbx");
+				
+				ln = "mov eax, [rax]";
+				
+			//32-bit version
+			} else {
+				std::string ln2 = "mov ebx, [ebp-";
+				ln2 += std::to_string(vars[id->get_name()].stack_pos);
+				ln2 += "]";
+				
+				sec_text.push_back(ln2);
+				
+				std::string mul_line = "imul ebx, ";
+				mul_line += std::to_string(size);
+				sec_text.push_back(mul_line);
+				
+				if (v.is_param) {
+					ln = "mov eax, [eax+ebx]";
+				} else {
+					ln += std::to_string((size*v.size));
+					
+					if (x64)
+						ln += "+rbx]";
+					else
+						ln += "+ebx]";
+				}
 			}
 		} break;
 	}
