@@ -102,6 +102,7 @@ void print_tree(AstNode *node, int indent, bool nl) {
 				std::cout << "{" << v.name;
 				if (v.is_array)
 					std::cout << "[]";
+				std::cout << ":" << type2str(v.type);
 				std::cout << "} ";
 			}
 			std::cout << ">";

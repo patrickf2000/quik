@@ -1,0 +1,28 @@
+include io
+
+func multi(a:int, b:int, c:int, d:int)
+	print_int(a)
+	print_int(b)
+	print_int(c)
+	print_int(d)
+end
+
+func main()
+	int a = 1
+	int b = 2
+	int c = 3
+	int d = 4
+	
+	multi(a,b,c,d)
+	multi(11,12,13,14)
+end
+
+#TEST
+#1
+#2
+#3
+#4
+#11
+#12
+#13
+#14
