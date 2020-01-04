@@ -1,0 +1,26 @@
+# test passing an integer array to a function
+include io
+
+func print_numbers(numbers:int[])
+	int x = 0
+	int index = 0
+	
+	x = numbers[1]
+	puts("Index 1:")
+	print_int(x)
+	puts("")
+	
+	while (index < 5)
+		x = numbers[index]
+		print_int(x)
+		index = index + 1
+	end
+end
+
+func main
+	int[5] list = 9, 8, 7, 6, 5
+	
+	puts("Printing numbers...")
+	print_numbers(list)
+	puts("Done")
+end

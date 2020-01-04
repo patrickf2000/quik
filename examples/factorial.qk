@@ -1,0 +1,25 @@
+# factorial.qk
+# Gives an example of calculating the factorial
+include io
+
+func factorial(no:int)
+	int result = 1
+	
+	while (no != 1)
+		result = result * no
+		no = no -1
+	end
+	
+	return result
+end
+
+func main
+	puts("Enter a number:")
+	int no = input_int()
+	
+	int answer = factorial(no)
+	
+	puts("")
+	puts("The factorial is:")
+	print_int(answer)
+end
