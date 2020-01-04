@@ -120,6 +120,9 @@ void Asm_x86::build_func_x64(AstFuncDec *fd) {
 	
 	//Build the arguments
 	stack_pos = 8;
+	if (fd->args.size() == 0)
+		stack_pos = 4;
+		
 	int call_index = 0;
 	
 	for (auto v : fd->args) {
