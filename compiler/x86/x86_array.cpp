@@ -129,9 +129,15 @@ void Asm_x86::build_arr_access(AstNode *node) {
 				sec_text.push_back(ln2);
 				
 				sec_text.push_back("imul rbx, " + std::to_string(size));
-				sec_text.push_back("add rax, rbx");
 				
-				ln = "mov eax, [rax]";
+				if (v.is_param) {
+					sec_text.push_back("add rax, rbx");
+					ln = "mov eax, [rax]";
+				} else {
+					int top = index + (index * size);
+					ln = "mov eax, [rbp-" + std::to_string(top);
+					ln += "+rbx]";
+				}
 				
 			//32-bit version
 			} else {
