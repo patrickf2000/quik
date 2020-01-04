@@ -15,8 +15,23 @@ func main
 	end
 	
 	# Print the array back out
+	# And double in the process
 	puts("")
 	puts("Your numbers:")
+	index = 0
+	
+	while (index < 5)
+		no = numbers[index]
+		print_int(no)
+		
+		no = no * 2
+		numbers[index] = no
+		index = index + 1
+	end
+	
+	# Print the doubled array out
+	puts("")
+	puts("Your numbers doubled are:")
 	index = 0
 	
 	while (index < 5)
