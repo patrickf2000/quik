@@ -62,7 +62,7 @@ void Asm_x86::build_var_assign(AstNode *node) {
 				dest_var += std::to_string((size*v.size));
 				dest_var += "+" + get_reg("bx") + "]";
 				
-				std::string ln2 = "mov ebx, [ebp-";
+				std::string ln2 = "mov ebx, [" + get_reg("bp") + "-";
 				ln2 += std::to_string(v.stack_pos);
 				ln2 += "]";
 				

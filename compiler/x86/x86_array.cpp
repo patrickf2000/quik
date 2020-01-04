@@ -52,7 +52,7 @@ void Asm_x86::build_arr_dec(AstNode *node) {
 	
 	//Add the initial values
 	for (auto child : ard->children) {
-		auto ln = "mov " + prefix + " [ebp-";
+		auto ln = "mov " + prefix + " [" + get_reg("bp") + "-";
 		ln += std::to_string(pos) + "], ";
 		
 		pos -= size;
@@ -86,7 +86,7 @@ void Asm_x86::build_arr_access(AstNode *node) {
 	//For ints: 4 * (element index)
 	//TODO: Modify not to only use ints
 	auto i_child = acc->children.at(0);
-	std::string ln = "mov eax, [ebp-";
+	std::string ln = "mov eax, [" + get_reg("bp") + "-";
 	
 	if (v.is_param) {
 		ln += std::to_string(index) + "]";
@@ -110,7 +110,7 @@ void Asm_x86::build_arr_access(AstNode *node) {
 		case AstType::Id: {
 			AstID *id = dynamic_cast<AstID *>(i_child);
 			
-			std::string ln2 = "mov ebx, [ebp-";
+			std::string ln2 = "mov ebx, [" + get_reg("bp") + "-";
 			ln2 += std::to_string(vars[id->get_name()].stack_pos);
 			ln2 += "]";
 			
@@ -124,7 +124,11 @@ void Asm_x86::build_arr_access(AstNode *node) {
 				ln = "mov eax, [eax+ebx]";
 			} else {
 				ln += std::to_string((size*v.size));
-				ln += "+ebx]";
+				
+				if (x64)
+					ln += "+rbx]";
+				else
+					ln += "+ebx]";
 			}
 		} break;
 	}
