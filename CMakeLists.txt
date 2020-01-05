@@ -10,6 +10,7 @@ set(PARSER_SRC
 	parser/ast.cpp
 	parser/build.cpp
 	parser/lex.cpp
+	parser/optimize.cpp
 	parser/parse.cpp
 	parser/strutils.cpp
 	parser/syntax.cpp

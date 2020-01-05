@@ -9,6 +9,7 @@
 #include "parse.hh"
 #include "analyzer.hh"
 #include "syntax.hh"
+#include "optimize.hh"
 
 //Load the source file and run it through lex
 std::vector<Line> load_source(const char *path) {
@@ -137,6 +138,9 @@ AstNode *build_ast(std::vector<Line> lines, bool fail) {
 	check.check_global(top);
 	check.check_vars(top, top->vars);
 	check.evaluate(fail);		//TODO: Something else rather than bomb out in function?
+	
+	//Optimize
+	Optimize op(top);
 	
 	return top;
 }
