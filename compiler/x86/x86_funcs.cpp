@@ -232,7 +232,8 @@ void Asm_x86::build_func_call_i386(AstFuncCall *fc) {
 			} break;
 			
 			//A float
-			case AstType::Float: type2flt(node); break;
+			//TODO: Add me
+			case AstType::Float: break;
 			
 			//A string
 			case AstType::Str: {
@@ -329,17 +330,18 @@ void Asm_x86::build_func_call_x64(AstFuncCall *fc) {
 }
 
 //Builds the return statements
+//TODO: Fix the float stuff, its probably wrong
 void Asm_x86::build_ret(AstNode *node) {
 	if (node->children.size() == 1) {
 		auto child = node->children.at(0);
 		if (child->type == AstType::Float) {
-			type2flt(child);
+			sec_text.push_back("mov xmm0, 0");
 		} else if (child->type == AstType::Id) {
 			AstID *id = dynamic_cast<AstID *>(child);
 			Var v = current_scope->vars[id->get_name()];
 			
 			if (v.type == DataType::Float)
-				type2flt(child);
+				sec_text.push_back("mov xmm0, 0");
 			else
 				sec_text.push_back("mov eax, " + type2asm(child));
 		} else {

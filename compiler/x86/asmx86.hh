@@ -46,7 +46,6 @@ protected:
 	void init_registers();
 	std::string get_reg(std::string r);
 	std::string type2asm(AstNode *node);
-	void type2flt(AstNode *node);
 	std::string build_string(AstNode *node);
 private:
 	std::string path = "";

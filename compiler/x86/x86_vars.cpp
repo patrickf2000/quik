@@ -219,25 +219,5 @@ void Asm_x86::build_var_assign(AstNode *node) {
 void Asm_x86::build_flt_assign(AstNode *node) {
 	AstAttrNode *va = dynamic_cast<AstAttrNode *>(node);
 	auto child = va->children.at(0);
-	
-	type2flt(child);
-	
-	//Iterate through the children
-	for (int i = 1; i<va->children.size(); i+=2) {
-		auto current = va->children.at(i);
-		auto next = va->children.at(i+1);
-		
-		type2flt(next);
-		
-		switch (current->type) {
-			case AstType::Add: sec_text.push_back("fadd st0, st1"); break;
-			case AstType::Sub: sec_text.push_back("fsubp st1, st0"); break;
-			case AstType::Mul: sec_text.push_back("fmulp st1, st0"); break;
-			case AstType::Div: sec_text.push_back("fdivp st1, st0"); break;
-		}
-	}
-	
-	sec_text.push_back("fstp qword [" + va->get_name() + "]");
-	sec_text.push_back("");
 }
 
