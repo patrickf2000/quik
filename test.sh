@@ -15,7 +15,7 @@ fi
 INPUT="$1"
 expected=`./get_out.py $INPUT`
 
-build/quikc $INPUT -o build/out.bin $arch_cmd
+build/quikc $INPUT -o build/out.bin $arch_cmd --no-optimize
 actual=`build/out.bin`
 
 if [[ $expected == $actual ]] ;then
