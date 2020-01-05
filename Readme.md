@@ -18,6 +18,8 @@ For some example programs and what the Assembly code looks like, see the example
 ### Optimizations
 I have a small optimization area of the parser, which I plan to expand. I may make it a separate library down the line, but I haven't decided yet. While I'm doing my best to make sure the optimizations don't create problems, its more than likely I'll miss something. Should you have an issue, optimizations can be disabled in the compiler and the qkast program using the "--no-optimize" switch (Note: In the qkast program, this MUST be the last argument).
 
+Note that the test scripts disable optimizations; this is because many of the functions are really small to test a certain concept (including argument passing). I'll change this in the future, especially as optimizations are improved.
+
 The following optimizations are currently implemented:
  * Remove uncalled functions (including those designated with "extern")
  * Inline small functions (currently set to less than or equal to 5 lines)
