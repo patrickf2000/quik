@@ -233,6 +233,11 @@ std::vector<Token> tokenize(std::string line) {
 				Token t;
 				t.type = TokenType::LESS;
 				tokens.push_back(t);
+			} else if (c == '+' && line[i+1] == '+') {
+				Token t;
+				t.type = TokenType::D_PLUS;
+				tokens.push_back(t);
+				skip_next = true;
 			} else if (c == '+') {
 				Token t;
 				t.type = TokenType::PLUS;
@@ -311,5 +316,6 @@ TokenType str2type(std::string in) {
 	else if (in == "RETURN") return TokenType::RETURN;
 	else if (in == "L_BRACKET") return TokenType::L_BRACKET;
 	else if (in == "R_BRACKET") return TokenType::R_BRACKET;
+	else if (in == "D_PLUS") return TokenType::D_PLUS;
 	return TokenType::NONE;
 }
