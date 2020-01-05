@@ -15,6 +15,9 @@ I currently don't have a document or anything with the language specs. Ok, I act
 
 For some example programs and what the Assembly code looks like, see the examples folder.
 
+### Optimizations
+I have a small optimization area of the parser, which I plan to expand. I may make it a separate library down the line, but I haven't decided yet. While I'm doing my best to make sure the optimizations don't create problems, its more than likely I'll miss something. Should you have an issue, optimizations can be disabled in the compiler and the qkast program using the "--no-optimize" switch (Note: In the qkast program, this MUST be the last argument).
+
 ### Building
 To build, you simply need CMake, a C++ compiler, and Python 3 (for testing). Quik does not use any libraries other than the standard C++ library. A compiler supporting at least the C++11 standard is necessary.
 
