@@ -21,6 +21,17 @@ std::string call_regs32[] = {
 	"r9"
 };
 
+std::string call_flt_regs[] = {
+	"xmm0",
+	"xmm1",
+	"xmm2",
+	"xmm3",
+	"xmm4",
+	"xmm5",
+	"xmm6",
+	"xmm7"
+};
+
 //Assembles a function declaration
 void Asm_x86::build_function(AstNode *node) {
 	AstFuncDec *fd = static_cast<AstFuncDec *>(node);
@@ -255,8 +266,10 @@ void Asm_x86::build_func_call_i386(AstFuncCall *fc) {
 //Build a 64-bit function call
 void Asm_x86::build_func_call_x64(AstFuncCall *fc) {
 	int call_index = 0;
+	int flt_call_index = 0;
 	
 	for (auto node : fc->children) {
+		bool flt_arg = false;
 		std::string call_ln = "mov " + call_regs32[call_index] + ", ";
 		
 		switch (node->type) {
@@ -300,6 +313,16 @@ void Asm_x86::build_func_call_x64(AstFuncCall *fc) {
 						}
 					} break;
 					
+					//Floating-point variables
+					case DataType::Float: {
+						flt_arg = true;
+						
+						call_ln = "movq " + call_flt_regs[flt_call_index] + ", ";
+						call_ln += "[rbp-" + std::to_string(v.stack_pos) + "]";
+						
+						sec_text.push_back(call_ln);
+					} break;
+					
 					//String variables
 					case DataType::Str: {
 						call_ln += "[rbp-" + std::to_string(v.stack_pos) + "]";
@@ -315,6 +338,17 @@ void Asm_x86::build_func_call_x64(AstFuncCall *fc) {
 				sec_text.push_back(call_ln + val);
 			} break;
 			
+			//A float
+			case AstType::Float: {
+				flt_arg = true;
+				auto name = build_float(node);
+						
+				call_ln = "movq " + call_flt_regs[flt_call_index] + ", ";
+				call_ln += "[" + name + "]";
+				
+				sec_text.push_back(call_ln);
+			} break;
+			
 			//A string
 			case AstType::Str: {
 				auto name = build_string(node);
@@ -322,7 +356,10 @@ void Asm_x86::build_func_call_x64(AstFuncCall *fc) {
 			} break;
 		}
 		
-		++call_index;
+		if (flt_arg)
+			++flt_call_index;
+		else
+			++call_index;
 	}
 	
 	sec_text.push_back("call " + fc->get_name());

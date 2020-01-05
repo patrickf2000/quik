@@ -47,6 +47,7 @@ protected:
 	std::string get_reg(std::string r);
 	std::string type2asm(AstNode *node);
 	std::string build_string(AstNode *node);
+	std::string build_float(AstNode *node);
 private:
 	std::string path = "";
 	std::vector<std::string> asm_files;

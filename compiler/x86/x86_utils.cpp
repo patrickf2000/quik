@@ -102,3 +102,17 @@ std::string Asm_x86::build_string(AstNode *node) {
 	return name;
 }
 
+//Builds a floating-point number and inserts it in the data section
+std::string Asm_x86::build_float(AstNode *node) {
+	AstFloat *flt = static_cast<AstFloat *>(node);
+	double val = flt->get_val();
+	
+	std::string name = "flt_" + std::to_string(flt_index);
+	++flt_index;
+	
+	std::string d_ln = name + " dq " + std::to_string(val);
+	sec_data.push_back(d_ln);
+	
+	return name;
+}
+
