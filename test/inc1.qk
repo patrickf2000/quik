@@ -1,0 +1,13 @@
+include io
+
+func main
+	int x = 5
+	print_int(x)
+	
+	x++
+	print_int(x)
+end
+
+#TEST
+#5
+#6
