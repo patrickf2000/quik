@@ -141,6 +141,7 @@ AstNode *build_ast(std::vector<Line> lines, bool fail) {
 	
 	//Optimize
 	Optimize op(top);
+	op.rm_uncalled_funcs();
 	
 	return top;
 }
