@@ -66,6 +66,7 @@ private:
 	//Control variables
 	bool in_main = false;
 	int str_index = 1;
+	int flt_index = 1;
 	
 	//Needed for conditionals and loops
 	int lbl_index = 1;
