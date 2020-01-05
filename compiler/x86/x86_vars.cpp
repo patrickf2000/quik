@@ -240,6 +240,37 @@ void Asm_x86::build_flt_assign(AstNode *node) {
 		} break;
 	}
 	
+	//If there are further children, we have math
+	for (int i = 1; i<va->children.size(); i+=2) {
+		auto op = va->children[i];
+		auto next = va->children[i+1];
+		std::string ln2 = "";
+		
+		switch (op->type) {
+			case AstType::Add: ln2 = "addsd xmm0, "; break;
+			case AstType::Sub: ln2 = "subsd xmm0, "; break;
+			case AstType::Mul: ln2 = "mulsd xmm0, "; break;
+			case AstType::Div: ln2 = "divsd xmm0, "; break;
+		}
+		
+		switch (next->type) {
+			case AstType::Float: {
+				auto name = build_float(next);
+				ln2 += "[" + name + "]";
+			} break;
+			
+			case AstType::Id: {
+				AstID *id = static_cast<AstID *>(next);
+				Var v2 = vars[id->get_name()];
+				
+				ln2 += "[" + get_reg("bp") + "-";
+				ln2 += std::to_string(v2.stack_pos) + "]";
+			} break;
+		}
+		
+		sec_text.push_back(ln2);
+	}
+	
 	//Push the final result to the stack
 	std::string ln = "movsd [" + get_reg("bp") + "-";
 	ln += std::to_string(v.stack_pos) + "], xmm0";
