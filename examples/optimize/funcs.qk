@@ -1,0 +1,40 @@
+# Run qkast (or quikc, but look at the Assembly) on this with and
+# without the --no-optimize switch
+#
+# With optimizations enabled (default), the silly blah() function will be
+# gone, along with the uncalled functions included from the io header.
+
+include io
+
+func blah()
+	int index = 0
+	puts("BLAHHHHHHHH")
+	while (index < 10)
+		puts("Your number:")
+		print_int(index)
+		index++
+	end
+	
+	sayHello()	
+end
+
+func bigFunc()
+	int index = 0
+	
+	while (index < 10)
+		puts("Your number:")
+		print_int(index)
+		index++
+	end
+	
+	sayHello()
+end
+
+func sayHello()
+	puts("Hello!")
+end
+
+func main
+	sayHello()
+	bigFunc()
+end
