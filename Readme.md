@@ -16,9 +16,7 @@ I currently don't have a document or anything with the language specs. Ok, I act
 For some example programs and what the Assembly code looks like, see the examples folder.
 
 ### Optimizations
-I have a small optimization area of the parser, which I plan to expand. I may make it a separate library down the line, but I haven't decided yet. While I'm doing my best to make sure the optimizations don't create problems, its more than likely I'll miss something. Should you have an issue, optimizations can be disabled in the compiler and the qkast program using the "--no-optimize" switch (Note: In the qkast program, this MUST be the last argument).
-
-Note that the test scripts disable optimizations; this is because many of the functions are really small to test a certain concept (including argument passing). I'll change this in the future, especially as optimizations are improved.
+I have a small optimization area of the parser, which I plan to expand. I may make it a separate library down the line, but I haven't decided yet. Optimizations are an experimental feature; I originally wanted to make it a default feature, but when I ran my test suite, I realized that we are really a long way off from doing that, so if you wish to try the optimizations, you can run the compiler and qkast with the "--optimize" switch. 
 
 The following optimizations are currently implemented:
  * Remove uncalled functions (including those designated with "extern")

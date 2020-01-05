@@ -25,10 +25,10 @@ int main(int argc, char *argv[]) {
 		std::cout << std::endl << "AST: " << std::endl;
 		print_tree(node);
 	} else {
-		bool optimize = true;
+		bool optimize = false;
 		if (argc == 3) {
-			if (std::string(argv[2]) == "--no-optimize") {
-				optimize = false;
+			if (std::string(argv[2]) == "--optimize") {
+				optimize = true;
 			}
 		}
 	
