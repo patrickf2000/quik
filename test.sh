@@ -12,7 +12,7 @@ else
 	exit 1
 fi
 
-INPUT="test/$1"
+INPUT="$1"
 expected=`./get_out.py $INPUT`
 
 build/quikc $INPUT -o build/out.bin $arch_cmd

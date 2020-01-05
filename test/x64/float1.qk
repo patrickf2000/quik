@@ -1,0 +1,19 @@
+include io
+
+func main
+	float x = 3.14
+	float y = 2.3232
+	x = 3.4444
+	
+	printf("%f\n", x);
+	printf("%f\n", y);
+	printf("%f\n", 4.98);
+	
+	fflush(0);
+end
+
+#TEST
+#3.444400
+#2.323200
+#4.980000
+

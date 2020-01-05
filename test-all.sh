@@ -7,7 +7,7 @@ if [[ $arch == "i386" ]] ; then
 	do
 		entry=`basename $entry`
 		echo "$entry"
-		./test.sh $entry i386
+		./test.sh "test/$entry" i386
 		
 		if [ $? == 1 ] ; then
 			exit 1
@@ -20,7 +20,21 @@ elif [[ $arch == "x64" ]] ; then
 	do
 		entry=`basename $entry`
 		echo "$entry"
-		./test.sh $entry x64
+		./test.sh "test/$entry" x64
+		
+		if [ $? == 1 ] ; then
+			exit 1
+		fi
+		
+		echo ""
+	done
+	
+	#Test stuff specific to x86_64
+	for entry in "./test/x64"/*.qk
+	do
+		entry=`basename $entry`
+		echo "$entry"
+		./test.sh "test/x64/$entry" x64
 		
 		if [ $? == 1 ] ; then
 			exit 1
