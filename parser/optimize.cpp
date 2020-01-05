@@ -25,8 +25,6 @@ void Optimize::rm_uncalled_funcs() {
 	}
 	
 	//Finally, remove anything not called
-	std::vector<int> to_remove;
-	
 	for (int i = 0; i<tree->children.size(); i++) {
 		auto node = static_cast<AstAttrNode *>(tree->children.at(i));
 		
@@ -34,15 +32,9 @@ void Optimize::rm_uncalled_funcs() {
 			auto name = node->get_name();
 			
 			if (std::find(f_calls.begin(), f_calls.end(), name) == f_calls.end()) {
-				to_remove.push_back(i);
+				tree->children.erase(tree->children.begin() + i);
 			}
 		}
-	}
-	
-	int rm = 0;
-	for (auto i : to_remove) {
-		tree->children.erase(tree->children.begin() + (i-rm));
-		++rm;
 	}
 }
 
