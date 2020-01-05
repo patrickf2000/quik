@@ -34,6 +34,7 @@ std::string ast2str(AstType type) {
 		case AstType::Mul: return "OP: *";
 		case AstType::Div: return "OP: /";
 		case AstType::Mod: return "OP: %";
+		case AstType::Inc: return "OP: ++";
 	}
 	
 	return "NONE";

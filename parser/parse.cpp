@@ -178,6 +178,8 @@ void build_var_parts(AstNode *vd, int start, std::vector<Token> tokens) {
 				vd->children.push_back(new AstNode(AstType::Div));
 			} else if (t.type == TokenType::MOD) {
 				vd->children.push_back(new AstNode(AstType::Mod));
+			} else if (t.type == TokenType::D_PLUS) {
+				vd->children.push_back(new AstNode(AstType::Inc));
 			} else {
 				AstID *i = new AstID(t.id);
 				vd->children.push_back(i);
@@ -565,6 +567,13 @@ AstNode *build_node(Line ln) {
 			
 				AstVarAssign *va = new AstVarAssign(tokens.at(0).id);
 				build_var_parts(va, 2, tokens);
+				return va;
+			
+			//Build an increment
+			} else if (tokens.at(1).type == TokenType::D_PLUS) {
+				AstVarAssign *va = new AstVarAssign(tokens.at(0).id);
+				AstNode *inc = new AstNode(AstType::Inc);
+				va->children.push_back(inc);
 				return va;
 			}
 		}

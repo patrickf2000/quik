@@ -44,7 +44,8 @@ enum AstType {
 	Sub,
 	Mul,
 	Div,
-	Mod
+	Mod,
+	Inc
 };
 
 //Holds variable information
