@@ -1,0 +1,56 @@
+include io
+
+# should be 8.009
+func add_test
+	float x = 1.232
+	float y = 3.553
+	float answer = x + y
+	answer = answer + 3.224
+	
+	printf("Add: %f\n", answer)
+end
+
+# should be 0.903
+func sub_test
+	float x = 1.232
+	float y = 3.553
+	float answer = x - y
+	answer = answer + 3.224
+	
+	printf("Sub: %f\n", answer)
+end
+
+# should be 7.601296
+func mul_test
+	float x = 1.232
+	float y = 3.553
+	float answer = x * y
+	answer = answer + 3.224
+	
+	printf("Mul: %f\n", answer)
+end
+
+# should be 3.570749226
+func div_test
+	float x = 1.232
+	float y = 3.553
+	float answer = x / y
+	answer = answer + 3.224
+	
+	printf("Div: %f\n", answer)
+end
+
+func main
+	add_test()
+	sub_test()
+	mul_test()
+	div_test()
+	fflush(0)
+end
+
+#TEST
+#Add: 8.009000
+#Sub: 0.903000
+#Mul: 7.601296
+#Div: 3.570749
+
