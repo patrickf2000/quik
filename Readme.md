@@ -18,6 +18,10 @@ For some example programs and what the Assembly code looks like, see the example
 ### Optimizations
 I have a small optimization area of the parser, which I plan to expand. I may make it a separate library down the line, but I haven't decided yet. While I'm doing my best to make sure the optimizations don't create problems, its more than likely I'll miss something. Should you have an issue, optimizations can be disabled in the compiler and the qkast program using the "--no-optimize" switch (Note: In the qkast program, this MUST be the last argument).
 
+The following optimizations are currently implemented:
+ * Remove uncalled functions (including those designated with "extern")
+ * Inline small functions (currently set to less than or equal to 5 lines)
+
 ### Building
 To build, you simply need CMake, a C++ compiler, and Python 3 (for testing). Quik does not use any libraries other than the standard C++ library. A compiler supporting at least the C++11 standard is necessary.
 
