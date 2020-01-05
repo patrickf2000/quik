@@ -217,7 +217,7 @@ void Asm_x86::build_var_assign(AstNode *node) {
 
 //Builds a floating-point variable assignment
 void Asm_x86::build_flt_assign(AstNode *node) {
-	AstAttrNode *va = dynamic_cast<AstAttrNode *>(node);
+	AstAttrNode *va = static_cast<AstAttrNode *>(node);
 	Var v = vars[va->get_name()];
 	
 	auto first = va->children.at(0);
@@ -227,19 +227,24 @@ void Asm_x86::build_flt_assign(AstNode *node) {
 		case AstType::Float: {
 			auto name = build_float(first);
 			sec_text.push_back("movq xmm0, [" + name + "]");
-			
-			std::string ln = "movsd [" + get_reg("bp") + "-";
-			ln += std::to_string(v.stack_pos) + "], xmm0";
-			
-			sec_text.push_back(ln);
 		} break;
 		
 		//Assign another variable
 		case AstType::Id: {
-		
+			AstID *id = static_cast<AstID *>(first);
+			Var v2 = vars[id->get_name()];
+			
+			std::string src = "movq xmm0, [" + get_reg("bp");
+			src += "-" + std::to_string(v2.stack_pos) + "]";
+			sec_text.push_back(src);
 		} break;
 	}
 	
+	//Push the final result to the stack
+	std::string ln = "movsd [" + get_reg("bp") + "-";
+	ln += std::to_string(v.stack_pos) + "], xmm0";
+			
+	sec_text.push_back(ln);
 	sec_text.push_back("");
 }
 
