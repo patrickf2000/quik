@@ -25,8 +25,15 @@ int main(int argc, char *argv[]) {
 		std::cout << std::endl << "AST: " << std::endl;
 		print_tree(node);
 	} else {
+		bool optimize = true;
+		if (argc == 3) {
+			if (std::string(argv[2]) == "--no-optimize") {
+				optimize = false;
+			}
+		}
+	
 		auto lines = load_source(argv[1]);
-		AstNode *top = build_ast(lines, false);
+		AstNode *top = build_ast(lines, false, optimize);
 		print_tree(top);
 	}
 	

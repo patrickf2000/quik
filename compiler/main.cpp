@@ -37,6 +37,7 @@ int main(int argc, char *argv[]) {
 									// -l
 	config.arch = "x86_64";			// -m <i386, x86_64>
 	bool asm_only = false;			// -s
+	bool optimize = true;			// --no-optimize
 	
 	//Iterate through and collect options
 	for (int i = 1; i<argc; i++) {
@@ -62,6 +63,8 @@ int main(int argc, char *argv[]) {
 			}
 		} else if (option == "-s") {
 			asm_only = true;
+		} else if (option == "--no-optimize") {
+			optimize = false;
 			
 		//Something else...
 		} else {
@@ -79,7 +82,7 @@ int main(int argc, char *argv[]) {
 	
 	for (auto path : inputs) {
 		auto lines = load_source(path.c_str());
-		AstNode *node = build_ast(lines);
+		AstNode *node = build_ast(lines, true, optimize);
 		
 		builder.assemble(path, node);
 		builder.write();

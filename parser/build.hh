@@ -8,4 +8,4 @@
 #include "ast.hh"
 
 std::vector<Line> load_source(const char *path);
-AstNode *build_ast(std::vector<Line> lines, bool fail = true);
+AstNode *build_ast(std::vector<Line> lines, bool fail=true, bool optimize=true);

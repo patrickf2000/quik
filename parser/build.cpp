@@ -100,7 +100,7 @@ std::vector<Line> load_source(const char *path) {
 }
 
 //Takes each line and builds the AST
-AstNode *build_ast(std::vector<Line> lines, bool fail) {
+AstNode *build_ast(std::vector<Line> lines, bool fail, bool optimize) {
 	AstScope *top = new AstScope;
 	std::vector<AstNode *> nodes;
 	
@@ -140,8 +140,10 @@ AstNode *build_ast(std::vector<Line> lines, bool fail) {
 	check.evaluate(fail);		//TODO: Something else rather than bomb out in function?
 	
 	//Optimize
-	Optimize op(top);
-	op.rm_uncalled_funcs();
+	if (optimize) {
+		Optimize op(top);
+		op.rm_uncalled_funcs();
+	}
 	
 	return top;
 }
