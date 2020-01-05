@@ -139,6 +139,12 @@ void Asm_x86::build_var_assign(AstNode *node) {
 		case AstType::ArrayAccess: {
 			build_arr_access(first);
 		} break;
+		
+		//Increment
+		case AstType::Inc: {
+			ln = "add dword " + dest_var + ", 1";
+			stop = true;
+		} break;
 	}
 	
 	sec_text.push_back(ln);
@@ -152,8 +158,8 @@ void Asm_x86::build_var_assign(AstNode *node) {
 	
 	//Now iterate through the reset of the children
 	for (int i = 1; i<node->children.size(); i+=2) {
-		auto op = node->children.at(i);
-		auto next = node->children.at(i+1);
+		auto op = node->children[i];
+		auto next = node->children[i+1];
 		std::string ln = "";
 		
 		bool is_mod = false;
