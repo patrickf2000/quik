@@ -46,6 +46,7 @@ protected:
 	void init_registers();
 	std::string get_reg(std::string r);
 	std::string type2asm(AstNode *node);
+	std::string asm_type(Var v);
 	std::string build_string(AstNode *node);
 	std::string build_float(AstNode *node);
 private:

@@ -22,7 +22,41 @@ void Asm_x86::build_var_dec(AstNode *node) {
 	v.stack_pos = stack_pos;
 	vars[vd->get_name()] = v;
 	
-	build_var_assign(node);
+	//Determine the nature of the first variable
+	if (vd->children.size() > 1 || vd->type == AstType::ArrayAssign) {
+		build_var_assign(node);
+		return;
+	}
+	
+	auto child = vd->children.at(0);
+	
+	switch (child->type) {
+		case AstType::FuncCall:
+		case AstType::ArrayAccess:
+		case AstType::Id: {
+			build_var_assign(node);
+			return;
+		} break;
+		case AstType::Float: {
+			build_flt_assign(node);
+			return;
+		} break;
+	}
+	
+	//Build the first variable
+	std::string dest_var = "[" + get_reg("bp") + "-";
+	dest_var += std::to_string(v.stack_pos) + "]";
+	std::string ln = "";
+	
+	if (child->type == AstType::Inc) {
+		ln = "add dword " + dest_var + ", 1";
+	} else {
+		ln = "mov " + asm_type(v);
+		ln += " " + dest_var + ", " + type2asm(child);
+	}
+	
+	sec_text.push_back(ln);
+	sec_text.push_back("");
 }
 
 //Builds a variable assignment

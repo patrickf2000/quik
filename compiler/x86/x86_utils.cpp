@@ -48,9 +48,8 @@ std::string Asm_x86::type2asm(AstNode *node) {
 		
 		case AstType::Char: {
 			AstChar *ch = dynamic_cast<AstChar *>(node);
-			ln = "\'";
-			ln += ch->get_val();
-			ln += "\'";
+			int val = (int)ch->get_val();
+			ln = std::to_string(val);
 		} break;
 		
 		case AstType::Bool: {
@@ -60,6 +59,26 @@ std::string Asm_x86::type2asm(AstNode *node) {
 			else
 				ln += "0";
 		} break;
+		
+		case AstType::Str: {
+			ln = build_string(node);
+		} break;
+	}
+	
+	return ln;
+}
+
+//Returns the assembly type for a given datatype
+std::string Asm_x86::asm_type(Var v) {
+	std::string ln = "dword";
+
+	switch (v.type) {
+		case DataType::Byte:
+		case DataType::Char: ln = "byte"; break;
+		case DataType::Short: ln = "word"; break;
+		case DataType::Bool:
+		case DataType::Int:
+		case DataType::Str: ln = "dword"; break;
 	}
 	
 	return ln;
