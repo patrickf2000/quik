@@ -22,9 +22,17 @@ void Asm_x86::build_var_dec(AstNode *node) {
 	v.stack_pos = stack_pos;
 	vars[vd->get_name()] = v;
 	
+	build_var_assign(node);
+}
+
+//Builds a variable assignment
+void Asm_x86::build_var_assign(AstNode *node) {
+	AstVarDec *vd = static_cast<AstVarDec *>(node);
+	Var v = vars[vd->get_name()];
+
 	//Determine the nature of the first variable
 	if (vd->children.size() > 1 || vd->type == AstType::ArrayAssign) {
-		build_var_assign(node);
+		build_int_math(node);
 		return;
 	}
 	
@@ -34,7 +42,7 @@ void Asm_x86::build_var_dec(AstNode *node) {
 		case AstType::FuncCall:
 		case AstType::ArrayAccess:
 		case AstType::Id: {
-			build_var_assign(node);
+			build_int_math(node);
 			return;
 		} break;
 		case AstType::Float: {
@@ -59,8 +67,8 @@ void Asm_x86::build_var_dec(AstNode *node) {
 	sec_text.push_back("");
 }
 
-//Builds a variable assignment
-void Asm_x86::build_var_assign(AstNode *node) {
+//Builds a math string
+void Asm_x86::build_int_math(AstNode *node) {
 	AstAttrNode *n = static_cast<AstAttrNode *>(node);
 	Var v = vars[n->get_name()];
 	
@@ -136,7 +144,7 @@ void Asm_x86::build_var_assign(AstNode *node) {
 		} break;
 		
 		//Characters
-		case AstType::Char: {
+		/*case AstType::Char: {
 			AstChar *ch = static_cast<AstChar *>(first);
 			int val = (int)ch->get_val();
 			
@@ -161,7 +169,7 @@ void Asm_x86::build_var_assign(AstNode *node) {
 				ln = "mov eax, 1";
 			else
 				ln = "mov eax, 0";
-		} break;
+		} break;*/
 		
 		//Function calls
 		case AstType::FuncCall: {
@@ -175,10 +183,10 @@ void Asm_x86::build_var_assign(AstNode *node) {
 		} break;
 		
 		//Increment
-		case AstType::Inc: {
+		/*case AstType::Inc: {
 			ln = "add dword " + dest_var + ", 1";
 			stop = true;
-		} break;
+		} break;*/
 	}
 	
 	sec_text.push_back(ln);
