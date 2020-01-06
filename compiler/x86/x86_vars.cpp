@@ -143,34 +143,6 @@ void Asm_x86::build_int_math(AstNode *node) {
 			ln = "mov eax, " + val;
 		} break;
 		
-		//Characters
-		/*case AstType::Char: {
-			AstChar *ch = static_cast<AstChar *>(first);
-			int val = (int)ch->get_val();
-			
-			ln = "mov byte " + dest_var + ", " + std::to_string(val);
-			stop = true;
-		} break;
-		
-		//Strings
-		case AstType::Str: {
-			auto name = build_string(first);
-			
-			ln = "mov dword " + dest_var + ", " + name;
-			stop = true;
-		} break;
-		
-		//Booleans
-		case AstType::Bool: {
-			AstBool *bl = static_cast<AstBool *>(first);
-			bool val = bl->get_val();
-			
-			if (val)
-				ln = "mov eax, 1";
-			else
-				ln = "mov eax, 0";
-		} break;*/
-		
 		//Function calls
 		case AstType::FuncCall: {
 			AstFuncCall *fc = dynamic_cast<AstFuncCall *>(first);
@@ -181,22 +153,9 @@ void Asm_x86::build_int_math(AstNode *node) {
 		case AstType::ArrayAccess: {
 			build_arr_access(first);
 		} break;
-		
-		//Increment
-		/*case AstType::Inc: {
-			ln = "add dword " + dest_var + ", 1";
-			stop = true;
-		} break;*/
 	}
 	
 	sec_text.push_back(ln);
-	
-	//In some instances, further arguments would not be appropriate
-	//In this case, we exit the function
-	if (stop) {
-		sec_text.push_back("");
-		return;
-	}
 	
 	//Now iterate through the reset of the children
 	for (int i = 1; i<node->children.size(); i+=2) {
