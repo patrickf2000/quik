@@ -25,6 +25,20 @@ void Asm_x86::build_var_dec(AstNode *node) {
 	build_var_assign(node);
 }
 
+//Assigns the eax register to a variable
+void Asm_x86::assign_ax(std::string dest, Var v) {
+	std::string ln = "mov " + asm_type(v) + " ";
+	ln += dest + ", ";
+	
+	if (v.type == DataType::Char)
+		ln += "al";
+	else
+		ln += "eax";
+		
+	sec_text.push_back(ln);
+	sec_text.push_back("");
+}
+
 //Builds a variable assignment
 void Asm_x86::build_var_assign(AstNode *node) {
 	AstVarDec *vd = static_cast<AstVarDec *>(node);
@@ -39,9 +53,7 @@ void Asm_x86::build_var_assign(AstNode *node) {
 	auto child = vd->children.at(0);
 	
 	switch (child->type) {
-		case AstType::FuncCall:
-		case AstType::ArrayAccess:
-		case AstType::Id: {
+		case AstType::ArrayAssign: {
 			build_int_math(node);
 			return;
 		} break;
@@ -56,15 +68,42 @@ void Asm_x86::build_var_assign(AstNode *node) {
 	dest_var += std::to_string(v.stack_pos) + "]";
 	std::string ln = "";
 	
+	//Increments
 	if (child->type == AstType::Inc) {
 		ln = "add dword " + dest_var + ", 1";
+		sec_text.push_back(ln);
+		sec_text.push_back("");
+		
+	//Other variables
+	} else if (child->type == AstType::Id) {
+		AstID *id = static_cast<AstID *>(child);
+		Var v2 = vars[id->get_name()];
+		
+		ln = "mov eax, [" + get_reg("bp") + "-";
+		ln += std::to_string(v2.stack_pos) + "]";
+		sec_text.push_back(ln);
+		
+		assign_ax(dest_var, v);
+		
+	//Function calls
+	} else if (child->type == AstType::FuncCall) {
+		AstFuncCall *fc = dynamic_cast<AstFuncCall *>(child);
+		build_func_call(fc);
+		assign_ax(dest_var, v);
+		
+	//Array access
+	} else if (child->type == AstType::ArrayAccess) {
+		build_arr_access(child);
+		assign_ax(dest_var, v);
+		
+	//Raw types
 	} else {
 		ln = "mov " + asm_type(v);
 		ln += " " + dest_var + ", " + type2asm(child);
+		
+		sec_text.push_back(ln);
+		sec_text.push_back("");
 	}
-	
-	sec_text.push_back(ln);
-	sec_text.push_back("");
 }
 
 //Builds a math string
@@ -77,8 +116,6 @@ void Asm_x86::build_int_math(AstNode *node) {
 	dest_var += std::to_string(v.stack_pos) + "]";
 	
 	std::string ln = "";
-	bool stop = false;
-	bool is_char = false;
 	
 	//Variable assignments
 	if (node->type == AstType::VarDec || node->type == AstType::VarAssign) {
@@ -87,9 +124,6 @@ void Asm_x86::build_int_math(AstNode *node) {
 			build_flt_assign(node);
 			return;
 		}
-		
-		if (va->get_type() == DataType::Char)
-			is_char = true;
 		
 	//Array assignments
 	} else if (node->type == AstType::ArrayAssign) {
@@ -210,13 +244,8 @@ void Asm_x86::build_int_math(AstNode *node) {
 		case DataType::Int:
 		case DataType::Str: ln += "dword "; break;
 	}
-	
-	std::string reg = "eax";
-	
-	if (is_char)
-		reg = "al";
 		
-	ln += dest_var + ", " + reg;
+	ln += dest_var + ", eax";
 	
 	sec_text.push_back(ln);
 	sec_text.push_back("");
