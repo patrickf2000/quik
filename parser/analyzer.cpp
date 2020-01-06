@@ -26,6 +26,17 @@ void find_variables(AstNode *top) {
 				find_variables(next);
 			} break;
 			
+			case AstType::If:
+			case AstType::Elif:
+			case AstType::Else:
+			case AstType::While: {
+				AstScope *s = new AstScope;
+				s->children = node->children;
+				
+				find_variables(s);
+				scope->vars.insert(s->vars.begin(), s->vars.end());
+			} break;
+			
 			case AstType::ArrayDec:
 			case AstType::VarDec: {
 				AstVarDec *vd = dynamic_cast<AstVarDec *>(node);
