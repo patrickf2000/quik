@@ -104,51 +104,12 @@ void Asm_x86::build_var_assign(AstNode *node) {
 void Asm_x86::build_int_math(AstNode *node) {
 	AstAttrNode *n = static_cast<AstAttrNode *>(node);
 	Var v = vars[n->get_name()];
+	std::string ln = "";
 	
 	//Construct the destination variable
 	std::string dest_var = "[" + get_reg("bp") + "-";
 	dest_var += std::to_string(v.stack_pos) + "]";
 	
-	std::string ln = "";
-	
-	//Variable assignments
-	/*if (node->type == AstType::VarDec || node->type == AstType::VarAssign) {
-		AstVarDec *va = dynamic_cast<AstVarDec *>(node);
-		if (va->get_type() == DataType::Float) {
-			build_flt_assign(node);
-			return;
-		}
-		
-	//Array assignments
-	} else if (node->type == AstType::ArrayAssign) {
-		AstArrayAssign *assign = dynamic_cast<AstArrayAssign *>(node);
-		dest_var = "[" + get_reg("bp") + "-";
-		int size = 4;
-		
-		//Math for int: 4 * the index
-		switch (assign->index->type) {
-			case AstType::Id: {
-				AstID *i = dynamic_cast<AstID *>(assign->index);
-				Var v2 = vars[i->get_name()];
-				
-				dest_var += std::to_string((size*v.size));
-				dest_var += "+" + get_reg("bx") + "]";
-				
-				std::string ln2 = "mov ebx, [" + get_reg("bp") + "-";
-				ln2 += std::to_string(v2.stack_pos);
-				ln2 += "]";
-				
-				sec_text.push_back(ln2);
-				sec_text.push_back("imul ebx, " + std::to_string(size));
-			} break;
-			
-			case AstType::Int: {
-				AstInt *i = dynamic_cast<AstInt *>(assign->index);
-				int val = v.stack_pos + (i->get_val() * size);
-				dest_var += std::to_string(val) + "]";
-			} break;
-		}
-	}*/
 	if (node->type == AstType::ArrayAssign)
 		dest_var = build_arr_assign(node, v);
 	
@@ -158,11 +119,7 @@ void Asm_x86::build_int_math(AstNode *node) {
 	switch (first->type) {
 		//ID
 		case AstType::Id: {
-			AstID *id = static_cast<AstID *>(first);
-			Var v2 = vars[id->get_name()];
-			
-			ln = "mov eax, [" + get_reg("bp") + "-";
-			ln += std::to_string(v2.stack_pos) + "]";
+			ln = "mov eax, " + type2asm(first);
 		} break;
 		
 		//Int
@@ -230,17 +187,7 @@ void Asm_x86::build_int_math(AstNode *node) {
 	}
 	
 	//Finally, move it back
-	ln = "mov ";
-	
-	switch (v.type) {
-		case DataType::Byte:
-		case DataType::Char: ln += "byte "; break;
-		case DataType::Short: ln += "word "; break;
-		case DataType::Bool:
-		case DataType::Int:
-		case DataType::Str: ln += "dword "; break;
-	}
-		
+	ln = "mov " + asm_type(v);	
 	ln += dest_var + ", eax";
 	
 	sec_text.push_back(ln);
