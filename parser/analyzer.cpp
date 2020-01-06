@@ -50,8 +50,11 @@ void find_assign(AstNode *top, AstScope *scope) {
 				auto n_scope = dynamic_cast<AstScope *>(child);
 				find_assign(child, n_scope); 
 			} break;
+			
+			case AstType::ArrayAssign:
+			case AstType::ArrayAccess:
 			case AstType::VarAssign: {
-				AstVarAssign *va = dynamic_cast<AstVarAssign *>(node);
+				AstVarDec *va = dynamic_cast<AstVarDec *>(node);
 			
 				Var v = scope->vars[va->get_name()];
 				va->set_type(v.type);

@@ -43,30 +43,28 @@ void Asm_x86::assign_ax(std::string dest, Var v) {
 void Asm_x86::build_var_assign(AstNode *node) {
 	AstVarDec *vd = static_cast<AstVarDec *>(node);
 	Var v = vars[vd->get_name()];
-
-	//Determine the nature of the first variable
-	if (vd->children.size() > 1 || vd->type == AstType::ArrayAssign) {
-		build_int_math(node);
+	
+	if (vd->get_type() == DataType::Float) {
+		build_flt_assign(node);
 		return;
 	}
 	
 	auto child = vd->children.at(0);
 	
-	switch (child->type) {
-		case AstType::ArrayAssign: {
-			build_int_math(node);
-			return;
-		} break;
-		case AstType::Float: {
-			build_flt_assign(node);
-			return;
-		} break;
-	}
-	
 	//Build the first variable
 	std::string dest_var = "[" + get_reg("bp") + "-";
 	dest_var += std::to_string(v.stack_pos) + "]";
 	std::string ln = "";
+	
+	//Array assignments
+	if (node->type == AstType::ArrayAssign) {
+		dest_var = build_arr_assign(node, v);
+	}
+	
+	if (vd->get_type() == DataType::Int && vd->children.size() > 1) {
+		build_int_math(node);
+		return;
+	}
 	
 	//Increments
 	if (child->type == AstType::Inc) {
@@ -114,7 +112,7 @@ void Asm_x86::build_int_math(AstNode *node) {
 	std::string ln = "";
 	
 	//Variable assignments
-	if (node->type == AstType::VarDec || node->type == AstType::VarAssign) {
+	/*if (node->type == AstType::VarDec || node->type == AstType::VarAssign) {
 		AstVarDec *va = dynamic_cast<AstVarDec *>(node);
 		if (va->get_type() == DataType::Float) {
 			build_flt_assign(node);
@@ -150,7 +148,9 @@ void Asm_x86::build_int_math(AstNode *node) {
 				dest_var += std::to_string(val) + "]";
 			} break;
 		}
-	}
+	}*/
+	if (node->type == AstType::ArrayAssign)
+		dest_var = build_arr_assign(node, v);
 	
 	//Build the first element
 	auto first = node->children.at(0);

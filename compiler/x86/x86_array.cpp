@@ -168,3 +168,37 @@ void Asm_x86::build_arr_access(AstNode *node) {
 	sec_text.push_back(ln);
 }
 
+//Builds an array assignment
+//Returns the memory location
+std::string Asm_x86::build_arr_assign(AstNode *node, Var v) {
+	AstArrayAssign *assign = dynamic_cast<AstArrayAssign *>(node);
+	std::string dest_var = "[" + get_reg("bp") + "-";
+	int size = 4;
+	
+	//Math for int: 4 * the index
+	switch (assign->index->type) {
+		case AstType::Id: {
+			AstID *i = dynamic_cast<AstID *>(assign->index);
+			Var v2 = vars[i->get_name()];
+			
+			dest_var += std::to_string((size*v.size));
+			dest_var += "+" + get_reg("bx") + "]";
+			
+			std::string ln2 = "mov ebx, [" + get_reg("bp") + "-";
+			ln2 += std::to_string(v2.stack_pos);
+			ln2 += "]";
+			
+			sec_text.push_back(ln2);
+			sec_text.push_back("imul ebx, " + std::to_string(size));
+		} break;
+		
+		case AstType::Int: {
+			AstInt *i = dynamic_cast<AstInt *>(assign->index);
+			int val = v.stack_pos + (i->get_val() * size);
+			dest_var += std::to_string(val) + "]";
+		} break;
+	}
+	
+	return dest_var;
+}
+

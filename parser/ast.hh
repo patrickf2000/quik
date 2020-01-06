@@ -276,18 +276,14 @@ class AstArrayDec : public AstVarDec {
 public:
 	explicit AstArrayDec() { type = AstType::ArrayDec; }
 	
-	DataType get_type() { return d_type; }
-	void set_type(DataType t) { d_type = t; }
-	
 	int get_size() { return size; }
 	void set_size(int s) { size = s; }
 private:
-	DataType d_type;
 	int size;
 };
 
 //Array access
-class AstArrayAcc : public AstAttrNode {
+class AstArrayAcc : public AstVarDec {
 public:
 	explicit AstArrayAcc() { type = AstType::ArrayAccess; }
 	explicit AstArrayAcc(std::string n) {
@@ -297,7 +293,7 @@ public:
 };
 
 //Array assignment
-class AstArrayAssign : public AstArrayAcc {
+class AstArrayAssign : public AstVarDec {
 public:
 	explicit AstArrayAssign() { type = AstType::ArrayAssign; }
 	explicit AstArrayAssign(std::string n) {

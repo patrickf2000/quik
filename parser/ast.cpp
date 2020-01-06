@@ -132,8 +132,8 @@ void print_tree(AstNode *node, int indent, bool nl) {
 		std::cout << type2str(arr->get_type()) << "}";
 		
 	} else if (node->type == AstType::ArrayAccess || node->type == AstType::ArrayAssign) {
-		AstAttrNode *acc = dynamic_cast<AstAttrNode *>(node);
-		std::cout << " [" << acc->get_name() << "]";
+		AstVarDec *acc = dynamic_cast<AstVarDec *>(node);
+		std::cout << " [" << acc->get_name() << ":" << type2str(acc->get_type()) << "]";
 		
 		if (node->type == AstType::ArrayAssign) {
 			auto assign = dynamic_cast<AstArrayAssign *>(node);

@@ -35,6 +35,7 @@ public:
 	//Array stuff
 	void build_arr_dec(AstNode *node);
 	void build_arr_access(AstNode *node);
+	std::string build_arr_assign(AstNode *node, Var v);
 	
 	//Flow stuff
 	void build_cond(AstNode *node);
