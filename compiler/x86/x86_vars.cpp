@@ -76,11 +76,7 @@ void Asm_x86::build_var_assign(AstNode *node) {
 		
 	//Other variables
 	} else if (child->type == AstType::Id) {
-		AstID *id = static_cast<AstID *>(child);
-		Var v2 = vars[id->get_name()];
-		
-		ln = "mov eax, [" + get_reg("bp") + "-";
-		ln += std::to_string(v2.stack_pos) + "]";
+		ln = "mov eax, " + type2asm(child);
 		sec_text.push_back(ln);
 		
 		assign_ax(dest_var, v);
