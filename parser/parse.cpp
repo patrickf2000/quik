@@ -384,80 +384,100 @@ AstCond *build_conditional(Line ln) {
 		cond = new AstWhile;
 	}
 	
-	//Extract the needed tokens
-	Token lval = tokens.at(2);
-	TokenType op;
-	Token rval;
+	//By default, make the operator equal and rval true
+	cond->set_op(CondOp::Equals);
+	cond->rval = new AstBool(true);
 	
-	if (tokens.size() == 4) {
-		op = TokenType::EQUALS;
-		rval.type = TokenType::B_TRUE;
-	} else {
-		op = tokens.at(3).type;
-		rval = tokens.at(4);
-	}
+	//Parse the expression
+	bool found_op = false;
 	
-	//TODO: Is there a way we can clean this up?
-	//Parse the left value
-	switch (lval.type) {
-		case TokenType::ID: {
-			AstID *id = new AstID(lval.id);
-			cond->lval = id;
-		} break;
-		case TokenType::NO: {
-			AstInt *i = new AstInt(std::stoi(lval.id));
-			cond->lval = i;
-		} break;
-		case TokenType::CHAR: {
-			AstChar *ch = new AstChar(lval.id[0]);
-			cond->lval = ch;
-		} break;
+	for (int i = 2; i<tokens.size()-1; i++) {
+		Token t = tokens.at(i);
 		
-		case TokenType::B_TRUE: {
-			AstBool *bl = new AstBool(true);
-			cond->lval = bl;
-		} break;
-		case TokenType::B_FALSE: {
-			AstBool *bl = new AstBool(false);
-			cond->lval = bl;
-		} break;
-	}
-	
-	//Right value
-	switch (rval.type) {
-		case TokenType::ID: {
-			AstID *id = new AstID(rval.id);
-			cond->rval = id;
-		} break;
-		case TokenType::NO: {
-			AstInt *i = new AstInt(std::stoi(rval.id));
-			cond->rval = i;
-		} break;
-		case TokenType::CHAR: {
-			AstChar *ch = new AstChar(rval.id[0]);
-			cond->rval = ch;
-		} break;
+		switch (t.type) {
+			//Types
+			//Variables
+			case TokenType::ID: {
+				AstID *id = new AstID(t.id);
+				
+				if (found_op)
+					cond->rval = id;
+				else
+					cond->lval = id;
+			} break;
+			
+			//Values
+			case TokenType::NO: {
+				AstInt *i = new AstInt(std::stoi(t.id));
+				
+				if (found_op)
+					cond->rval = i;
+				else
+					cond->lval = i;
+			} break;
+			
+			case TokenType::CHAR: {
+				AstChar *ch = new AstChar(t.id[0]);
+				
+				if (found_op)
+					cond->rval = ch;
+				else
+					cond->lval = ch;
+			} break;
+			
+			//Booleans
+			case TokenType::B_TRUE: {
+				AstBool *bl = new AstBool(true);
+				
+				if (found_op)
+					cond->rval = bl;
+				else
+					cond->lval = bl;
+			} break;
+			
+			case TokenType::B_FALSE: {
+				AstBool *bl = new AstBool(false);
+				
+				if (found_op)
+					cond->rval = bl;
+				else
+					cond->lval = bl;
+			} break;
 		
-		case TokenType::B_TRUE: {
-			AstBool *bl = new AstBool(true);
-			cond->rval = bl;
-		} break;
-		case TokenType::B_FALSE: {
-			AstBool *bl = new AstBool(false);
-			cond->rval = bl;
-		} break;
+			//Operators
+			case TokenType::EQUALS: {
+				cond->set_op(CondOp::Equals);
+				found_op = true;
+			} break;
+			
+			case TokenType::NOT_EQUAL: {
+				cond->set_op(CondOp::NotEquals);
+				found_op = true;
+			} break;
+			
+			case TokenType::GREATER: {
+				cond->set_op(CondOp::Greater);
+				found_op = true;
+			} break;
+			
+			case TokenType::GREATER_EQ: {
+				cond->set_op(CondOp::GreaterEq);
+				found_op = true;
+			} break;
+			
+			case TokenType::LESS: {
+				cond->set_op(CondOp::Less);
+				found_op = true;
+			} break;
+			
+			case TokenType::LESS_EQ: {
+				cond->set_op(CondOp::LessEq);
+				found_op = true;
+			} break;
+		}
 	}
 	
-	//The operator
-	switch (op) {
-		case TokenType::EQUALS: cond->set_op(CondOp::Equals); break;
-		case TokenType::NOT_EQUAL: cond->set_op(CondOp::NotEquals); break;
-		case TokenType::GREATER: cond->set_op(CondOp::Greater); break;
-		case TokenType::GREATER_EQ: cond->set_op(CondOp::GreaterEq); break;
-		case TokenType::LESS: cond->set_op(CondOp::Less); break;
-		case TokenType::LESS_EQ: cond->set_op(CondOp::LessEq); break;
-	}
-	
+	//Return
 	return cond;
 }
 
