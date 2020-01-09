@@ -9,11 +9,11 @@ void Asm_x86::build_arr_dec(AstNode *node) {
 	Var v;
 	v.name = ard->get_name();
 	v.type = ard->get_type();
-	v.stack_pos = stack_pos;
+	//v.stack_pos = stack_pos;
 	v.size = ard->children.size();
 	v.is_array = true;
 	v.is_param = false;
-	vars[ard->get_name()] = v;
+	//vars[ard->get_name()] = v;
 	
 	//Determine the stack position and type
 	int size = 1;
@@ -44,11 +44,11 @@ void Asm_x86::build_arr_dec(AstNode *node) {
 			} break;
 	}
 	
-	//v.stack_pos = stack_pos + size;
-	//vars[ard->get_name()] = v;
-	
-	pos = size * v.size;
+	pos = stack_pos + (size * v.size);
 	stack_pos = pos;
+	
+	v.stack_pos = stack_pos;
+	vars[ard->get_name()] = v;
 	
 	//Add the initial values
 	for (auto child : ard->children) {
@@ -104,10 +104,10 @@ void Asm_x86::build_arr_access(AstNode *node) {
 			int i2 = 0;
 			
 			if (v.is_param) {
-				i2 = i->get_val() * size;
+				i2 = (i->get_val() * size);
 				ln = "mov eax, [" + reg + "+" + std::to_string(i2) + "]";
 			} else {
-				i2 = index + (i->get_val() * size);
+				i2 = index - (i->get_val() * size);
 				ln += std::to_string(i2) + "]";
 			}
 		} break;
@@ -134,7 +134,7 @@ void Asm_x86::build_arr_access(AstNode *node) {
 					sec_text.push_back("add rax, rbx");
 					ln = "mov eax, [rax]";
 				} else {
-					int top = index + (index * size);
+					int top = index;
 					ln = "mov eax, [rbp-" + std::to_string(top);
 					ln += "+rbx]";
 				}
@@ -154,7 +154,7 @@ void Asm_x86::build_arr_access(AstNode *node) {
 				if (v.is_param) {
 					ln = "mov eax, [eax+ebx]";
 				} else {
-					ln += std::to_string((size*v.size));
+					ln += std::to_string(index);
 					
 					if (x64)
 						ln += "+rbx]";
@@ -181,7 +181,7 @@ std::string Asm_x86::build_arr_assign(AstNode *node, Var v) {
 			AstID *i = dynamic_cast<AstID *>(assign->index);
 			Var v2 = vars[i->get_name()];
 			
-			dest_var += std::to_string((size*v.size));
+			dest_var += std::to_string(v.stack_pos);
 			dest_var += "+" + get_reg("bx") + "]";
 			
 			std::string ln2 = "mov ebx, [" + get_reg("bp") + "-";
@@ -194,7 +194,7 @@ std::string Asm_x86::build_arr_assign(AstNode *node, Var v) {
 		
 		case AstType::Int: {
 			AstInt *i = dynamic_cast<AstInt *>(assign->index);
-			int val = v.stack_pos + (i->get_val() * size);
+			int val = v.stack_pos - (i->get_val() * size);
 			dest_var += std::to_string(val) + "]";
 		} break;
 	}

@@ -125,7 +125,7 @@ void Asm_x86::build_func_x64(AstFuncDec *fd) {
 	sec_text.push_back("mov rbp, rsp");
 	
 	//TODO: Add some logic instead of randomly assigning some large number
-	sec_text.push_back("sub rsp, 48");
+	sec_text.push_back("sub rsp, 56");
 	
 	sec_text.push_back("");
 	
@@ -211,10 +211,8 @@ void Asm_x86::build_func_call_i386(AstFuncCall *fc) {
 					case DataType::Bool:
 					case DataType::Int: {
 						if (v.is_array) {
-							int top = (4 * v.size);
-							
 							std::string ln1 = "lea eax, [ebp-";
-							ln1 += std::to_string(top) + "]";
+							ln1 += std::to_string(v.stack_pos) + "]";
 							sec_text.push_back(ln1);
 							
 							ln = "push eax";
@@ -296,10 +294,8 @@ void Asm_x86::build_func_call_x64(AstFuncCall *fc) {
 					//Integer variables and arrays
 					case DataType::Int: {
 						if (v.is_array) {
-							int top = (4 * v.size);
-							
 							std::string ln1 = "lea rax, [rbp-";
-							ln1 += std::to_string(top) + "]";
+							ln1 += std::to_string(v.stack_pos) + "]";
 							sec_text.push_back(ln1);
 							
 							call_ln = "mov " + call_regs[call_index] + ", ";
