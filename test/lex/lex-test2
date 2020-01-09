@@ -30,3 +30,12 @@ VAR~ID>x~ASSIGN~NO>32~
 
 int[3] array = 1, 2, 3
 T_INT~L_BRACKET~NO>3~R_BRACKET~ID>array~ASSIGN~NO>1~,~NO>2~,~NO>3~
+
+float128 array = 1, 2, 3, 4
+FLOAT_128~ID>array~ASSIGN~NO>1~,~NO>2~,~NO>3~,~NO>4~
+
+float256 array = 1, 2, 3, 4, 5, 6, 7, 8
+FLOAT_256~ID>array~ASSIGN~NO>1~,~NO>2~,~NO>3~,~NO>4~,~NO>5~,~NO>6~,~NO>7~,~NO>8~
+
+float80 pi = 3.14
+FLOAT_80~ID>pi~ASSIGN~DEC>3.14~

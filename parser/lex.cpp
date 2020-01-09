@@ -132,6 +132,17 @@ std::vector<Token> tokenize(std::string line) {
 				t.type = TokenType::VAR;
 				tokens.push_back(t);
 				
+			//Special types
+			} else if (current == "float128") {
+				t.type = TokenType::FLOAT_128;
+				tokens.push_back(t);
+			} else if (current == "float256") {
+				t.type = TokenType::FLOAT_256;
+				tokens.push_back(t);
+			} else if (current == "float80") {
+				t.type = TokenType::FLOAT_80;
+				tokens.push_back(t);
+				
 			//Conditional stuff
 			} else if (current == "if") {
 				t.type = TokenType::IF;
@@ -317,5 +328,8 @@ TokenType str2type(std::string in) {
 	else if (in == "L_BRACKET") return TokenType::L_BRACKET;
 	else if (in == "R_BRACKET") return TokenType::R_BRACKET;
 	else if (in == "D_PLUS") return TokenType::D_PLUS;
+	else if (in == "FLOAT_128") return TokenType::FLOAT_128;
+	else if (in == "FLOAT_256") return TokenType::FLOAT_256;
+	else if (in == "FLOAT_80") return TokenType::FLOAT_80;
 	return TokenType::NONE;
 }

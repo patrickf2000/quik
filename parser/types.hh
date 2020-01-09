@@ -25,6 +25,9 @@ enum TokenType {
 	T_FLOAT,
 	T_BOOL,
 	T_STR,
+	FLOAT_128,
+	FLOAT_256,
+	FLOAT_80,
 	VAR,
 	
 	//Symbols
