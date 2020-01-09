@@ -1,0 +1,44 @@
+include io
+
+func double(x:int)
+	x = x * x
+	return x
+end
+
+func double2(x:int)
+	x = x * x
+	return x
+end
+
+func is_even(x:int)
+	int mod = x % 2
+	if (mod == 0)
+		return 1
+	end
+	return 0
+end
+
+func main
+	if (double(33) == double2(33))
+		puts("Big!!")
+	else
+		puts("Small!!")
+	end
+	
+	if (is_even(10))
+		puts("Even!")
+	else
+		puts("Odd!")
+	end
+	
+	if (is_even(11))
+		puts("Even!")
+	else
+		puts("Odd!")
+	end
+end
+
+#TEST
+#Big!!
+#Even!
+#Odd!
