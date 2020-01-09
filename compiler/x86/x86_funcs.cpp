@@ -125,7 +125,7 @@ void Asm_x86::build_func_x64(AstFuncDec *fd) {
 	sec_text.push_back("mov rbp, rsp");
 	
 	//TODO: Add some logic instead of randomly assigning some large number
-	sec_text.push_back("sub rsp, 56");
+	sec_text.push_back("sub rsp, 48");
 	
 	sec_text.push_back("");
 	
