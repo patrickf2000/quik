@@ -273,14 +273,14 @@ public:
 
 //The float-128 type
 //Tells the compiler to use SSE extensions
-class AstFloat128 : public AstAttrNode {
+class AstFloat128 : public AstVarDec {
 public:
 	explicit AstFloat128() { type = AstType::Float128; }
 };
 
 //The float-256 type
 //Tells the compiler to use AVX extensions
-class AstFloat256 : public AstAttrNode {
+class AstFloat256 : public AstVarDec {
 public:
 	explicit AstFloat256() { type = AstType::Float256; }
 };

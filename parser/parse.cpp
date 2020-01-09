@@ -292,31 +292,47 @@ AstFuncDec *build_func_dec(Line ln) {
 }
 
 //Build an array node
-AstArrayDec *build_array(Line ln) {
+AstArrayDec *build_array(Line ln, bool is_float) {
 	auto tokens = ln.tokens;
 	auto type = tokens.at(0).type;
 
 	AstArrayDec *arr = new AstArrayDec;
 	arr->set_type(ttype2dtype(type));
 	
-	//Syntax checking
-	auto lb = tokens.at(1).type;
-	auto count = tokens.at(2);
-	auto rb = tokens.at(3).type;
-	auto name = tokens.at(4);
+	int start = 6;
 	
-	if (lb != TokenType::L_BRACKET || rb != TokenType::R_BRACKET)
-		syntax_error(ln, "Invalid array declaration syntax.");
+	//Vectors
+	if (is_float) {
+		auto name = tokens.at(0);
+		arr->set_name(name.id);
 		
-	if (count.type != TokenType::NO)
-		syntax_error(ln, "No or invalid size specified for array.");
+		if (type == TokenType::FLOAT_128)
+			arr->set_size(4);
+		else if (type == TokenType::FLOAT_256)
+			arr->set_size(8);
+			
+		start = 3;
+	//Arrays
+	} else {
+		//Syntax checking
+		auto lb = tokens.at(1).type;
+		auto count = tokens.at(2);
+		auto rb = tokens.at(3).type;
+		auto name = tokens.at(4);
 		
-	//Set the name and size
-	arr->set_name(name.id);
-	arr->set_size(std::stoi(count.id));
+		if (lb != TokenType::L_BRACKET || rb != TokenType::R_BRACKET)
+			syntax_error(ln, "Invalid array declaration syntax.");
+			
+		if (count.type != TokenType::NO)
+			syntax_error(ln, "No or invalid size specified for array.");
+			
+		//Set the name and size
+		arr->set_name(name.id);
+		arr->set_size(std::stoi(count.id));
+	}
 	
 	//Set the elements
-	for (int i = 6; i<tokens.size(); i++) {
+	for (int i = start; i<tokens.size(); i++) {
 		auto t = tokens.at(i);
 		
 		switch (t.type) {
@@ -644,7 +660,7 @@ AstNode *build_node(Line ln) {
 				auto t2 = tokens[3].type;
 				
 				if (t1 == TokenType::L_BRACKET && t2 == TokenType::R_BRACKET) {
-					AstArrayDec *arr = build_array(ln);
+					AstArrayDec *arr = build_array(ln, false);
 					return arr;
 				}
 			}
@@ -656,6 +672,10 @@ AstNode *build_node(Line ln) {
 			
 			return vd;
 		}
+		
+		//Build the AVX types
+		case TokenType::FLOAT_128:
+		case TokenType::FLOAT_256: return build_array(ln, true);
 	}
 
 	return nullptr;
