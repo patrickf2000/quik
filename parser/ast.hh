@@ -34,6 +34,9 @@ enum AstType {
 	Char,
 	Bool,
 	Float,
+	Float80,
+	Float128,
+	Float256,
 	Str,
 	ArrayDec,
 	ArrayAccess,
@@ -252,8 +255,34 @@ public:
 	
 	double get_val() { return no; }
 	void set_val(double n) { no = n; }
-private:
+protected:
 	double no = 0;
+};
+
+//The float-80 type
+//This tells the compiler to use the FPU unit, which handles
+// 80-bit types (hence the name)
+class AstFloat80: public AstFloat {
+public:
+	explicit AstFloat80() { type = AstType::Float80; }
+	explicit AstFloat80(double n) {
+		type = AstType::Float80;
+		no = n;
+	}
+};
+
+//The float-128 type
+//Tells the compiler to use SSE extensions
+class AstFloat128 : public AstAttrNode {
+public:
+	explicit AstFloat128() { type = AstType::Float128; }
+};
+
+//The float-256 type
+//Tells the compiler to use AVX extensions
+class AstFloat256 : public AstAttrNode {
+public:
+	explicit AstFloat256() { type = AstType::Float256; }
 };
 
 //The string type

@@ -23,6 +23,10 @@ std::string ast2str(AstType type) {
 		case AstType::ArrayAccess: return "ArrayAccess";
 		case AstType::ArrayAssign: return "ArrayAssign";
 		
+		case AstType::Float128: return "Float128";
+		case AstType::Float256: return "Float256";
+		case AstType::Float80: return "Float80";
+				
 		case AstType::If: return "If";
 		case AstType::Elif: return "Elif";
 		case AstType::Else: return "Else";
@@ -51,6 +55,10 @@ std::string type2str(DataType type) {
 		case DataType::Float: return "Float";
 		case DataType::Bool: return "Bool";
 		case DataType::Str: return "Str";
+		
+		case DataType::Float128: return "Float128";
+		case DataType::Float256: return "Float256";
+		case DataType::Float80: return "Float80";
 	}
 	
 	return "NONE";

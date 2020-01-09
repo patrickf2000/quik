@@ -77,7 +77,10 @@ enum class DataType {
 	Long,
 	Float,
 	Bool,
-	Str
+	Str,
+	Float128,
+	Float256,
+	Float80
 };
 
 enum class CondOp {
