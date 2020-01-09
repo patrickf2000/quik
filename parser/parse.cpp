@@ -362,10 +362,6 @@ AstCond *build_conditional(Line ln) {
 	auto type = tokens.at(0).type;
 	
 	//Make sure the syntax is correct
-	if (tokens.size() != 6 && tokens.size() != 4) {
-		syntax_error(ln, "Incorrect conditional syntax.");
-	}
-	
 	auto t1 = tokens.at(1).type;
 	auto t2 = tokens.at(tokens.size() - 1).type;
 	
@@ -393,6 +389,29 @@ AstCond *build_conditional(Line ln) {
 	
 	for (int i = 2; i<tokens.size()-1; i++) {
 		Token t = tokens.at(i);
+		
+		if (tokens[i+1].type == TokenType::LEFT_PAREN) {
+			std::vector<Token> sub_tokens;
+			
+			for (int j = i; j<tokens.size(); j++) {
+				sub_tokens.push_back(tokens.at(j));
+			
+				if (tokens[j].type == TokenType::RIGHT_PAREN) {
+					i = j;
+					break;
+				}
+			}
+			
+			Line l;
+			l.tokens = sub_tokens;
+			
+			AstFuncCall *call = build_func_call(l);
+			if (found_op)
+				cond->rval = call;
+			else
+				cond->lval = call;
+			continue;
+		}
 		
 		switch (t.type) {
 			//Types

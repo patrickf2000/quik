@@ -26,14 +26,30 @@ void Asm_x86::build_cond(AstNode *node) {
 		} else if (cond->rval->type == AstType::Char) {
 			c_reg = "al";
 		}
+		
+		std::string ln = "";
 	
 		//Position the lval
-		std::string ln = "mov eax, " + type2asm(cond->lval);
-		sec_text.push_back(ln);
+		if (cond->lval->type == AstType::FuncCall) {
+			AstFuncCall *fc = static_cast<AstFuncCall *>(cond->lval);
+			build_func_call(fc);
+		} else {
+			ln = "mov eax, " + type2asm(cond->lval);
+			sec_text.push_back(ln);
+		}
 		
 		//Position the rval
-		ln = "cmp " + c_reg + ", " + type2asm(cond->rval);
-		sec_text.push_back(ln);
+		if (cond->rval->type == AstType::FuncCall) {
+			sec_text.push_back("mov ebx, eax");
+			
+			AstFuncCall *fc = static_cast<AstFuncCall *>(cond->rval);
+			build_func_call(fc);
+			
+			sec_text.push_back("cmp eax, ebx");
+		} else {
+			ln = "cmp " + c_reg + ", " + type2asm(cond->rval);
+			sec_text.push_back(ln);
+		}
 		
 		//Comparison
 		switch (cond->get_op()) {

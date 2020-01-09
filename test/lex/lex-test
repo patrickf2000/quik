@@ -37,6 +37,9 @@ ELIF~(~ID>x~==~ID>y~)~
 else
 ELSE~
 
+if (myfunc() == x)
+IF~(~ID>myfunc~(~)~==~ID>x~)~
+
 == != > < >= <=
 ==~!=~GREATER~LESS~GREATER_EQ~LESS_EQ~
 
