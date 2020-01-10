@@ -9,11 +9,9 @@ void Asm_x86::build_arr_dec(AstNode *node) {
 	Var v;
 	v.name = ard->get_name();
 	v.type = ard->get_type();
-	//v.stack_pos = stack_pos;
 	v.size = ard->children.size();
 	v.is_array = true;
 	v.is_param = false;
-	//vars[ard->get_name()] = v;
 	
 	//Determine the stack position and type
 	int size = 1;
@@ -23,25 +21,25 @@ void Asm_x86::build_arr_dec(AstNode *node) {
 	switch (v.type) {
 		case DataType::Byte:
 		case DataType::Char: {
-				size = 1;
-			} break;
+			size = 1;
+		} break;
 			
 		case DataType::Short: {
-				size = 2;
-				prefix = "word";
-			} break;
+			size = 2;
+			prefix = "word";
+		} break;
 			
 		case DataType::Bool:
 		case DataType::Int:
 		case DataType::Float: {
-				size = 4;
-				prefix = "dword";
-			} break;
+			size = 4;
+			prefix = "dword";
+		} break;
 			
 		case DataType::Str: {
-				size = 8;
-				prefix = "qword";
-			} break;
+			size = 8;
+			prefix = "qword";
+		} break;
 	}
 	
 	pos = stack_pos + (size * v.size);
