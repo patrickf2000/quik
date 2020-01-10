@@ -283,8 +283,20 @@ void Asm_x86::build_floatex_assign(AstNode *node) {
 		sec_text.push_back("");
 		
 		//Load variables
-		std::string ln1 = "movupd xmm0, [rbp-" + std::to_string(v1.stack_pos) + "]";
-		std::string ln2 = "movupd xmm1, [rbp-" + std::to_string(v2.stack_pos) + "]";
+		std::string ln1 = "movupd xmm0";
+		std::string ln2 = "movupd xmm1";
+		
+		std::string dest_var = " [rbp-" + std::to_string(index) + "], ";
+		std::string dest_ln = "movups" + dest_var + "xmm0";
+		
+		if (vd->get_type() == DataType::Float256) {
+			ln1 = "vmovupd ymm0";
+			ln2 = "vmovupd ymm1";
+			dest_ln = "vmovups" + dest_var + "ymm0";
+		}
+		
+		ln1 += ", [rbp-" + std::to_string(v1.stack_pos) + "]";
+		ln2 += ", [rbp-" + std::to_string(v2.stack_pos) + "]";
 		
 		sec_text.push_back(ln1);
 		sec_text.push_back(ln2);
@@ -296,14 +308,16 @@ void Asm_x86::build_floatex_assign(AstNode *node) {
 			
 		//Parallel addition
 		} else if (op->type == AstType::Inc) {
-			sec_text.push_back("addps xmm0, xmm1");
+			if (vd->get_type() == DataType::Float256)
+				sec_text.push_back("vaddps ymm0, ymm1");
+			else
+				sec_text.push_back("addps xmm0, xmm1");
 		}
 		
 		sec_text.push_back("");
 		
 		//Store the result
-		std::string ln = "movups [rbp-" + std::to_string(index) + "], xmm0";
-		sec_text.push_back(ln);
+		sec_text.push_back(dest_ln);
 	} else {
 		for (auto child : vd->children) {
 			std::string dest = "mov dword [" + get_reg("bp") + "-";
