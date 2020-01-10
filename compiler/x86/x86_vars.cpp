@@ -271,20 +271,55 @@ void Asm_x86::build_floatex_assign(AstNode *node) {
 	int index = v.stack_pos;
 	int size = 4;
 		
-	for (auto child : vd->children) {
-		std::string dest = "mov dword [" + get_reg("bp") + "-";
-		dest += std::to_string(index) + "], ";
+	if (vd->children.size() == 3) {
+		auto part1 = static_cast<AstAttrNode *>(vd->children.at(0));
+		auto op = vd->children.at(1);
+		auto part2 = static_cast<AstAttrNode *>(vd->children.at(2));
 		
-		//TODO: Add remaining types
-		switch (child->type) {
-			case AstType::Int: {
-				AstInt *i = static_cast<AstInt *>(child);
-				dest += std::to_string(i->get_val());
-			} break;
+		Var v1 = vars[part1->get_name()];
+		Var v2 = vars[part2->get_name()];
+		
+		sec_text.push_back("vzeroall");
+		sec_text.push_back("");
+		
+		//Load variables
+		std::string ln1 = "movupd xmm0, [rbp-" + std::to_string(v1.stack_pos) + "]";
+		std::string ln2 = "movupd xmm1, [rbp-" + std::to_string(v2.stack_pos) + "]";
+		
+		sec_text.push_back(ln1);
+		sec_text.push_back(ln2);
+		
+		//Do the math
+		//Scalar addition
+		if (op->type == AstType::Add) {
+			//TODO: Add me
+			
+		//Parallel addition
+		} else if (op->type == AstType::Inc) {
+			sec_text.push_back("addps xmm0, xmm1");
 		}
 		
-		index -= size;
-		sec_text.push_back(dest);
+		sec_text.push_back("");
+		
+		//Store the result
+		std::string ln = "movups [rbp-" + std::to_string(index) + "], xmm0";
+		sec_text.push_back(ln);
+	} else {
+		for (auto child : vd->children) {
+			std::string dest = "mov dword [" + get_reg("bp") + "-";
+			dest += std::to_string(index) + "], ";
+			
+			//TODO: Add remaining types
+			switch (child->type) {
+				case AstType::Int: {
+					AstInt *i = static_cast<AstInt *>(child);
+					dest += std::to_string(i->get_val());
+				} break;
+			}
+			
+			index -= size;
+			sec_text.push_back(dest);
+		}
 	}
 	
 	sec_text.push_back("");

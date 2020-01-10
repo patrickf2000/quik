@@ -184,14 +184,8 @@ void build_var_parts(AstNode *vd, int start, std::vector<Token> tokens) {
 				vd->children.push_back(new AstNode(AstType::Div));
 			} else if (t.type == TokenType::MOD) {
 				vd->children.push_back(new AstNode(AstType::Mod));
-				
-			//TODO: Make it valid for an increment operator in the equation
 			} else if (t.type == TokenType::D_PLUS) {
-				//vd->children.push_back(new AstNode(AstType::Inc));
-				Line l;
-				l.tokens = tokens;
-				syntax_error(l, "Increment operator invalid within an equation.");
-				
+				vd->children.push_back(new AstNode(AstType::Inc));
 			} else {
 				AstID *i = new AstID(t.id);
 				vd->children.push_back(i);
