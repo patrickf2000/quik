@@ -48,3 +48,7 @@ WHILE~(~ID>x~LESS~NO>10~)~
 
 ++x
 D_PLUS~ID>x~
+
+x**y
+ID>x~D_MUL~ID>y~
+

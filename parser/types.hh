@@ -46,6 +46,7 @@ enum TokenType {
 	DIV,
 	MOD,
 	D_PLUS,
+	D_MUL,
 	
 	//Boolean operators
 	EQUALS,
