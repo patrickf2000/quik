@@ -186,6 +186,8 @@ void build_var_parts(AstNode *vd, int start, std::vector<Token> tokens) {
 				vd->children.push_back(new AstNode(AstType::Mod));
 			} else if (t.type == TokenType::D_PLUS) {
 				vd->children.push_back(new AstNode(AstType::Inc));
+			} else if (t.type == TokenType::D_MUL) {
+				vd->children.push_back(new AstNode(AstType::DMul));
 			} else {
 				AstID *i = new AstID(t.id);
 				vd->children.push_back(i);
