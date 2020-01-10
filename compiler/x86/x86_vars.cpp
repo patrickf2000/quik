@@ -17,6 +17,8 @@ void Asm_x86::build_var_dec(AstNode *node) {
 		case DataType::Int:
 		case DataType::Str: stack_pos += 4; break;
 		case DataType::Float: stack_pos += 8; break;
+		case DataType::Float128: stack_pos += 16; break;
+		case DataType::Float256: stack_pos += 32; break;
 	}
 	
 	v.stack_pos = stack_pos;
@@ -47,6 +49,10 @@ void Asm_x86::build_var_assign(AstNode *node) {
 	if (vd->get_type() == DataType::Float) {
 		build_flt_assign(node);
 		return;
+	} else if (vd->get_type() == DataType::Float128
+		|| vd->get_type() == DataType::Float256) {
+		build_floatex_assign(node);
+		return;	
 	}
 	
 	auto child = vd->children.at(0);
@@ -257,4 +263,31 @@ void Asm_x86::build_flt_assign(AstNode *node) {
 	sec_text.push_back(ln);
 	sec_text.push_back("");
 }
+
+//Build SSE/AVX variables
+void Asm_x86::build_floatex_assign(AstNode *node) {
+	AstVarDec *vd = static_cast<AstVarDec *>(node);
+	Var v = vars[vd->get_name()];
+	int index = v.stack_pos;
+	int size = 4;
+		
+	for (auto child : vd->children) {
+		std::string dest = "mov dword [" + get_reg("bp") + "-";
+		dest += std::to_string(index) + "], ";
+		
+		//TODO: Add remaining types
+		switch (child->type) {
+			case AstType::Int: {
+				AstInt *i = static_cast<AstInt *>(child);
+				dest += std::to_string(i->get_val());
+			} break;
+		}
+		
+		index -= size;
+		sec_text.push_back(dest);
+	}
+	
+	sec_text.push_back("");
+}
+
 
