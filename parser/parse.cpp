@@ -150,6 +150,8 @@ void build_var_parts(AstNode *vd, int start, std::vector<Token> tokens) {
 			vd->children.push_back(acc);
 			
 			i += 3;
+		} else if (t.type == TokenType::COMMA) {
+			continue;
 		} else {
 			if (t.type == TokenType::NO) {
 				int no = std::stoi(t.id);
@@ -638,6 +640,8 @@ AstNode *build_node(Line ln) {
 		case TokenType::T_BOOL:
 		case TokenType::T_STR:
 		case TokenType::FLOAT_80:
+		case TokenType::FLOAT_128:
+		case TokenType::FLOAT_256:
 		case TokenType::VAR: {
 			if (tokens.size() > 4) {
 				auto t1 = tokens[1].type;

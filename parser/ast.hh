@@ -175,7 +175,7 @@ public:
 	
 	DataType get_type() { return dtype; }
 	void set_type(DataType t) { dtype = t; }
-private:
+protected:
 	DataType dtype;
 };
 
@@ -275,14 +275,20 @@ public:
 //Tells the compiler to use SSE extensions
 class AstFloat128 : public AstVarDec {
 public:
-	explicit AstFloat128() { type = AstType::Float128; }
+	explicit AstFloat128() { 
+		type = AstType::Float128;
+		dtype = DataType::Float128;
+	}
 };
 
 //The float-256 type
 //Tells the compiler to use AVX extensions
 class AstFloat256 : public AstVarDec {
 public:
-	explicit AstFloat256() { type = AstType::Float256; }
+	explicit AstFloat256() {
+		type = AstType::Float256;
+		dtype = DataType::Float256;
+	}
 };
 
 //The string type
