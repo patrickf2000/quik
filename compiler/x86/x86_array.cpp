@@ -18,28 +18,38 @@ void Asm_x86::build_arr_dec(AstNode *node) {
 	int pos = 0;
 	std::string prefix = "byte";
 	
-	switch (v.type) {
-		case DataType::Byte:
-		case DataType::Char: {
-			size = 1;
-		} break;
-			
-		case DataType::Short: {
-			size = 2;
-			prefix = "word";
-		} break;
-			
-		case DataType::Bool:
-		case DataType::Int:
-		case DataType::Float: {
-			size = 4;
-			prefix = "dword";
-		} break;
-			
-		case DataType::Str: {
-			size = 8;
-			prefix = "qword";
-		} break;
+	if (v.type == DataType::Float128) {
+		size = 4;
+		v.size = 4;
+		prefix = "dword";
+	} else if (v.type == DataType::Float256) {
+		size = 4;
+		v.size = 8;
+		prefix = "dword";
+	} else {
+		switch (v.type) {
+			case DataType::Byte:
+			case DataType::Char: {
+				size = 1;
+			} break;
+				
+			case DataType::Short: {
+				size = 2;
+				prefix = "word";
+			} break;
+				
+			case DataType::Bool:
+			case DataType::Int:
+			case DataType::Float: {
+				size = 4;
+				prefix = "dword";
+			} break;
+				
+			case DataType::Str: {
+				size = 8;
+				prefix = "qword";
+			} break;
+		}
 	}
 	
 	pos = stack_pos + (size * v.size);
