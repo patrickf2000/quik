@@ -299,40 +299,24 @@ AstArrayDec *build_array(Line ln, bool is_float) {
 	AstArrayDec *arr = new AstArrayDec;
 	arr->set_type(ttype2dtype(type));
 	
-	int start = 6;
+	//Syntax checking
+	auto lb = tokens.at(1).type;
+	auto count = tokens.at(2);
+	auto rb = tokens.at(3).type;
+	auto name = tokens.at(4);
 	
-	//Vectors
-	if (is_float) {
-		auto name = tokens.at(0);
-		arr->set_name(name.id);
+	if (lb != TokenType::L_BRACKET || rb != TokenType::R_BRACKET)
+		syntax_error(ln, "Invalid array declaration syntax.");
 		
-		if (type == TokenType::FLOAT_128)
-			arr->set_size(4);
-		else if (type == TokenType::FLOAT_256)
-			arr->set_size(8);
-			
-		start = 3;
-	//Arrays
-	} else {
-		//Syntax checking
-		auto lb = tokens.at(1).type;
-		auto count = tokens.at(2);
-		auto rb = tokens.at(3).type;
-		auto name = tokens.at(4);
+	if (count.type != TokenType::NO)
+		syntax_error(ln, "No or invalid size specified for array.");
 		
-		if (lb != TokenType::L_BRACKET || rb != TokenType::R_BRACKET)
-			syntax_error(ln, "Invalid array declaration syntax.");
-			
-		if (count.type != TokenType::NO)
-			syntax_error(ln, "No or invalid size specified for array.");
-			
-		//Set the name and size
-		arr->set_name(name.id);
-		arr->set_size(std::stoi(count.id));
-	}
+	//Set the name and size
+	arr->set_name(name.id);
+	arr->set_size(std::stoi(count.id));
 	
 	//Set the elements
-	for (int i = start; i<tokens.size(); i++) {
+	for (int i = 6; i<tokens.size(); i++) {
 		auto t = tokens.at(i);
 		
 		switch (t.type) {
@@ -672,10 +656,6 @@ AstNode *build_node(Line ln) {
 			
 			return vd;
 		}
-		
-		//Build the AVX types
-		case TokenType::FLOAT_128:
-		case TokenType::FLOAT_256: return build_array(ln, true);
 	}
 
 	return nullptr;
