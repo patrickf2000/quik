@@ -283,8 +283,8 @@ void Asm_x86::build_floatex_assign(AstNode *node) {
 		sec_text.push_back("");
 		
 		//Load variables
-		std::string ln1 = "movupd xmm0";
-		std::string ln2 = "movupd xmm1";
+		std::string ln1 = "movups xmm0";
+		std::string ln2 = "movups xmm1";
 		
 		std::string dest_var = " [rbp-" + std::to_string(index) + "], ";
 		std::string dest_ln = "movups" + dest_var + "xmm0";
@@ -312,6 +312,13 @@ void Asm_x86::build_floatex_assign(AstNode *node) {
 				sec_text.push_back("vaddps ymm0, ymm1");
 			else
 				sec_text.push_back("addps xmm0, xmm1");
+				
+		//Parallel multiplication
+		} else if (op->type == AstType::DMul) {
+			if (vd->get_type() == DataType::Float256)
+				sec_text.push_back("vmulps ymm0, ymm1");
+			else
+				sec_text.push_back("pmulld xmm0, xmm1");
 		}
 		
 		sec_text.push_back("");
