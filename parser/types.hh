@@ -81,6 +81,8 @@ enum class DataType {
 	Float,
 	Bool,
 	Str,
+	Int128,
+	Int256,
 	Float128,
 	Float256,
 	Float80
