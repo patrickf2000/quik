@@ -1,0 +1,32 @@
+# avx_int.qk
+# This is an example of vectorization using the Intel AVX extensions
+# See the corresponding Assembly file for how it is generated
+
+include io
+
+func main
+	int256 no1 = 1, 2, 3, 4, 5, 6, 7, 8
+	int256 no2 = 10, 20, 30, 40, 50, 60, 70, 80
+	
+	int256 answer1 = no1 ++ no2
+	int256 answer2 = no1 ** no2
+	
+	int index = 0
+	
+	puts("Add:")
+	while (index < 8)
+		int x = answer1[index]
+		print_int(x)
+		index++
+	end
+	
+	index = 0
+	
+	puts("Mul:")
+	while (index < 8)
+		int x = answer2[index]
+		print_int(x)
+		index++
+	end
+end
+
