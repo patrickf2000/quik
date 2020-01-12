@@ -304,7 +304,8 @@ void Asm_x86::build_floatex_assign(AstNode *node) {
 		std::string dest_var = " [rbp-" + std::to_string(index) + "], ";
 		std::string dest_ln = "movups" + dest_var + "xmm0";
 		
-		if (vd->get_type() == DataType::Float256) {
+		if (vd->get_type() == DataType::Int256
+			|| vd->get_type() == DataType::Float256) {
 			ln1 = "vmovupd ymm0";
 			ln2 = "vmovupd ymm1";
 			dest_ln = "vmovups" + dest_var + "ymm0";
@@ -323,17 +324,20 @@ void Asm_x86::build_floatex_assign(AstNode *node) {
 			
 		//Parallel addition
 		} else if (op->type == AstType::Inc) {
-			if (vd->get_type() == DataType::Float256)
-				sec_text.push_back("vaddps ymm0, ymm1");
+			if (vd->get_type() == DataType::Int256
+				|| vd->get_type() == DataType::Float256)
+				sec_text.push_back("vaddps ymm0, ymm0, ymm1");
 			else
 				sec_text.push_back("addps xmm0, xmm1");
 				
 		//Parallel multiplication
 		} else if (op->type == AstType::DMul) {
 			if (vd->get_type() == DataType::Float256)
-				sec_text.push_back("vmulps ymm0, ymm1");
+				sec_text.push_back("vmulps ymm0, ymm0, ymm1");
 			else if (vd->get_type() == DataType::Float128)
 				sec_text.push_back("mulps xmm0, xmm1");
+			else if (vd->get_type() == DataType::Int256)
+				sec_text.push_back("vpmulld ymm0, ymm0, ymm1");
 			else
 				sec_text.push_back("pmulld xmm0, xmm1");
 		}
