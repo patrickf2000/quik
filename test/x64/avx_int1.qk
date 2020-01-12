@@ -1,0 +1,43 @@
+include io
+
+func int_math
+	int128 no1 = 1, 2, 3, 4
+	int128 no2 = 10, 20, 30, 40
+	
+	int128 answer1 = no1 ++ no2
+	int128 answer2 = no1 ** no2
+	
+	int index = 0
+	
+	puts("Add:")
+	while (index < 4)
+		int x = answer1[index]
+		print_int(x)
+		index++
+	end
+	
+	index = 0
+	
+	puts("Mul:")
+	while (index < 4)
+		int x = answer2[index]
+		print_int(x)
+		index++
+	end
+end
+
+func main
+	int_math()
+end
+
+#TEST
+#Add:
+#11
+#22
+#33
+#44
+#Mul:
+#10
+#40
+#90
+#160
