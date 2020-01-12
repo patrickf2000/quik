@@ -125,7 +125,12 @@ void Asm_x86::build_func_x64(AstFuncDec *fd) {
 	sec_text.push_back("mov rbp, rsp");
 	
 	//TODO: Add some logic instead of randomly assigning some large number
-	sec_text.push_back("sub rsp, 48");
+	if (contains(fd->children.at(0), DataType::Float128)
+		|| contains(fd->children.at(0), DataType::Float256)) {
+		sec_text.push_back("sub rsp, 196");	
+	} else {
+		sec_text.push_back("sub rsp, 48");
+	}
 	
 	sec_text.push_back("");
 	

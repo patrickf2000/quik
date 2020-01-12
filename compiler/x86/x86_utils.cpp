@@ -135,3 +135,18 @@ std::string Asm_x86::build_float(AstNode *node) {
 	return name;
 }
 
+//Checks to see if a node contains another node of a particular type
+// among its children elements
+bool Asm_x86::contains(AstNode *node, DataType t) {
+	for (auto n : node->children) {
+		if (n->type == AstType::VarDec) {
+			auto vd = static_cast<AstVarDec *>(n);
+			if (vd->get_type() == t)
+				return true;
+		}
+	}
+	
+	return false;
+}
+
+

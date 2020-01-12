@@ -53,6 +53,7 @@ protected:
 	std::string asm_type(Var v);
 	std::string build_string(AstNode *node);
 	std::string build_float(AstNode *node);
+	bool contains(AstNode *node, DataType t);
 private:
 	std::string path = "";
 	std::vector<std::string> asm_files;
