@@ -34,12 +34,12 @@ std::string Asm_x86::type2asm(AstNode *node) {
 	
 	switch (node->type) {
 		case AstType::Int: {
-			AstInt *i = dynamic_cast<AstInt *>(node);
+			AstInt *i = static_cast<AstInt *>(node);
 			ln = std::to_string(i->get_val());
 		} break;
 		
 		case AstType::Id: {
-			AstID *id = dynamic_cast<AstID *>(node);
+			AstID *id = static_cast<AstID *>(node);
 			Var v2 = vars[id->get_name()];
 			
 			ln = "[" + get_reg("bp") + "-";
@@ -47,13 +47,13 @@ std::string Asm_x86::type2asm(AstNode *node) {
 		} break;
 		
 		case AstType::Char: {
-			AstChar *ch = dynamic_cast<AstChar *>(node);
+			AstChar *ch = static_cast<AstChar *>(node);
 			int val = (int)ch->get_val();
 			ln = std::to_string(val);
 		} break;
 		
 		case AstType::Bool: {
-			AstBool *bl = dynamic_cast<AstBool *>(node);
+			AstBool *bl = static_cast<AstBool *>(node);
 			if (bl->get_val())
 				ln += "1";
 			else
