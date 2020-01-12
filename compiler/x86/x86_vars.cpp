@@ -333,19 +333,29 @@ void Asm_x86::build_floatex_assign(AstNode *node) {
 		sec_text.push_back(dest_ln);
 	} else {
 		for (auto child : vd->children) {
-			std::string dest = "mov dword [" + get_reg("bp") + "-";
-			dest += std::to_string(index) + "], ";
+			std::string dest = "[" + get_reg("bp") + "-";
+			dest += std::to_string(index) + "]";
+			
+			std::string ln = "";
 			
 			//TODO: Add remaining types
 			switch (child->type) {
 				case AstType::Int: {
 					AstInt *i = static_cast<AstInt *>(child);
-					dest += std::to_string(i->get_val());
+					
+					ln = "mov dword " + dest + ", " + std::to_string(i->get_val());
+				} break;
+				
+				case AstType::Float: {
+					auto flt_name = build_float(child);
+					sec_text.push_back("movq xmm0, [" + flt_name + "]");
+					
+					ln = "movq " + dest + ", xmm0";
 				} break;
 			}
 			
 			index -= size;
-			sec_text.push_back(dest);
+			sec_text.push_back(ln);
 		}
 	}
 	
