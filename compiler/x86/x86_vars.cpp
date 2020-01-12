@@ -227,6 +227,11 @@ void Asm_x86::build_flt_assign(AstNode *node) {
 			src += "-" + std::to_string(v2.stack_pos) + "]";
 			sec_text.push_back(src);
 		} break;
+		
+		//Assign an array access
+		case AstType::ArrayAccess: {
+			build_arr_access(first);
+		} break;
 	}
 	
 	//If there are further children, we have math

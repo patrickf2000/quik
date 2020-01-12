@@ -26,14 +26,18 @@ void Asm_x86::build_arr_dec(AstNode *node) {
 			
 		case DataType::Short: {
 			size = 2;
-			prefix = "word";
+			prefix = "mov word";
 		} break;
 			
 		case DataType::Bool:
-		case DataType::Int:
+		case DataType::Int: {
+			size = 4;
+			prefix = "mov dword";
+		} break;
+		
 		case DataType::Float: {
 			size = 4;
-			prefix = "dword";
+			prefix = "movq";
 		} break;
 			
 		case DataType::Str: {
@@ -50,7 +54,7 @@ void Asm_x86::build_arr_dec(AstNode *node) {
 	
 	//Add the initial values
 	for (auto child : ard->children) {
-		auto ln = "mov " + prefix + " [" + get_reg("bp") + "-";
+		auto ln = prefix + " [" + get_reg("bp") + "-";
 		ln += std::to_string(pos) + "], ";
 		
 		pos -= size;
@@ -59,6 +63,12 @@ void Asm_x86::build_arr_dec(AstNode *node) {
 			case AstType::Int: {
 				AstInt *i = static_cast<AstInt *>(child);
 				ln += std::to_string(i->get_val());
+			} break;
+			
+			case AstType::Float: {
+				auto flt_name = build_float(child);
+				sec_text.push_back("movq xmm0, [" + flt_name + "]");
+				ln += "xmm0";
 			} break;
 		}
 		
