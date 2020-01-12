@@ -25,6 +25,8 @@ enum TokenType {
 	T_FLOAT,
 	T_BOOL,
 	T_STR,
+	INT_128,
+	INT_256,
 	FLOAT_128,
 	FLOAT_256,
 	FLOAT_80,
