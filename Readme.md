@@ -21,6 +21,13 @@ I have a small optimization area of the parser, which I plan to expand. I may ma
 The following optimizations are currently implemented:
  * Remove uncalled functions (including those designated with "extern")
  * Inline small functions (currently set to less than or equal to 5 lines)
+ 
+### Vectorization (Intel SSE/AVX)
+One of the new and unique features I'm currently adding to Quik is its vectorization support. I've recently started studying the Intel SSE/AVX extensions, and decided to make an easy-to-use, builtin way to access this.
+
+The data for vectorization is declared using the int128, int256, float128, and float256 types. They are pretty self-explanatory. The SSE extensions handle 128 bits of data (or 4 ints), while the AVX extensions handle 256 bits of data (or 8 ints). The types are declared with the same syntax as arrays. Currently, only parallel math operations are supported (and only addition and multiplication are supported). See the examples folder for sample programs.
+
+I'll expand the documentation on this a little later on my site. For now, keep an eye on the test and examples folder.
 
 ### Building
 To build, you simply need CMake, a C++ compiler, and Python 3 (for testing). Quik does not use any libraries other than the standard C++ library. A compiler supporting at least the C++11 standard is necessary.
