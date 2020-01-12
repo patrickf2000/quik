@@ -275,6 +275,12 @@ void Asm_x86::build_flt_assign(AstNode *node) {
 
 //Build SSE/AVX variables
 void Asm_x86::build_floatex_assign(AstNode *node) {
+	//Make sure we are not in 32-bit mode
+	if (!x64) {
+		std::cout << "Fatal: Vectorization is not supported in 32-bit mode." << std::endl;
+		std::exit(1);
+	}
+
 	AstVarDec *vd = static_cast<AstVarDec *>(node);
 	Var v = vars[vd->get_name()];
 	int index = v.stack_pos;
