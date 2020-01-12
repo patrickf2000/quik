@@ -149,4 +149,14 @@ bool Asm_x86::contains(AstNode *node, DataType t) {
 	return false;
 }
 
+bool Asm_x86::contains_arr(AstNode *node) {
+	for (auto n : node->children) {
+		if (n->type == AstType::ArrayDec) {
+			return true;
+		}
+	}
+	
+	return false;
+}
+
 

@@ -130,6 +130,8 @@ void Asm_x86::build_func_x64(AstFuncDec *fd) {
 		|| contains(fd->children.at(0), DataType::Int256)
 		|| contains(fd->children.at(0), DataType::Float256)) {
 		sec_text.push_back("sub rsp, 196");	
+	} else if (contains_arr(fd->children.at(0))) {
+		sec_text.push_back("sub rsp, 128");
 	} else {
 		sec_text.push_back("sub rsp, 48");
 	}
