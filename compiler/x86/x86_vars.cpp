@@ -17,7 +17,9 @@ void Asm_x86::build_var_dec(AstNode *node) {
 		case DataType::Int:
 		case DataType::Str: stack_pos += 4; break;
 		case DataType::Float: stack_pos += 8; break;
+		case DataType::Int128:
 		case DataType::Float128: stack_pos += 16; break;
+		case DataType::Int256:
 		case DataType::Float256: stack_pos += 32; break;
 	}
 	
@@ -49,7 +51,9 @@ void Asm_x86::build_var_assign(AstNode *node) {
 	if (vd->get_type() == DataType::Float) {
 		build_flt_assign(node);
 		return;
-	} else if (vd->get_type() == DataType::Float128
+	} else if ( vd->get_type() == DataType::Int128
+		|| vd->get_type() == DataType::Float128
+		|| vd->get_type() == DataType::Int256
 		|| vd->get_type() == DataType::Float256) {
 		build_floatex_assign(node);
 		return;	
@@ -317,6 +321,8 @@ void Asm_x86::build_floatex_assign(AstNode *node) {
 		} else if (op->type == AstType::DMul) {
 			if (vd->get_type() == DataType::Float256)
 				sec_text.push_back("vmulps ymm0, ymm1");
+			else if (vd->get_type() == DataType::Float128)
+				sec_text.push_back("mulps xmm0, xmm1");
 			else
 				sec_text.push_back("pmulld xmm0, xmm1");
 		}
