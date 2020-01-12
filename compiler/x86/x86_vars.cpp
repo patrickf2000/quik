@@ -215,7 +215,7 @@ void Asm_x86::build_flt_assign(AstNode *node) {
 		//Assign a float value
 		case AstType::Float: {
 			auto name = build_float(first);
-			sec_text.push_back("movq xmm0, [" + name + "]");
+			sec_text.push_back("movsd xmm0, [" + name + "]");
 		} break;
 		
 		//Assign another variable
@@ -223,7 +223,7 @@ void Asm_x86::build_flt_assign(AstNode *node) {
 			AstID *id = static_cast<AstID *>(first);
 			Var v2 = vars[id->get_name()];
 			
-			std::string src = "movq xmm0, [" + get_reg("bp");
+			std::string src = "movsd xmm0, [" + get_reg("bp");
 			src += "-" + std::to_string(v2.stack_pos) + "]";
 			sec_text.push_back(src);
 		} break;

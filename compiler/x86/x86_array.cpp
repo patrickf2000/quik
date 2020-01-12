@@ -36,8 +36,8 @@ void Asm_x86::build_arr_dec(AstNode *node) {
 		} break;
 		
 		case DataType::Float: {
-			size = 4;
-			prefix = "movq";
+			size = 8;
+			prefix = "movsd";
 		} break;
 			
 		case DataType::Str: {
@@ -51,6 +51,8 @@ void Asm_x86::build_arr_dec(AstNode *node) {
 	
 	v.stack_pos = stack_pos;
 	vars[ard->get_name()] = v;
+	
+	stack_pos += (size * 2);
 	
 	//Add the initial values
 	for (auto child : ard->children) {
@@ -67,7 +69,7 @@ void Asm_x86::build_arr_dec(AstNode *node) {
 			
 			case AstType::Float: {
 				auto flt_name = build_float(child);
-				sec_text.push_back("movq xmm0, [" + flt_name + "]");
+				sec_text.push_back("movsd xmm0, [" + flt_name + "]");
 				ln += "xmm0";
 			} break;
 		}
@@ -89,6 +91,8 @@ void Asm_x86::build_arr_access(AstNode *node) {
 	
 	if (v.type == DataType::Str)
 		size = 1;
+	else if (v.type == DataType::Float)
+		size = 8;
 	
 	//Calculate the index
 	//For ints: 4 * (element index)
@@ -96,9 +100,13 @@ void Asm_x86::build_arr_access(AstNode *node) {
 	std::string reg = "eax";
 	if (x64)
 		reg = "rax";
+		
+	std::string start = "mov eax";
+	if (v.type == DataType::Float)
+		start = "movsd xmm0";
 	
 	auto i_child = acc->children.at(0);
-	std::string ln = "mov eax, [" + get_reg("bp") + "-";
+	std::string ln = start + ", [" + get_reg("bp") + "-";
 	
 	if (v.is_param) {
 		ln = "mov " + reg + ", [" + get_reg("bp") + "-";
@@ -133,8 +141,10 @@ void Asm_x86::build_arr_access(AstNode *node) {
 				sec_text.push_back("cdqe");
 				sec_text.push_back("mov rbx, rax");
 				
-				ln2 = "mov rax, [rbp-" + std::to_string(index) + "]";
-				sec_text.push_back(ln2);
+				if (v.type != DataType::Float) {
+					ln2 = "mov rax, [rbp-" + std::to_string(index) + "]";
+					sec_text.push_back(ln2);
+				}
 				
 				sec_text.push_back("imul rbx, " + std::to_string(size));
 				
@@ -143,7 +153,7 @@ void Asm_x86::build_arr_access(AstNode *node) {
 					ln = "mov eax, [rax]";
 				} else {
 					int top = index;
-					ln = "mov eax, [rbp-" + std::to_string(top);
+					ln = start + ", [rbp-" + std::to_string(top);
 					ln += "+rbx]";
 				}
 				

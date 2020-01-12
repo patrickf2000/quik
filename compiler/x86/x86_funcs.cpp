@@ -320,7 +320,7 @@ void Asm_x86::build_func_call_x64(AstFuncCall *fc) {
 					case DataType::Float: {
 						flt_arg = true;
 						
-						call_ln = "movq " + call_flt_regs[flt_call_index] + ", ";
+						call_ln = "movsd " + call_flt_regs[flt_call_index] + ", ";
 						call_ln += "[rbp-" + std::to_string(v.stack_pos) + "]";
 						
 						sec_text.push_back(call_ln);
@@ -346,7 +346,7 @@ void Asm_x86::build_func_call_x64(AstFuncCall *fc) {
 				flt_arg = true;
 				auto name = build_float(node);
 						
-				call_ln = "movq " + call_flt_regs[flt_call_index] + ", ";
+				call_ln = "movsd " + call_flt_regs[flt_call_index] + ", ";
 				call_ln += "[" + name + "]";
 				
 				sec_text.push_back(call_ln);
