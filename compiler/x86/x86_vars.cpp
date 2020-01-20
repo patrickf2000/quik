@@ -17,7 +17,8 @@ void Asm_x86::build_var_dec(AstNode *node) {
 		case DataType::Int:
 		case DataType::Float:
 		case DataType::Str: stack_pos += 4; break;
-		//case DataType::Double: stack_pos += 8; break;
+		case DataType::Int64: 
+		case DataType::Float64: stack_pos += 8; break;
 		case DataType::Int128:
 		case DataType::Float128: stack_pos += 16; break;
 		case DataType::Int256:
@@ -52,7 +53,9 @@ void Asm_x86::build_var_assign(AstNode *node) {
 	if (vd->get_type() == DataType::Float) {
 		build_flt_assign(node);
 		return;
-	} else if ( vd->get_type() == DataType::Int128
+	} else if (vd->get_type() == DataType::Int64
+		|| vd->get_type() == DataType::Float64 
+		|| vd->get_type() == DataType::Int128
 		|| vd->get_type() == DataType::Float128
 		|| vd->get_type() == DataType::Int256
 		|| vd->get_type() == DataType::Float256) {
@@ -329,7 +332,7 @@ void Asm_x86::build_floatex_assign(AstNode *node) {
 		if (op->type == AstType::Add) {
 			if (vd->get_type() == DataType::Float256)
 				sec_text.push_back("vhaddps ymm0, ymm0, ymm1");
-			else if (vd->get_type() == DataType::Float128)
+			else if (vd->get_type() == DataType::Float128 || vd->get_type() == DataType::Float64)
 				sec_text.push_back("haddps xmm0, xmm1");
 			else if (vd->get_type() == DataType::Int256)
 				sec_text.push_back("vphaddd ymm0, ymm0, ymm1");
@@ -359,7 +362,21 @@ void Asm_x86::build_floatex_assign(AstNode *node) {
 		sec_text.push_back("");
 		
 		//Store the result
-		sec_text.push_back(dest_ln);
+		//If we have a 64-bit type, we have to add extraction code
+		if (vd->get_type() == DataType::Int64 || vd->get_type() == DataType::Float64) {
+			std::string d1 = "[rbp-" + std::to_string(index) + "]";
+			std::string d2 = "[rbp-" + std::to_string(index-4) + "]";
+			
+			if (vd->get_type() == DataType::Float64) {
+				sec_text.push_back("extractps " + d1 + ", xmm0, 0");
+				sec_text.push_back("extractps " + d2 + ", xmm0, 1");
+			} else {
+				sec_text.push_back("pextrd " + d1 + ", xmm0, 0");
+				sec_text.push_back("pextrd " + d2 + ", xmm0, 1");
+			}
+		} else {
+			sec_text.push_back(dest_ln);
+		}
 	} else {
 		for (auto child : vd->children) {
 			std::string dest = "[" + get_reg("bp") + "-";
@@ -377,9 +394,9 @@ void Asm_x86::build_floatex_assign(AstNode *node) {
 				
 				case AstType::Float: {
 					auto flt_name = build_float(child);
-					sec_text.push_back("movq xmm0, [" + flt_name + "]");
+					sec_text.push_back("movss xmm0, [" + flt_name + "]");
 					
-					ln = "movq " + dest + ", xmm0";
+					ln = "movss " + dest + ", xmm0";
 				} break;
 			}
 			

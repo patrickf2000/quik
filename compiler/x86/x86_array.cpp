@@ -102,8 +102,8 @@ void Asm_x86::build_arr_access(AstNode *node) {
 		reg = "rax";
 		
 	std::string start = "mov eax";
-	if (v.type == DataType::Float)
-		start = "movsd xmm0";
+	if (v.type == DataType::Float || v.type == DataType::Float64)
+		start = "movss xmm0";
 	
 	auto i_child = acc->children.at(0);
 	std::string ln = start + ", [" + get_reg("bp") + "-";
