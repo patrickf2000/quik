@@ -304,6 +304,9 @@ void Asm_x86::build_floatex_assign(AstNode *node) {
 		Var v1 = vars[part1->get_name()];
 		Var v2 = vars[part2->get_name()];
 		
+		DataType vd_type = vd->get_type();
+		DataType op_type = v1.type;
+		
 		//Load variables
 		std::string ln1 = "movups xmm0";
 		std::string ln2 = "movups xmm1";
@@ -311,8 +314,8 @@ void Asm_x86::build_floatex_assign(AstNode *node) {
 		std::string dest_var = " [rbp-" + std::to_string(index) + "], ";
 		std::string dest_ln = "movups" + dest_var + "xmm0";
 		
-		if (vd->get_type() == DataType::Int256
-			|| vd->get_type() == DataType::Float256) {
+		if (op_type == DataType::Int256
+			|| op_type == DataType::Float256) {
 			ln1 = "vmovupd ymm0";
 			ln2 = "vmovupd ymm1";
 			dest_ln = "vmovups" + dest_var + "ymm0";
@@ -327,11 +330,11 @@ void Asm_x86::build_floatex_assign(AstNode *node) {
 		//Do the math
 		//Scalar addition
 		if (op->type == AstType::Add) {
-			if (vd->get_type() == DataType::Float256)
+			if (op_type == DataType::Float256)
 				sec_text.push_back("vhaddps ymm0, ymm0, ymm1");
-			else if (vd->get_type() == DataType::Float128 || vd->get_type() == DataType::Float64)
+			else if (op_type == DataType::Float128)
 				sec_text.push_back("haddps xmm0, xmm1");
-			else if (vd->get_type() == DataType::Int256)
+			else if (op_type == DataType::Int256)
 				sec_text.push_back("vphaddd ymm0, ymm0, ymm1");
 			else
 				sec_text.push_back("phaddd xmm0, xmm1");
@@ -360,17 +363,37 @@ void Asm_x86::build_floatex_assign(AstNode *node) {
 		
 		//Store the result
 		//If we have a 64-bit type, we have to add extraction code
-		if (vd->get_type() == DataType::Int64 || vd->get_type() == DataType::Float64) {
+		if (vd_type == DataType::Int64 || vd_type == DataType::Float64) {
 			std::string d1 = "[rbp-" + std::to_string(index) + "]";
 			std::string d2 = "[rbp-" + std::to_string(index-4) + "]";
 			
-			if (vd->get_type() == DataType::Float64) {
+			if (vd_type == DataType::Float64) {
 				sec_text.push_back("extractps " + d1 + ", xmm0, 0");
 				sec_text.push_back("extractps " + d2 + ", xmm0, 1");
 			} else {
 				sec_text.push_back("pextrd " + d1 + ", xmm0, 0");
 				sec_text.push_back("pextrd " + d2 + ", xmm0, 1");
 			}
+		
+		//TODO: There's gotta be a better way to do this
+		} else if (vd_type == DataType::Int128 && op_type == DataType::Int256) {
+			sec_text.push_back("vextracti128 xmm4, ymm0, 0");
+			sec_text.push_back("vextracti128 xmm5, ymm0, 1");
+			
+			sec_text.push_back("");
+			sec_text.push_back("pextrd eax, xmm4, 0");
+			sec_text.push_back("pextrd ebx, xmm4, 1");
+			sec_text.push_back("pextrd ecx, xmm5, 0");
+			sec_text.push_back("pextrd edx, xmm5, 1");
+			sec_text.push_back("");
+			sec_text.push_back("pinsrd xmm3, eax, 0");
+			sec_text.push_back("pinsrd xmm3, ebx, 1");
+			sec_text.push_back("pinsrd xmm3, ecx, 2");
+			sec_text.push_back("pinsrd xmm3, edx, 3");
+			sec_text.push_back("");
+			
+			std::string dest = "[rbp-" + std::to_string(index) + "]";
+			sec_text.push_back("movups " + dest + ", xmm3");
 		} else {
 			sec_text.push_back(dest_ln);
 		}
