@@ -142,6 +142,9 @@ std::vector<Token> tokenize(std::string line) {
 			} else if (current == "int") {
 				t.type = TokenType::T_INT;
 				tokens.push_back(t);
+			} else if (current == "int64") {
+				t.type = TokenType::INT_64;
+				tokens.push_back(t);
 			} else if (current == "int128") {
 				t.type = TokenType::INT_128;
 				tokens.push_back(t);
@@ -152,6 +155,9 @@ std::vector<Token> tokenize(std::string line) {
 			//Floating-point types
 			} else if (current == "float") {
 				t.type = TokenType::T_FLOAT;
+				tokens.push_back(t);
+			} else if (current == "float64") {
+				t.type = TokenType::FLOAT_64;
 				tokens.push_back(t);
 			} else if (current == "float128") {
 				t.type = TokenType::FLOAT_128;
@@ -177,6 +183,9 @@ std::vector<Token> tokenize(std::string line) {
 			//Unsigned integers
 			} else if (current == "uint") {
 				t.type = TokenType::T_UINT;
+				tokens.push_back(t);
+			} else if (current == "uint64") {
+				t.type = TokenType::UINT_64;
 				tokens.push_back(t);
 			} else if (current == "uint128") {
 				t.type = TokenType::UINT_128;
@@ -410,6 +419,10 @@ TokenType str2type(std::string in) {
 	else if (in == "T_UINT") return TokenType::T_UINT;
 	else if (in == "UINT_128") return TokenType::UINT_128;
 	else if (in == "UINT_256") return TokenType::UINT_256;
+	
+	else if (in == "INT_64") return TokenType::INT_64;
+	else if (in == "FLOAT_64") return TokenType::FLOAT_64;
+	else if (in == "UINT_64") return TokenType::UINT_64;
 	
 	return TokenType::NONE;
 }

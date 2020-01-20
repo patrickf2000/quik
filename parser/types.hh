@@ -35,6 +35,9 @@ enum TokenType {
 	T_UINT,
 	UINT_128,
 	UINT_256,
+	INT_64,
+	FLOAT_64,
+	UINT_64,
 	
 	//Symbols
 	LEFT_PAREN,

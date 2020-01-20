@@ -58,3 +58,13 @@ UINT_128~ID>array~ASSIGN~NO>1~,~NO>2~,~NO>3~,~NO>4~
 uint256 array = 1, 2, 3, 4, 5, 6, 7, 8
 UINT_256~ID>array~ASSIGN~NO>1~,~NO>2~,~NO>3~,~NO>4~,~NO>5~,~NO>6~,~NO>7~,~NO>8~
 
+int64 array = 1, 2
+INT_64~ID>array~ASSIGN~NO>1~,~NO>2~
+
+float64 array = 1, 2
+FLOAT_64~ID>array~ASSIGN~NO>1~,~NO>2~
+
+uint64 array = 1, 2
+UINT_64~ID>array~ASSIGN~NO>1~,~NO>2~
+
+
