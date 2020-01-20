@@ -153,7 +153,7 @@ void Asm_x86::build_func_x64(AstFuncDec *fd) {
 		//Determine the type
 		if (v.type == DataType::Float) {
 			std::string reg = call_flt_regs[flt_call_index];
-			std::string line = "cvtsd2ss xmm0, " + reg;
+			std::string line = "cvtsd2ss " + reg + ", " + reg;
 			sec_text.push_back(line);
 		
 			line = "movss [rbp-" + std::to_string(stack_pos) + "], ";
@@ -337,12 +337,13 @@ void Asm_x86::build_func_call_x64(AstFuncCall *fc) {
 					//Floating-point variables
 					case DataType::Float: {
 						flt_arg = true;
+						std::string reg = call_flt_regs[flt_call_index];
 						
-						call_ln = "movss " + call_flt_regs[flt_call_index] + ", ";
+						call_ln = "movss " + reg + ", ";
 						call_ln += "[rbp-" + std::to_string(v.stack_pos) + "]";
 						
 						sec_text.push_back(call_ln);
-						sec_text.push_back("cvtss2sd xmm0, xmm0");
+						sec_text.push_back("cvtss2sd " + reg + ", " + reg);
 					} break;
 					
 					//String variables
@@ -364,12 +365,13 @@ void Asm_x86::build_func_call_x64(AstFuncCall *fc) {
 			case AstType::Float: {
 				flt_arg = true;
 				auto name = build_float(node);
+				std::string reg = call_flt_regs[flt_call_index];
 						
-				call_ln = "movss " + call_flt_regs[flt_call_index] + ", ";
+				call_ln = "movss " + reg + ", ";
 				call_ln += "[" + name + "]";
 				
 				sec_text.push_back(call_ln);
-				sec_text.push_back("cvtss2sd xmm0, xmm0");
+				sec_text.push_back("cvtss2sd " + reg + ", " + reg);
 			} break;
 			
 			//A string
