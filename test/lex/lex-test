@@ -58,4 +58,7 @@ ID>x~AND~ID>y~
 x ? y
 ID>x~OR~ID>y~
 
+x ?? y
+ID>x~XOR~ID>y~
+
 

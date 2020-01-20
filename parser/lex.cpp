@@ -329,6 +329,11 @@ std::vector<Token> tokenize(std::string line) {
 				t.type = TokenType::AND;
 				tokens.push_back(t);
 				skip_next = true;
+			} else if (c == '?' && line[i+1] == '?') {
+				Token t;
+				t.type = TokenType::XOR;
+				tokens.push_back(t);
+				skip_next = true;
 			} else if (c == '?') {
 				Token t;
 				t.type = TokenType::OR;
@@ -396,6 +401,7 @@ TokenType str2type(std::string in) {
 	else if (in == "HEX") return TokenType::HEX;
 	else if (in == "AND") return TokenType::AND;
 	else if (in == "OR") return TokenType::OR;
+	else if (in == "XOR") return TokenType::XOR;
 	
 	else if (in == "T_DOUBLE") return TokenType::T_DOUBLE;
 	else if (in == "DOUBLE_128") return TokenType::DOUBLE_128;
