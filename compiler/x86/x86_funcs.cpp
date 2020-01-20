@@ -402,10 +402,11 @@ void Asm_x86::build_ret(AstNode *node) {
 			AstID *id = dynamic_cast<AstID *>(child);
 			Var v = current_scope->vars[id->get_name()];
 			
-			if (v.type == DataType::Float)
-				sec_text.push_back("mov xmm0, 0");
-			else
+			if (v.type == DataType::Float) {
+				sec_text.push_back("movss xmm0, " + type2asm(child));
+			} else {
 				sec_text.push_back("mov eax, " + type2asm(child));
+			}
 		} else {
 			sec_text.push_back("mov eax, " + type2asm(child));
 		}
