@@ -24,8 +24,11 @@ DataType ttype2dtype(TokenType t) {
 		case TokenType::T_BOOL: return DataType::Bool;
 		case TokenType::T_STR: return DataType::Str;
 		
+		case TokenType::INT_64: return DataType::Int64;
 		case TokenType::INT_128: return DataType::Int128;
 		case TokenType::INT_256: return DataType::Int256;
+		
+		case TokenType::FLOAT_64: return DataType::Float64;
 		case TokenType::FLOAT_80: return DataType::Float80;
 		case TokenType::FLOAT_128: return DataType::Float128;
 		case TokenType::FLOAT_256: return DataType::Float256;
@@ -647,8 +650,10 @@ AstNode *build_node(Line ln) {
 		case TokenType::T_FLOAT:
 		case TokenType::T_BOOL:
 		case TokenType::T_STR:
+		case TokenType::INT_64:
 		case TokenType::INT_128:
 		case TokenType::INT_256:
+		case TokenType::FLOAT_64:
 		case TokenType::FLOAT_80:
 		case TokenType::FLOAT_128:
 		case TokenType::FLOAT_256: {

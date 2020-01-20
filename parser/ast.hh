@@ -34,8 +34,10 @@ enum AstType {
 	Char,
 	Bool,
 	Float,
+	Int64,
 	Int128,
 	Int256,
+	Float64,
 	Float80,
 	Float128,
 	Float256,
@@ -267,6 +269,16 @@ protected:
 	double no = 0;
 };
 
+//The int-64 type
+//Holds two integer types
+class AstInt64 : public AstVarDec {
+public:
+	explicit AstInt64() { 
+		type = AstType::Int64;
+		dtype = DataType::Int64;
+	}
+};
+
 //The int-128 type
 //Tells the compiler to use SSE extensions (with integers)
 class AstInt128 : public AstVarDec {
@@ -284,6 +296,16 @@ public:
 	explicit AstInt256() {
 		type = AstType::Int256;
 		dtype = DataType::Int256;
+	}
+};
+
+//The float-64 type
+//Holds two floating-point values
+class AstFloat64 : public AstVarDec {
+public:
+	explicit AstFloat64() { 
+		type = AstType::Float64;
+		dtype = DataType::Float64;
 	}
 };
 

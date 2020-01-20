@@ -95,7 +95,9 @@ enum class DataType {
 	Int256,
 	Float128,
 	Float256,
-	Float80
+	Float80,
+	Int64,
+	Float64
 };
 
 enum class CondOp {
