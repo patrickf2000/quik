@@ -53,6 +53,7 @@ enum TokenType {
 	MOD,
 	D_PLUS,
 	D_MUL,
+	AND,
 	
 	//Boolean operators
 	EQUALS,

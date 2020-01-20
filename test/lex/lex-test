@@ -52,3 +52,7 @@ D_PLUS~ID>x~
 x**y
 ID>x~D_MUL~ID>y~
 
+x && y
+ID>x~AND~ID>y~
+
+
