@@ -1,0 +1,20 @@
+# avx_int2
+# This provides an example of horizontal adding, and saving it to a register
+# of half the size (since the results will be 1/2 the size of the input)
+#
+# See the corresponding Assembly file for how it is generated. If you have any
+# suggestion on how to make a more efficient way to do it, let me know.
+
+include io
+
+func main
+	int256 numbers = 1, 2, 3, 4, 5, 6, 7, 8
+	int128 answer = numbers + numbers
+	
+	int index = 0
+	while (index < 4)
+		int x = answer[index]
+		print_int(x)
+		index++
+	end
+end
