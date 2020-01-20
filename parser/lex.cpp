@@ -116,9 +116,6 @@ std::vector<Token> tokenize(std::string line) {
 			} else if (current == "int") {
 				t.type = TokenType::T_INT;
 				tokens.push_back(t);
-			} else if (current == "long") {
-				t.type = TokenType::T_LONG;
-				tokens.push_back(t);
 			} else if (current == "float") {
 				t.type = TokenType::T_FLOAT;
 				tokens.push_back(t);
@@ -307,7 +304,6 @@ TokenType str2type(std::string in) {
 	else if (in == "T_CHAR") return TokenType::T_CHAR;
 	else if (in == "T_SHORT") return TokenType::T_SHORT;
 	else if (in == "T_INT") return TokenType::T_INT;
-	else if (in == "T_LONG") return TokenType::T_LONG;
 	else if (in == "T_FLOAT") return TokenType::T_FLOAT;
 	else if (in == "T_BOOL") return TokenType::T_BOOL;
 	else if (in == "T_STR") return TokenType::T_STR;

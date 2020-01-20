@@ -20,7 +20,6 @@ DataType ttype2dtype(TokenType t) {
 		case TokenType::T_CHAR: return DataType::Char;
 		case TokenType::T_SHORT: return DataType::Short;
 		case TokenType::T_INT: return DataType::Int;
-		case TokenType::T_LONG: return DataType::Long;
 		case TokenType::T_FLOAT: return DataType::Float;
 		case TokenType::T_BOOL: return DataType::Bool;
 		case TokenType::T_STR: return DataType::Str;
@@ -633,7 +632,6 @@ AstNode *build_node(Line ln) {
 		case TokenType::T_CHAR:
 		case TokenType::T_SHORT:
 		case TokenType::T_INT:
-		case TokenType::T_LONG:
 		case TokenType::T_FLOAT:
 		case TokenType::T_BOOL:
 		case TokenType::T_STR:

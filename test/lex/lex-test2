@@ -10,9 +10,6 @@ T_SHORT~ID>x~ASSIGN~NO>1~
 int x = 32
 T_INT~ID>x~ASSIGN~NO>32~
 
-long x = 64
-T_LONG~ID>x~ASSIGN~NO>64~
-
 float pi = 3.14
 T_FLOAT~ID>pi~ASSIGN~DEC>3.14~
 

@@ -230,7 +230,6 @@ void Asm_x86::build_func_call_i386(AstFuncCall *fc) {
 							ln += std::to_string(v.stack_pos) + "]";
 						}
 					} break;
-					case DataType::Long:
 					case DataType::Float: {
 							ln = "fld qword [" + v.name + "]";
 					} break;

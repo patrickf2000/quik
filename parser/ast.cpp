@@ -54,7 +54,6 @@ std::string type2str(DataType type) {
 		case DataType::Char: return "Char";
 		case DataType::Short: return "Short";
 		case DataType::Int: return "Int";
-		case DataType::Long: return "Long";
 		case DataType::Float: return "Float";
 		case DataType::Bool: return "Bool";
 		case DataType::Str: return "Str";
