@@ -1,0 +1,37 @@
+include io
+
+func test1
+	int128 no1 = 2, 3, 4, 5
+	int64 answer = no1 + no1
+	
+	int n1 = answer[0]
+	int n2 = answer[1]
+	
+	print_int(n1)
+	print_int(n2)
+end
+
+func test2
+	float128 no1 = 2.45, 3.56, 4.78, 5.90
+	float64 answer = no1 + no1
+	
+	float n1 = answer[0]
+	float n2 = answer[1]
+	
+	puts("Float:")
+	printf("%f\n", n1)
+	printf("%f\n", n2)
+end
+
+func main
+	test1()
+	test2()
+end
+
+#TEST
+#5
+#9
+#Float:
+#6.010000
+#10.680000
+
