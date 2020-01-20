@@ -48,3 +48,13 @@ DOUBLE_128~ID>array~ASSIGN~NO>1~,~NO>2~
 
 double256 array = 1, 2, 3, 4
 DOUBLE_256~ID>array~ASSIGN~NO>1~,~NO>2~,~NO>3~,~NO>4~
+
+uint x = 32
+T_UINT~ID>x~ASSIGN~NO>32~
+
+uint128 array = 1, 2, 3, 4
+UINT_128~ID>array~ASSIGN~NO>1~,~NO>2~,~NO>3~,~NO>4~
+
+uint256 array = 1, 2, 3, 4, 5, 6, 7, 8
+UINT_256~ID>array~ASSIGN~NO>1~,~NO>2~,~NO>3~,~NO>4~,~NO>5~,~NO>6~,~NO>7~,~NO>8~
+

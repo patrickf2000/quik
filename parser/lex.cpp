@@ -174,6 +174,17 @@ std::vector<Token> tokenize(std::string line) {
 				t.type = TokenType::DOUBLE_256;
 				tokens.push_back(t);
 				
+			//Unsigned integers
+			} else if (current == "uint") {
+				t.type = TokenType::T_UINT;
+				tokens.push_back(t);
+			} else if (current == "uint128") {
+				t.type = TokenType::UINT_128;
+				tokens.push_back(t);
+			} else if (current == "uint256") {
+				t.type = TokenType::UINT_256;
+				tokens.push_back(t);
+				
 			//Conditional stuff
 			} else if (current == "if") {
 				t.type = TokenType::IF;
@@ -375,5 +386,10 @@ TokenType str2type(std::string in) {
 	else if (in == "T_DOUBLE") return TokenType::T_DOUBLE;
 	else if (in == "DOUBLE_128") return TokenType::DOUBLE_128;
 	else if (in == "DOUBLE_256") return TokenType::DOUBLE_256;
+	
+	else if (in == "T_UINT") return TokenType::T_UINT;
+	else if (in == "UINT_128") return TokenType::UINT_128;
+	else if (in == "UINT_256") return TokenType::UINT_256;
+	
 	return TokenType::NONE;
 }

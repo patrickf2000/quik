@@ -32,6 +32,9 @@ enum TokenType {
 	T_DOUBLE,
 	DOUBLE_128,
 	DOUBLE_256,
+	T_UINT,
+	UINT_128,
+	UINT_256,
 	
 	//Symbols
 	LEFT_PAREN,
