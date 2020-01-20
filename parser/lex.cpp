@@ -7,7 +7,7 @@
 
 bool is_separator(char c) {
 	if (c == ' ' || c == '(' || c == ')'
-		|| c == '[' || c == ']' || c == '&'
+		|| c == '[' || c == ']' || c == '&' || c == '?'
 		|| c == '=' || c == ',' || c == ':'
 		|| c == '+' || c == '-' || c == '*' || c == '/'
 		|| c == '%' || c == '!' || c == '>' || c == '<') {
@@ -322,9 +322,16 @@ std::vector<Token> tokenize(std::string line) {
 				Token t;
 				t.type = TokenType::COMMA;
 				tokens.push_back(t);
+				
+			//Logical operators
 			} else if (c == '&' && line[i+1] == '&') {
 				Token t;
 				t.type = TokenType::AND;
+				tokens.push_back(t);
+				skip_next = true;
+			} else if (c == '?') {
+				Token t;
+				t.type = TokenType::OR;
 				tokens.push_back(t);
 				skip_next = true;
 			}
@@ -388,6 +395,7 @@ TokenType str2type(std::string in) {
 	else if (in == "INT_256") return TokenType::INT_256;
 	else if (in == "HEX") return TokenType::HEX;
 	else if (in == "AND") return TokenType::AND;
+	else if (in == "OR") return TokenType::OR;
 	
 	else if (in == "T_DOUBLE") return TokenType::T_DOUBLE;
 	else if (in == "DOUBLE_128") return TokenType::DOUBLE_128;

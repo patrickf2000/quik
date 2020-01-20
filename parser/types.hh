@@ -54,6 +54,7 @@ enum TokenType {
 	D_PLUS,
 	D_MUL,
 	AND,
+	OR,
 	
 	//Boolean operators
 	EQUALS,
