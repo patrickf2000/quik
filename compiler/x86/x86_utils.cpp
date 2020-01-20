@@ -129,7 +129,7 @@ std::string Asm_x86::build_float(AstNode *node) {
 	std::string name = "flt_" + std::to_string(flt_index);
 	++flt_index;
 	
-	std::string d_ln = name + " dq " + std::to_string(val);
+	std::string d_ln = name + " dd " + std::to_string(val);
 	sec_data.push_back(d_ln);
 	
 	return name;

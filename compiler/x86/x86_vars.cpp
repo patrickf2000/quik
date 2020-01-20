@@ -15,8 +15,9 @@ void Asm_x86::build_var_dec(AstNode *node) {
 		case DataType::Short: stack_pos += 2; break;
 		case DataType::Bool:
 		case DataType::Int:
+		case DataType::Float:
 		case DataType::Str: stack_pos += 4; break;
-		case DataType::Float: stack_pos += 8; break;
+		//case DataType::Double: stack_pos += 8; break;
 		case DataType::Int128:
 		case DataType::Float128: stack_pos += 16; break;
 		case DataType::Int256:
@@ -215,7 +216,7 @@ void Asm_x86::build_flt_assign(AstNode *node) {
 		//Assign a float value
 		case AstType::Float: {
 			auto name = build_float(first);
-			sec_text.push_back("movsd xmm0, [" + name + "]");
+			sec_text.push_back("movss xmm0, [" + name + "]");
 		} break;
 		
 		//Assign another variable
@@ -223,7 +224,7 @@ void Asm_x86::build_flt_assign(AstNode *node) {
 			AstID *id = static_cast<AstID *>(first);
 			Var v2 = vars[id->get_name()];
 			
-			std::string src = "movsd xmm0, [" + get_reg("bp");
+			std::string src = "movss xmm0, [" + get_reg("bp");
 			src += "-" + std::to_string(v2.stack_pos) + "]";
 			sec_text.push_back(src);
 		} break;
@@ -241,10 +242,10 @@ void Asm_x86::build_flt_assign(AstNode *node) {
 		std::string ln2 = "";
 		
 		switch (op->type) {
-			case AstType::Add: ln2 = "addsd xmm0, "; break;
-			case AstType::Sub: ln2 = "subsd xmm0, "; break;
-			case AstType::Mul: ln2 = "mulsd xmm0, "; break;
-			case AstType::Div: ln2 = "divsd xmm0, "; break;
+			case AstType::Add: ln2 = "addss xmm0, "; break;
+			case AstType::Sub: ln2 = "subss xmm0, "; break;
+			case AstType::Mul: ln2 = "mulss xmm0, "; break;
+			case AstType::Div: ln2 = "divss xmm0, "; break;
 		}
 		
 		switch (next->type) {
@@ -266,7 +267,7 @@ void Asm_x86::build_flt_assign(AstNode *node) {
 	}
 	
 	//Push the final result to the stack
-	std::string ln = "movsd [" + get_reg("bp") + "-";
+	std::string ln = "movss [" + get_reg("bp") + "-";
 	ln += std::to_string(v.stack_pos) + "], xmm0";
 			
 	sec_text.push_back(ln);
