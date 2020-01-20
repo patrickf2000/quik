@@ -639,8 +639,7 @@ AstNode *build_node(Line ln) {
 		case TokenType::INT_256:
 		case TokenType::FLOAT_80:
 		case TokenType::FLOAT_128:
-		case TokenType::FLOAT_256:
-		case TokenType::VAR: {
+		case TokenType::FLOAT_256: {
 			if (tokens.size() > 4) {
 				auto t1 = tokens[1].type;
 				auto t2 = tokens[3].type;

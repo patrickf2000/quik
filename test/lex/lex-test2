@@ -22,9 +22,6 @@ T_BOOL~ID>x~ASSIGN~B_FALSE~
 str s = "Hello!"
 T_STR~ID>s~ASSIGN~STRING>Hello!~
 
-var x = 32
-VAR~ID>x~ASSIGN~NO>32~
-
 int[3] array = 1, 2, 3
 T_INT~L_BRACKET~NO>3~R_BRACKET~ID>array~ASSIGN~NO>1~,~NO>2~,~NO>3~
 

@@ -125,9 +125,6 @@ std::vector<Token> tokenize(std::string line) {
 			} else if (current == "str") {
 				t.type = TokenType::T_STR;
 				tokens.push_back(t);
-			} else if (current == "var") {
-				t.type = TokenType::VAR;
-				tokens.push_back(t);
 				
 			//Special types
 			} else if (current == "int128") {
@@ -307,7 +304,6 @@ TokenType str2type(std::string in) {
 	else if (in == "T_FLOAT") return TokenType::T_FLOAT;
 	else if (in == "T_BOOL") return TokenType::T_BOOL;
 	else if (in == "T_STR") return TokenType::T_STR;
-	else if (in == "VAR") return TokenType::VAR;
 	else if (in == "NO") return TokenType::NO;
 	else if (in == "CHAR") return TokenType::CHAR;
 	else if (in == "DEC") return TokenType::DEC;
