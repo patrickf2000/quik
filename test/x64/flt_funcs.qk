@@ -1,0 +1,38 @@
+include io
+
+func _double(no:float)
+	float d = 2.0 * no
+	printf("D: %f\n", d)
+	return d
+end
+
+func multi(no1:float, no2:float, no3:float, x:int)
+	printf("F1: %f\n", no1)
+	printf("F2: %f\n", no2)
+	printf("F3: %f\n", no3)
+	printf("I: %d\n", x)
+end
+
+func main
+	float pi = 3.14
+	printf("%f\n", pi)
+	
+	puts("")
+	multi(pi, 3.66, 1.95, 7)
+	puts("")
+	
+	pi = _double(pi)
+	printf("Doubled %f\n", pi)
+end
+
+#TEST
+#3.140000
+#
+#F1: 3.140000
+#F2: 3.660000
+#F3: 1.950000
+#I: 7
+#
+#D: 6.280000
+#Doubled 6.280000
+
