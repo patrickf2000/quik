@@ -131,12 +131,6 @@ std::vector<Token> tokenize(std::string line) {
 			} else if (current == "short") {
 				t.type = TokenType::T_SHORT;
 				tokens.push_back(t);
-			} else if (current == "int") {
-				t.type = TokenType::T_INT;
-				tokens.push_back(t);
-			} else if (current == "float") {
-				t.type = TokenType::T_FLOAT;
-				tokens.push_back(t);
 			} else if (current == "bool") {
 				t.type = TokenType::T_BOOL;
 				tokens.push_back(t);
@@ -144,12 +138,20 @@ std::vector<Token> tokenize(std::string line) {
 				t.type = TokenType::T_STR;
 				tokens.push_back(t);
 				
-			//Special types
+			//Integer types
+			} else if (current == "int") {
+				t.type = TokenType::T_INT;
+				tokens.push_back(t);
 			} else if (current == "int128") {
 				t.type = TokenType::INT_128;
 				tokens.push_back(t);
 			} else if (current == "int256") {
 				t.type = TokenType::INT_256;
+				tokens.push_back(t);
+				
+			//Floating-point types
+			} else if (current == "float") {
+				t.type = TokenType::T_FLOAT;
 				tokens.push_back(t);
 			} else if (current == "float128") {
 				t.type = TokenType::FLOAT_128;
@@ -159,6 +161,17 @@ std::vector<Token> tokenize(std::string line) {
 				tokens.push_back(t);
 			} else if (current == "float80") {
 				t.type = TokenType::FLOAT_80;
+				tokens.push_back(t);
+				
+			//Double types
+			} else if (current == "double") {
+				t.type = TokenType::T_DOUBLE;
+				tokens.push_back(t);
+			} else if (current == "double128") {
+				t.type = TokenType::DOUBLE_128;
+				tokens.push_back(t);
+			} else if (current == "double256") {
+				t.type = TokenType::DOUBLE_256;
 				tokens.push_back(t);
 				
 			//Conditional stuff
@@ -358,5 +371,9 @@ TokenType str2type(std::string in) {
 	else if (in == "INT_128") return TokenType::INT_128;
 	else if (in == "INT_256") return TokenType::INT_256;
 	else if (in == "HEX") return TokenType::HEX;
+	
+	else if (in == "T_DOUBLE") return TokenType::T_DOUBLE;
+	else if (in == "DOUBLE_128") return TokenType::DOUBLE_128;
+	else if (in == "DOUBLE_256") return TokenType::DOUBLE_256;
 	return TokenType::NONE;
 }

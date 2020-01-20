@@ -29,6 +29,9 @@ enum TokenType {
 	FLOAT_128,
 	FLOAT_256,
 	FLOAT_80,
+	T_DOUBLE,
+	DOUBLE_128,
+	DOUBLE_256,
 	
 	//Symbols
 	LEFT_PAREN,

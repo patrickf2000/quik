@@ -1,11 +1,11 @@
 include io
 
-func double(x:int)
+func _double(x:int)
 	x = x * x
 	return x
 end
 
-func double2(x:int)
+func _double2(x:int)
 	x = x * x
 	return x
 end
@@ -19,7 +19,7 @@ func is_even(x:int)
 end
 
 func main
-	if (double(33) == double2(33))
+	if (_double(33) == _double2(33))
 		puts("Big!!")
 	else
 		puts("Small!!")
