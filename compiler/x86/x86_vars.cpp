@@ -304,9 +304,6 @@ void Asm_x86::build_floatex_assign(AstNode *node) {
 		Var v1 = vars[part1->get_name()];
 		Var v2 = vars[part2->get_name()];
 		
-		sec_text.push_back("vzeroall");
-		sec_text.push_back("");
-		
 		//Load variables
 		std::string ln1 = "movups xmm0";
 		std::string ln2 = "movups xmm1";
