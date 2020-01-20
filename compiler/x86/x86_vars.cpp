@@ -229,6 +229,12 @@ void Asm_x86::build_flt_assign(AstNode *node) {
 			sec_text.push_back(src);
 		} break;
 		
+		//Function call
+		case AstType::FuncCall: {
+			AstFuncCall *fc = static_cast<AstFuncCall *>(first);
+			build_func_call(fc);
+		} break;
+		
 		//Assign an array access
 		case AstType::ArrayAccess: {
 			build_arr_access(first);
