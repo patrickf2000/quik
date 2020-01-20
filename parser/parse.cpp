@@ -175,6 +175,8 @@ void build_var_parts(AstNode *vd, int start, std::vector<Token> tokens) {
 			} else if (t.type == TokenType::STRING) {
 				AstString *i = new AstString(t.id);
 				vd->children.push_back(i);
+			
+			//Math operators
 			} else if (t.type == TokenType::PLUS) {
 				vd->children.push_back(new AstNode(AstType::Add));
 			} else if (t.type == TokenType::MINUS) {
@@ -189,6 +191,16 @@ void build_var_parts(AstNode *vd, int start, std::vector<Token> tokens) {
 				vd->children.push_back(new AstNode(AstType::Inc));
 			} else if (t.type == TokenType::D_MUL) {
 				vd->children.push_back(new AstNode(AstType::DMul));
+				
+			//Logical operators
+			} else if (t.type == TokenType::AND) {
+				vd->children.push_back(new AstNode(AstType::And));
+			} else if (t.type == TokenType::OR) {
+				vd->children.push_back(new AstNode(AstType::Or));
+			} else if (t.type == TokenType::XOR) {
+				vd->children.push_back(new AstNode(AstType::Xor));
+				
+			//Other variables
 			} else {
 				AstID *i = new AstID(t.id);
 				vd->children.push_back(i);

@@ -42,6 +42,10 @@ std::string ast2str(AstType type) {
 		case AstType::Mod: return "OP: %";
 		case AstType::Inc: return "OP: ++";
 		case AstType::DMul: return "OP: **";
+		
+		case AstType::And: return "And";
+		case AstType::Or: return "Or";
+		case AstType::Xor: return "Xor";
 	}
 	
 	return "NONE";

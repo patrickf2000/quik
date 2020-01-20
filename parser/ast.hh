@@ -51,7 +51,12 @@ enum AstType {
 	Div,
 	Mod,
 	Inc,
-	DMul
+	DMul,
+	
+	//Logical operators
+	And,
+	Or,
+	Xor
 };
 
 //Holds variable information
