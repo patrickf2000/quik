@@ -327,7 +327,14 @@ void Asm_x86::build_floatex_assign(AstNode *node) {
 		//Do the math
 		//Scalar addition
 		if (op->type == AstType::Add) {
-			//TODO: Add me
+			if (vd->get_type() == DataType::Float256)
+				sec_text.push_back("vhaddps ymm0, ymm0, ymm1");
+			else if (vd->get_type() == DataType::Float128)
+				sec_text.push_back("haddps xmm0, xmm1");
+			else if (vd->get_type() == DataType::Int256)
+				sec_text.push_back("vphaddd ymm0, ymm0, ymm1");
+			else
+				sec_text.push_back("phaddd xmm0, xmm1");
 			
 		//Parallel addition
 		} else if (op->type == AstType::Inc) {
