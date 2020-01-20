@@ -61,6 +61,7 @@ enum TokenType {
 	ID,
 	
 	//Values
+	HEX,
 	STRING,
 	NO,
 	CHAR,

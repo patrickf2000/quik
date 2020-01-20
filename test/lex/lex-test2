@@ -1,5 +1,5 @@
-byte x = 1
-T_BYTE~ID>x~ASSIGN~NO>1~
+byte x = 0xA1
+T_BYTE~ID>x~ASSIGN~HEX>0xA1~
 
 char x = 'a'
 T_CHAR~ID>x~ASSIGN~CHAR>a~

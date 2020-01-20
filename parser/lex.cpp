@@ -34,6 +34,24 @@ bool is_dec(std::string s) {
 	return true;
 }
 
+bool is_hex(std::string s) {
+	if (s.length() < 3)
+		return false;
+		
+	if (s[0] != '0' || s[1] != 'x') {
+		return false;
+	}
+	
+	for (int i = 2; i<s.length(); i++) {
+		char c = s[i];
+		
+		if (!isxdigit(c))
+			return false;
+	}
+	
+	return true;
+}
+
 //Tokenize a string
 std::vector<Token> tokenize(std::string line) {
 	line += " ";	//No purpose, makes my life easier :)
@@ -173,6 +191,8 @@ std::vector<Token> tokenize(std::string line) {
 					t.type = TokenType::NO;
 				} else if (is_dec(current)) {
 					t.type = TokenType::DEC;
+				} else if (is_hex(current)) {
+					t.type = TokenType::HEX;
 				} else {
 					t.type = TokenType::ID;
 				}
@@ -337,5 +357,6 @@ TokenType str2type(std::string in) {
 	else if (in == "FLOAT_80") return TokenType::FLOAT_80;
 	else if (in == "INT_128") return TokenType::INT_128;
 	else if (in == "INT_256") return TokenType::INT_256;
+	else if (in == "HEX") return TokenType::HEX;
 	return TokenType::NONE;
 }
