@@ -7,7 +7,19 @@
 
 include io
 
-func main
+func add_float
+	float256 numbers = 1.1, 2.2, 3.3, 4.4, 5.5, 6.6, 7.7, 8.8
+	float128 answer = numbers + numbers
+	
+	int index = 0
+	while (index < 4)
+		float x = answer[index]
+		printf("%f\n", x)
+		index++
+	end
+end
+
+func add_int
 	int256 numbers = 1, 2, 3, 4, 5, 6, 7, 8
 	int128 answer = numbers + numbers
 	
@@ -17,4 +29,9 @@ func main
 		print_int(x)
 		index++
 	end
+end
+
+func main
+	add_float()
+	add_int()
 end
