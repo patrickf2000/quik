@@ -36,8 +36,8 @@ void Asm_x86::build_arr_dec(AstNode *node) {
 		} break;
 		
 		case DataType::Float: {
-			size = 8;
-			prefix = "movsd";
+			size = 4;
+			prefix = "movss";
 		} break;
 			
 		case DataType::Str: {
@@ -69,7 +69,7 @@ void Asm_x86::build_arr_dec(AstNode *node) {
 			
 			case AstType::Float: {
 				auto flt_name = build_float(child);
-				sec_text.push_back("movsd xmm0, [" + flt_name + "]");
+				sec_text.push_back("movss xmm0, [" + flt_name + "]");
 				ln += "xmm0";
 			} break;
 		}
@@ -87,12 +87,10 @@ void Asm_x86::build_arr_access(AstNode *node) {
 	int size = 4;
 	
 	Var v = vars[acc->get_name()];
-	index = v.stack_pos;	
+	index = v.stack_pos;
 	
 	if (v.type == DataType::Str)
 		size = 1;
-	else if (v.type == DataType::Float)
-		size = 8;
 	
 	//Calculate the index
 	//For ints: 4 * (element index)
@@ -102,7 +100,8 @@ void Asm_x86::build_arr_access(AstNode *node) {
 		reg = "rax";
 		
 	std::string start = "mov eax";
-	if (v.type == DataType::Float || v.type == DataType::Float64)
+	if (v.type == DataType::Float || v.type == DataType::Float64
+		|| v.type == DataType::Float128 || v.type == DataType::Float256)
 		start = "movss xmm0";
 	
 	auto i_child = acc->children.at(0);

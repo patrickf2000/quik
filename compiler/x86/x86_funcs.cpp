@@ -125,12 +125,12 @@ void Asm_x86::build_func_x64(AstFuncDec *fd) {
 	sec_text.push_back("mov rbp, rsp");
 	
 	//TODO: Add some logic instead of randomly assigning some large number
-	if (contains(fd->children.at(0), DataType::Float64)) {
+	if (contains(fd->children.at(0), DataType::Float64)
+		|| contains(fd->children.at(0), DataType::Float256)) {
 		sec_text.push_back("sub rsp, 128");
 	} else if (contains(fd->children.at(0), DataType::Int128)
 		|| contains(fd->children.at(0), DataType::Float128)
-		|| contains(fd->children.at(0), DataType::Int256)
-		|| contains(fd->children.at(0), DataType::Float256)) {
+		|| contains(fd->children.at(0), DataType::Int256)) {
 		sec_text.push_back("sub rsp, 196");	
 	} else if (contains_arr(fd->children.at(0))) {
 		sec_text.push_back("sub rsp, 128");
