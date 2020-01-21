@@ -374,23 +374,25 @@ void Asm_x86::build_floatex_assign(AstNode *node) {
 				sec_text.push_back("pextrd " + d1 + ", xmm0, 0");
 				sec_text.push_back("pextrd " + d2 + ", xmm0, 1");
 			}
-		
-		//TODO: There's gotta be a better way to do this
+
 		} else if (vd_type == DataType::Int128 && op_type == DataType::Int256) {
 			sec_text.push_back("vextracti128 xmm4, ymm0, 0");
 			sec_text.push_back("vextracti128 xmm5, ymm0, 1");
+			sec_text.push_back("");
 			
-			sec_text.push_back("");
-			sec_text.push_back("pextrd eax, xmm4, 0");
-			sec_text.push_back("pextrd ebx, xmm4, 1");
-			sec_text.push_back("pextrd ecx, xmm5, 0");
-			sec_text.push_back("pextrd edx, xmm5, 1");
-			sec_text.push_back("");
-			sec_text.push_back("pinsrd xmm3, eax, 0");
-			sec_text.push_back("pinsrd xmm3, ebx, 1");
-			sec_text.push_back("pinsrd xmm3, ecx, 2");
-			sec_text.push_back("pinsrd xmm3, edx, 3");
-			sec_text.push_back("");
+			std::string reg = "xmm4";
+			bool l = 0;
+			
+			for (int i = 0; i<4; i++) {
+				if (i == 2)
+					reg = "xmm5";
+					
+				sec_text.push_back("pextrd eax, " + reg + ", " + std::to_string(l));
+				sec_text.push_back("pinsrd xmm3, eax, " + std::to_string(i));
+				sec_text.push_back("");
+				
+				l = !l;
+			}
 			
 			std::string dest = "[rbp-" + std::to_string(index) + "]";
 			sec_text.push_back("movups " + dest + ", xmm3");
