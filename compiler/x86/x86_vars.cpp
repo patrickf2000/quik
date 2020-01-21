@@ -394,6 +394,27 @@ void Asm_x86::build_floatex_assign(AstNode *node) {
 			
 			std::string dest = "[rbp-" + std::to_string(index) + "]";
 			sec_text.push_back("movups " + dest + ", xmm3");
+			
+		} else if (vd_type == DataType::Float128 && op_type == DataType::Float256) {
+			std::string reg = "xmm4";
+			bool l = 0;
+			
+			sec_text.push_back("vextractf128 xmm4, ymm0, 0");
+			sec_text.push_back("vextractf128 xmm5, ymm0, 1");
+			sec_text.push_back("");
+		
+			for (int i = 0; i<16; i+=4) {
+				if (i == 8)
+					reg = "xmm5";
+					
+				std::string ln = "extractps [rbp-" + std::to_string(index-i) + "], ";
+				ln += reg + ", " + std::to_string(l);
+				sec_text.push_back(ln);
+					
+				l = !l;
+			}
+		
+			sec_text.push_back("");
 		} else {
 			sec_text.push_back(dest_ln);
 		}
