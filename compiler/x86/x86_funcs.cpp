@@ -197,7 +197,10 @@ void Asm_x86::build_func_x64(AstFuncDec *fd) {
 			case DataType::Bool:
 			case DataType::Int:
 			case DataType::Str:
-			case DataType::Float: stack_pos += 4; break;
+			case DataType::Float: {
+				if (v.is_array) stack_pos += 8;
+				else stack_pos += 4; 
+			} break;
 		}
 	}
 }

@@ -320,14 +320,28 @@ void Asm_x86::build_floatex_assign(AstNode *node) {
 		std::string dest_ln = "movups" + dest_var + "xmm0";
 		
 		if (op_type == DataType::Int256
-			|| op_type == DataType::Float256) {
+			|| op_type == DataType::Float256
+			|| vd_type == DataType::Int256) {
 			ln1 = "vmovupd ymm0";
 			ln2 = "vmovupd ymm1";
 			dest_ln = "vmovups" + dest_var + "ymm0";
 		}
 		
-		ln1 += ", [rbp-" + std::to_string(v1.stack_pos) + "]";
-		ln2 += ", [rbp-" + std::to_string(v2.stack_pos) + "]";
+		//Check if the first variable is an array
+		if (v1.is_array) {
+			sec_text.push_back("mov rax, [rbp-" + std::to_string(v1.stack_pos) + "]");
+			ln1 += ", [rax]";
+		} else {
+			ln1 += ", [rbp-" + std::to_string(v1.stack_pos) + "]";
+		}
+		
+		//Check if the second variable is an array
+		if (v2.is_array) {
+			sec_text.push_back("mov rbx, [rbp-" + std::to_string(v2.stack_pos) + "]");
+			ln2 += ", [rbx]";
+		} else {
+			ln2 += ", [rbp-" + std::to_string(v2.stack_pos) + "]";
+		}
 		
 		sec_text.push_back(ln1);
 		sec_text.push_back(ln2);
