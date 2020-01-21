@@ -184,6 +184,11 @@ void Asm_x86::build_int_math(AstNode *node) {
 			AstFuncCall *fc = dynamic_cast<AstFuncCall *>(next);
 			build_func_call(fc);
 			ln += dest_var;
+		} else if (next->type == AstType::ArrayAccess) {
+			sec_text.push_back("mov ebx, eax");
+		
+			build_arr_access(next);
+			ln += "ebx";
 		} else {
 			ln += type2asm(next);
 		}
