@@ -61,4 +61,10 @@ ID>x~OR~ID>y~
 x ?? y
 ID>x~XOR~ID>y~
 
+loop 5
+LOOP~NO>5~
+
+loop x
+LOOP~ID>x~
+
 

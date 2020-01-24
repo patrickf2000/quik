@@ -518,6 +518,14 @@ AstCond *build_conditional(Line ln) {
 	return cond;
 }
 
+//Builds a loop statement
+AstLoop *build_loop(Line ln) {
+	AstLoop *lp = new AstLoop;
+	lp->param = new AstInt(0);
+	
+	return lp;
+}
+
 //Builds an AST node from a string of tokens
 AstNode *build_node(Line ln) {
 	auto tokens = ln.tokens;
@@ -580,6 +588,7 @@ AstNode *build_node(Line ln) {
 		
 		//Build loops
 		case TokenType::WHILE: return build_conditional(ln);
+		case TokenType::LOOP: return build_loop(ln);
 		
 		//Handle if the first node is an ID
 		case TokenType::ID: {
@@ -697,7 +706,8 @@ int build_tree(std::vector<AstNode *> nodes, AstNode *top, int index, bool in_if
 			
 			i = build_tree(nodes, s, i+1);
 		} else if (c->type == AstType::If || c->type == AstType::Elif 
-				|| c->type == AstType::Else || c->type == AstType::While) {
+				|| c->type == AstType::Else || c->type == AstType::While
+				|| c->type == AstType::Loop) {
 			top->children.push_back(c);
 			i = build_tree(nodes, c, i+1, true);
 		} else if (c->type == AstType::End) {

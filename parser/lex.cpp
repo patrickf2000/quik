@@ -209,6 +209,9 @@ std::vector<Token> tokenize(std::string line) {
 			} else if (current == "while") {
 				t.type = TokenType::WHILE;
 				tokens.push_back(t);
+			} else if (current == "loop") {
+				t.type = TokenType::LOOP;
+				tokens.push_back(t);
 				
 			//Booleans
 			} else if (current == "true") {
@@ -423,6 +426,8 @@ TokenType str2type(std::string in) {
 	else if (in == "INT_64") return TokenType::INT_64;
 	else if (in == "FLOAT_64") return TokenType::FLOAT_64;
 	else if (in == "UINT_64") return TokenType::UINT_64;
+	
+	else if (in == "LOOP") return TokenType::LOOP;
 	
 	return TokenType::NONE;
 }

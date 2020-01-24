@@ -25,6 +25,7 @@ enum AstType {
 	
 	//Loop stuff
 	While,
+	Loop,
 	
 	//Variable stuff
 	VarDec,
@@ -171,6 +172,13 @@ public:
 class AstWhile : public AstCond {
 public:
 	AstWhile() { type = AstType::While; }
+};
+
+//The loop keyword
+class AstLoop : public AstNode {
+public:
+	AstLoop() { type = AstType::Loop; }
+	AstNode *param;
 };
 
 //Variable declaration

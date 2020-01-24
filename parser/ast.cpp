@@ -37,6 +37,7 @@ std::string ast2str(AstType type) {
 		case AstType::Else: return "Else";
 		case AstType::EndIf: return "EndIf";
 		case AstType::While: return "While";
+		case AstType::Loop: return "Loop";
 		
 		case AstType::Add: return "OP: +";
 		case AstType::Sub: return "OP: -";
@@ -173,6 +174,21 @@ void print_tree(AstNode *node, int indent, bool nl) {
 			}
 			
 			std::cout << "}";
+		}
+		
+	} else if (node->type == AstType::Loop) {
+		AstLoop *lp = static_cast<AstLoop *>(node);
+		
+		switch (lp->param->type) {
+			case AstType::Int: {
+				auto i = static_cast<AstInt* >(lp->param)->get_val();
+				std::cout << " {" << i << "}";
+			} break;
+			
+			case AstType::Id: {
+				auto name = static_cast<AstID *>(lp->param)->get_name();
+				std::cout << " {" << name << "}";
+			} break;
 		}
 		
 	//values
