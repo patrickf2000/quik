@@ -179,16 +179,20 @@ void print_tree(AstNode *node, int indent, bool nl) {
 	} else if (node->type == AstType::Loop) {
 		AstLoop *lp = static_cast<AstLoop *>(node);
 		
-		switch (lp->param->type) {
-			case AstType::Int: {
-				auto i = static_cast<AstInt* >(lp->param)->get_val();
-				std::cout << " {" << ast2str(lp->param->type) << ":" << i << "}";
-			} break;
-			
-			case AstType::Id: {
-				auto name = static_cast<AstID *>(lp->param)->get_name();
-				std::cout << " {" << ast2str(lp->param->type) << ":" << name << "}";
-			} break;
+		if (lp->param == nullptr) {
+			std::cout << " {INF}";
+		} else {
+			switch (lp->param->type) {
+				case AstType::Int: {
+					auto i = static_cast<AstInt* >(lp->param)->get_val();
+					std::cout << " {" << ast2str(lp->param->type) << ":" << i << "}";
+				} break;
+				
+				case AstType::Id: {
+					auto name = static_cast<AstID *>(lp->param)->get_name();
+					std::cout << " {" << ast2str(lp->param->type) << ":" << name << "}";
+				} break;
+			}
 		}
 		
 	//values

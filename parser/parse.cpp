@@ -525,18 +525,22 @@ AstLoop *build_loop(Line ln) {
 		syntax_error(ln, "Too many arguments in loop statement.");
 
 	AstLoop *lp = new AstLoop;
-	auto arg = tokens.at(1);
+	lp->param = nullptr;
 	
-	switch (arg.type) {
-		case TokenType::NO: {
-			int i = std::stoi(arg.id);
-			lp->param = new AstInt(i);
-		} break;
+	if (tokens.size() > 1) {
+		auto arg = tokens.at(1);
 		
-		case TokenType::ID: {
-			AstID *id = new AstID(arg.id);
-			lp->param = id;
-		} break;
+		switch (arg.type) {
+			case TokenType::NO: {
+				int i = std::stoi(arg.id);
+				lp->param = new AstInt(i);
+			} break;
+			
+			case TokenType::ID: {
+				AstID *id = new AstID(arg.id);
+				lp->param = id;
+			} break;
+		}
 	}
 	
 	return lp;
