@@ -126,6 +126,9 @@ void Asm_x86::build_while(AstNode *node) {
 					
 					ln = "jne " + lbl;
 					sec_text.push_back(ln);
+					
+					ln = "mov dword " + dest + ", 0";
+					sec_text.push_back(ln);
 				} break;
 			
 				case AstType::Id: {
