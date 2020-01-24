@@ -70,8 +70,6 @@ void Asm_x86::build_cond(AstNode *node) {
 
 //Generates assembly for a while loop
 void Asm_x86::build_while(AstNode *node) {
-	AstCond *cond = dynamic_cast<AstCond *>(node);
-
 	//Set up the labels
 	auto cmp_lbl = labels.top();
 	labels.pop();
@@ -81,27 +79,62 @@ void Asm_x86::build_while(AstNode *node) {
 	
 	sec_text.push_back(cmp_lbl + ":");
 	
-	//Position the lval
-	std::string ln = "mov eax, " + type2asm(cond->lval);
-	sec_text.push_back(ln);
-	
-	//Position the rval
-	ln = "cmp eax, " + type2asm(cond->rval);
-	sec_text.push_back(ln);
-	
-	//Comparison
-	switch (cond->get_op()) {
-		case CondOp::Equals: ln = "je "; break;
-		case CondOp::NotEquals: ln = "jne "; break;
-		case CondOp::Greater: ln = "jg "; break;
-		case CondOp::GreaterEq: ln = "jge "; break;
-		case CondOp::Less: ln = "jl "; break;
-		case CondOp::LessEq: ln = "jle "; break;
+	//While loops
+	if (node->type == AstType::While) {
+		AstCond *cond = dynamic_cast<AstCond *>(node);
+			
+		//Position the lval
+		std::string ln = "mov eax, " + type2asm(cond->lval);
+		sec_text.push_back(ln);
+		
+		//Position the rval
+		ln = "cmp eax, " + type2asm(cond->rval);
+		sec_text.push_back(ln);
+		
+		//Comparison
+		switch (cond->get_op()) {
+			case CondOp::Equals: ln = "je "; break;
+			case CondOp::NotEquals: ln = "jne "; break;
+			case CondOp::Greater: ln = "jg "; break;
+			case CondOp::GreaterEq: ln = "jge "; break;
+			case CondOp::Less: ln = "jl "; break;
+			case CondOp::LessEq: ln = "jle "; break;
+		}
+		
+		ln += lbl;
+
+		sec_text.push_back(ln);
+		
+	//Loops
+	} else if (node->type == AstType::Loop) {
+		AstLoop *lp = static_cast<AstLoop *>(node);
+		
+		if (lp->param == nullptr) {
+			sec_text.push_back("jmp " + lbl);
+		} else {
+			switch (lp->param->type) {
+				case AstType::Int: {
+					std::string dest = "[rbp-" + std::to_string(stack_pos) + "]";
+					sec_text.push_back("add dword " + dest + ", 1");
+					stack_pos += 4;
+					
+					AstInt *i = static_cast<AstInt *>(lp->param);
+					sec_text.push_back("mov eax, " + std::to_string(i->get_val() + 1));
+					
+					std::string ln = "cmp eax, " + dest;
+					sec_text.push_back(ln);
+					
+					ln = "jne " + lbl;
+					sec_text.push_back(ln);
+				} break;
+			
+				case AstType::Id: {
+				
+				} break;
+			}
+		}
 	}
 	
-	ln += lbl;
-
-	sec_text.push_back(ln);
 	sec_text.push_back("");
 }
 

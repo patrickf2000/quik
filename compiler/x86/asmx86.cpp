@@ -84,6 +84,7 @@ void Asm_x86::assemble(std::string p, AstNode *top) {
 				top_lbls.pop();
 			} break;
 			
+			case AstType::Loop:
 			case AstType::While: {
 				std::string top_lbl = "L" + std::to_string(lbl_index);
 				++lbl_index;
