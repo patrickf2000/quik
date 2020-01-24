@@ -520,8 +520,24 @@ AstCond *build_conditional(Line ln) {
 
 //Builds a loop statement
 AstLoop *build_loop(Line ln) {
+	auto tokens = ln.tokens;
+	if (tokens.size() > 2)
+		syntax_error(ln, "Too many arguments in loop statement.");
+
 	AstLoop *lp = new AstLoop;
-	lp->param = new AstInt(0);
+	auto arg = tokens.at(1);
+	
+	switch (arg.type) {
+		case TokenType::NO: {
+			int i = std::stoi(arg.id);
+			lp->param = new AstInt(i);
+		} break;
+		
+		case TokenType::ID: {
+			AstID *id = new AstID(arg.id);
+			lp->param = id;
+		} break;
+	}
 	
 	return lp;
 }

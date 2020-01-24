@@ -182,12 +182,12 @@ void print_tree(AstNode *node, int indent, bool nl) {
 		switch (lp->param->type) {
 			case AstType::Int: {
 				auto i = static_cast<AstInt* >(lp->param)->get_val();
-				std::cout << " {" << i << "}";
+				std::cout << " {" << ast2str(lp->param->type) << ":" << i << "}";
 			} break;
 			
 			case AstType::Id: {
 				auto name = static_cast<AstID *>(lp->param)->get_name();
-				std::cout << " {" << name << "}";
+				std::cout << " {" << ast2str(lp->param->type) << ":" << name << "}";
 			} break;
 		}
 		
