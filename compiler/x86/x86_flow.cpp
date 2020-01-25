@@ -114,7 +114,8 @@ void Asm_x86::build_while(AstNode *node) {
 		} else {
 			switch (lp->param->type) {
 				case AstType::Int: {
-					std::string dest = "[rbp-" + std::to_string(stack_pos) + "]";
+					std::string dest = "[" + get_reg("bp");
+					dest += "-" + std::to_string(stack_pos) + "]";
 					sec_text.push_back("add dword " + dest + ", 1");
 					stack_pos += 4;
 					
