@@ -1,0 +1,49 @@
+include io
+
+func main
+	int x = 3
+	
+	loop 2
+		puts("First loop!")
+	end
+	puts("")
+	
+	loop x
+		puts("Hello!")
+		
+		loop 5
+			puts("Inner!")
+		end
+		puts("-")
+	end
+	
+	puts("Done")
+end
+
+#TEST
+#First loop!
+#First loop!
+#
+#Hello!
+#Inner!
+#Inner!
+#Inner!
+#Inner!
+#Inner!
+#-
+#Hello!
+#Inner!
+#Inner!
+#Inner!
+#Inner!
+#Inner!
+#-
+#Hello!
+#Inner!
+#Inner!
+#Inner!
+#Inner!
+#Inner!
+#-
+#Done
+

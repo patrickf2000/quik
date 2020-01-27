@@ -1,0 +1,14 @@
+include io
+
+func main
+	loop 5
+		puts("Hello!")
+		
+		loop 2
+			puts("Inner")
+		end
+	end
+	
+	puts("Done")
+end
+
