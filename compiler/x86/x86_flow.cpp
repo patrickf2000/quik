@@ -113,31 +113,35 @@ void Asm_x86::build_while(AstNode *node) {
 		} else {
 			std::string dest = lp->i_var;
 		
+			//Increment the value
+			sec_text.push_back("add dword " + dest + ", 1");
+					
+			//Insert the comparison label
+			sec_text.push_back(cmp_lbl + ":");
+					
 			switch (lp->param->type) {
 				//Hard-coded values
 				case AstType::Int: {
-					//Increment the value
-					sec_text.push_back("add dword " + dest + ", 1");
-					
-					//Insert the comparison label
-					sec_text.push_back(cmp_lbl + ":");
-					
-					//Generate the comparison
 					AstInt *i = static_cast<AstInt *>(lp->param);
 					sec_text.push_back("mov eax, " + std::to_string(i->get_val()));
-					
-					std::string ln = "cmp eax, " + dest;
-					sec_text.push_back(ln);
-					
-					ln = "jne " + lbl;
-					sec_text.push_back(ln);
 				} break;
 			
 				//Variables containing the value
 				case AstType::Id: {
-				
+					AstID *id = static_cast<AstID *>(lp->param);
+					Var v2 = vars[id->get_name()];
+					std::string p_dest = "[rbp-" + std::to_string(v2.stack_pos) + "]";
+					
+					sec_text.push_back("mov eax, " + p_dest);
 				} break;
 			}
+			
+			//Generate the comparison
+			std::string ln = "cmp eax, " + dest;
+			sec_text.push_back(ln);
+				
+			ln = "jne " + lbl;
+			sec_text.push_back(ln);
 		}
 	}
 	
