@@ -1,0 +1,14 @@
+include io
+
+func main
+	float x = 3.14
+
+	loop x
+		puts("IN")
+	end
+	
+	puts("Done")
+end
+
+
+
