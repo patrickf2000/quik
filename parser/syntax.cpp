@@ -63,20 +63,23 @@ void SyntaxCheck::check_lp_vars(AstNode *top, std::map<std::string, Var> vars) {
 	for (auto node : top->children) {
 		if (node->type == AstType::Loop) {
 			AstLoop *lp = static_cast<AstLoop *>(node);
-			AstAttrNode *va = static_cast<AstAttrNode *>(lp->param);
 			
-			if (vars.find(va->get_name()) == vars.end()) {
-				Error er;
-				er.ln = node->ln;
-				er.msg = "Use of undeclared variable.";
-				errors.push_back(er);
-			} else {
-				Var v = vars[va->get_name()];
-				if (v.type != DataType::Int) {
+			if (lp->param->type == AstType::Id) {
+				AstAttrNode *va = static_cast<AstAttrNode *>(lp->param);
+				
+				if (vars.find(va->get_name()) == vars.end()) {
 					Error er;
 					er.ln = node->ln;
-					er.msg = "Only integer variables may be used with the loop statement.";
+					er.msg = "Use of undeclared variable.";
 					errors.push_back(er);
+				} else {
+					Var v = vars[va->get_name()];
+					if (v.type != DataType::Int) {
+						Error er;
+						er.ln = node->ln;
+						er.msg = "Only integer variables may be used with the loop statement.";
+						errors.push_back(er);
+					}
 				}
 			}
 		}
