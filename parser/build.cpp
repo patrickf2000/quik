@@ -137,6 +137,7 @@ AstNode *build_ast(std::vector<Line> lines, bool fail, bool optimize) {
 	SyntaxCheck check;
 	check.check_global(top);
 	check.check_vars(top, top->vars);
+	check.check_lp_vars(top, top->vars);
 	check.evaluate(fail);		//TODO: Something else rather than bomb out in function?
 	
 	//Optimize

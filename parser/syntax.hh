@@ -16,6 +16,7 @@ class SyntaxCheck {
 public:
 	void check_global(AstNode *top);
 	void check_vars(AstNode *top, std::map<std::string, Var> vars);
+	void check_lp_vars(AstNode *top, std::map<std::string, Var> vars);
 	void syntax_error(Error err);
 	void evaluate(bool fail = true);
 };
