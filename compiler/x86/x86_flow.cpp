@@ -77,11 +77,10 @@ void Asm_x86::build_while(AstNode *node) {
 	auto lbl = labels.top();
 	labels.pop();
 	
-	sec_text.push_back(cmp_lbl + ":");
-	
 	//While loops
 	if (node->type == AstType::While) {
 		AstCond *cond = dynamic_cast<AstCond *>(node);
+		sec_text.push_back(cmp_lbl + ":");
 			
 		//Position the lval
 		std::string ln = "mov eax, " + type2asm(cond->lval);
@@ -114,13 +113,18 @@ void Asm_x86::build_while(AstNode *node) {
 		} else {
 			switch (lp->param->type) {
 				case AstType::Int: {
+					//Increment the value
 					std::string dest = "[" + get_reg("bp");
 					dest += "-" + std::to_string(stack_pos) + "]";
 					sec_text.push_back("add dword " + dest + ", 1");
 					stack_pos += 4;
 					
+					//Insert the comparison label
+					sec_text.push_back(cmp_lbl + ":");
+					
+					//Generate the comparison
 					AstInt *i = static_cast<AstInt *>(lp->param);
-					sec_text.push_back("mov eax, " + std::to_string(i->get_val() + 1));
+					sec_text.push_back("mov eax, " + std::to_string(i->get_val()));
 					
 					std::string ln = "cmp eax, " + dest;
 					sec_text.push_back(ln);
