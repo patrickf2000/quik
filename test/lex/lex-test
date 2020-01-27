@@ -67,4 +67,7 @@ LOOP~NO>5~
 loop x
 LOOP~ID>x~
 
+foreach i : numbers
+FOREACH~ID>i~COLON~ID>numbers~
+
 

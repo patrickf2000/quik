@@ -15,6 +15,7 @@ enum TokenType {
 	ELSE,
 	WHILE,
 	LOOP,
+	FOREACH,
 	RETURN,
 	
 	//Type keywords
