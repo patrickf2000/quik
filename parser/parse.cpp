@@ -540,6 +540,12 @@ AstLoop *build_loop(Line ln) {
 				AstID *id = new AstID(arg.id);
 				lp->param = id;
 			} break;
+			
+			default: {
+				std::string er_msg = "Error: Only integers and integer variables ";
+				er_msg += "may be used with the loop statement.";
+				syntax_error(ln, er_msg);
+			}
 		}
 	}
 	
