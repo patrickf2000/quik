@@ -94,6 +94,21 @@ void Asm_x86::assemble(std::string p, AstNode *top) {
 				++lbl_index;
 				labels.push(cmp_lbl);
 				
+				//This is the only chunk of code specific to the loop
+				//We have to zero-out the segment of memory we use to hold the
+				// index in order to safely use it
+				if (node->type == AstType::Loop) {
+					stack_pos += 4;
+					std::string dest = "[" + get_reg("bp");
+					dest += "-" + std::to_string(stack_pos) + "]";
+					
+					AstLoop *lp = static_cast<AstLoop *>(node);
+					lp->i_var = dest;
+					node = lp;
+					
+					sec_text.push_back("mov dword " + dest + ", 0");
+				}
+				
 				sec_text.push_back("jmp " + cmp_lbl);
 				sec_text.push_back(top_lbl + ":");
 				

@@ -111,13 +111,13 @@ void Asm_x86::build_while(AstNode *node) {
 		if (lp->param == nullptr) {
 			sec_text.push_back("jmp " + lbl);
 		} else {
+			std::string dest = lp->i_var;
+		
 			switch (lp->param->type) {
+				//Hard-coded values
 				case AstType::Int: {
 					//Increment the value
-					std::string dest = "[" + get_reg("bp");
-					dest += "-" + std::to_string(stack_pos) + "]";
 					sec_text.push_back("add dword " + dest + ", 1");
-					stack_pos += 4;
 					
 					//Insert the comparison label
 					sec_text.push_back(cmp_lbl + ":");
@@ -131,11 +131,9 @@ void Asm_x86::build_while(AstNode *node) {
 					
 					ln = "jne " + lbl;
 					sec_text.push_back(ln);
-					
-					ln = "mov dword " + dest + ", 0";
-					sec_text.push_back(ln);
 				} break;
 			
+				//Variables containing the value
 				case AstType::Id: {
 				
 				} break;

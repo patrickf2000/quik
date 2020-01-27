@@ -179,6 +179,7 @@ class AstLoop : public AstNode {
 public:
 	AstLoop() { type = AstType::Loop; }
 	AstNode *param;
+	std::string i_var = "";
 };
 
 //Variable declaration
