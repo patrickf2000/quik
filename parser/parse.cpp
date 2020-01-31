@@ -759,7 +759,7 @@ int build_tree(std::vector<AstNode *> nodes, AstNode *top, int index, bool in_if
 			i = build_tree(nodes, s, i+1);
 		} else if (c->type == AstType::If || c->type == AstType::Elif 
 				|| c->type == AstType::Else || c->type == AstType::While
-				|| c->type == AstType::Loop) {
+				|| c->type == AstType::Loop || c->type == AstType::ForEach) {
 			top->children.push_back(c);
 			i = build_tree(nodes, c, i+1, true);
 		} else if (c->type == AstType::End) {
