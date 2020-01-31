@@ -37,6 +37,21 @@ void find_variables(AstNode *top) {
 				scope->vars.insert(s->vars.begin(), s->vars.end());
 			} break;
 			
+			case AstType::ForEach: {
+				AstScope *s = new AstScope;
+				s->children = node->children;
+				
+				find_variables(s);
+				scope->vars.insert(s->vars.begin(), s->vars.end());
+				
+				AstForEach *fe = static_cast<AstForEach *>(node);
+				Var v;
+				v.name = fe->i_var;
+				v.is_param = false;
+				v.is_array = false;
+				scope->vars[fe->i_var] = v;
+			} break;
+			
 			case AstType::ArrayDec:
 			case AstType::VarDec: {
 				AstVarDec *vd = dynamic_cast<AstVarDec *>(node);

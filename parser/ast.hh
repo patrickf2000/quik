@@ -184,11 +184,12 @@ public:
 };
 
 //The foreach keyword
-class AstForEach : public AstNode {
+class AstForEach : public AstAttrNode {
 public:
 	AstForEach() { type = AstType::ForEach; }
 	std::string i_var = "";		//Index
 	std::string r_var = "";		//Range
+	std::string i_var_in = "";	//Internal index counter
 };
 
 //Variable declaration

@@ -85,6 +85,7 @@ void Asm_x86::assemble(std::string p, AstNode *top) {
 			} break;
 			
 			case AstType::Loop:
+			case AstType::ForEach:
 			case AstType::While: {
 				std::string top_lbl = "L" + std::to_string(lbl_index);
 				++lbl_index;
@@ -97,20 +98,47 @@ void Asm_x86::assemble(std::string p, AstNode *top) {
 				//This is the only chunk of code specific to the loop
 				//We have to zero-out the segment of memory we use to hold the
 				// index in order to safely use it
-				if (node->type == AstType::Loop) {
+				//TODO: Is there a way we can clean this up?
+				if (node->type == AstType::Loop || node->type == AstType::ForEach) {
 					stack_pos += 4;
 					std::string dest = "[" + get_reg("bp");
 					dest += "-" + std::to_string(stack_pos) + "]";
 					
-					AstLoop *lp = static_cast<AstLoop *>(node);
-					lp->i_var = dest;
-					node = lp;
-					
 					sec_text.push_back("mov dword " + dest + ", 0");
+					
+					if (node->type == AstType::ForEach) {
+						AstForEach *fe = static_cast<AstForEach *>(node);
+					
+						//Build the variable used to hold the for-each value
+						Var v;
+						v.name = fe->i_var;
+						v.stack_pos = stack_pos;
+						v.is_array = false;
+						v.is_param = false;
+						vars[fe->i_var] = v;
+						
+						//Build the internal index counter
+						stack_pos += 4;
+						dest = "[" + get_reg("bp");
+						dest += "-" + std::to_string(stack_pos) + "]";
+						
+						sec_text.push_back("mov dword " + dest + ", 0");
+						
+						fe->i_var_in = dest;
+						node = fe;
+					} else {
+						AstLoop *lp = static_cast<AstLoop *>(node);
+						lp->i_var = dest;
+						node = lp;
+					}
 				}
 				
 				sec_text.push_back("jmp " + cmp_lbl);
 				sec_text.push_back(top_lbl + ":");
+				
+				//If we have a foreach, we have to handle the top
+				if (node->type == AstType::ForEach)
+					build_foreach_top(node);
 				
 				assemble("", node);
 				build_while(node);

@@ -41,6 +41,7 @@ public:
 	//Flow stuff
 	void build_cond(AstNode *node);
 	void build_while(AstNode *node);
+	void build_foreach_top(AstNode *node);
 	
 	//Build stuff
 	void write();

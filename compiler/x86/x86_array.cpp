@@ -82,7 +82,7 @@ void Asm_x86::build_arr_dec(AstNode *node) {
 
 //Generates assembly for an array access statement
 void Asm_x86::build_arr_access(AstNode *node) {
-	AstArrayAcc *acc = dynamic_cast<AstArrayAcc *>(node);
+	AstArrayAcc *acc = static_cast<AstArrayAcc *>(node);
 	int index = 0;
 	int size = 4;
 	
@@ -104,7 +104,7 @@ void Asm_x86::build_arr_access(AstNode *node) {
 		|| v.type == DataType::Float128 || v.type == DataType::Float256)
 		start = "movss xmm0";
 	
-	auto i_child = acc->children.at(0);
+	auto i_child = acc->children[0];
 	std::string ln = start + ", [" + get_reg("bp") + "-";
 	
 	if (v.is_param) {

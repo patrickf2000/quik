@@ -143,8 +143,53 @@ void Asm_x86::build_while(AstNode *node) {
 			ln = "jne " + lbl;
 			sec_text.push_back(ln);
 		}
+			
+	//For-each loops, used for arrays and ranges
+	//This only builds the bottom comparison portion
+	} else if (node->type == AstType::ForEach) {
+		AstForEach *fe = static_cast<AstForEach *>(node);
+		std::string dest = fe->i_var_in;
+		
+		//Increment the index value
+		sec_text.push_back("add dword " + dest + ", 1");
+		
+		//Insert comparison label
+		sec_text.push_back(cmp_lbl + ":");
+		
+		//Generate the comparison
+		Var r_var = vars[fe->r_var];
+		int size = r_var.size;
+		
+		sec_text.push_back("mov eax, " + std::to_string(size));
+		sec_text.push_back("cmp eax, " + dest);
+		sec_text.push_back("jne " + lbl);
 	}
 	
+	sec_text.push_back("");
+}
+
+//Generates the top part of a for-each loop
+void Asm_x86::build_foreach_top(AstNode *node) {
+	AstForEach *fe = static_cast<AstForEach *>(node);
+	int size = 4;
+	
+	//Build the access
+	int r_index = vars[fe->r_var].stack_pos;
+	
+	sec_text.push_back("mov eax, " + fe->i_var_in);
+	sec_text.push_back("cdqe");
+	sec_text.push_back("mov rbx, rax");
+	
+	std::string ln = "mov eax, [rbp-" + std::to_string(r_index);
+	ln += "+rbx*" + std::to_string(size) + "]";
+	sec_text.push_back(ln);
+	
+	//Assign the retrieved value
+	int i_index = vars[fe->i_var].stack_pos;
+	ln = "mov dword [rbp-" + std::to_string(i_index);
+	ln += "], eax";
+	
+	sec_text.push_back(ln);
 	sec_text.push_back("");
 }
 
