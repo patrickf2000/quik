@@ -113,6 +113,7 @@ void Asm_x86::assemble(std::string p, AstNode *top) {
 						Var v;
 						v.name = fe->i_var;
 						v.stack_pos = stack_pos;
+						v.type = vars[fe->r_var].type;
 						v.is_array = false;
 						v.is_param = false;
 						vars[fe->i_var] = v;
