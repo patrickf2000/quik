@@ -196,6 +196,11 @@ void print_tree(AstNode *node, int indent, bool nl) {
 			}
 		}
 		
+	} else if (node->type == AstType::ForEach) {
+		AstForEach *fe = static_cast<AstForEach *>(node);
+		
+		std::cout << " {" << fe->i_var << " : " << fe->r_var << "}";
+		
 	//values
 	} else if (node->type == AstType::Int) {
 		std::cout << " " << dynamic_cast<AstInt *>(node)->get_val();
