@@ -38,6 +38,7 @@ std::string ast2str(AstType type) {
 		case AstType::EndIf: return "EndIf";
 		case AstType::While: return "While";
 		case AstType::Loop: return "Loop";
+		case AstType::ForEach: return "ForEach";
 		
 		case AstType::Add: return "OP: +";
 		case AstType::Sub: return "OP: -";

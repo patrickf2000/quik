@@ -552,6 +552,12 @@ AstLoop *build_loop(Line ln) {
 	return lp;
 }
 
+//Builds a foreach statement
+AstForEach *build_foreach(Line ln) {
+	AstForEach *fe = new AstForEach;
+	return fe;
+}
+
 //Builds an AST node from a string of tokens
 AstNode *build_node(Line ln) {
 	auto tokens = ln.tokens;
@@ -615,6 +621,7 @@ AstNode *build_node(Line ln) {
 		//Build loops
 		case TokenType::WHILE: return build_conditional(ln);
 		case TokenType::LOOP: return build_loop(ln);
+		case TokenType::FOREACH: return build_foreach(ln);
 		
 		//Handle if the first node is an ID
 		case TokenType::ID: {

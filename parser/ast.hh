@@ -26,6 +26,7 @@ enum AstType {
 	//Loop stuff
 	While,
 	Loop,
+	ForEach,
 	
 	//Variable stuff
 	VarDec,
@@ -180,6 +181,14 @@ public:
 	AstLoop() { type = AstType::Loop; }
 	AstNode *param;
 	std::string i_var = "";
+};
+
+//The foreach keyword
+class AstForEach : public AstNode {
+public:
+	AstForEach() { type = AstType::ForEach; }
+	std::string i_var = "";		//Index
+	std::string r_var = "";		//Range
 };
 
 //Variable declaration
