@@ -593,6 +593,26 @@ AstStructDec *build_struct_dec(Line ln) {
 //Builds a structure operation
 AstStruct *build_struct_var(Line ln) {
 	AstStruct *op = new AstStruct;
+	auto tokens = ln.tokens;
+	
+	//Perform a size check
+	if (tokens.size() != 3)
+		syntax_error(ln, "Invalid tokens in structure declaration.");
+		
+	auto str_name = tokens.at(1);
+	auto var_name = tokens.at(2);
+	
+	//Perform some syntax checking
+	if (str_name.type != TokenType::ID)
+		syntax_error(ln, "Invalid or non-existent structure being referenced.");
+		
+	if (var_name.type != TokenType::ID)
+		syntax_error(ln, "Invalid structure variable name.");
+		
+	//Create the AST type
+	op->str_name = str_name.id;
+	op->var_name = var_name.id;
+	
 	return op;
 }
 
