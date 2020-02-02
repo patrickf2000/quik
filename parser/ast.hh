@@ -17,6 +17,10 @@ enum AstType {
 	End,
 	Return,
 	
+	//Structure stuff
+	Struct,
+	StructDec,
+	
 	//Conditional stuff
 	If,
 	Elif,
@@ -138,6 +142,25 @@ public:
 class AstReturn : public AstNode {
 public:
 	AstReturn() { type = AstType::Return; }
+};
+
+//Structure declarations
+class AstStructDec : public AstAttrNode {
+public:
+	explicit AstStructDec() { type = AstType::StructDec; }
+	explicit AstStructDec(std::string n) {
+		type = AstType::StructDec;
+		name = n;
+	}
+};
+
+//A struct variable
+class AstStruct : public AstNode {
+public:
+	explicit AstStruct() { type = AstType::Struct; }
+	
+	std::string str_name = "";		//Refers to the structure being used
+	std::string var_name = "";		//The name of our structure variable
 };
 
 //The base class for conditionals

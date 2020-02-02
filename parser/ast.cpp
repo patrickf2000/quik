@@ -19,9 +19,13 @@ std::string ast2str(AstType type) {
 		case AstType::Float: return "Float";
 		case AstType::Id: return "ID";
 		case AstType::Str: return "Str";
+		
 		case AstType::ArrayDec: return "ArrayDec";
 		case AstType::ArrayAccess: return "ArrayAccess";
 		case AstType::ArrayAssign: return "ArrayAssign";
+		
+		case AstType::Struct: return "Struct";
+		case AstType::StructDec: return "StructDec";
 		
 		case AstType::Int64: return "Int64";
 		case AstType::Int128: return "Int128";
@@ -200,6 +204,14 @@ void print_tree(AstNode *node, int indent, bool nl) {
 		AstForEach *fe = static_cast<AstForEach *>(node);
 		
 		std::cout << " {" << fe->i_var << " : " << fe->r_var << "}";
+		
+	} else if (node->type == AstType::StructDec) {
+		AstStructDec *strd = static_cast<AstStructDec *>(node);
+		std::cout << " {" << strd->get_name() << "}";
+		
+	} else if (node->type == AstType::Struct) {
+		AstStruct *s = static_cast<AstStruct *>(node);
+		std::cout << " {" << s->str_name << ":" << s->var_name << "}";
 		
 	//values
 	} else if (node->type == AstType::Int) {
