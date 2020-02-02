@@ -18,6 +18,9 @@ enum TokenType {
 	FOREACH,
 	RETURN,
 	
+	//Struct keywords
+	STRUCT,
+	
 	//Type keywords
 	T_BYTE,
 	T_CHAR,

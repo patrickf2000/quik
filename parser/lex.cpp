@@ -121,6 +121,11 @@ std::vector<Token> tokenize(std::string line) {
 				t.type = TokenType::RETURN;
 				tokens.push_back(t);
 				
+			//Structure
+			} else if (current == "struct") {
+				t.type = TokenType::STRUCT;
+				tokens.push_back(t);
+				
 			//Variable types
 			} else if (current == "byte") {
 				t.type = TokenType::T_BYTE;
@@ -432,6 +437,8 @@ TokenType str2type(std::string in) {
 	
 	else if (in == "LOOP") return TokenType::LOOP;
 	else if (in == "FOREACH") return TokenType::FOREACH;
+	
+	else if (in == "STRUCT") return TokenType::STRUCT;
 	
 	return TokenType::NONE;
 }

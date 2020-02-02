@@ -70,4 +70,9 @@ LOOP~ID>x~
 foreach i : numbers
 FOREACH~ID>i~COLON~ID>numbers~
 
+struct s
+STRUCT~ID>s~
+
+struct s s1
+STRUCT~ID>s~ID>s1~
 
