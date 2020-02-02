@@ -130,7 +130,8 @@ void Asm_x86::build_while(AstNode *node) {
 				case AstType::Id: {
 					AstID *id = static_cast<AstID *>(lp->param);
 					Var v2 = vars[id->get_name()];
-					std::string p_dest = "[rbp-" + std::to_string(v2.stack_pos) + "]";
+					std::string p_dest = "[" + get_reg("bp");
+					p_dest += "-" + std::to_string(v2.stack_pos) + "]";
 					
 					sec_text.push_back("mov eax, " + p_dest);
 				} break;
