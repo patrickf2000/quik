@@ -176,9 +176,8 @@ void Asm_x86::build_foreach_top(AstNode *node) {
 	//Build the access
 	int r_index = vars[fe->r_var].stack_pos;
 	
-	sec_text.push_back("mov eax, " + fe->i_var_in);
+	sec_text.push_back("mov ebx, " + fe->i_var_in);
 	sec_text.push_back("cdqe");
-	sec_text.push_back("mov rbx, rax");
 	
 	std::string ln = "mov eax, [rbp-" + std::to_string(r_index);
 	ln += "+rbx*" + std::to_string(size) + "]";

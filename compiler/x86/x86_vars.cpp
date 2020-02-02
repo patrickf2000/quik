@@ -18,11 +18,20 @@ void Asm_x86::build_var_dec(AstNode *node) {
 		case DataType::Float:
 		case DataType::Str: stack_pos += 4; break;
 		case DataType::Int64: 
-		case DataType::Float64: stack_pos += 8; break;
+		case DataType::Float64: {
+			stack_pos += 8;
+			v.size = 2;
+		} break;
 		case DataType::Int128:
-		case DataType::Float128: stack_pos += 16; break;
+		case DataType::Float128: {
+			stack_pos += 16;
+			v.size = 4;
+		} break;
 		case DataType::Int256:
-		case DataType::Float256: stack_pos += 32; break;
+		case DataType::Float256: {
+			stack_pos += 32;
+			v.size = 8;
+		} break;
 	}
 	
 	v.stack_pos = stack_pos;
