@@ -577,6 +577,25 @@ AstForEach *build_foreach(Line ln) {
 	return fe;
 }
 
+//Builds a structure declaration
+AstStructDec *build_struct_dec(Line ln) {
+	AstStructDec *dec = new AstStructDec;
+	
+	Token name = ln.tokens.at(1);
+	if (name.type != TokenType::ID)
+		syntax_error(ln, "Invalid structure identifier.");
+		
+	dec->set_name(name.id);
+	
+	return dec;
+}
+
+//Builds a structure operation
+AstStruct *build_struct_var(Line ln) {
+	AstStruct *op = new AstStruct;
+	return op;
+}
+
 //Builds an AST node from a string of tokens
 AstNode *build_node(Line ln) {
 	auto tokens = ln.tokens;
@@ -627,6 +646,14 @@ AstNode *build_node(Line ln) {
 			}
 			
 			return node;
+		}
+		
+		//Build structure statements
+		case TokenType::STRUCT: {
+			if (ln.tokens.size() == 2)
+				return build_struct_dec(ln);
+			else
+				return build_struct_var(ln);
 		}
 		
 		//Build conditional statements
@@ -759,7 +786,8 @@ int build_tree(std::vector<AstNode *> nodes, AstNode *top, int index, bool in_if
 			i = build_tree(nodes, s, i+1);
 		} else if (c->type == AstType::If || c->type == AstType::Elif 
 				|| c->type == AstType::Else || c->type == AstType::While
-				|| c->type == AstType::Loop || c->type == AstType::ForEach) {
+				|| c->type == AstType::Loop || c->type == AstType::ForEach
+				|| c->type == AstType::StructDec) {
 			top->children.push_back(c);
 			i = build_tree(nodes, c, i+1, true);
 		} else if (c->type == AstType::End) {

@@ -19,7 +19,8 @@ void SyntaxCheck::check_global(AstNode *top) {
 			case AstType::FuncDec:
 			case AstType::ExternFunc:
 			case AstType::VarDec: 
-			case AstType::EndIf: continue;
+			case AstType::EndIf: 
+			case AstType::StructDec: continue;
 		}
 			
 		Error er;
