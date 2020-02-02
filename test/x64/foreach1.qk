@@ -1,0 +1,21 @@
+include io
+
+func main
+	int[6] numbers = 1, 2, 3, 4, 5, 6
+	
+	foreach x : numbers
+		print_int(x)
+	end
+	
+	puts("Done!")
+end
+
+#TEST
+#1
+#2
+#3
+#4
+#5
+#6
+#Done!
+

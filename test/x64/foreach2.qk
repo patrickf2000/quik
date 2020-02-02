@@ -1,0 +1,37 @@
+include io
+
+func main
+	int256 numbers = 1, 2, 3, 4, 5, 6, 7, 8
+	int128 numbers2 = 1, 2, 3, 4
+	
+	foreach x : numbers
+		print_int(x)
+	end
+	
+	puts("")
+	puts("Numbers2:")
+	
+	foreach x : numbers2
+		print_int(x)
+	end
+	
+	puts("Done!")
+end
+
+#TEST
+#1
+#2
+#3
+#4
+#5
+#6
+#7
+#8
+#
+#Numbers2:
+#1
+#2
+#3
+#4
+#Done!
+
