@@ -1,0 +1,10 @@
+include io
+
+struct s1
+	int x = 0
+	int y = 0
+end
+
+func main
+	struct s1 s
+end
