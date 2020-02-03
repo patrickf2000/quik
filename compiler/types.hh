@@ -5,6 +5,9 @@
 
 #include <string>
 #include <vector>
+#include <map>
+
+#include <ast.hh>
 
 struct Config {
 	std::string out_name;
@@ -18,4 +21,5 @@ struct StructV {
 	std::string name;
 	int stack_pos;
 	int size;
+	std::map<std::string, Var> vars;
 };
