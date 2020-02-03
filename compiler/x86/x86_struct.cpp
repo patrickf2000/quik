@@ -24,6 +24,7 @@ void Asm_x86::build_struct_var(AstNode *node) {
 				var.size += 4;
 				stack_pos += 4;
 				v.stack_pos = stack_pos;
+				v.type = DataType::Int;
 				
 				AstInt *i = static_cast<AstInt *>(child);
 				
@@ -46,9 +47,7 @@ void Asm_x86::build_struct_var(AstNode *node) {
 
 //Build struct access
 void Asm_x86::build_struct_acc(AstNode *node) {
-	AstStructAcc *acc = static_cast<AstStructAcc *>(node);
-	StructV var = structs[acc->str_name];
-	Var sub_var = var.vars[acc->var_name];
+	Var sub_var = get_struct_child(node);
 	
 	std::string ln = "mov eax, [" + get_reg("bp");
 	ln += "-" + std::to_string(sub_var.stack_pos) + "]";
@@ -60,13 +59,19 @@ void Asm_x86::build_struct_acc(AstNode *node) {
 //Build struct member modification
 //Returns the memory location of the structure variable
 std::string Asm_x86::build_struct_mod(AstNode *node) {
-	AstStructMod *mod = static_cast<AstStructMod *>(node);
-	StructV var = structs[mod->str_name];
-	Var sub_var = var.vars[mod->var_name];
+	Var sub_var = get_struct_child(node);
 	
 	std::string ln = "[" + get_reg("bp") + "-";
 	ln += std::to_string(sub_var.stack_pos) + "]";
 	
 	return ln;
 }
+
+Var Asm_x86::get_struct_child(AstNode *node) {
+	AstStructMod *mod = static_cast<AstStructMod *>(node);
+	StructV var = structs[mod->str_name];
+	Var sub_var = var.vars[mod->var_name];
+	return sub_var;
+}
+
 

@@ -86,9 +86,10 @@ void Asm_x86::build_var_assign(AstNode *node) {
 	//Structure assignments
 	} else if (node->type == AstType::StructMod) {
 		dest_var = build_struct_mod(node);
+		v = get_struct_child(node);
 	}
 	
-	if (vd->get_type() == DataType::Int && vd->children.size() > 1) {
+	if (v.type == DataType::Int && vd->children.size() > 1) {
 		build_int_math(node);
 		return;
 	}
@@ -144,6 +145,8 @@ void Asm_x86::build_int_math(AstNode *node) {
 	
 	if (node->type == AstType::ArrayAssign)
 		dest_var = build_arr_assign(node, v);
+	else if (node->type == AstType::StructMod)
+		dest_var = build_struct_mod(node);
 	
 	//Build the first element
 	auto first = node->children.at(0);
@@ -212,7 +215,7 @@ void Asm_x86::build_int_math(AstNode *node) {
 		
 			build_arr_access(next);
 			ln += "ebx";
-		} else if (next->type == AstType::StructMod) {
+		} else if (next->type == AstType::StructAcc) {
 			sec_text.push_back("mov ebx, eax");
 			
 			build_struct_mod(next);
