@@ -8,7 +8,7 @@
 bool is_separator(char c) {
 	if (c == ' ' || c == '(' || c == ')'
 		|| c == '[' || c == ']' || c == '&' || c == '?'
-		|| c == '=' || c == ',' || c == ':'
+		|| c == '=' || c == ',' || c == ':' || c == '.'
 		|| c == '+' || c == '-' || c == '*' || c == '/'
 		|| c == '%' || c == '!' || c == '>' || c == '<') {
 		return true;
@@ -105,6 +105,16 @@ std::vector<Token> tokenize(std::string line) {
 		// new token
 		} else if (is_separator(c)) {
 			Token t;
+			
+			//Do a quick check on the dot operator
+			if (c == '.') {
+				char nx = line[i+1];
+				
+				if (is_int(current) && isdigit(nx)) {
+					current += c;
+					continue;
+				}
+			}
 			
 			//Check for keywords
 			//Function keywords
@@ -229,6 +239,15 @@ std::vector<Token> tokenize(std::string line) {
 				t.type = TokenType::B_FALSE;
 				tokens.push_back(t);
 				
+			//Check the dot operator
+			/*} else if (c == '.') {
+				char nx = line[i+1];
+				
+				if (is_int(current) && isdigit(nx)) {
+					current += c;
+					continue;
+				}*/
+				
 			//If no keyword, and its not empty, then we have an identifier
 			} else if (current.size() > 0) {
 				if (is_int(current)) {
@@ -248,7 +267,11 @@ std::vector<Token> tokenize(std::string line) {
 			current = "";
 			
 			//Check to see if the separator is also a token
-			if (c == '(') {
+			if (c == '.') {
+				Token t;
+				t.type = TokenType::DOT;
+				tokens.push_back(t);
+			} else if (c == '(') {
 				Token t;
 				t.type = TokenType::LEFT_PAREN;
 				tokens.push_back(t);
@@ -377,6 +400,7 @@ TokenType str2type(std::string in) {
 	else if (in == "STRING") return TokenType::STRING;
 	else if (in == "END") return TokenType::END;
 	else if (in == ",") return TokenType::COMMA;
+	else if (in == "DOT") return TokenType::DOT;
 	else if (in == "ASSIGN") return TokenType::ASSIGN;
 	else if (in == "T_BYTE") return TokenType::T_BYTE;
 	else if (in == "T_CHAR") return TokenType::T_CHAR;

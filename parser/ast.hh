@@ -20,6 +20,7 @@ enum AstType {
 	//Structure stuff
 	Struct,
 	StructDec,
+	StructAcc,
 	
 	//Conditional stuff
 	If,
@@ -161,6 +162,12 @@ public:
 	
 	std::string str_name = "";		//Refers to the structure being used
 	std::string var_name = "";		//The name of our structure variable
+};
+
+//A struct access
+class AstStructAcc : public AstAttrNode {
+public:
+	explicit AstStructAcc() { type = AstType::StructAcc; }
 };
 
 //The base class for conditionals

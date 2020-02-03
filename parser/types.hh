@@ -52,6 +52,7 @@ enum TokenType {
 	ASSIGN,
 	COMMA,
 	COLON,
+	DOT,
 	
 	//Operator
 	PLUS,
