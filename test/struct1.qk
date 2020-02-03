@@ -1,0 +1,36 @@
+include io
+
+struct s1
+	int x = 4
+	int y = 1
+end
+
+func main
+	struct s1 s
+	
+	int x = s.x
+	int y = s.y * 2
+	
+	print_int(x)
+	print_int(y)
+	
+	puts("")
+	puts("MOD:")
+	
+	s.x = 5
+	int z = s.x
+	print_int(z)
+	
+	s.x = s.x * 9
+	z = s.x
+	print_int(z)
+end
+
+#TEST
+#4
+#2
+#
+#MOD:
+#5
+#45
+
