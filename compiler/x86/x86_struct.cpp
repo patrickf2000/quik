@@ -56,3 +56,17 @@ void Asm_x86::build_struct_acc(AstNode *node) {
 	sec_text.push_back(ln);
 	sec_text.push_back("");
 }
+
+//Build struct member modification
+//Returns the memory location of the structure variable
+std::string Asm_x86::build_struct_mod(AstNode *node) {
+	AstStructMod *mod = static_cast<AstStructMod *>(node);
+	StructV var = structs[mod->str_name];
+	Var sub_var = var.vars[mod->var_name];
+	
+	std::string ln = "[" + get_reg("bp") + "-";
+	ln += std::to_string(sub_var.stack_pos) + "]";
+	
+	return ln;
+}
+

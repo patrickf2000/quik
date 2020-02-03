@@ -52,7 +52,8 @@ void Asm_x86::assemble(std::string p, AstNode *top) {
 			
 			case AstType::ExternFunc: build_extern_func(node); break;
 			case AstType::VarDec: build_var_dec(node); break;
-			case AstType::VarAssign: 
+			case AstType::VarAssign:
+			case AstType::StructMod:
 			case AstType::ArrayAssign: build_var_assign(node); break;
 			case AstType::ArrayDec: build_arr_dec(node); break;
 			
