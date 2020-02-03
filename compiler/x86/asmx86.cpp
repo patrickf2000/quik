@@ -84,6 +84,9 @@ void Asm_x86::assemble(std::string p, AstNode *top) {
 				top_lbls.pop();
 			} break;
 			
+			case AstType::StructDec: build_struct_dec(node); break;
+			case AstType::Struct: build_struct_var(node); break;
+			
 			case AstType::Loop:
 			case AstType::ForEach:
 			case AstType::While: {

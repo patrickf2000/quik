@@ -13,3 +13,9 @@ struct Config {
 	std::vector<std::string> libs;
 	std::string arch;
 };
+
+struct StructV {
+	std::string name;
+	int stack_pos;
+	int size;
+};

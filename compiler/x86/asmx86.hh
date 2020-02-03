@@ -38,6 +38,10 @@ public:
 	void build_arr_access(AstNode *node);
 	std::string build_arr_assign(AstNode *node, Var v);
 	
+	//Struct stuff
+	void build_struct_dec(AstNode *node);
+	void build_struct_var(AstNode *node);
+	
 	//Flow stuff
 	void build_cond(AstNode *node);
 	void build_while(AstNode *node);
@@ -84,4 +88,8 @@ private:
 	
 	//Scope data
 	AstScope *current_scope;
+	
+	//Struct data
+	std::map<std::string, AstStructDec *> av_structs;		//Available structures
+	std::map<std::string, StructV> structs;					//Struct variables
 };
