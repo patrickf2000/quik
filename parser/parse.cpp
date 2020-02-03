@@ -154,6 +154,25 @@ void build_var_parts(AstNode *vd, int start, std::vector<Token> tokens) {
 			vd->children.push_back(acc);
 			
 			i += 3;
+		} else if (tokens[i+1].type == TokenType::DOT) {
+			Token s_var = tokens[i];		//The structure variable
+			Token i_var = tokens[i+2];		//The struct sub variable
+			
+			Line l;
+			l.tokens = tokens;
+			
+			if (s_var.type != TokenType::ID)
+				syntax_error(l, "Invalid structure named.");
+				
+			if (i_var.type != TokenType::ID)
+				syntax_error(l, "Invalid structure item referenced.");
+				
+			AstStructAcc *str_acc = new AstStructAcc;
+			str_acc->str_name = s_var.id;
+			str_acc->var_name = i_var.id;
+			vd->children.push_back(str_acc);
+			
+			i += 2;
 		} else if (t.type == TokenType::COMMA) {
 			continue;
 		} else {

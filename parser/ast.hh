@@ -165,7 +165,7 @@ public:
 };
 
 //A struct access
-class AstStructAcc : public AstAttrNode {
+class AstStructAcc : public AstStruct {
 public:
 	explicit AstStructAcc() { type = AstType::StructAcc; }
 };
