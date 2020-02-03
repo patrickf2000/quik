@@ -43,3 +43,16 @@ void Asm_x86::build_struct_var(AstNode *node) {
 	
 	sec_text.push_back("");
 }
+
+//Build struct access
+void Asm_x86::build_struct_acc(AstNode *node) {
+	AstStructAcc *acc = static_cast<AstStructAcc *>(node);
+	StructV var = structs[acc->str_name];
+	Var sub_var = var.vars[acc->var_name];
+	
+	std::string ln = "mov eax, [" + get_reg("bp");
+	ln += "-" + std::to_string(sub_var.stack_pos) + "]";
+	
+	sec_text.push_back(ln);
+	sec_text.push_back("");
+}

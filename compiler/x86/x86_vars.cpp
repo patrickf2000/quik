@@ -113,6 +113,11 @@ void Asm_x86::build_var_assign(AstNode *node) {
 		build_arr_access(child);
 		assign_ax(dest_var, v);
 		
+	//Struct access
+	} else if (child->type == AstType::StructAcc) {
+		build_struct_acc(child);
+		assign_ax(dest_var, v);
+		
 	//Raw types
 	} else {
 		ln = "mov " + asm_type(v);
@@ -162,6 +167,11 @@ void Asm_x86::build_int_math(AstNode *node) {
 		//Array access
 		case AstType::ArrayAccess: {
 			build_arr_access(first);
+		} break;
+		
+		//Structure access
+		case AstType::StructAcc: {
+			build_struct_acc(first);
 		} break;
 	}
 	

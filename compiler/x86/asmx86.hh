@@ -41,6 +41,7 @@ public:
 	//Struct stuff
 	void build_struct_dec(AstNode *node);
 	void build_struct_var(AstNode *node);
+	void build_struct_acc(AstNode *node);
 	
 	//Flow stuff
 	void build_cond(AstNode *node);
