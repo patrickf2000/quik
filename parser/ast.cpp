@@ -27,6 +27,7 @@ std::string ast2str(AstType type) {
 		case AstType::Struct: return "Struct";
 		case AstType::StructDec: return "StructDec";
 		case AstType::StructAcc: return "StructAcc";
+		case AstType::StructMod: return "StructMod";
 		
 		case AstType::Int64: return "Int64";
 		case AstType::Int128: return "Int128";
@@ -210,7 +211,8 @@ void print_tree(AstNode *node, int indent, bool nl) {
 		AstStructDec *strd = static_cast<AstStructDec *>(node);
 		std::cout << " {" << strd->get_name() << "}";
 		
-	} else if (node->type == AstType::Struct || node->type == AstType::StructAcc) {
+	} else if (node->type == AstType::Struct || node->type == AstType::StructAcc
+			|| node->type == AstType::StructMod) {
 		AstStruct *s = static_cast<AstStruct *>(node);
 		std::cout << " {" << s->str_name << ":" << s->var_name << "}";
 		

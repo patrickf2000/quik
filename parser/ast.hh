@@ -21,6 +21,7 @@ enum AstType {
 	Struct,
 	StructDec,
 	StructAcc,
+	StructMod,
 	
 	//Conditional stuff
 	If,
@@ -168,6 +169,12 @@ public:
 class AstStructAcc : public AstStruct {
 public:
 	explicit AstStructAcc() { type = AstType::StructAcc; }
+};
+
+//A struct modification
+class AstStructMod : public AstStruct {
+public:
+	explicit AstStructMod() { type = AstType::StructMod; }
 };
 
 //The base class for conditionals

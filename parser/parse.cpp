@@ -758,6 +758,30 @@ AstNode *build_node(Line ln) {
 				AstVarAssign *va = new AstVarAssign(tokens.at(0).id);
 				build_var_parts(va, 2, tokens);
 				return va;
+				
+			//Build a structure assignment
+			} else if (tokens.at(1).type == TokenType::DOT) {
+				if (tokens.size() < 5)
+					syntax_error(ln, "Missing elements.");
+				
+				if (tokens.at(3).type != TokenType::ASSIGN)
+					syntax_error(ln, "Expected \'=\'");
+			
+				Token s_var = tokens.at(0);
+				Token i_var = tokens.at(2);
+				
+				if (s_var.type != TokenType::ID)
+					syntax_error(ln, "Invalid structure assignment.");
+					
+				if (i_var.type != TokenType::ID)
+					syntax_error(ln, "Invalid structure member assignment.");
+				
+				AstStructMod *mod = new AstStructMod;
+				mod->str_name = s_var.id;
+				mod->var_name = i_var.id;
+				
+				build_var_parts(mod, 4, tokens);
+				return mod;
 			
 			//Build an increment
 			} else if (tokens.at(1).type == TokenType::D_PLUS) {
