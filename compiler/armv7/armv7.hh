@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 
 #include <ast.hh>
 
@@ -18,6 +19,10 @@ public:
 	void build_extern_func(AstNode *node);
 	void build_ret(AstNode *node);
 	
+	//Variable stuff
+	void build_var_dec(AstNode *node);
+	void build_var_assign(AstNode *node);
+	
 protected:
 	//Utility stuff
 	std::string build_string(AstNode *node);
@@ -32,4 +37,8 @@ private:
 	
 	//Control variables
 	int str_lbl = 0;
+	
+	//Variable stuff
+	std::map<std::string, Var> vars;
+	int stack_pos = 8;
 };

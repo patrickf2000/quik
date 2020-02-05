@@ -22,6 +22,7 @@ set(COMPILER_SRC
 	compiler/armv7/armv7.cpp
 	compiler/armv7/armv7_funcs.cpp
 	compiler/armv7/armv7_utils.cpp
+	compiler/armv7/armv7_vars.cpp
 	compiler/x86/asmx86.cpp
 	compiler/x86/x86_array.cpp
 	compiler/x86/x86_flow.cpp
