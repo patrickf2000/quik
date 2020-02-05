@@ -102,7 +102,10 @@ void Asm_Armv7::build_int_chain(AstVarAssign *va) {
 			
 			//Multiplication
 			case AstType::Mul: {
-			
+				if (val[0] == '#')
+					sec_text.push_back("mov r3, " + val);
+				sec_text.push_back("mul r4, r2, r3");
+				sec_text.push_back("mov r2, r4");
 			} break;
 			
 			//Division
