@@ -19,6 +19,7 @@ set(PARSER_SRC
 set(COMPILER_SRC
 	compiler/main.cpp
 	compiler/utils.cpp
+	compiler/armv7/armv7.cpp
 	compiler/x86/asmx86.cpp
 	compiler/x86/x86_array.cpp
 	compiler/x86/x86_flow.cpp

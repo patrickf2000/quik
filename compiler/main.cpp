@@ -8,6 +8,8 @@
 
 #include "utils.hh"
 #include "types.hh"
+
+#include "armv7/armv7.hh"
 #include "x86/asmx86.hh"
 
 void help() {
@@ -84,7 +86,15 @@ int main(int argc, char *argv[]) {
 	//Iterate through each input and work on each file
 	//Build for ARM
 	if (config.arch == "armv7") {
-		std::cout << "Building for ARMv7!" << std::endl;
+		Asm_Armv7 builder("/tmp/tmp.asm");
+		
+		auto lines = load_source(inputs[0].c_str());
+		AstNode *top = build_ast(lines, true, optimize);
+		
+		builder.assemble(top);
+		builder.write();
+		
+		delete top;
 	
 	//Build for Intel
 	} else {
