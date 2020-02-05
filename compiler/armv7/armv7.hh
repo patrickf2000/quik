@@ -22,6 +22,7 @@ public:
 	//Variable stuff
 	void build_var_dec(AstNode *node);
 	void build_var_assign(AstNode *node);
+	void build_int_chain(AstVarAssign *va);
 	
 protected:
 	//Utility stuff

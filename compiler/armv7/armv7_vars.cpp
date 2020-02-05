@@ -48,9 +48,73 @@ void Asm_Armv7::build_var_assign(AstNode *node) {
 		//TODO: Add rest
 	}
 	
+	//See if we have an integer math chain
+	if (v.type == DataType::Int && va->children.size() > 1)
+		build_int_chain(va);
+	
 	//Store the variable
 	std::string ln = "str r2, [fp, #-";
 	ln += std::to_string(v.stack_pos) + "]";
 	sec_text.push_back(ln);
 	sec_text.push_back("");
 }
+
+//Build an integer chain
+void Asm_Armv7::build_int_chain(AstVarAssign *va) {
+	auto children = va->children;
+	std::string val = "";
+	
+	for (int i = 1; i<children.size(); i+=2) {
+		auto op = children[i];
+		auto next = children[i+1];
+		val = "";
+		
+		//Determine what the next value is
+		switch (next->type) {
+			//Integers
+			case AstType::Int: {
+				AstInt *i = static_cast<AstInt *>(next);
+				val = "#" + std::to_string(i->get_val());
+			} break;
+			
+			//Other variables
+			case AstType::Id: {
+				AstID *id = static_cast<AstID *>(next);
+				Var v = vars[id->get_name()];
+				std::string pos = std::to_string(v.stack_pos);
+				
+				sec_text.push_back("ldr r3, [fp, #-" + pos + "]");
+				val = "r3";
+			} break;
+		}
+		
+		//Determine the operator type
+		switch (op->type) {
+			//Addition
+			case AstType::Add: {
+				sec_text.push_back("add r2, r2, " + val);
+			} break;
+			
+			//Subtraction
+			case AstType::Sub: {
+			
+			} break;
+			
+			//Multiplication
+			case AstType::Mul: {
+			
+			} break;
+			
+			//Division
+			case AstType::Div: {
+			
+			} break;
+			
+			//Mod
+			case AstType::Mod: {
+			
+			} break;
+		}
+	}
+}
+
