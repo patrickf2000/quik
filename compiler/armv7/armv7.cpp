@@ -10,8 +10,19 @@ Asm_Armv7::Asm_Armv7(std::string f_path) {
 }
 
 //Our recursive assembly function
-void Asm_Armv7::assemble(AstNode *node) {
-
+void Asm_Armv7::assemble(AstNode *top) {
+	for (auto node : top->children) {
+		switch (node->type) {
+			case AstType::Scope: assemble(node); break;
+			
+			case AstType::FuncDec: {
+				build_func_dec(node);
+				assemble(node);
+			} break;
+			
+			case AstType::Return: build_ret(node); break;
+		}
+	}
 }
 
 //Writes everything out into a file
@@ -32,7 +43,10 @@ void Asm_Armv7::write() {
 	writer << std::endl;
 	
 	for (auto ln : sec_text) {
-		writer << "\t" << ln << std::endl;
+		if (ln[ln.length()-1] == ':')
+			writer << ln << std::endl;
+		else
+			writer << "\t" << ln << std::endl;
 	}
 	
 	//Close everything up...

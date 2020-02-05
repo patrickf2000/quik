@@ -8,8 +8,12 @@
 class Asm_Armv7 {
 public:
 	explicit Asm_Armv7(std::string f_path);
-	void assemble(AstNode *node);
+	void assemble(AstNode *top);
 	void write();
+	
+	//Function stuff
+	void build_func_dec(AstNode *node);
+	void build_ret(AstNode *node);
 private:
 	std::string path = "";
 	
