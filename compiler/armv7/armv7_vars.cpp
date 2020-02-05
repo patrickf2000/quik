@@ -45,6 +45,12 @@ void Asm_Armv7::build_var_assign(AstNode *node) {
 			sec_text.push_back(ln);
 		} break;
 		
+		//Function calls
+		case AstType::FuncCall: {
+			build_func_call(first);
+			sec_text.push_back("mov r2, r0");
+		} break;
+		
 		//TODO: Add rest
 	}
 	

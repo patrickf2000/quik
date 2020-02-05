@@ -55,6 +55,22 @@ void Asm_Armv7::build_extern_func(AstNode *node) {
 
 //Builds a return statement
 void Asm_Armv7::build_ret(AstNode *node) {
+	if (node->children.size() == 1) {
+		auto val = node->children.at(0);
+		
+		switch (val->type) {
+			//Return an integer value
+			case AstType::Int: {
+				int v = static_cast<AstInt *>(val)->get_val();
+				sec_text.push_back("mov r0, #" + std::to_string(v));
+			} break;
+			
+			//TODO: Add the reset
+		}
+		
+		sec_text.push_back("");
+	}
+
 	sec_text.push_back("sub sp, fp, #4");
 	sec_text.push_back("pop {fp, pc}");
 	sec_text.push_back("");
