@@ -84,4 +84,7 @@ void Asm_Armv7::build_ret(AstNode *node) {
 	sec_text.push_back("sub sp, fp, #4");
 	sec_text.push_back("pop {fp, pc}");
 	sec_text.push_back("");
+	
+	stack_pos = 8;
+	vars.clear();
 }
