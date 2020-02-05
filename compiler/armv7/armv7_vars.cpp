@@ -110,12 +110,12 @@ void Asm_Armv7::build_int_chain(AstVarAssign *va) {
 			
 			//Division
 			case AstType::Div: {
-			
+				//TODO: Add me
 			} break;
 			
 			//Mod
 			case AstType::Mod: {
-			
+				//TODO: Add me
 			} break;
 		}
 	}
