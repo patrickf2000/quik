@@ -25,6 +25,7 @@ void Asm_Armv7::assemble(AstNode *top) {
 			case AstType::ExternFunc: build_extern_func(node); break;
 			
 			case AstType::VarDec: build_var_dec(node); break;
+			case AstType::VarAssign: build_var_assign(node); break;
 			
 			case AstType::Return: build_ret(node); break;
 		}
