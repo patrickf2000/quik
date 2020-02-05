@@ -35,7 +35,10 @@ int main(int argc, char *argv[]) {
 	config.build_lib = false;		// --lib
 	config.obj_only = false;		// -c
 									// -l
-	config.arch = "x86_64";			// -m <i386, x86_64>
+	//TODO: Change the config back to default Intel-64 bit
+	//config.arch = "x86_64";			// -m <i386, x86_64, armv7>
+	config.arch = "armv7";			// -m <i386, x86_64, armv7>
+	
 	bool asm_only = false;			// -s
 	bool optimize = false;			// --optimize
 	
@@ -57,7 +60,8 @@ int main(int argc, char *argv[]) {
 			config.arch = std::string(argv[i+1]);
 			i += 1;
 			
-			if (config.arch != "i386" && config.arch != "x86_64") {
+			if (config.arch != "i386" && config.arch != "x86_64"
+				&& config.arch != "armv7") {
 				std::cout << "Fatal: Unknown architecture." << std::endl;
 				return 1;
 			}
@@ -78,20 +82,27 @@ int main(int argc, char *argv[]) {
 	}
 	
 	//Iterate through each input and work on each file
-	Asm_x86 builder(config);
+	//Build for ARM
+	if (config.arch == "armv7") {
+		std::cout << "Building for ARMv7!" << std::endl;
 	
-	for (auto path : inputs) {
-		auto lines = load_source(path.c_str());
-		AstNode *node = build_ast(lines, true, optimize);
+	//Build for Intel
+	} else {
+		Asm_x86 builder(config);
 		
-		builder.assemble(path, node);
-		builder.write();
+		for (auto path : inputs) {
+			auto lines = load_source(path.c_str());
+			AstNode *node = build_ast(lines, true, optimize);
+			
+			builder.assemble(path, node);
+			builder.write();
+			
+			delete node;
+		}
 		
-		delete node;
+		if (!asm_only)
+			builder.build();
 	}
-	
-	if (!asm_only)
-		builder.build();
 	
 	return 0;
 }
