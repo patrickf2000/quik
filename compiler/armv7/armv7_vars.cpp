@@ -35,6 +35,16 @@ void Asm_Armv7::build_var_assign(AstNode *node) {
 			sec_text.push_back("mov r2, #" + val);
 		} break;
 		
+		//Other variables
+		case AstType::Id: {
+			AstID *id = static_cast<AstID *>(first);
+			Var v2 = vars[id->get_name()];
+			
+			std::string ln = "ldr r2, [fp, #-";
+			ln += std::to_string(v2.stack_pos) + "]";
+			sec_text.push_back(ln);
+		} break;
+		
 		//TODO: Add rest
 	}
 	
