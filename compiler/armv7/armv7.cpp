@@ -67,6 +67,6 @@ void Asm_Armv7::write() {
 //TODO: This needs a lot of work
 void Asm_Armv7::build() {
 	system("as /tmp/tmp.asm -o /tmp/tmp.o");
-	system("gcc /tmp/tmp.o -o out");
+	system("gcc /tmp/tmp.o -o out -lqkstdlib");
 }
 
