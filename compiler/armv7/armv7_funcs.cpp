@@ -16,6 +16,12 @@ void Asm_Armv7::build_func_call(AstNode *node) {
 	
 	for (auto child : fc->children) {
 		switch (child->type) {
+			//Integers
+			case AstType::Int: {
+				AstInt *i = static_cast<AstInt *>(child);
+				sec_text.push_back("mov r0, #" + std::to_string(i->get_val()));
+			} break;
+		
 			//Strings
 			case AstType::Str: {
 				auto name = build_string(child);
