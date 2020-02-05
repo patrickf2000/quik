@@ -1,0 +1,20 @@
+include io
+
+func sayHello
+	puts("Hello!")
+end
+
+func main
+	puts("Calling func:")
+	sayHello()
+	
+	puts("")
+	puts("Done!")
+end
+
+#TEST
+#Calling func:
+#Hello!
+#
+#Done!
+

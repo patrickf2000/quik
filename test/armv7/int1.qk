@@ -1,0 +1,17 @@
+include io
+
+func main
+	int x = 21
+	int y = 8
+	int z = y
+	
+	print_int(x)
+	print_int(y)
+	print_int(z)
+end
+
+#TEST
+#21
+#8
+#8
+

@@ -42,9 +42,22 @@ elif [[ $arch == "x64" ]] ; then
 		
 		echo ""
 	done
+elif [[ $arch == "armv7" ]] ; then
+	for entry in "./test/armv7"/*.qk
+	do
+		entry=`basename $entry`
+		echo "$entry"
+		./test.sh "test/$entry" armv7
+		
+		if [ $? == 1 ] ; then
+			exit 1
+		fi
+		
+		echo ""
+	done
 else
 	echo "Error: Unknown or unsupported architecture."
-	echo "The choices are i386 (32-bit) or x64 (64-bit)."
+	echo "The choices are i386 (Intel 32-bit), x64 (Intel 64-bit), or armv7 (ARM)"
 	exit 1
 fi
 
