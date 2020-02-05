@@ -97,7 +97,7 @@ void Asm_Armv7::build_int_chain(AstVarAssign *va) {
 			
 			//Subtraction
 			case AstType::Sub: {
-			
+				sec_text.push_back("sub r2, r2, " + val);
 			} break;
 			
 			//Multiplication
