@@ -7,7 +7,7 @@ void Asm_Armv7::build_func_dec(AstNode *node) {
 
 	sec_text.push_back("push {fp, lr}");
 	sec_text.push_back("add fp, sp, #4");
-	sec_text.push_back("sub sp, sp, #8");
+	sec_text.push_back("sub sp, sp, #16");
 	sec_text.push_back("");
 }
 
