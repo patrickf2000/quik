@@ -65,6 +65,16 @@ void Asm_Armv7::build_ret(AstNode *node) {
 				sec_text.push_back("mov r0, #" + std::to_string(v));
 			} break;
 			
+			//Return a variable
+			case AstType::Id: {
+				auto name = static_cast<AstID *>(val)->get_name();
+				Var v = vars[name];
+				
+				std::string ln = "ldr r0, [fp, #-";
+				ln += std::to_string(v.stack_pos) + "]";
+				sec_text.push_back(ln);
+			} break;
+			
 			//TODO: Add the reset
 		}
 		
