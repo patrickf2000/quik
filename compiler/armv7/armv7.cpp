@@ -20,6 +20,8 @@ void Asm_Armv7::assemble(AstNode *top) {
 				assemble(node);
 			} break;
 			
+			case AstType::FuncCall: build_func_call(node); break;
+			
 			case AstType::Return: build_ret(node); break;
 		}
 	}
@@ -47,6 +49,13 @@ void Asm_Armv7::write() {
 			writer << ln << std::endl;
 		else
 			writer << "\t" << ln << std::endl;
+	}
+	
+	//Write the bottom data section
+	writer << std::endl;
+	
+	for (auto ln : btm_data) {
+		writer << ln << std::endl;
 	}
 	
 	//Close everything up...
