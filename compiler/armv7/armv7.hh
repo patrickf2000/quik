@@ -15,6 +15,7 @@ public:
 	//Function stuff
 	void build_func_dec(AstNode *node);
 	void build_func_call(AstNode *node);
+	void build_extern_func(AstNode *node);
 	void build_ret(AstNode *node);
 	
 protected:
@@ -27,6 +28,7 @@ private:
 	std::vector<std::string> sec_data;
 	std::vector<std::string> sec_text;
 	std::vector<std::string> btm_data;
+	std::vector<std::string> extern_data;
 	
 	//Control variables
 	int str_lbl = 0;

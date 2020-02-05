@@ -22,6 +22,7 @@ void Asm_Armv7::assemble(AstNode *top) {
 			} break;
 			
 			case AstType::FuncCall: build_func_call(node); break;
+			case AstType::ExternFunc: build_extern_func(node); break;
 			
 			case AstType::Return: build_ret(node); break;
 		}
@@ -39,10 +40,15 @@ void Asm_Armv7::write() {
 		writer << "\t" << ln << std::endl;
 	}
 	
-	//Write the text section
+	//Write the extern section
 	writer << std::endl;
 	writer << ".text" << std::endl;
 	writer << ".global main" << std::endl;
+	
+	for (auto ln : extern_data)
+		writer << ln << std::endl;
+	
+	//Write the text section
 	writer << std::endl;
 	
 	for (auto ln : sec_text) {

@@ -30,6 +30,12 @@ void Asm_Armv7::build_func_call(AstNode *node) {
 	sec_text.push_back("");
 }
 
+//Build an extern function call
+void Asm_Armv7::build_extern_func(AstNode *node) {
+	AstExternFunc *fd = static_cast<AstExternFunc *>(node);
+	extern_data.push_back(".extern " + fd->get_name());
+}
+
 //Builds a return statement
 void Asm_Armv7::build_ret(AstNode *node) {
 	sec_text.push_back("pop {fp, pc}");
