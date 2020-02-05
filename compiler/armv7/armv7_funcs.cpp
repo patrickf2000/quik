@@ -7,6 +7,7 @@ void Asm_Armv7::build_func_dec(AstNode *node) {
 
 	sec_text.push_back("push {fp, lr}");
 	sec_text.push_back("add fp, sp, #4");
+	sec_text.push_back("sub sp, sp, #8");
 	sec_text.push_back("");
 }
 
@@ -54,6 +55,7 @@ void Asm_Armv7::build_extern_func(AstNode *node) {
 
 //Builds a return statement
 void Asm_Armv7::build_ret(AstNode *node) {
+	sec_text.push_back("sub sp, fp, #4");
 	sec_text.push_back("pop {fp, pc}");
 	sec_text.push_back("");
 }
