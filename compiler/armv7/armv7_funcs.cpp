@@ -28,6 +28,16 @@ void Asm_Armv7::build_func_call(AstNode *node) {
 				sec_text.push_back("ldr r0, ." + name);
 			} break;
 			
+			//Other variables
+			case AstType::Id: {
+				AstID *id = static_cast<AstID *>(child);
+				Var v = vars[id->get_name()];
+				
+				std::string ln = "ldr r0, [fp, #-";
+				ln += std::to_string(v.stack_pos) + "]";
+				sec_text.push_back(ln);
+			} break;
+			
 			//TODO: Add the rest
 		}
 	}
