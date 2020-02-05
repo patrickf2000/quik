@@ -10,6 +10,7 @@ public:
 	explicit Asm_Armv7(std::string f_path);
 	void assemble(AstNode *top);
 	void write();
+	void build();
 	
 	//Function stuff
 	void build_func_dec(AstNode *node);

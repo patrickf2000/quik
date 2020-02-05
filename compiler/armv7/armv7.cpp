@@ -1,6 +1,7 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <cstdlib>
 
 #include "armv7.hh"
 
@@ -61,3 +62,11 @@ void Asm_Armv7::write() {
 	//Close everything up...
 	writer.close();
 }
+
+//Issues the proper command to build the program
+//TODO: This needs a lot of work
+void Asm_Armv7::build() {
+	system("as /tmp/tmp.asm -o /tmp/tmp.o");
+	system("gcc /tmp/tmp.o -o out");
+}
+
