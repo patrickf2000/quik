@@ -1,7 +1,7 @@
 ## Quik
 
 ### Note
-Check the dev branch for the latest progress; the master branch may not have all the latest commits.
+You are on the ARM branch. As its name implies, this is where I am beginning work on adding code generation for the ARM architecture. Because the only ARM machine I have is a Raspberry Pi 3, I will be generating ARMv7 code. 
 
 ### Introduction
 This is the third version of my Quik programming language. Quik is a simple general-purpose systems programming language. Its similar to C in that its basically portable assembler, but its different in that its intended to be somewhat easier to use and understand, which still being able to interface with the underlying system libraries. This project contains the compiler, standard library, and tests. The compiler in turn is split into two parts: the parser library, which loads a source file and generates an AST; and the compiler, which calls the parser and generates Assembly.
