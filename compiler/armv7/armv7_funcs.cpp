@@ -9,6 +9,30 @@ void Asm_Armv7::build_func_dec(AstNode *node) {
 	sec_text.push_back("add fp, sp, #4");
 	sec_text.push_back("sub sp, sp, #16");
 	sec_text.push_back("");
+	
+	for (int i = 0; i<fd->args.size(); i++) {
+		Var v = fd->args[i];
+		std::string reg = "r" + std::to_string(i);
+		
+		Var v2;
+		v2.name = v.name;
+		v2.type = v.type;
+		v2.stack_pos = stack_pos;
+		vars[v.name] = v2;
+		
+		//Update the stack position
+		switch (v.type) {
+			case DataType::Int: stack_pos += 4; break;
+			
+			//TODO: Add the reset
+		}
+		
+		std::string ln = "str " + reg + ", [fp, #-";
+		ln += std::to_string(v2.stack_pos) + "]";
+		sec_text.push_back(ln);
+	}
+	
+	sec_text.push_back("");
 }
 
 //Builds a function call
