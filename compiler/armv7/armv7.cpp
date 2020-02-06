@@ -86,7 +86,10 @@ void Asm_Armv7::write() {
 void Asm_Armv7::build() {
 	std::string as_path = "/tmp/" + get_basename(path) + ".asm";
 	std::string o_path = "/tmp/" + get_basename(path) + ".o";
-	std::string out_path = get_path(path) + config.out_name;
+	
+	std::string out_path = get_path(path) + "out";
+	if (config.out_name != "out")
+		out_path = config.out_name;
 	
 	std::string as_cmd = "as " + as_path + " -o " + o_path;
 	std::string ln_cmd = "gcc " + o_path + " -o " + out_path + " -lqkstdlib";
