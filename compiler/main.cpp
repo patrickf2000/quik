@@ -37,9 +37,7 @@ int main(int argc, char *argv[]) {
 	config.build_lib = false;		// --lib
 	config.obj_only = false;		// -c
 									// -l
-	//TODO: Change the config back to default Intel-64 bit
-	//config.arch = "x86_64";			// -m <i386, x86_64, armv7>
-	config.arch = "armv7";			// -m <i386, x86_64, armv7>
+	config.arch = "x86_64";			// -m <i386, x86_64, armv7>
 	
 	bool asm_only = false;			// -s
 	bool optimize = false;			// --optimize
