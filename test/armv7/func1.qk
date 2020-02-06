@@ -1,0 +1,33 @@
+include io
+
+func sayHello
+	puts("Hello!")
+end
+
+func get_num(x1:int, x2:int, x3:int, x4:int)
+	int x = x1 + x2 + x3 + x4
+	return x
+end
+
+func main
+	sayHello()
+	puts("Your number is:")
+	
+	int x1 = 10
+	int x2 = 20
+	
+	# Should be 33
+	int x = get_num(1, 2, x1, x2)
+	print_int(x)
+	
+	# Should be 273
+	x = 6 + x * 7
+	print_int(x)
+end
+
+#TEST
+#Hello!
+#Your number is:
+#33
+#273
+
