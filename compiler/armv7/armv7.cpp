@@ -92,7 +92,16 @@ void Asm_Armv7::build() {
 		out_path = config.out_name;
 	
 	std::string as_cmd = "as " + as_path + " -o " + o_path;
-	std::string ln_cmd = "gcc " + o_path + " -o " + out_path + " -lqkstdlib";
+	//std::string ln_cmd = "gcc " + o_path + " -o " + out_path + " -lqkstdlib";
+	
+	std::string ln_cmd = "ld ";
+	ln_cmd += "/usr/lib/arm-linux-gnueabihf/crti.o ";
+	ln_cmd += "/usr/lib/arm-linux-gnueabihf/crtn.o ";
+	ln_cmd += "/usr/lib/arm-linux-gnueabihf/crt1.o ";
+	ln_cmd += "-lc -lqkstdlib ";
+	ln_cmd += o_path;
+	ln_cmd += " -dynamic-linker /lib/ld-linux.so.3 -o ";
+	ln_cmd += out_path;
 
 	system(as_cmd.c_str());
 	system(ln_cmd.c_str());
