@@ -4,21 +4,24 @@
 #include <cstdlib>
 
 #include "armv7.hh"
+#include "../utils.hh"
 
 //The constructor
-Asm_Armv7::Asm_Armv7(std::string f_path) {
-	path = f_path;
+Asm_Armv7::Asm_Armv7() {
 }
 
 //Our recursive assembly function
-void Asm_Armv7::assemble(AstNode *top) {
+void Asm_Armv7::assemble(std::string f_path, AstNode *top) {
+	if (f_path != "")
+		path = f_path;
+
 	for (auto node : top->children) {
 		switch (node->type) {
-			case AstType::Scope: assemble(node); break;
+			case AstType::Scope: assemble("", node); break;
 			
 			case AstType::FuncDec: {
 				build_func_dec(node);
-				assemble(node);
+				assemble("", node);
 			} break;
 			
 			case AstType::FuncCall: build_func_call(node); break;
@@ -34,7 +37,8 @@ void Asm_Armv7::assemble(AstNode *top) {
 
 //Writes everything out into a file
 void Asm_Armv7::write() {
-	std::ofstream writer(path);
+	std::string as_path = "/tmp/" + get_basename(path) + ".asm";
+	std::ofstream writer(as_path);
 
 	//Write the data section
 	writer << ".data" << std::endl;
@@ -75,7 +79,14 @@ void Asm_Armv7::write() {
 //Issues the proper command to build the program
 //TODO: This needs a lot of work
 void Asm_Armv7::build() {
-	system("as /tmp/tmp.asm -o /tmp/tmp.o");
-	system("gcc /tmp/tmp.o -o out -lqkstdlib");
+	std::string as_path = "/tmp/" + get_basename(path) + ".asm";
+	std::string o_path = "/tmp/" + get_basename(path) + ".o";
+	std::string out_path = get_path(path) + "out";
+	
+	std::string as_cmd = "as " + as_path + " -o " + o_path;
+	std::string ln_cmd = "gcc " + o_path + " -o " + out_path + " -lqkstdlib";
+
+	system(as_cmd.c_str());
+	system(ln_cmd.c_str());
 }
 

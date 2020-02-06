@@ -8,8 +8,8 @@
 
 class Asm_Armv7 {
 public:
-	explicit Asm_Armv7(std::string f_path);
-	void assemble(AstNode *top);
+	explicit Asm_Armv7();
+	void assemble(std::string f_path, AstNode *top);
 	void write();
 	void build();
 	

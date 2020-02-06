@@ -95,12 +95,13 @@ int main(int argc, char *argv[]) {
 	//Iterate through each input and work on each file
 	//Build for ARM
 	if (config.arch == "armv7") {
-		Asm_Armv7 builder("/tmp/tmp.asm");
+		std::string path = std::string(inputs[0]);
+		Asm_Armv7 builder;
 		
-		auto lines = load_source(inputs[0].c_str());
+		auto lines = load_source(path.c_str());
 		AstNode *top = build_ast(lines, true, optimize);
 		
-		builder.assemble(top);
+		builder.assemble(path, top);
 		builder.write();
 		
 		if (build)
