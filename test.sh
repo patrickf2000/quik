@@ -8,7 +8,7 @@ if [[ $arch == "i386" ]] ; then
 elif [[ $arch == "x64" ]] ; then
 	arch_cmd="-m x86_64"
 elif [[ $arch == "armv7" ]] ; then
-	arch_cmd="-m armv7 -b"
+	arch_cmd="-m armv7"
 else
 	echo "Error: Unknown architecture specified."
 	exit 1

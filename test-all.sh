@@ -47,7 +47,7 @@ elif [[ $arch == "armv7" ]] ; then
 	do
 		entry=`basename $entry`
 		echo "$entry"
-		./test.sh "test/$entry" armv7
+		./test.sh "test/armv7/$entry" armv7
 		
 		if [ $? == 1 ] ; then
 			exit 1
