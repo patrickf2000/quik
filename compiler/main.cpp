@@ -85,7 +85,7 @@ int main(int argc, char *argv[]) {
 	//Build for ARM
 	if (config.arch == "armv7") {
 		std::string path = std::string(inputs[0]);
-		Asm_Armv7 builder;
+		Asm_Armv7 builder(config);
 		
 		auto lines = load_source(path.c_str());
 		AstNode *top = build_ast(lines, true, optimize);
