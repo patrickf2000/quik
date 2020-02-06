@@ -8,6 +8,11 @@
 
 //The constructor
 Asm_Armv7::Asm_Armv7() {
+	config.out_name = "out";
+}
+
+Asm_Armv7::Asm_Armv7(Config cf) {
+	config = cf;
 }
 
 //Our recursive assembly function

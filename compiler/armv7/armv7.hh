@@ -6,9 +6,12 @@
 
 #include <ast.hh>
 
+#include "../types.hh"
+
 class Asm_Armv7 {
 public:
 	explicit Asm_Armv7();
+	explicit Asm_Armv7(Config cf);
 	void assemble(std::string f_path, AstNode *top);
 	void write();
 	void build();
@@ -28,6 +31,7 @@ protected:
 	//Utility stuff
 	std::string build_string(AstNode *node);
 private:
+	Config config;
 	std::string path = "";
 	
 	//Holds various section parts
