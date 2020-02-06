@@ -223,21 +223,33 @@ void Asm_x86::build() {
 
 //Invoke system commands to build the final executable
 void Asm_x86::build_link() {
-	std::string gcc_line = "gcc -g ";
+	std::string ld_line = "ld ";
 	
-	if (x64)
-		gcc_line += "-no-pie ";
-	else
-		gcc_line += "-m32 ";
-	
-	if (config.build_lib) {
-		gcc_line += "-shared -fPIC ";
+	if (x64) {
+		ld_line += "/usr/lib/x86_64-linux-gnu/crti.o ";
+		ld_line += "/usr/lib/x86_64-linux-gnu/crtn.o ";
+		ld_line += "/usr/lib/x86_64-linux-gnu/crt1.o -lc ";
+		ld_line += "-lqkstdlib ";
+	} else {
+		ld_line += "/usr/lib32/crti.o ";
+		ld_line += "/usr/lib32/crtn.o ";
+		ld_line += "/usr/lib32/crt1.o -lc ";
+		ld_line += "-lqkstdlib32 ";
+		ld_line += "-melf_i386 ";
 	}
+
+	for (auto l : config.libs) {
+		ld_line += "-l" + l + " ";
+	}
+	
+	/*if (config.build_lib) {
+		ld_line += "-shared -fPIC ";
+	}*/
 
 	for (auto p : asm_files) {
 		auto o_out = get_basename(p);
 		o_out = "/tmp/" + o_out + ".o";
-		gcc_line += o_out + " ";
+		ld_line += o_out + " ";
 		
 		std::string nasm_line = "nasm -g -f";
 		
@@ -251,19 +263,15 @@ void Asm_x86::build_link() {
 		system(nasm_line.c_str());
 	}
 	
-	gcc_line += " -o ";
-	gcc_line += config.out_name; 
-	
 	if (x64)
-		gcc_line += " -L./ -lqkstdlib -L./ ";
+		ld_line += "-dynamic-linker /lib64/ld-linux-x86-64.so.2 ";
 	else
-		gcc_line += " -L./ -lqkstdlib32 -L./ ";
-	
-	for (auto l : config.libs) {
-		gcc_line += "-l" + l + " ";
-	}
-	
-	system(gcc_line.c_str());
+		ld_line += "-dynamic-linker /lib32/ld-linux.so.2 ";
+		
+	ld_line += "-o ";
+	ld_line += config.out_name; 
+
+	system(ld_line.c_str());
 }
 
 
