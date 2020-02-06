@@ -1,0 +1,26 @@
+include io
+
+func main
+	int x = 10
+	int y = 5
+	
+	int z1 = x + y
+	print_int(z1)
+	
+	int z2 = x + y * 10
+	print_int(z2)
+	
+	int z3 = 10 + x + y - 7
+	print_int(z3)
+	
+	int z4 = x - y
+	print_int(z4)
+	
+	int z5 = x * y
+	print_int(z5)
+	
+	int z6 = x * y * 2
+	print_int(z6)
+end
+
+
