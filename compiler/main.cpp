@@ -44,10 +44,6 @@ int main(int argc, char *argv[]) {
 	bool asm_only = false;			// -s
 	bool optimize = false;			// --optimize
 	
-	//Temporary option
-	//TODO: Remove me
-	bool build = false;				// -b
-	
 	//Iterate through and collect options
 	for (int i = 1; i<argc; i++) {
 		auto option = std::string(argv[i]);
@@ -76,11 +72,6 @@ int main(int argc, char *argv[]) {
 		} else if (option == "--optimize") {
 			optimize = true;
 			
-		//Temporary option
-		//TODO: Remove me
-		} else if (option == "-b") {
-			build = true;
-			
 		//Something else...
 		} else {
 			if (option[0] == '-') {
@@ -104,7 +95,7 @@ int main(int argc, char *argv[]) {
 		builder.assemble(path, top);
 		builder.write();
 		
-		if (build)
+		if (!asm_only)
 			builder.build();
 		
 		delete top;
