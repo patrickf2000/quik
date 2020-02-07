@@ -54,4 +54,5 @@ private:
 	//Flow-control stuff
 	int lbl_index = 0;
 	std::stack<std::string> labels;
+	std::stack<std::string> end_lbls;
 };

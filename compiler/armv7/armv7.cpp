@@ -35,8 +35,13 @@ void Asm_Armv7::assemble(std::string f_path, AstNode *top) {
 			case AstType::VarDec: build_var_dec(node); break;
 			case AstType::VarAssign: build_var_assign(node); break;
 			
-			case AstType::If: 
-			case AstType::Elif: {
+			case AstType::If: {
+				std::string lbl = "L" + std::to_string(lbl_index);
+				++lbl_index;
+				end_lbls.push(lbl);
+			}
+			case AstType::Elif: 
+			case AstType::Else: {
 				std::string lbl = "L" + std::to_string(lbl_index);
 				++lbl_index;
 				labels.push(lbl);
@@ -44,7 +49,13 @@ void Asm_Armv7::assemble(std::string f_path, AstNode *top) {
 				build_conditional(node);
 				assemble("", node);
 				
+				sec_text.push_back("b " + end_lbls.top());
 				sec_text.push_back(lbl + ":");
+			} break;
+			
+			case AstType::EndIf: {
+				sec_text.push_back(end_lbls.top() + ":");
+				end_lbls.pop();
 			} break;
 			
 			case AstType::Return: build_ret(node); break;

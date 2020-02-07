@@ -2,6 +2,9 @@
 
 //Build a conditional comparison
 void Asm_Armv7::build_conditional(AstNode *node) {
+	if (node->type == AstType::Else)
+		return;
+
 	AstCond *cond = static_cast<AstCond *>(node);
 	std::string ln = "";
 	
