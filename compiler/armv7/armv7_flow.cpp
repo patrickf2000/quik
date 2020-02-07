@@ -30,7 +30,19 @@ void Asm_Armv7::build_conditional(AstNode *node) {
 			AstInt *i = static_cast<AstInt *>(cond->rval);
 			ln = "cmp r3, #" + std::to_string(i->get_val());
 			sec_text.push_back(ln);
-		}
+		} break;
+		
+		//Other variables
+		case AstType::Id: {
+			AstID *id = static_cast<AstID *>(cond->rval);
+			Var v = vars[id->get_name()];
+			
+			ln = "ldr r4, [fp, #-";
+			ln += std::to_string(v.stack_pos) + "]";
+			sec_text.push_back(ln);
+			
+			sec_text.push_back("cmp r3, r4");
+		} break;
 		
 		//TODO: Add the rest
 	}
