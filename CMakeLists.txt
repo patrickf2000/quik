@@ -20,6 +20,7 @@ set(COMPILER_SRC
 	compiler/main.cpp
 	compiler/utils.cpp
 	compiler/armv7/armv7.cpp
+	compiler/armv7/armv7_flow.cpp
 	compiler/armv7/armv7_funcs.cpp
 	compiler/armv7/armv7_utils.cpp
 	compiler/armv7/armv7_vars.cpp

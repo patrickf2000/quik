@@ -35,6 +35,17 @@ void Asm_Armv7::assemble(std::string f_path, AstNode *top) {
 			case AstType::VarDec: build_var_dec(node); break;
 			case AstType::VarAssign: build_var_assign(node); break;
 			
+			case AstType::If: {
+				std::string lbl = "L" + std::to_string(lbl_index);
+				++lbl_index;
+				labels.push(lbl);
+				
+				build_conditional(node);
+				assemble("", node);
+				
+				sec_text.push_back(lbl + ":");
+			} break;
+			
 			case AstType::Return: build_ret(node); break;
 		}
 	}

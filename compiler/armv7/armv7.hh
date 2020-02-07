@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <stack>
 
 #include <ast.hh>
 
@@ -27,6 +28,9 @@ public:
 	void build_var_assign(AstNode *node);
 	void build_int_chain(AstVarAssign *va);
 	
+	//Conditional stuff
+	void build_conditional(AstNode *node);
+	
 protected:
 	//Utility stuff
 	std::string build_string(AstNode *node);
@@ -46,4 +50,8 @@ private:
 	//Variable stuff
 	std::map<std::string, Var> vars;
 	int stack_pos = 8;
+	
+	//Flow-control stuff
+	int lbl_index = 0;
+	std::stack<std::string> labels;
 };
