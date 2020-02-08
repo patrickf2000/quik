@@ -108,6 +108,8 @@ AstVarDec *basic_var_dec(Line ln) {
 
 //Translates each part into tokens for variable declarations and assignments
 void build_var_parts(AstNode *vd, int start, std::vector<Token> tokens) {
+	bool array_dec = false;
+
 	for (int i = start; i<tokens.size(); i++) {
 		Token t = tokens.at(i);
 
@@ -190,6 +192,7 @@ void build_var_parts(AstNode *vd, int start, std::vector<Token> tokens) {
 			
 			i += 2;
 		} else if (t.type == TokenType::COMMA) {
+			array_dec = true;
 			continue;
 		} else {
 			if (t.type == TokenType::NO) {
@@ -247,7 +250,8 @@ void build_var_parts(AstNode *vd, int start, std::vector<Token> tokens) {
 	}
 	
 	//Check to see if it is a mathematical expression
-	if (vd->children.size() > 1 && vd->type != AstType::Math) {
+	if (vd->children.size() > 1 && vd->type != AstType::Math
+		&& !array_dec) {
 		AstMath *math = new AstMath;
 		math->children = vd->children;
 		

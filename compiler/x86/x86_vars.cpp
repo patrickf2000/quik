@@ -89,10 +89,10 @@ void Asm_x86::build_var_assign(AstNode *node) {
 		v = get_struct_child(node);
 	}
 	
-	if (v.type == DataType::Int && vd->children.size() > 1) {
+	/*if (v.type == DataType::Int && node->type == AstType::Math) {
 		build_int_math(node);
 		return;
-	}
+	}*/
 	
 	//Increments
 	if (child->type == AstType::Inc) {
@@ -123,6 +123,11 @@ void Asm_x86::build_var_assign(AstNode *node) {
 		build_struct_acc(child);
 		assign_ax(dest_var, v);
 		
+	//Integer math
+	} else if (child->type == AstType::Math) {
+		if (v.type == DataType::Int)
+			build_int_math(node);
+		
 	//Raw types
 	} else {
 		ln = "mov " + asm_type(v);
@@ -136,6 +141,7 @@ void Asm_x86::build_var_assign(AstNode *node) {
 //Builds a math string
 void Asm_x86::build_int_math(AstNode *node) {
 	AstAttrNode *n = static_cast<AstAttrNode *>(node);
+	AstNode *math = n->children.at(0);
 	Var v = vars[n->get_name()];
 	std::string ln = "";
 	
@@ -149,7 +155,7 @@ void Asm_x86::build_int_math(AstNode *node) {
 		dest_var = build_struct_mod(node);
 	
 	//Build the first element
-	auto first = node->children.at(0);
+	auto first = math->children.at(0);
 	
 	switch (first->type) {
 		//ID
@@ -185,9 +191,9 @@ void Asm_x86::build_int_math(AstNode *node) {
 	sec_text.push_back(ln);
 	
 	//Now iterate through the reset of the children
-	for (int i = 1; i<node->children.size(); i+=2) {
-		auto op = node->children[i];
-		auto next = node->children[i+1];
+	for (int i = 1; i<math->children.size(); i+=2) {
+		auto op = math->children[i];
+		auto next = math->children[i+1];
 		std::string ln = "";
 		
 		bool is_mod = false;
@@ -247,9 +253,12 @@ void Asm_x86::build_int_math(AstNode *node) {
 //Builds a floating-point variable assignment
 void Asm_x86::build_flt_assign(AstNode *node) {
 	AstAttrNode *va = static_cast<AstAttrNode *>(node);
+	AstNode *math = va->children.at(0);
 	Var v = vars[va->get_name()];
 	
 	auto first = va->children.at(0);
+	if (math->type == AstType::Math)
+		first = math->children.at(0);
 	
 	switch (first->type) {
 		//Assign a float value
@@ -281,9 +290,9 @@ void Asm_x86::build_flt_assign(AstNode *node) {
 	}
 	
 	//If there are further children, we have math
-	for (int i = 1; i<va->children.size(); i+=2) {
-		auto op = va->children[i];
-		auto next = va->children[i+1];
+	for (int i = 1; i<math->children.size(); i+=2) {
+		auto op = math->children[i];
+		auto next = math->children[i+1];
 		std::string ln2 = "";
 		
 		switch (op->type) {
@@ -328,14 +337,15 @@ void Asm_x86::build_floatex_assign(AstNode *node) {
 	}
 
 	AstVarDec *vd = static_cast<AstVarDec *>(node);
+	AstNode *math = vd->children.at(0);
 	Var v = vars[vd->get_name()];
 	int index = v.stack_pos;
 	int size = 4;
 		
-	if (vd->children.size() == 3) {
-		auto part1 = static_cast<AstAttrNode *>(vd->children.at(0));
-		auto op = vd->children.at(1);
-		auto part2 = static_cast<AstAttrNode *>(vd->children.at(2));
+	if (math->children.size() == 3) {
+		auto part1 = static_cast<AstAttrNode *>(math->children.at(0));
+		auto op = math->children.at(1);
+		auto part2 = static_cast<AstAttrNode *>(math->children.at(2));
 		
 		Var v1 = vars[part1->get_name()];
 		Var v2 = vars[part2->get_name()];
