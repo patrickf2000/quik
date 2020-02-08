@@ -212,7 +212,10 @@ void Asm_x86::build_int_math(AstNode *node) {
 		}
 		
 		if (next->type == AstType::Math) {
-			sec_text.push_back("push rax");
+			if (x64)
+				sec_text.push_back("push rax");
+			else
+				sec_text.push_back("push eax");
 			
 			AstNode *n2 = node;
 			n2->children.clear();
@@ -220,7 +223,10 @@ void Asm_x86::build_int_math(AstNode *node) {
 			build_int_math(n2);
 			
 			sec_text.push_back("mov ebx, eax");
-			sec_text.push_back("pop rax");
+			if (x64)
+				sec_text.push_back("pop rax");
+			else
+				sec_text.push_back("pop eax");
 			ln += "ebx";
 		} else if (next->type == AstType::FuncCall) {
 			sec_text.push_back("mov " + dest_var + ", eax");
