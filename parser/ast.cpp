@@ -13,6 +13,7 @@ std::string ast2str(AstType type) {
 		case AstType::End: return "End";
 		case AstType::VarDec: return "VarDec";
 		case AstType::VarAssign: return "VarAssign";
+		case AstType::Math: return "Math";
 		case AstType::Int: return "Int";
 		case AstType::Char: return "Char";
 		case AstType::Bool: return "Bool";

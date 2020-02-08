@@ -229,6 +229,15 @@ void build_var_parts(AstNode *vd, int start, std::vector<Token> tokens) {
 			}
 		}
 	}
+	
+	//Check to see if it is a mathematical expression
+	if (vd->children.size() > 1) {
+		AstMath *math = new AstMath;
+		math->children = vd->children;
+		
+		vd->children.clear();
+		vd->children.push_back(math);
+	}
 }
 
 //Builds a variable declaration

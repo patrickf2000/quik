@@ -53,6 +53,7 @@ enum AstType {
 	ArrayDec,
 	ArrayAccess,
 	ArrayAssign,
+	Math,
 	
 	//Operator
 	Add,
@@ -253,6 +254,12 @@ public:
 		type = AstType::VarAssign;
 		name = n;
 	}
+};
+
+//Represents a math operation
+class AstMath : public AstNode {
+public:
+	explicit AstMath() { type = AstType::Math; }
 };
 
 //The ID type
