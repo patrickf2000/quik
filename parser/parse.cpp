@@ -118,7 +118,7 @@ void build_var_parts(AstNode *vd, int start, std::vector<Token> tokens) {
 			
 			for (int j = i+1; j<tokens.size(); j++) {
 				if (tokens[j].type == TokenType::RIGHT_PAREN) {
-					i = j + 1;
+					i = j;
 					break;
 				}
 				

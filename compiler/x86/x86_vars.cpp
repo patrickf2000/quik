@@ -211,7 +211,15 @@ void Asm_x86::build_int_math(AstNode *node) {
 			ln = "mov ebx, ";
 		}
 		
-		if (next->type == AstType::FuncCall) {
+		if (next->type == AstType::Math) {
+			sec_text.push_back("mov ebx, eax");
+			ln += "ebx";
+			
+			AstNode *n2 = node;
+			n2->children.clear();
+			n2->children.push_back(next);
+			build_int_math(n2);
+		} else if (next->type == AstType::FuncCall) {
 			sec_text.push_back("mov " + dest_var + ", eax");
 			AstFuncCall *fc = dynamic_cast<AstFuncCall *>(next);
 			build_func_call(fc);
