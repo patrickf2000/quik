@@ -186,6 +186,14 @@ void Asm_x86::build_int_math(AstNode *node) {
 		case AstType::StructAcc: {
 			build_struct_acc(first);
 		} break;
+		
+		//Math
+		case AstType::Math: {
+			AstNode *n2 = node;
+			n2->children.clear();
+			n2->children.push_back(first);
+			build_int_math(n2);
+		} break;
 	}
 	
 	sec_text.push_back(ln);
