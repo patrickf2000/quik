@@ -110,8 +110,24 @@ AstVarDec *basic_var_dec(Line ln) {
 void build_var_parts(AstNode *vd, int start, std::vector<Token> tokens) {
 	for (int i = start; i<tokens.size(); i++) {
 		Token t = tokens.at(i);
-		
-		if (tokens[i+1].type == TokenType::LEFT_PAREN) {
+
+		if (tokens[i].type == TokenType::LEFT_PAREN) {
+			std::vector<Token> sub_tokens;
+			
+			for (int j = i+1; j<tokens.size(); j++) {
+				if (tokens[j].type == TokenType::RIGHT_PAREN) {
+					i = j + 1;
+					break;
+				}
+				
+				sub_tokens.push_back(tokens.at(j));
+			}
+			
+			AstMath *math = new AstMath;
+			build_var_parts(math, 0, sub_tokens);
+			
+			vd->children.push_back(math);
+		} else if (tokens[i+1].type == TokenType::LEFT_PAREN && tokens[i].type == TokenType::ID) {
 			std::vector<Token> sub_tokens;
 			
 			for (int j = i; j<tokens.size(); j++) {
@@ -231,7 +247,7 @@ void build_var_parts(AstNode *vd, int start, std::vector<Token> tokens) {
 	}
 	
 	//Check to see if it is a mathematical expression
-	if (vd->children.size() > 1) {
+	if (vd->children.size() > 1 && vd->type != AstType::Math) {
 		AstMath *math = new AstMath;
 		math->children = vd->children;
 		
