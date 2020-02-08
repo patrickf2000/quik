@@ -1,0 +1,26 @@
+include io
+
+func blow_up(x:int)
+	int answer = x * x * x
+	return answer
+end
+
+func main
+	int x = 8
+	int y = 20
+	
+	int answer = 1 + x * y - 7
+	print_int(answer)
+	
+	answer = 1 + (x * y + (2 * 3) + (1 + blow_up(3))) - 7 + (1 + blow_up(2))
+	print_int(answer)
+	
+	answer = (x * y) + 1
+	print_int(answer)
+end
+
+#TEST
+#173
+#197
+#161
+
