@@ -115,9 +115,14 @@ void build_var_parts(AstNode *vd, int start, std::vector<Token> tokens) {
 
 		if (tokens[i].type == TokenType::LEFT_PAREN) {
 			std::vector<Token> sub_tokens;
+			int layer = 1;
 			
 			for (int j = i+1; j<tokens.size(); j++) {
-				if (tokens[j].type == TokenType::RIGHT_PAREN) {
+				if (tokens[j].type == TokenType::LEFT_PAREN) {
+					++layer;
+				} else if (tokens[j].type == TokenType::RIGHT_PAREN && layer > 1) {
+					--layer;
+				} else if (tokens[j].type == TokenType::RIGHT_PAREN) {
 					i = j;
 					break;
 				}
