@@ -1,0 +1,21 @@
+include io
+
+func main
+	int x = 20
+	int y = 20
+	
+	if (x == 10)
+		puts("Equal to 10")
+	elif (x == y)
+		puts("Equal to y!")
+	else
+		puts("I dont know!")
+	end
+	
+	puts("Done")
+end
+
+#TEST
+#Equal to y!
+#Done
+
