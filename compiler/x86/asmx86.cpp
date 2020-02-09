@@ -251,16 +251,14 @@ void Asm_x86::build_link() {
 		o_out = "/tmp/" + o_out + ".o";
 		ld_line += o_out + " ";
 		
-		std::string nasm_line = "nasm -g -f";
+		std::string as_line = "as -g ";
 		
-		if (x64)
-			nasm_line += " elf64 ";
-		else
-			nasm_line += " elf32 ";
+		if (!x64)
+			as_line += " --32 ";
 		
-		nasm_line += p + " -o " + o_out;
+		as_line += p + " -o " + o_out;
 		
-		system(nasm_line.c_str());
+		system(as_line.c_str());
 	}
 	
 	if (x64)
