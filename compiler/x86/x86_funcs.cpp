@@ -37,7 +37,7 @@ void Asm_x86::build_function(AstNode *node) {
 	AstFuncDec *fd = static_cast<AstFuncDec *>(node);
 	
 	std::string ln = fd->get_name();
-	std::string global_ln = "global " + ln;
+	std::string global_ln = ".global " + ln;
 	
 	if (config.build_lib)
 		global_ln += ":function";
@@ -208,7 +208,7 @@ void Asm_x86::build_func_x64(AstFuncDec *fd) {
 //Assembles an external function
 void Asm_x86::build_extern_func(AstNode *node) {
 	AstExternFunc *fd = dynamic_cast<AstExternFunc *>(node);
-	std::string ln = "extern " + fd->get_name();
+	std::string ln = ".extern " + fd->get_name();
 	
 	extern_data.push_back(ln);
 }
@@ -382,6 +382,7 @@ void Asm_x86::build_func_call_x64(AstFuncCall *fc) {
 			//A string
 			case AstType::Str: {
 				auto name = build_string(node);
+				call_ln += "OFFSET FLAT:";
 				sec_text.push_back(call_ln + name);
 			} break;
 		}

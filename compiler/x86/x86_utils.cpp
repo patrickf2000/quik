@@ -114,7 +114,7 @@ std::string Asm_x86::build_string(AstNode *node) {
 		
 	//Build the final product
 	std::string name = "STR_" + std::to_string(str_index);
-	std::string str = name + " db " + val + ",0";
+	std::string str = name + ": .string " + val;
 	++str_index;
 	sec_data.push_back(str);
 	

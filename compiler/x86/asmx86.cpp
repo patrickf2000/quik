@@ -162,21 +162,22 @@ void Asm_x86::assemble(std::string p, AstNode *top) {
 void Asm_x86::write() {
 	std::ofstream writer(path);
 	
-	writer << "section .data" << std::endl;
+	writer << ".intel_syntax noprefix" << std::endl;
+	writer << ".data" << std::endl;
 	
 	for (auto l : sec_data) {
 		writer << "\t" << l << std::endl;
 	}
 	
 	writer << std::endl;
-	writer << "section .bss" << std::endl;
+	writer << ".bss" << std::endl;
 	
 	for (auto l : sec_bss) {
 		writer << "\t" << l << std::endl;
 	}
 	
 	writer << std::endl;
-	writer << "section .text" << std::endl;
+	writer << ".text" << std::endl;
 	
 	for (auto l : extern_data) {
 		writer << "\t" << l << std::endl;
