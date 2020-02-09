@@ -74,7 +74,7 @@ std::string Asm_x86::asm_type(Var v) {
 
 	switch (v.type) {
 		case DataType::Byte:
-		case DataType::Char: ln = "byte"; break;
+		case DataType::Char: ln = "BYTE PTR"; break;
 		case DataType::Short: ln = "word"; break;
 		case DataType::Bool:
 		case DataType::Int:
@@ -89,7 +89,7 @@ std::string Asm_x86::build_string(AstNode *node) {
 	AstString *s = static_cast<AstString *>(node);
 	
 	//Check for escape characters
-	std::string old_val = s->get_val();
+	/*std::string old_val = s->get_val();
 	std::string val = "\"";
 	bool done = false;
 	
@@ -110,7 +110,8 @@ std::string Asm_x86::build_string(AstNode *node) {
 	}
 	
 	if (!done)
-		val += '\"';
+		val += '\"';*/
+	std::string val = "\"" + s->get_val() + "\"";
 		
 	//Build the final product
 	std::string name = "STR_" + std::to_string(str_index);

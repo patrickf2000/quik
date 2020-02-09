@@ -89,11 +89,6 @@ void Asm_x86::build_var_assign(AstNode *node) {
 		v = get_struct_child(node);
 	}
 	
-	/*if (v.type == DataType::Int && node->type == AstType::Math) {
-		build_int_math(node);
-		return;
-	}*/
-	
 	//Increments
 	if (child->type == AstType::Inc) {
 		ln = "add dword " + dest_var + ", 1";

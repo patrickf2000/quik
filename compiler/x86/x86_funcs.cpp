@@ -314,7 +314,7 @@ void Asm_x86::build_func_call_x64(AstFuncCall *fc) {
 				switch (v.type) {
 					//Char variables
 					case DataType::Char: {
-						std::string ln = "movsx eax, byte [rbp-";
+						std::string ln = "movsx eax, BYTE PTR [rbp-";
 						ln += std::to_string(v.stack_pos) + "]";
 						
 						sec_text.push_back(ln);
