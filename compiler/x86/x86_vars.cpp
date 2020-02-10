@@ -517,7 +517,7 @@ void Asm_x86::build_floatex_assign(AstNode *node) {
 				case AstType::Int: {
 					AstInt *i = static_cast<AstInt *>(child);
 					
-					ln = "mov dword " + dest + ", " + std::to_string(i->get_val());
+					ln = "mov DWORD PTR " + dest + ", " + std::to_string(i->get_val());
 				} break;
 				
 				case AstType::Float: {
