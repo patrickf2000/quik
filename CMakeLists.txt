@@ -17,6 +17,7 @@ set(PARSER_SRC
 )
 
 set(AASM_SRC
+	aasm/aasm.cpp
 	aasm/build.cpp
 )
 

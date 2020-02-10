@@ -6,6 +6,8 @@
 enum class A_Asm {
 	//Label
 	Label,
+	Call,
+	Ret,
 
 	//Instructions
 	Add,
@@ -32,13 +34,18 @@ enum class A_Asm {
 	VVReg,		// YMM on Intel
 	
 	//Memory
-	Mem
+	Mem,
+	
+	//Other
+	No,
+	Str
 };
 
 //Types
 enum class AsmType {
 	Node,
-	File
+	File,
+	String
 };
 
 //The class types
@@ -59,3 +66,19 @@ public:
 	
 	std::string file = "";
 };
+
+//Represents a string
+class AsmString : public AsmNode {
+public:
+	explicit AsmString() { n_type = AsmType::String; }
+	explicit AsmString(std::string s) {
+		n_type = AsmType::String;
+		val = s;
+	}
+	
+	std::string val = "";
+};
+
+//The debug function
+std::string aasm_translate(AsmNode *node);
+
