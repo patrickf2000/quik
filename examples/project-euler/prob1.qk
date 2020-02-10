@@ -1,0 +1,39 @@
+# pe1.qk
+# This solves the first problem on the Project Euler website
+
+include io
+
+func main
+	int sum = 0
+	int index = 0
+	
+	# First, do the multiples of 3
+	while (index < 1000)
+		int i = index % 3
+		if (i == 0)
+			sum = sum + index
+		end
+		
+		index = index + 3
+	end
+	
+	# Next, do the multiples of 5
+	index = 0
+	
+	while (index < 1000)
+		int i = index % 5
+		
+		if (i == 0)
+			i = index % 3
+			if (i != 0)
+				sum = sum + index
+			end
+		end
+		
+		index = index + 5
+	end
+	
+	#Print the result
+	print_int(sum)
+end
+

@@ -1,20 +1,21 @@
-section .data
-	STR_1 db "Index 1:",0
-	STR_2 db "",0
-	STR_3 db "Printing numbers...",0
-	STR_4 db "Done",0
+.intel_syntax noprefix
+.data
+	STR_1: .string "Index 1:"
+	STR_2: .string ""
+	STR_3: .string "Printing numbers..."
+	STR_4: .string "Done"
 
-section .bss
+.bss
 
-section .text
-	extern puts
-	extern printf
-	extern exit
-	extern fflush
-	extern input_int
-	extern print_int
-	global print_numbers
-	global main
+.text
+	.extern puts
+	.extern printf
+	.extern exit
+	.extern fflush
+	.extern input_int
+	.extern print_int
+	.global print_numbers
+	.global main
 
 print_numbers:
 	push ebp
@@ -24,26 +25,23 @@ print_numbers:
 	mov eax, [ebp+8]
 	mov [ebp-4], eax
 	
-	mov eax, 0
-	mov dword [ebp-12], eax
+	mov DWORD PTR [ebp-12], 0
 	
-	mov eax, 0
-	mov dword [ebp-16], eax
+	mov DWORD PTR [ebp-16], 0
 	
 	mov eax, [ebp-4]
 	mov eax, [eax+4]
+	mov DWORD PTR [ebp-12], eax
 	
-	mov dword [ebp-12], eax
-	
-	push dword STR_1
+	push OFFSET FLAT:STR_1
 	call puts
 	add esp, 4
 	
-	push dword [ebp-12]
+	push DWORD PTR [ebp-12]
 	call print_int
 	add esp, 4
 	
-	push dword STR_2
+	push OFFSET FLAT:STR_2
 	call puts
 	add esp, 4
 	
@@ -53,16 +51,15 @@ L1:
 	mov ebx, [ebp-16]
 	imul ebx, 4
 	mov eax, [eax+ebx]
+	mov DWORD PTR [ebp-12], eax
 	
-	mov dword [ebp-12], eax
-	
-	push dword [ebp-12]
+	push DWORD PTR [ebp-12]
 	call print_int
 	add esp, 4
 	
 	mov eax, [ebp-16]
 	add eax, 1
-	mov dword [ebp-16], eax
+	mov DWORD PTR[ebp-16], eax
 	
 L2:
 	mov eax, [ebp-16]
@@ -78,22 +75,22 @@ main:
 	mov ebp, esp
 	sub esp, 48
 	
-	mov dword [ebp-20], 9
-	mov dword [ebp-16], 8
-	mov dword [ebp-12], 7
-	mov dword [ebp-8], 6
-	mov dword [ebp-4], 5
+	mov DWORD PTR [ebp-24], 9
+	mov DWORD PTR [ebp-20], 8
+	mov DWORD PTR [ebp-16], 7
+	mov DWORD PTR [ebp-12], 6
+	mov DWORD PTR [ebp-8], 5
 	
-	push dword STR_3
+	push OFFSET FLAT:STR_3
 	call puts
 	add esp, 4
 	
-	lea eax, [ebp-20]
+	lea eax, [ebp-24]
 	push eax
 	call print_numbers
 	add esp, 4
 	
-	push dword STR_4
+	push OFFSET FLAT:STR_4
 	call puts
 	add esp, 4
 	

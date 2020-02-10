@@ -1,57 +1,59 @@
-section .data
-	flt_1 dq 1.232000
-	flt_2 dq 3.553000
-	flt_3 dq 3.224000
-	STR_1 db "Add: %f",0xA,0
-	flt_4 dq 1.232000
-	flt_5 dq 3.553000
-	flt_6 dq 3.224000
-	STR_2 db "Sub: %f",0xA,0
-	flt_7 dq 1.232000
-	flt_8 dq 3.553000
-	flt_9 dq 3.224000
-	STR_3 db "Mul: %f",0xA,0
-	flt_10 dq 1.232000
-	flt_11 dq 3.553000
-	flt_12 dq 3.224000
-	STR_4 db "Div: %f",0xA,0
+.intel_syntax noprefix
+.data
+	flt_1: .long 1067299373
+	flt_2: .long 1080255578
+	flt_3: .long 1078875652
+	STR_1: .string "Add: %f\n"
+	flt_4: .long 1067299373
+	flt_5: .long 1080255578
+	flt_6: .long 1078875652
+	STR_2: .string "Sub: %f\n"
+	flt_7: .long 1067299373
+	flt_8: .long 1080255578
+	flt_9: .long 1078875652
+	STR_3: .string "Mul: %f\n"
+	flt_10: .long 1067299373
+	flt_11: .long 1080255578
+	flt_12: .long 1078875652
+	STR_4: .string "Div: %f\n"
 
-section .bss
+.bss
 
-section .text
-	extern puts
-	extern printf
-	extern exit
-	extern fflush
-	extern input_int
-	extern print_int
-	global add_test
-	global sub_test
-	global mul_test
-	global div_test
-	global main
+.text
+	.extern puts
+	.extern printf
+	.extern exit
+	.extern fflush
+	.extern input_int
+	.extern print_int
+	.global add_test
+	.global sub_test
+	.global mul_test
+	.global div_test
+	.global main
 
 add_test:
 	push rbp
 	mov rbp, rsp
 	sub rsp, 48
 	
-	movq xmm0, [flt_1]
-	movsd [rbp-12], xmm0
+	movss xmm0, [flt_1]
+	movss [rbp-8], xmm0
 	
-	movq xmm0, [flt_2]
-	movsd [rbp-20], xmm0
+	movss xmm0, [flt_2]
+	movss [rbp-12], xmm0
 	
-	movq xmm0, [rbp-12]
-	addsd xmm0, [rbp-20]
-	movsd [rbp-28], xmm0
+	movss xmm0, [rbp-8]
+	addss xmm0, [rbp-12]
+	movss [rbp-16], xmm0
 	
-	movq xmm0, [rbp-28]
-	addsd xmm0, [flt_3]
-	movsd [rbp-28], xmm0
+	movss xmm0, [rbp-16]
+	addss xmm0, [flt_3]
+	movss [rbp-16], xmm0
 	
-	mov edi, STR_1
-	movq xmm0, [rbp-28]
+	mov edi, OFFSET FLAT:STR_1
+	movss xmm0, [rbp-16]
+	cvtss2sd xmm0, xmm0
 	call printf
 	
 	leave
@@ -62,22 +64,23 @@ sub_test:
 	mov rbp, rsp
 	sub rsp, 48
 	
-	movq xmm0, [flt_4]
-	movsd [rbp-12], xmm0
+	movss xmm0, [flt_4]
+	movss [rbp-8], xmm0
 	
-	movq xmm0, [flt_5]
-	movsd [rbp-20], xmm0
+	movss xmm0, [flt_5]
+	movss [rbp-12], xmm0
 	
-	movq xmm0, [rbp-12]
-	subsd xmm0, [rbp-20]
-	movsd [rbp-28], xmm0
+	movss xmm0, [rbp-8]
+	subss xmm0, [rbp-12]
+	movss [rbp-16], xmm0
 	
-	movq xmm0, [rbp-28]
-	addsd xmm0, [flt_6]
-	movsd [rbp-28], xmm0
+	movss xmm0, [rbp-16]
+	addss xmm0, [flt_6]
+	movss [rbp-16], xmm0
 	
-	mov edi, STR_2
-	movq xmm0, [rbp-28]
+	mov edi, OFFSET FLAT:STR_2
+	movss xmm0, [rbp-16]
+	cvtss2sd xmm0, xmm0
 	call printf
 	
 	leave
@@ -88,22 +91,23 @@ mul_test:
 	mov rbp, rsp
 	sub rsp, 48
 	
-	movq xmm0, [flt_7]
-	movsd [rbp-12], xmm0
+	movss xmm0, [flt_7]
+	movss [rbp-8], xmm0
 	
-	movq xmm0, [flt_8]
-	movsd [rbp-20], xmm0
+	movss xmm0, [flt_8]
+	movss [rbp-12], xmm0
 	
-	movq xmm0, [rbp-12]
-	mulsd xmm0, [rbp-20]
-	movsd [rbp-28], xmm0
+	movss xmm0, [rbp-8]
+	mulss xmm0, [rbp-12]
+	movss [rbp-16], xmm0
 	
-	movq xmm0, [rbp-28]
-	addsd xmm0, [flt_9]
-	movsd [rbp-28], xmm0
+	movss xmm0, [rbp-16]
+	addss xmm0, [flt_9]
+	movss [rbp-16], xmm0
 	
-	mov edi, STR_3
-	movq xmm0, [rbp-28]
+	mov edi, OFFSET FLAT:STR_3
+	movss xmm0, [rbp-16]
+	cvtss2sd xmm0, xmm0
 	call printf
 	
 	leave
@@ -114,22 +118,23 @@ div_test:
 	mov rbp, rsp
 	sub rsp, 48
 	
-	movq xmm0, [flt_10]
-	movsd [rbp-12], xmm0
+	movss xmm0, [flt_10]
+	movss [rbp-8], xmm0
 	
-	movq xmm0, [flt_11]
-	movsd [rbp-20], xmm0
+	movss xmm0, [flt_11]
+	movss [rbp-12], xmm0
 	
-	movq xmm0, [rbp-12]
-	divsd xmm0, [rbp-20]
-	movsd [rbp-28], xmm0
+	movss xmm0, [rbp-8]
+	divss xmm0, [rbp-12]
+	movss [rbp-16], xmm0
 	
-	movq xmm0, [rbp-28]
-	addsd xmm0, [flt_12]
-	movsd [rbp-28], xmm0
+	movss xmm0, [rbp-16]
+	addss xmm0, [flt_12]
+	movss [rbp-16], xmm0
 	
-	mov edi, STR_4
-	movq xmm0, [rbp-28]
+	mov edi, OFFSET FLAT:STR_4
+	movss xmm0, [rbp-16]
+	cvtss2sd xmm0, xmm0
 	call printf
 	
 	leave

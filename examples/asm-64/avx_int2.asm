@@ -1,26 +1,27 @@
-section .data
-	flt_1 dd 1.100000
-	flt_2 dd 2.200000
-	flt_3 dd 3.300000
-	flt_4 dd 4.400000
-	flt_5 dd 5.500000
-	flt_6 dd 6.600000
-	flt_7 dd 7.700000
-	flt_8 dd 8.800000
-	STR_1 db "%f",0xA,0
+.intel_syntax noprefix
+.data
+	flt_1: .long 1066192077
+	flt_2: .long 1074580685
+	flt_3: .long 1079194419
+	flt_4: .long 1082969293
+	flt_5: .long 1085276160
+	flt_6: .long 1087583027
+	flt_7: .long 1089889894
+	flt_8: .long 1091357901
+	STR_1: .string "%f\n"
 
-section .bss
+.bss
 
-section .text
-	extern puts
-	extern printf
-	extern exit
-	extern fflush
-	extern input_int
-	extern print_int
-	global add_float
-	global add_int
-	global main
+.text
+	.extern puts
+	.extern printf
+	.extern exit
+	.extern fflush
+	.extern input_int
+	.extern print_int
+	.global add_float
+	.global add_int
+	.global main
 
 add_float:
 	push rbp
@@ -57,7 +58,7 @@ add_float:
 	extractps [rbp-40], xmm5, 1
 	
 	
-	mov dword [rbp-56], 0
+	mov DWORD PTR [rbp-56], 0
 	
 	jmp L2
 L1:
@@ -69,12 +70,12 @@ L1:
 	movss xmm0, [rbp-52+rbx]
 	movss [rbp-60], xmm0
 	
-	mov edi, STR_1
+	mov edi, OFFSET FLAT:STR_1
 	movss xmm0, [rbp-60]
 	cvtss2sd xmm0, xmm0
 	call printf
 	
-	add dword [rbp-56], 1
+	add DWORD PTR [rbp-56], 1
 	
 L2:
 	mov eax, [rbp-56]
@@ -89,14 +90,14 @@ add_int:
 	mov rbp, rsp
 	sub rsp, 196
 	
-	mov dword [rbp-36], 1
-	mov dword [rbp-32], 2
-	mov dword [rbp-28], 3
-	mov dword [rbp-24], 4
-	mov dword [rbp-20], 5
-	mov dword [rbp-16], 6
-	mov dword [rbp-12], 7
-	mov dword [rbp-8], 8
+	mov DWORD PTR [rbp-36], 1
+	mov DWORD PTR [rbp-32], 2
+	mov DWORD PTR [rbp-28], 3
+	mov DWORD PTR [rbp-24], 4
+	mov DWORD PTR [rbp-20], 5
+	mov DWORD PTR [rbp-16], 6
+	mov DWORD PTR [rbp-12], 7
+	mov DWORD PTR [rbp-8], 8
 	
 	vmovupd ymm0, [rbp-36]
 	vmovupd ymm1, [rbp-36]
@@ -106,18 +107,20 @@ add_int:
 	vextracti128 xmm5, ymm0, 1
 	
 	pextrd eax, xmm4, 0
-	pextrd ebx, xmm4, 1
-	pextrd ecx, xmm5, 0
-	pextrd edx, xmm5, 1
-	
 	pinsrd xmm3, eax, 0
-	pinsrd xmm3, ebx, 1
-	pinsrd xmm3, ecx, 2
-	pinsrd xmm3, edx, 3
+	
+	pextrd eax, xmm4, 1
+	pinsrd xmm3, eax, 1
+	
+	pextrd eax, xmm5, 0
+	pinsrd xmm3, eax, 2
+	
+	pextrd eax, xmm5, 1
+	pinsrd xmm3, eax, 3
 	
 	movups [rbp-52], xmm3
 	
-	mov dword [rbp-56], 0
+	mov DWORD PTR [rbp-56], 0
 	
 	jmp L4
 L3:
@@ -127,13 +130,13 @@ L3:
 	mov rax, [rbp-52]
 	imul rbx, 4
 	mov eax, [rbp-52+rbx]
-	mov dword [rbp-60], eax
+	mov DWORD PTR [rbp-60], eax
 	
 	mov eax, [rbp-60]
 	mov edi, eax
 	call print_int
 	
-	add dword [rbp-56], 1
+	add DWORD PTR [rbp-56], 1
 	
 L4:
 	mov eax, [rbp-56]

@@ -1,20 +1,21 @@
-section .data
-	STR_1 db "Char: %c",0xA,0
-	STR_2 db "Your string:",0
-	STR_3 db "Hello!",0
+.intel_syntax noprefix
+.data
+	STR_1: .string "Char: %c\n"
+	STR_2: .string "Your string:"
+	STR_3: .string "Hello!"
 
-section .bss
+.bss
 
-section .text
-	extern puts
-	extern printf
-	extern exit
-	extern fflush
-	extern input_int
-	extern print_int
-	extern strlen
-	global count_char
-	global main
+.text
+	.extern puts
+	.extern printf
+	.extern exit
+	.extern fflush
+	.extern input_int
+	.extern print_int
+	.extern strlen
+	.global count_char
+	.global main
 
 count_char:
 	push ebp
@@ -24,18 +25,15 @@ count_char:
 	mov eax, [ebp+8]
 	mov [ebp-4], eax
 	
-	push dword [ebp-4]
+	push DWORD PTR [ebp-4]
 	call strlen
 	add esp, 4
 	
+	mov DWORD PTR [ebp-12], eax
 	
-	mov dword [ebp-12], eax
+	mov DWORD PTR [ebp-16], 0
 	
-	mov eax, 0
-	mov dword [ebp-16], eax
-	
-	mov eax, 0
-	mov byte [ebp-17], al
+	mov BYTE PTR [ebp-17], 0
 	
 	jmp L2
 L1:
@@ -43,11 +41,10 @@ L1:
 	mov ebx, [ebp-16]
 	imul ebx, 1
 	mov eax, [eax+ebx]
+	mov BYTE PTR [ebp-17], al
 	
-	mov byte [ebp-17], al
-	
-	push dword [ebp-17]
-	push dword STR_1
+	push DWORD PTR [ebp-17]
+	push OFFSET FLAT:STR_1
 	call printf
 	add esp, 4
 	add esp, 4
@@ -58,7 +55,7 @@ L1:
 	
 	mov eax, [ebp-16]
 	add eax, 1
-	mov dword [ebp-16], eax
+	mov DWORD PTR[ebp-16], eax
 	
 L2:
 	mov eax, [ebp-16]
@@ -74,11 +71,11 @@ main:
 	mov ebp, esp
 	sub esp, 48
 	
-	push dword STR_2
+	push OFFSET FLAT:STR_2
 	call puts
 	add esp, 4
 	
-	push dword STR_3
+	push OFFSET FLAT:STR_3
 	call count_char
 	add esp, 4
 	
