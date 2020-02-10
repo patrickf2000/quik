@@ -248,7 +248,7 @@ void Asm_x86::build_func_call_i386(AstFuncCall *fc) {
 							
 							ln = "push eax";
 						} else {
-							ln = "push dword [ebp-";
+							ln = "push DWORD PTR [ebp-";
 							ln += std::to_string(v.stack_pos) + "]";
 						}
 					} break;
@@ -256,7 +256,7 @@ void Asm_x86::build_func_call_i386(AstFuncCall *fc) {
 							ln = "fld qword [" + v.name + "]";
 					} break;
 					case DataType::Str: {
-						ln = "push dword [ebp-";
+						ln = "push DWORD PTR [ebp-";
 						ln += std::to_string(v.stack_pos) + "]";
 					} break;
 				}
@@ -277,7 +277,7 @@ void Asm_x86::build_func_call_i386(AstFuncCall *fc) {
 			//A string
 			case AstType::Str: {
 				auto name = build_string(node);
-				sec_text.push_back("push dword " + name);
+				sec_text.push_back("push OFFSET FLAT:" + name);
 			} break;
 		}
 	}
