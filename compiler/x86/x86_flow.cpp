@@ -152,7 +152,7 @@ void Asm_x86::build_while(AstNode *node) {
 		std::string dest = fe->i_var_in;
 		
 		//Increment the index value
-		sec_text.push_back("add dword " + dest + ", 1");
+		sec_text.push_back("add DWORD PTR " + dest + ", 1");
 		
 		//Insert comparison label
 		sec_text.push_back(cmp_lbl + ":");
