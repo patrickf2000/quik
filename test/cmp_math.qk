@@ -1,0 +1,48 @@
+include io
+
+func test_left(x:int)
+	if ((x % 2) == 0)
+		puts("Even")
+	else
+		puts("Odd")
+	end
+end
+
+func test_right(x:int)
+	if (0 == (x % 2))
+		puts("Even")
+	else
+		puts("Odd")
+	end
+end
+
+func test_both(x:int)
+	if ((x % 2) == (1 - 1))
+		puts("Even")
+	else
+		puts("Odd")
+	end
+end
+
+func main
+	int x1 = 33
+	int x2 = 34
+	
+	test_left(x1)
+	test_right(x1)
+	test_both(x1)
+	puts("")
+	test_left(x2)
+	test_right(x2)
+	test_both(x2)
+end
+
+#TEST
+#Odd
+#Odd
+#Odd
+#
+#Even
+#Even
+#Even
+
