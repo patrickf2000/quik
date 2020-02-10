@@ -36,6 +36,9 @@ void write_asm_file(AsmFile *file) {
 	std::ofstream writer(file->file);
 
 	for (AsmNode *node : file->children) {
+		if (node->type == A_Asm::Label)
+			writer << std::endl;
+		
 		writer << aasm_translate(node) << std::endl;
 	}
 	

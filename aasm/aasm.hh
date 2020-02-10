@@ -8,6 +8,7 @@ enum class A_Asm {
 	Label,
 	Call,
 	Ret,
+	Extern,
 
 	//Instructions
 	Add,
