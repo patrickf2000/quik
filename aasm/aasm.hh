@@ -59,9 +59,22 @@ enum class AsmType {
 //The class types
 class AsmNode {
 public:
+	explicit AsmNode() { n_type = AsmType::Node; }
+	explicit AsmNode(AsmType t) { n_type = t; }
+
 	A_Asm type;
 	AsmType n_type = AsmType::Node;
 	std::vector<AsmNode *> children;
+	
+	void add(AsmNode *child) {
+		children.push_back(child);
+	}
+	
+	void add(A_Asm t) {
+		AsmNode *n = new AsmNode;
+		n->type = t;
+		children.push_back(n);
+	}
 };
 
 class AsmFile : public AsmNode {

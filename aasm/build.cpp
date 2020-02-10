@@ -16,9 +16,9 @@ void build(AstNode *top, AsmNode *scope) {
 			
 			//Build a regular function declaration
 			case AstType::FuncDec: {
-				auto current = aasm_build_func(node);
-				scope->children.push_back(current);
-				
+				/*auto current = aasm_build_func(node);
+				scope->children.push_back(current);*/
+				aasm_build_func(node, scope);
 				build(node, scope);
 			} break;
 		}
@@ -38,6 +38,8 @@ void write_asm_file(AsmFile *file) {
 	for (AsmNode *node : file->children) {
 		if (node->type == A_Asm::Label)
 			writer << std::endl;
+		else if (node->type != A_Asm::Extern)
+			writer << "\t";
 		
 		writer << aasm_translate(node) << std::endl;
 	}

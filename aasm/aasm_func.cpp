@@ -14,7 +14,7 @@ AsmNode *aasm_build_extern(AstNode *node) {
 }
 
 //Builds function declarations
-AsmNode *aasm_build_func(AstNode *node) {
+void aasm_build_func(AstNode *node, AsmNode *scope) {
 	AstFuncDec *fd = static_cast<AstFuncDec *>(node);
 	
 	AsmNode *a_node = new AsmNode;
@@ -23,7 +23,8 @@ AsmNode *aasm_build_func(AstNode *node) {
 	AsmString *a_str = new AsmString(fd->get_name());
 	a_node->children.push_back(a_str);
 	
-	return a_node;
+	scope->add(a_node);
+	scope->add(A_Asm::Setup);
 }
 
 //Build function calls

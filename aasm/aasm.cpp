@@ -16,6 +16,11 @@ std::string aasm_translate(AsmNode *node) {
 			AsmString *s = static_cast<AsmString *>(node->children[0]);
 			ln = "lbl " + s->val;
 		} break;
+		
+		//Setup
+		case A_Asm::Setup: {
+			ln = "setup";
+		} break;
 	}
 	
 	return ln;
