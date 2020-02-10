@@ -353,6 +353,8 @@ void Asm_x86::build_func_call_x64(AstFuncCall *fc) {
 					
 					//String variables
 					case DataType::Str: {
+						call_ln = "mov " + call_regs[call_index] + ", ";
+						call_ln += "QWORD PTR ";
 						call_ln += "[rbp-" + std::to_string(v.stack_pos) + "]";
 						sec_text.push_back(call_ln);
 					} break;

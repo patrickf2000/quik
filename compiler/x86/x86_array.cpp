@@ -22,17 +22,18 @@ void Asm_x86::build_arr_dec(AstNode *node) {
 		case DataType::Byte:
 		case DataType::Char: {
 			size = 1;
+			prefix = "mov BYTE PTR";
 		} break;
 			
 		case DataType::Short: {
 			size = 2;
-			prefix = "mov word";
+			prefix = "mov WORD PTR";
 		} break;
 			
 		case DataType::Bool:
 		case DataType::Int: {
 			size = 4;
-			prefix = "mov dword";
+			prefix = "mov DWORD PTR";
 		} break;
 		
 		case DataType::Float: {
@@ -42,7 +43,7 @@ void Asm_x86::build_arr_dec(AstNode *node) {
 			
 		case DataType::Str: {
 			size = 8;
-			prefix = "qword";
+			prefix = "QWORD PTR";
 		} break;
 	}
 	

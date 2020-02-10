@@ -108,7 +108,7 @@ void Asm_x86::assemble(std::string p, AstNode *top) {
 					std::string dest = "[" + get_reg("bp");
 					dest += "-" + std::to_string(stack_pos) + "]";
 					
-					sec_text.push_back("mov dword " + dest + ", 0");
+					sec_text.push_back("mov DWORD PTR " + dest + ", 0");
 					
 					if (node->type == AstType::ForEach) {
 						AstForEach *fe = static_cast<AstForEach *>(node);
@@ -131,7 +131,7 @@ void Asm_x86::assemble(std::string p, AstNode *top) {
 						dest = "[" + get_reg("bp");
 						dest += "-" + std::to_string(stack_pos) + "]";
 						
-						sec_text.push_back("mov dword " + dest + ", 0");
+						sec_text.push_back("mov DWORD PTR " + dest + ", 0");
 						
 						fe->i_var_in = dest;
 						node = fe;

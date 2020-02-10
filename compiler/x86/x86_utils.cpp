@@ -70,15 +70,15 @@ std::string Asm_x86::type2asm(AstNode *node) {
 
 //Returns the assembly type for a given datatype
 std::string Asm_x86::asm_type(Var v) {
-	std::string ln = "dword";
+	std::string ln = "DWORD PTR";
 
 	switch (v.type) {
 		case DataType::Byte:
 		case DataType::Char: ln = "BYTE PTR"; break;
-		case DataType::Short: ln = "word"; break;
+		case DataType::Short: ln = "WORD PTR"; break;
 		case DataType::Bool:
 		case DataType::Int:
-		case DataType::Str: ln = "dword"; break;
+		case DataType::Str: ln = "DWORD PTR"; break;
 	}
 	
 	return ln;

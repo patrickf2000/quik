@@ -91,7 +91,7 @@ void Asm_x86::build_var_assign(AstNode *node) {
 	
 	//Increments
 	if (child->type == AstType::Inc) {
-		ln = "add dword " + dest_var + ", 1";
+		ln = "add DWORD PTR " + dest_var + ", 1";
 		sec_text.push_back(ln);
 		sec_text.push_back("");
 		
@@ -126,7 +126,12 @@ void Asm_x86::build_var_assign(AstNode *node) {
 	//Raw types
 	} else {
 		ln = "mov " + asm_type(v);
-		ln += " " + dest_var + ", " + type2asm(child);
+		ln += " " + dest_var + ", ";
+		
+		if (child->type == AstType::Str)
+			ln += "OFFSET FLAT:";
+		
+		ln += type2asm(child);
 		
 		sec_text.push_back(ln);
 		sec_text.push_back("");

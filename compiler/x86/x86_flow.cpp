@@ -114,7 +114,7 @@ void Asm_x86::build_while(AstNode *node) {
 			std::string dest = lp->i_var;
 		
 			//Increment the value
-			sec_text.push_back("add dword " + dest + ", 1");
+			sec_text.push_back("add DWORD PTR " + dest + ", 1");
 					
 			//Insert the comparison label
 			sec_text.push_back(cmp_lbl + ":");
@@ -186,7 +186,7 @@ void Asm_x86::build_foreach_top(AstNode *node) {
 	
 	//Assign the retrieved value
 	int i_index = vars[fe->i_var].stack_pos;
-	ln = "mov dword [rbp-" + std::to_string(i_index);
+	ln = "mov DWORD PTR [rbp-" + std::to_string(i_index);
 	ln += "], eax";
 	
 	sec_text.push_back(ln);

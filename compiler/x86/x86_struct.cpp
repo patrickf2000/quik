@@ -28,7 +28,7 @@ void Asm_x86::build_struct_var(AstNode *node) {
 				
 				AstInt *i = static_cast<AstInt *>(child);
 				
-				std::string ln = "mov dword [" + get_reg("bp");
+				std::string ln = "mov DWORD PTR [" + get_reg("bp");
 				ln += "-" + std::to_string(stack_pos) + "], ";
 				ln += std::to_string(i->get_val());
 				sec_text.push_back(ln);
