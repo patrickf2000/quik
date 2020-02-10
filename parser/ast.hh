@@ -321,15 +321,15 @@ private:
 class AstFloat : public AstNode {
 public:
 	explicit AstFloat() { type = AstType::Float; }
-	explicit AstFloat(double n) {
+	explicit AstFloat(float n) {
 		type = AstType::Float;
 		no = n;
 	}
 	
-	double get_val() { return no; }
-	void set_val(double n) { no = n; }
+	float get_val() { return no; }
+	void set_val(float n) { no = n; }
 protected:
-	double no = 0;
+	float no = 0;
 };
 
 //The int-64 type

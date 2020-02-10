@@ -1,5 +1,8 @@
 //x86_utils
 //Contains backend-specific stuff
+#include <stdio.h>
+#include <malloc.h>
+
 #include "asmx86.hh"
 
 std::map<std::string, std::string> regs32;
@@ -125,13 +128,20 @@ std::string Asm_x86::build_string(AstNode *node) {
 //Builds a floating-point number and inserts it in the data section
 std::string Asm_x86::build_float(AstNode *node) {
 	AstFloat *flt = static_cast<AstFloat *>(node);
-	double val = flt->get_val();
+	float val = flt->get_val();
 	
 	std::string name = "flt_" + std::to_string(flt_index);
 	++flt_index;
 	
-	std::string d_ln = name + " dd " + std::to_string(val);
+	char buf[32];
+	
+	sprintf(buf, "%d", *(unsigned int*)&val);
+	
+	std::string d_ln = name + ": .long ";
+	d_ln += std::string(buf);
 	sec_data.push_back(d_ln);
+	
+	//free(buf);
 	
 	return name;
 }
