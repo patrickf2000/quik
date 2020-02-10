@@ -9,15 +9,10 @@ void build(AstNode *top, AsmNode *scope) {
 	for (auto node : top->children) {
 		switch (node->type) {
 			//Build an extern declaration
-			case AstType::ExternFunc: {
-				auto current = aasm_build_extern(node); 
-				scope->children.push_back(current);
-			} break;
+			case AstType::ExternFunc: aasm_build_extern(node, scope); break;
 			
 			//Build a regular function declaration
 			case AstType::FuncDec: {
-				/*auto current = aasm_build_func(node);
-				scope->children.push_back(current);*/
 				aasm_build_func(node, scope);
 				build(node, scope);
 			} break;
