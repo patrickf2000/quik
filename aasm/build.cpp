@@ -3,15 +3,26 @@
 
 #include "build.hh"
 #include "aasm.hh"
+#include "aasm_func.hh"
 
 void build(AstNode *top, AsmNode *scope) {
-	AsmNode *func = new AsmNode;
-	func->type = A_Asm::Label;
-	
-	AsmString *str = new AsmString("myFunc");
-	func->children.push_back(str);
-	
-	scope->children.push_back(func);
+	for (auto node : top->children) {
+		switch (node->type) {
+			//Build an extern declaration
+			case AstType::ExternFunc: {
+				auto current = aasm_build_extern(node); 
+				scope->children.push_back(current);
+			} break;
+			
+			//Build a regular function declaration
+			case AstType::FuncDec: {
+				auto current = aasm_build_func(node);
+				scope->children.push_back(current);
+				
+				build(node, scope);
+			} break;
+		}
+	}
 }
 
 AsmFile *build_asm_file(AstNode *top) {

@@ -38,7 +38,14 @@ enum class A_Asm {
 	
 	//Other
 	No,
-	Str
+	Str,
+	
+	//Pseudo-commands
+	//These don't correspond directly to assembly commands;
+	// rather, they are general commands for assembly that
+	// is very platform-specific
+	Setup,
+	Leave
 };
 
 //Types
