@@ -139,20 +139,26 @@ void Asm_x86::build_var_assign(AstNode *node) {
 }
 
 //Builds a math string
-void Asm_x86::build_int_math(AstNode *node) {
-	AstAttrNode *n = static_cast<AstAttrNode *>(node);
-	AstNode *math = n->children.at(0);
-	Var v = vars[n->get_name()];
+void Asm_x86::build_int_math(AstNode *node, bool store) {
+	AstNode *math = node;
+	Var v;
+	std::string dest_var = "";
 	std::string ln = "";
 	
-	//Construct the destination variable
-	std::string dest_var = "[" + get_reg("bp") + "-";
-	dest_var += std::to_string(v.stack_pos) + "]";
-	
-	if (node->type == AstType::ArrayAssign)
-		dest_var = build_arr_assign(node, v);
-	else if (node->type == AstType::StructMod)
-		dest_var = build_struct_mod(node);
+	if (store) {
+		AstAttrNode *n = static_cast<AstAttrNode *>(node);
+		math = node->children.at(0);
+		v = vars[n->get_name()];
+		
+		//Construct the destination variable
+		dest_var = "[" + get_reg("bp") + "-";
+		dest_var += std::to_string(v.stack_pos) + "]";
+		
+		if (node->type == AstType::ArrayAssign)
+			dest_var = build_arr_assign(node, v);
+		else if (node->type == AstType::StructMod)
+			dest_var = build_struct_mod(node);
+	}
 	
 	//Build the first element
 	auto first = math->children.at(0);
@@ -268,10 +274,13 @@ void Asm_x86::build_int_math(AstNode *node) {
 	}
 	
 	//Finally, move it back
-	ln = "mov " + asm_type(v);	
-	ln += dest_var + ", eax";
+	if (store) {
+		ln = "mov " + asm_type(v);	
+		ln += dest_var + ", eax";
+		
+		sec_text.push_back(ln);
+	}
 	
-	sec_text.push_back(ln);
 	sec_text.push_back("");
 }
 

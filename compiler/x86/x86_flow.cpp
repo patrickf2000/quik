@@ -33,6 +33,8 @@ void Asm_x86::build_cond(AstNode *node) {
 		if (cond->lval->type == AstType::FuncCall) {
 			AstFuncCall *fc = static_cast<AstFuncCall *>(cond->lval);
 			build_func_call(fc);
+		} else if (cond->lval->type == AstType::Math) {
+			build_int_math(cond->lval, false);
 		} else {
 			ln = "mov eax, " + type2asm(cond->lval);
 			sec_text.push_back(ln);
@@ -46,6 +48,10 @@ void Asm_x86::build_cond(AstNode *node) {
 			build_func_call(fc);
 			
 			sec_text.push_back("cmp eax, ebx");
+		} else if (cond->rval->type == AstType::Math) {
+			sec_text.push_back("mov ecx, eax");
+			build_int_math(cond->rval, false);
+			sec_text.push_back("cmp eax, ecx");
 		} else {
 			ln = "cmp " + c_reg + ", " + type2asm(cond->rval);
 			sec_text.push_back(ln);

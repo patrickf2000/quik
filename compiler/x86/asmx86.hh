@@ -29,7 +29,7 @@ public:
 	void build_var_dec(AstNode *node);
 	void assign_ax(std::string dest, Var v);
 	void build_var_assign(AstNode *node);
-	void build_int_math(AstNode *node);
+	void build_int_math(AstNode *node, bool store=true);
 	void build_flt_assign(AstNode *node);
 	void build_floatex_assign(AstNode *node);
 	
