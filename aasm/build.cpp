@@ -8,6 +8,9 @@
 void build(AstNode *top, AsmNode *scope) {
 	for (auto node : top->children) {
 		switch (node->type) {
+			//Scopes
+			case AstType::Scope: build(node, scope); break;
+		
 			//Build an extern declaration
 			case AstType::ExternFunc: aasm_build_extern(node, scope); break;
 			
@@ -16,6 +19,9 @@ void build(AstNode *top, AsmNode *scope) {
 				aasm_build_func(node, scope);
 				build(node, scope);
 			} break;
+			
+			//Build return statements
+			case AstType::Return: aasm_build_ret(node, scope); break;
 		}
 	}
 }

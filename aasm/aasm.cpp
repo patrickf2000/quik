@@ -18,8 +18,14 @@ std::string aasm_translate(AsmNode *node) {
 		} break;
 		
 		//Setup
-		case A_Asm::Setup: {
-			ln = "setup";
+		case A_Asm::Setup: ln = "setup"; break;
+		
+		//Leave
+		case A_Asm::Leave: ln = "leave"; break;
+		
+		//Return
+		case A_Asm::Ret: {
+			ln = "ret";
 		} break;
 	}
 	

@@ -34,5 +34,6 @@ void aasm_build_func_call(AstNode *node, AsmNode *scope) {
 
 //Build return statements
 void aasm_build_ret(AstNode *node, AsmNode *scope) {
-	
+	scope->add(A_Asm::Leave);
+	scope->add(A_Asm::Ret);
 }
