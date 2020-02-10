@@ -150,10 +150,14 @@ void print_tree(AstNode *node, int indent, bool nl) {
 			
 	} else if (node->type == AstType::If || node->type == AstType::Elif || node->type == AstType::While) {
 		AstCond *cond = dynamic_cast<AstCond *>(node);
-		std::cout << " <" << op2str(cond->get_op()) << "> [{";
-		print_tree(cond->lval, 0, false);
-		std::cout << "} {";
-		print_tree(cond->rval, 0, false);
+		std::cout << " <" << op2str(cond->get_op()) << "> [{" << std::endl;
+		print_tree(cond->lval, indent+4, true);
+		for (int i = 0; i<indent+8; i++)
+			std::cout << " ";
+		std::cout << "} {" << std::endl;
+		print_tree(cond->rval, indent+4, true);
+		for (int i = 0; i<indent+8; i++)
+			std::cout << " ";
 		std::cout << "}]";
 		
 	} else if (node->type == AstType::ArrayDec) {

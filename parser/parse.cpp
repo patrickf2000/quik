@@ -461,7 +461,33 @@ AstCond *build_conditional(Line ln) {
 	for (int i = 2; i<tokens.size()-1; i++) {
 		Token t = tokens.at(i);
 		
-		if (tokens[i+1].type == TokenType::LEFT_PAREN) {
+		if (tokens[i].type == TokenType::LEFT_PAREN) {
+			std::vector<Token> sub_tokens;
+			int layer = 1;
+			
+			for (int j = i+1; j<tokens.size(); j++) {
+				if (tokens[j].type == TokenType::LEFT_PAREN) {
+					++layer;
+				} else if (tokens[j].type == TokenType::RIGHT_PAREN && layer > 1) {
+					--layer;
+				} else if (tokens[j].type == TokenType::RIGHT_PAREN) {
+					i = j;
+					break;
+				}
+				
+				sub_tokens.push_back(tokens.at(j));
+			}
+			
+			AstMath *math = new AstMath;
+			build_var_parts(math, 0, sub_tokens);
+			
+			if (found_op)
+				cond->rval = math;
+			else
+				cond->lval = math;
+			continue;
+		} else if (tokens[i+1].type == TokenType::LEFT_PAREN
+			&& tokens[i].type == TokenType::ID) {
 			std::vector<Token> sub_tokens;
 			
 			for (int j = i; j<tokens.size(); j++) {
