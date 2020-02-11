@@ -32,11 +32,40 @@ void LTAC_Builder::build(AstNode *top) {
 	}
 }
 
-#include "ltac.hh"
+std::string node2str(AsmNode *node) {
+	std::string ln = "";
+
+	switch (node->type) {
+		case ltac::Reg: {
+			ln += "rx";
+			
+			AsmReg *reg = static_cast<AsmReg *>(node);
+			ln += std::to_string(reg->reg_no);
+		} break;
+		
+		case ltac::ArgReg: ln += "argx"; break;
+		
+		case ltac::Mem: {
+			AsmMem *mem = static_cast<AsmMem *>(node);
+		
+			ln += "[base+";
+			ln += std::to_string(mem->index) + "*";
+			ln += std::to_string(mem->scale) + "]";
+		} break;
+
+		case ltac::Ptr: ln += "*" + node->val; break;
+		case ltac::No: ln += "#" + node->val; break;
+	}
+	
+	return ln;
+}
 
 //Translates an LTAC node to a string
 std::string ltac_translate(AsmNode *node) {
 	std::string ln = "";
+	
+	if (node->n_type == AsmType::Empty)
+		return ln;
 	
 	switch (node->type) {
 		//Extern labels
@@ -76,26 +105,7 @@ std::string ltac_translate(AsmNode *node) {
 			AsmNode *arg1 = node->children[0];
 			AsmNode *arg2 = node->children[1];
 			
-			switch (arg1->type) {
-				case ltac::Reg: ln += "rx,"; break;
-				case ltac::ArgReg: ln += "argx,"; break;
-				case ltac::Mem: {
-					AsmMem *mem = static_cast<AsmMem *>(arg1);
-				
-					ln += "[base+";
-					ln += std::to_string(mem->index) + "*";
-					ln += std::to_string(mem->scale) + "],";
-				} break;
-				
-				//TODO: Add the rest
-			}
-			
-			switch (arg2->type) {
-				case ltac::Ptr: ln += " *" + arg2->val; break;
-				case ltac::No: ln += " #" + arg2->val; break;
-				
-				//TODO: Add the rest
-			}
+			ln += node2str(arg1) + ", " + node2str(arg2);
 		} break;
 	}
 	

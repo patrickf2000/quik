@@ -55,6 +55,7 @@ enum class ltac {
 //Types
 enum class AsmType {
 	Node,
+	Empty,
 	File,
 	String,
 	Reg,
@@ -79,6 +80,11 @@ public:
 	void add(ltac t) {
 		AsmNode *n = new AsmNode;
 		n->type = t;
+		children.push_back(n);
+	}
+	
+	void add_nl() {
+		AsmNode *n = new AsmNode(AsmType::Empty);
 		children.push_back(n);
 	}
 };
@@ -108,9 +114,14 @@ public:
 //Represents a register
 class AsmReg : public AsmNode {
 public:
-	explicit AsmReg() { n_type = AsmType::Reg; }
+	explicit AsmReg() { 
+		n_type = AsmType::Reg; 
+		type = ltac::Reg;
+	}
+	
 	explicit AsmReg(int n) {
 		n_type = AsmType::Reg;
+		type = ltac::Reg;
 		reg_no = n;
 	}
 	
@@ -120,9 +131,14 @@ public:
 //Represents a memory segment
 class AsmMem : public AsmNode {
 public:
-	explicit AsmMem() { n_type = AsmType::Mem; }
+	explicit AsmMem() { 
+		n_type = AsmType::Mem; 
+		type = ltac::Mem;
+	}
+	
 	explicit AsmMem(int i, int sz) {
 		n_type = AsmType::Mem;
+		type = ltac::Mem;
 		index = i;
 		scale = sz;
 	}

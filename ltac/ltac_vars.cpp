@@ -73,7 +73,34 @@ void LTAC_Builder::build_var_assign(AstNode *node) {
 		
 	//Other variables
 	} else if (child->type == AstType::Id) {
+		AstID *id = static_cast<AstID *>(child);
+		Var v2 = vars[id->get_name()];
+	
+		//Build the first line (move the variable we want to a register)
+		AsmNode *a_node1 = new AsmNode;
+		a_node1->type = ltac::Mov;
 		
+		AsmReg *reg = new AsmReg(0);
+		a_node1->add(reg);
+		
+		AsmMem *mem1 = new AsmMem(v2.stack_pos, 0);
+		mem1->val = v2.name;
+		a_node1->add(mem1);
+		
+		//Build the second line (move the register to the current var)
+		AsmNode *a_node2 = new AsmNode;
+		a_node2->type = ltac::Mov;
+		
+		AsmMem *mem2 = new AsmMem(v.stack_pos, 0);
+		mem2->val = v.name;
+		a_node2->add(mem2);
+		
+		a_node2->add(reg);
+		
+		//Add both lines
+		scope->add(a_node1);
+		scope->add(a_node2);
+		scope->add_nl();
 		
 	//Function calls
 	} else if (child->type == AstType::FuncCall) {
@@ -101,8 +128,7 @@ void LTAC_Builder::build_var_assign(AstNode *node) {
 			case AstType::Int: {
 				AstInt *i = static_cast<AstInt *>(child);
 			
-				AsmMem *a_mem = new AsmMem(v.stack_pos, 1);
-				a_mem->type = ltac::Mem;
+				AsmMem *a_mem = new AsmMem(v.stack_pos, 0);
 				a_mem->val = v.name;
 				a_node->add(a_mem);
 				
@@ -114,5 +140,6 @@ void LTAC_Builder::build_var_assign(AstNode *node) {
 		}
 		
 		scope->add(a_node);
+		scope->add_nl();
 	}
 }
