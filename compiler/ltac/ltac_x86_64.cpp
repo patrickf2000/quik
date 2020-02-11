@@ -8,7 +8,34 @@
 
 //Generates code for the x86-64 platform
 void LTAC_Generator::build_x86_64(AsmFile *file) {
-	std::cout << "64-bit" << std::endl;
+	std::ofstream writer(output + ".asm");
+	
+	//Write the data section
+	writer << ".intel_syntax noprefix" << std::endl;
+	writer << ".data" << std::endl;
+	
+	for (auto const& str : file->str_pool) {
+		writer << "\t" << str.first << ": .string \""
+			<< str.second << "\"" << std::endl;
+	}
+	
+	//Write the code section
+	writer << std::endl;
+	writer << ".text" << std::endl;
+	writer << ".global main" << std::endl;
+	writer << std::endl;
+	
+	for (auto node : file->children) {
+		switch (node->type) {
+			case ltac::Label: {
+				auto name = node->children[0]->val;
+				writer << name << ":" << std::endl;
+			} break;
+		}
+	}
+	
+	//Close the writer
+	writer.close();
 }
 
 //Compile
