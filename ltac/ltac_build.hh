@@ -1,5 +1,8 @@
 #pragma once
 
+#include <string>
+#include <map>
+
 #include <ast.hh>
 
 #include "ltac.hh"
@@ -17,11 +20,18 @@ public:
 	void build_func(AstNode *node);
 	void build_func_call(AstNode *node);
 	void build_ret(AstNode *node);
+	
+	//Variable stuff
+	void build_var_dec(AstNode *node);
+	void build_var_assign(AstNode *node);
 private:
 	AsmFile *scope;
+	AstScope *var_scope;
+	std::map<std::string, Var> vars;
 	
 	//Control stuff
 	int str_index = 0;
+	int stack_pos = 4;
 };
 
 //The debug function

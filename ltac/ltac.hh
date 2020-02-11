@@ -57,7 +57,8 @@ enum class AsmType {
 	Node,
 	File,
 	String,
-	Reg
+	Reg,
+	Mem
 };
 
 //The class types
@@ -115,4 +116,19 @@ public:
 	
 	int reg_no = 0;
 };
+
+//Represents a memory segment
+class AsmMem : public AsmNode {
+public:
+	explicit AsmMem() { n_type = AsmType::Mem; }
+	explicit AsmMem(int i, int sz) {
+		n_type = AsmType::Mem;
+		index = i;
+		scale = sz;
+	}
+	
+	int index = 0;
+	int scale = 1;
+};
+
 

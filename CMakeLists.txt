@@ -20,6 +20,7 @@ set(LTAC_SRC
 	ltac/build.cpp
 	ltac/ltac_build.cpp
 	ltac/ltac_func.cpp
+	ltac/ltac_vars.cpp
 )
 
 set(COMPILER_SRC
