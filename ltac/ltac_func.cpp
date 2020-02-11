@@ -40,7 +40,7 @@ void LTAC_Builder::build_func_call(AstNode *node) {
 				AsmNode *a_node = new AsmNode;
 				a_node->type = ltac::Mov;
 				
-				a_node->add(ltac::Reg);
+				a_node->add(ltac::ArgReg);
 				
 				std::string name = "STR" + std::to_string(str_index);
 				++str_index;

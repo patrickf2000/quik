@@ -71,6 +71,7 @@ std::string ltac_translate(AsmNode *node) {
 			
 			switch (arg1->type) {
 				case ltac::Reg: ln += "rx,"; break;
+				case ltac::ArgReg: ln += "argx,"; break;
 				
 				//TODO: Add the rest
 			}

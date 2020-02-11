@@ -30,6 +30,7 @@ enum class ltac {
 	
 	//Registers
 	Reg,
+	ArgReg,
 	SpReg,
 	BpReg,
 	VReg,		// XMM on Intel
