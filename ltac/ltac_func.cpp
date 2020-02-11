@@ -1,7 +1,7 @@
-#include "ltac_func.hh"
+#include "ltac_build.hh"
 
 //Builds external declarations
-void aasm_build_extern(AstNode *node, AsmFile *scope) {
+void LTAC_Builder::build_extern(AstNode *node) {
 	AstExternFunc *fd = static_cast<AstExternFunc *>(node);
 
 	AsmNode *a_node = new AsmNode;
@@ -14,7 +14,7 @@ void aasm_build_extern(AstNode *node, AsmFile *scope) {
 }
 
 //Builds function declarations
-void aasm_build_func(AstNode *node, AsmFile *scope) {
+void LTAC_Builder::build_func(AstNode *node) {
 	AstFuncDec *fd = static_cast<AstFuncDec *>(node);
 	
 	AsmNode *a_node = new AsmNode;
@@ -28,7 +28,7 @@ void aasm_build_func(AstNode *node, AsmFile *scope) {
 }
 
 //Build function calls
-void aasm_build_func_call(AstNode *node, AsmFile *scope) {
+void LTAC_Builder::build_func_call(AstNode *node) {
 	AstFuncCall *fc = static_cast<AstFuncCall *>(node);
 	
 	//Iterate through the arguments
@@ -65,7 +65,7 @@ void aasm_build_func_call(AstNode *node, AsmFile *scope) {
 }
 
 //Build return statements
-void aasm_build_ret(AstNode *node, AsmFile *scope) {
+void LTAC_Builder::build_ret(AstNode *node) {
 	scope->add(ltac::Leave);
 	scope->add(ltac::Ret);
 }
