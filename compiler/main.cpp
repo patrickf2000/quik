@@ -6,11 +6,15 @@
 #include <ast.hh>
 #include <build.hh>
 
+#include <ltac_build.hh>
+#include <ltac.hh>
+
 #include "utils.hh"
 #include "types.hh"
 
 #include "armv7/armv7.hh"
 #include "x86/asmx86.hh"
+#include "ltac/ltac_gen.hh"
 
 void help() {
 	std::cout << "help" << std::endl;
@@ -41,6 +45,7 @@ int main(int argc, char *argv[]) {
 	
 	bool asm_only = false;			// -s
 	bool optimize = false;			// --optimize
+	bool use_ltac = false;			// --ltac
 	
 	//Iterate through and collect options
 	for (int i = 1; i<argc; i++) {
@@ -69,6 +74,8 @@ int main(int argc, char *argv[]) {
 			asm_only = true;
 		} else if (option == "--optimize") {
 			optimize = true;
+		} else if (option == "--ltac") {
+			use_ltac = true;
 			
 		//Something else...
 		} else {
@@ -81,39 +88,54 @@ int main(int argc, char *argv[]) {
 		}
 	}
 	
-	//Iterate through each input and work on each file
-	//Build for ARM
-	if (config.arch == "armv7") {
+	//Check to see if we wish to use the experimental ltac layer
+	if (use_ltac) {
 		std::string path = std::string(inputs[0]);
-		Asm_Armv7 builder(config);
-		
 		auto lines = load_source(path.c_str());
-		AstNode *top = build_ast(lines, true, optimize);
+		AstNode *top = build_ast(lines, true, false);
+		AsmFile *file = build_asm_file(top);
 		
-		builder.assemble(path, top);
-		builder.write();
+		LTAC_Generator gen("out");
+		gen.build_x86_64(file);
+		gen.compile_x86_64("out");
 		
-		if (!asm_only)
-			builder.build();
-		
+		delete file;
 		delete top;
-	
-	//Build for Intel
 	} else {
-		Asm_x86 builder(config);
-		
-		for (auto path : inputs) {
-			auto lines = load_source(path.c_str());
-			AstNode *node = build_ast(lines, true, optimize);
+		//Iterate through each input and work on each file
+		//Build for ARM
+		if (config.arch == "armv7") {
+			std::string path = std::string(inputs[0]);
+			Asm_Armv7 builder(config);
 			
-			builder.assemble(path, node);
+			auto lines = load_source(path.c_str());
+			AstNode *top = build_ast(lines, true, optimize);
+			
+			builder.assemble(path, top);
 			builder.write();
 			
-			delete node;
-		}
+			if (!asm_only)
+				builder.build();
+			
+			delete top;
 		
-		if (!asm_only)
-			builder.build();
+		//Build for Intel
+		} else {
+			Asm_x86 builder(config);
+			
+			for (auto path : inputs) {
+				auto lines = load_source(path.c_str());
+				AstNode *node = build_ast(lines, true, optimize);
+				
+				builder.assemble(path, node);
+				builder.write();
+				
+				delete node;
+			}
+			
+			if (!asm_only)
+				builder.build();
+		}
 	}
 	
 	return 0;

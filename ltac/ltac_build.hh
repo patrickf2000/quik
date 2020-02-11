@@ -36,3 +36,7 @@ private:
 
 //The debug function
 std::string ltac_translate(AsmNode *node);
+
+//Build and write functions
+AsmFile *build_asm_file(AstNode *top);
+void write_asm_file(AsmFile *file);

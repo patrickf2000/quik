@@ -4,7 +4,7 @@
 #include <ast.hh>
 #include <build.hh>
 
-#include "../build.hh"
+#include "../ltac_build.hh"
 #include "../ltac.hh"
 
 int main(int argc, char *argv[]) {
