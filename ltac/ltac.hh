@@ -3,7 +3,7 @@
 #include <vector>
 #include <string>
 
-enum class A_Asm {
+enum class ltac {
 	//Label
 	Label,
 	Call,
@@ -63,7 +63,7 @@ public:
 	explicit AsmNode() { n_type = AsmType::Node; }
 	explicit AsmNode(AsmType t) { n_type = t; }
 
-	A_Asm type;
+	ltac type;
 	AsmType n_type = AsmType::Node;
 	std::vector<AsmNode *> children;
 	std::string val = "";
@@ -72,7 +72,7 @@ public:
 		children.push_back(child);
 	}
 	
-	void add(A_Asm t) {
+	void add(ltac t) {
 		AsmNode *n = new AsmNode;
 		n->type = t;
 		children.push_back(n);
@@ -101,5 +101,5 @@ public:
 };
 
 //The debug function
-std::string aasm_translate(AsmNode *node);
+std::string ltac_translate(AsmNode *node);
 

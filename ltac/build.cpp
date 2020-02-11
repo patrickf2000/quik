@@ -2,8 +2,8 @@
 #include <fstream>
 
 #include "build.hh"
-#include "aasm.hh"
-#include "aasm_func.hh"
+#include "ltac.hh"
+#include "ltac_func.hh"
 
 void build(AstNode *top, AsmFile *scope) {
 	for (auto node : top->children) {
@@ -40,12 +40,12 @@ void write_asm_file(AsmFile *file) {
 	std::ofstream writer(file->file);
 
 	for (AsmNode *node : file->children) {
-		if (node->type == A_Asm::Label)
+		if (node->type == ltac::Label)
 			writer << std::endl;
-		else if (node->type != A_Asm::Extern)
+		else if (node->type != ltac::Extern)
 			writer << "\t";
 		
-		writer << aasm_translate(node) << std::endl;
+		writer << ltac_translate(node) << std::endl;
 	}
 	
 	writer.close();

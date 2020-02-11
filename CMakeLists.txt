@@ -16,10 +16,10 @@ set(PARSER_SRC
 	parser/syntax.cpp
 )
 
-set(AASM_SRC
-	aasm/aasm.cpp
-	aasm/aasm_func.cpp
-	aasm/build.cpp
+set(LTAC_SRC
+	ltac/ltac.cpp
+	ltac/ltac_func.cpp
+	ltac/build.cpp
 )
 
 set(COMPILER_SRC
@@ -40,15 +40,15 @@ set(COMPILER_SRC
 )
 
 add_library(qkparser ${PARSER_SRC})
-add_library(qkaasm ${AASM_SRC})
+add_library(qkltac ${LTAC_SRC})
 
 add_executable(lextest parser/test/lex_test.cpp)
 add_executable(qkast parser/test/parser_test.cpp)
-add_executable(qkasm aasm/test/main.cpp)
+add_executable(qkasm ltac/test/main.cpp)
 add_executable(quikc ${COMPILER_SRC})
 
 target_link_libraries(lextest qkparser)
 target_link_libraries(qkast qkparser)
-target_link_libraries(qkasm qkparser qkaasm)
+target_link_libraries(qkasm qkparser qkltac)
 target_link_libraries(quikc qkparser)
 

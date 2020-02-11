@@ -5,7 +5,7 @@
 #include <build.hh>
 
 #include "../build.hh"
-#include "../aasm.hh"
+#include "../ltac.hh"
 
 int main(int argc, char *argv[]) {
 	if (argc == 1) {

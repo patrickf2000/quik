@@ -2,7 +2,7 @@
 
 #include <ast.hh>
 
-#include "aasm.hh"
+#include "ltac.hh"
 
 void aasm_build_extern(AstNode *node, AsmFile *scope);
 void aasm_build_func(AstNode *node, AsmFile *scope);
