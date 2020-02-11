@@ -17,4 +17,7 @@ public:
 	void build_ret(AstNode *node);
 private:
 	AsmFile *scope;
+	
+	//Control stuff
+	int str_index = 0;
 };

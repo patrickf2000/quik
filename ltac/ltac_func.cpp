@@ -42,9 +42,13 @@ void LTAC_Builder::build_func_call(AstNode *node) {
 				
 				a_node->add(ltac::Reg);
 				
+				std::string name = "STR" + std::to_string(str_index);
+				++str_index;
+				scope->str_pool[name] = str->get_val();
+				
 				AsmNode *str_ptr = new AsmNode;
 				str_ptr->type = ltac::Ptr;
-				str_ptr->val = str->get_val();
+				str_ptr->val = name;
 				a_node->add(str_ptr);
 				
 				scope->add(a_node);

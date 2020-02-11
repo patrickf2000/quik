@@ -1,7 +1,8 @@
 #pragma once
 
-#include <vector>
 #include <string>
+#include <vector>
+#include <map>
 
 enum class ltac {
 	//Label
@@ -88,6 +89,7 @@ public:
 	}
 	
 	std::string file = "";
+	std::map<std::string, std::string> str_pool;
 };
 
 //Represents a string

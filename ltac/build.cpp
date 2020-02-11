@@ -39,7 +39,14 @@ AsmFile *build_asm_file(AstNode *top) {
 
 void write_asm_file(AsmFile *file) {
 	std::ofstream writer(file->file);
+	
+	//Write the data
+	for (auto const& str : file->str_pool) {
+		writer << str.first << ": \"" << str.second << "\"" << std::endl;
+	}
+	writer << std::endl;
 
+	//Write the code
 	for (AsmNode *node : file->children) {
 		if (node->type == ltac::Label)
 			writer << std::endl;
