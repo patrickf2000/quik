@@ -1,6 +1,33 @@
+#include "ltac_build.hh"
+
+//The main build function for the LTAC builder
+void LTAC_Builder::build(AstNode *top) {
+	for (auto node : top->children) {
+		switch (node->type) {
+			//Scopes
+			case AstType::Scope: build(node); break;
+		
+			//Build an extern declaration
+			case AstType::ExternFunc: build_extern(node); break;
+			
+			//Build a regular function declaration
+			case AstType::FuncDec: {
+				build_func(node);
+				build(node);
+			} break;
+			
+			//Build a function call
+			case AstType::FuncCall: build_func_call(node); break;
+			
+			//Build return statements
+			case AstType::Return: build_ret(node); break;
+		}
+	}
+}
+
 #include "ltac.hh"
 
-//Translates an AASM node to a string
+//Translates an LTAC node to a string
 std::string ltac_translate(AsmNode *node) {
 	std::string ln = "";
 	
@@ -56,3 +83,4 @@ std::string ltac_translate(AsmNode *node) {
 	
 	return ln;
 }
+

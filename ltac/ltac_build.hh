@@ -10,6 +10,8 @@ public:
 		scope = s;
 	}
 	
+	void build(AstNode *top);
+	
 	//Function stuff
 	void build_extern(AstNode *node);
 	void build_func(AstNode *node);
@@ -21,3 +23,6 @@ private:
 	//Control stuff
 	int str_index = 0;
 };
+
+//The debug function
+std::string ltac_translate(AsmNode *node);

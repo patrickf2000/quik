@@ -17,9 +17,9 @@ set(PARSER_SRC
 )
 
 set(LTAC_SRC
-	ltac/ltac.cpp
-	ltac/ltac_func.cpp
 	ltac/build.cpp
+	ltac/ltac_build.cpp
+	ltac/ltac_func.cpp
 )
 
 set(COMPILER_SRC

@@ -102,6 +102,3 @@ public:
 	}
 };
 
-//The debug function
-std::string ltac_translate(AsmNode *node);
-
