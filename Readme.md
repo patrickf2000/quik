@@ -11,7 +11,7 @@ I wrote the entire thing from scratch. I don't intend for Quik to fill any speci
 Currently, the compiler is capable of generating 32-bit/64-bit x86 Intel Assembly code and Arm v7 Assembly code. By default, it will generate Intel 64-bit.
 
 ### The Language
-I currently don't have a document or anything with the language specs. Ok, I actually do, but its for the original versions of Quik. The specs folder contains examples of pretty much everything supported by the implementations.
+You can find the language specs here on my website: https://patrickflynn.co/quik-language/. The specs and examples folder has some practical examples of most of the language parts. 
 
 For some example programs and what the Assembly code looks like, see the examples folder.
 
