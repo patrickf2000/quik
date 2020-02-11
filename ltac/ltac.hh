@@ -56,7 +56,8 @@ enum class ltac {
 enum class AsmType {
 	Node,
 	File,
-	String
+	String,
+	Reg
 };
 
 //The class types
@@ -101,5 +102,17 @@ public:
 		n_type = AsmType::String;
 		val = s;
 	}
+};
+
+//Represents a register
+class AsmReg : public AsmNode {
+public:
+	explicit AsmReg() { n_type = AsmType::Reg; }
+	explicit AsmReg(int n) {
+		n_type = AsmType::Reg;
+		reg_no = n;
+	}
+	
+	int reg_no = 0;
 };
 
