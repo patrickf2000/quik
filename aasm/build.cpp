@@ -5,7 +5,7 @@
 #include "aasm.hh"
 #include "aasm_func.hh"
 
-void build(AstNode *top, AsmNode *scope) {
+void build(AstNode *top, AsmFile *scope) {
 	for (auto node : top->children) {
 		switch (node->type) {
 			//Scopes
@@ -19,6 +19,9 @@ void build(AstNode *top, AsmNode *scope) {
 				aasm_build_func(node, scope);
 				build(node, scope);
 			} break;
+			
+			//Build a function call
+			case AstType::FuncCall: aasm_build_func_call(node, scope); break;
 			
 			//Build return statements
 			case AstType::Return: aasm_build_ret(node, scope); break;

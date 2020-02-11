@@ -36,6 +36,7 @@ enum class A_Asm {
 	
 	//Memory
 	Mem,
+	Ptr,
 	
 	//Other
 	No,
@@ -65,6 +66,7 @@ public:
 	A_Asm type;
 	AsmType n_type = AsmType::Node;
 	std::vector<AsmNode *> children;
+	std::string val = "";
 	
 	void add(AsmNode *child) {
 		children.push_back(child);
@@ -96,8 +98,6 @@ public:
 		n_type = AsmType::String;
 		val = s;
 	}
-	
-	std::string val = "";
 };
 
 //The debug function
