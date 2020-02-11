@@ -34,6 +34,21 @@ void LTAC_Builder::build_func_call(AstNode *node) {
 	//Iterate through the arguments
 	for (auto arg : fc->children) {
 		switch (arg->type) {
+			case AstType::Id: {
+				AstID *id = static_cast<AstID *>(arg);
+				Var v = vars[id->get_name()];
+				
+				AsmNode *a_node = new AsmNode;
+				a_node->type = ltac::Mov;
+				
+				a_node->add(ltac::ArgReg);
+				
+				AsmMem *mem = new AsmMem(v.stack_pos, 0);
+				a_node->add(mem);
+				
+				scope->add(a_node);
+			} break;
+		
 			case AstType::Str: {
 				AstString *str = static_cast<AstString *>(arg);
 				
