@@ -15,6 +15,7 @@ std::string ast2str(AstType type) {
 		case AstType::VarAssign: return "VarAssign";
 		case AstType::Math: return "Math";
 		case AstType::Int: return "Int";
+		case AstType::Hex: return "Hex";
 		case AstType::Char: return "Char";
 		case AstType::Bool: return "Bool";
 		case AstType::Float: return "Float";
@@ -224,6 +225,8 @@ void print_tree(AstNode *node, int indent, bool nl) {
 	//values
 	} else if (node->type == AstType::Int) {
 		std::cout << " " << dynamic_cast<AstInt *>(node)->get_val();
+	} else if (node->type == AstType::Hex) {
+		std::cout << " 0x" << std::hex << static_cast<AstHex *>(node)->get_val();
 	} else if (node->type == AstType::Char) {
 		std::cout << " " << dynamic_cast<AstChar *>(node)->get_val();
 	} else if (node->type == AstType::Bool) {

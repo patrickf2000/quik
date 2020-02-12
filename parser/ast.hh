@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <map>
+#include <sstream>
 
 #include <lex.hh>
 
@@ -39,6 +40,7 @@ enum AstType {
 	VarAssign,
 	Id,
 	Int,
+	Hex,
 	Char,
 	Bool,
 	Float,
@@ -285,6 +287,27 @@ public:
 	void set_val(int i) { no = i; }
 private:
 	int no = 0;
+};
+
+//The hex type
+class AstHex : public AstNode {
+public:
+	explicit AstHex() { type = AstType::Hex; }
+	explicit AstHex(unsigned short b) {
+		type = AstType::Hex;
+		byte = b;
+	}
+	
+	unsigned short get_val() { return byte; }
+	void set_val(unsigned short b) { byte = b; }
+	
+	void set_val(std::string str) {
+		std::stringstream ss(str);
+		ss.flags(std::ios_base::hex);
+		ss >> byte;
+	}
+private:
+	unsigned short byte;
 };
 
 //The char type

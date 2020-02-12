@@ -127,6 +127,10 @@ void QkParser::build_var_parts(AstNode *vd, int start, std::vector<Token> tokens
 				double no = std::stod(t.id);
 				AstFloat *i = new AstFloat(no);
 				vd->children.push_back(i);
+			} else if (t.type == TokenType::HEX) {
+				AstHex *hex = new AstHex;
+				hex->set_val(t.id);
+				vd->children.push_back(hex);
 			} else if (t.type == TokenType::B_TRUE) {
 				AstBool *bl = new AstBool(true);
 				vd->children.push_back(bl);
