@@ -49,6 +49,12 @@ std::string Asm_x86::type2asm(AstNode *node) {
 			ln += std::to_string(v2.stack_pos) + "]";
 		} break;
 		
+		case AstType::Hex: {
+			AstHex *hex = static_cast<AstHex *>(node);
+			int val = (int)hex->get_val();
+			ln = std::to_string(val);
+		} break;
+		
 		case AstType::Char: {
 			AstChar *ch = static_cast<AstChar *>(node);
 			int val = (int)ch->get_val();

@@ -312,9 +312,27 @@ void Asm_x86::build_func_call_x64(AstFuncCall *fc) {
 				
 				//TODO: Add the rest
 				switch (v.type) {
+					//Byte variables
+					case DataType::Byte: {
+						std::string ln = "movzx eax, BYTE PTR [rbp-";
+						ln += std::to_string(v.stack_pos) + "]";
+						
+						sec_text.push_back(ln);
+						sec_text.push_back(call_ln + "eax");
+					} break;
+				
 					//Char variables
 					case DataType::Char: {
 						std::string ln = "movsx eax, BYTE PTR [rbp-";
+						ln += std::to_string(v.stack_pos) + "]";
+						
+						sec_text.push_back(ln);
+						sec_text.push_back(call_ln + "eax");
+					} break;
+					
+					//Short values
+					case DataType::Short: {
+						std::string ln = "movsx eax, WORD PTR [rbp-";
 						ln += std::to_string(v.stack_pos) + "]";
 						
 						sec_text.push_back(ln);
