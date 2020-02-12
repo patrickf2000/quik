@@ -129,13 +129,14 @@ AstNode *build_ast(std::vector<Line> lines, bool fail, bool optimize) {
 		}
 	}
 	
-	delete parser;
+	parser->build_tree(nodes, top);
 	
-	build_tree(nodes, top);
 	find_variables(top);
 	find_assign(top, top);
 	find_cond(top);
 	check_return(top);
+	
+	delete parser;
 	
 	//Perform syntax checking
 	SyntaxCheck check;

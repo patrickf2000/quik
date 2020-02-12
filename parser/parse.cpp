@@ -204,7 +204,7 @@ AstNode *QkParser::build_node(Line ln) {
 }
 
 //Builds a tree from a given list of nodes
-int build_tree(std::vector<AstNode *> nodes, AstNode *top, int index, bool in_if) {
+int QkParser::build_tree(std::vector<AstNode *> nodes, AstNode *top, int index, bool in_if) {
 	int i = index;
 	
 	for (; i<nodes.size(); i++) {
