@@ -244,3 +244,12 @@ int QkParser::build_tree(std::vector<AstNode *> nodes, AstNode *top, int index, 
 	
 	return i;
 }
+
+//A wrapper function for calling all the analzyer and check functions
+void QkParser::analyze_and_check(AstScope *top) {
+	find_variables(top);
+	find_assign(top, top);
+	find_cond(top);
+	check_return(top);
+}
+

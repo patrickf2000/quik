@@ -1,11 +1,10 @@
 #include <map>
 
-#include "analyzer.hh"
-#include "types.hh"
 #include "parse.hh"
+#include "types.hh"
 
 //Scans the tree for variable declarations
-void find_variables(AstNode *top) {
+void QkParser::find_variables(AstNode *top) {
 	if (top->type != AstType::Scope) {
 		return;
 	}
@@ -68,7 +67,7 @@ void find_variables(AstNode *top) {
 
 //Locates variable assignments and assigns the right type to them
 // We also make sure there are no undeclared variables here
-void find_assign(AstNode *top, AstScope *scope) {
+void QkParser::find_assign(AstNode *top, AstScope *scope) {
 	for (auto node : top->children) {
 		switch (node->type) {
 			case AstType::FuncDec: {
@@ -95,7 +94,7 @@ void find_assign(AstNode *top, AstScope *scope) {
 }
 
 //Finds conditional nodes, and adds end-if blocks
-void find_cond(AstNode *top) {
+void QkParser::find_cond(AstNode *top) {
 	AstType last_type;
 
 	for (int i = 0; i<top->children.size(); i++) {
@@ -135,7 +134,7 @@ void find_cond(AstNode *top) {
 
 //Scans the tree and adds empty return statements to
 // functions that don't have any (needed for the backend)
-void check_return(AstNode *top) {
+void QkParser::check_return(AstNode *top) {
 	for (auto node : top->children) {
 		if (node->type == AstType::FuncDec && node->children.size() > 0) {
 			auto scope = node->children.at(0);

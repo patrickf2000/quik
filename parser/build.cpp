@@ -7,7 +7,6 @@
 #include "build.hh"
 #include "strutils.hh"
 #include "parse.hh"
-#include "analyzer.hh"
 #include "syntax.hh"
 #include "optimize.hh"
 
@@ -130,11 +129,7 @@ AstNode *build_ast(std::vector<Line> lines, bool fail, bool optimize) {
 	}
 	
 	parser->build_tree(nodes, top);
-	
-	find_variables(top);
-	find_assign(top, top);
-	find_cond(top);
-	check_return(top);
+	parser->analyze_and_check(top);
 	
 	delete parser;
 	
