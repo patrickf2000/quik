@@ -20,10 +20,14 @@ int main(int argc, char *argv[]) {
 		l.original = ln;
 		l.tokens = tokenize(ln);
 		
-		AstNode *node = build_node(l);
+		QkParser *parser = new QkParser;
+		AstNode *node = parser->build_node(l);
 		
 		std::cout << std::endl << "AST: " << std::endl;
 		print_tree(node);
+		
+		delete node;
+		delete parser;
 	} else {
 		bool optimize = false;
 		if (argc == 3) {
@@ -35,6 +39,8 @@ int main(int argc, char *argv[]) {
 		auto lines = load_source(argv[1]);
 		AstNode *top = build_ast(lines, false, optimize);
 		print_tree(top);
+		
+		delete top;
 	}
 	
 	return 0;

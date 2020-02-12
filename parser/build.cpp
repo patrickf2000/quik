@@ -104,8 +104,10 @@ AstNode *build_ast(std::vector<Line> lines, bool fail, bool optimize) {
 	AstScope *top = new AstScope;
 	std::vector<AstNode *> nodes;
 	
+	QkParser *parser = new QkParser;
+	
 	for (auto ln : lines) {
-		auto n = build_node(ln);
+		auto n = parser->build_node(ln);
 		n->ln = ln;
 		
 		if (n->children.size() > 0) {
@@ -126,6 +128,8 @@ AstNode *build_ast(std::vector<Line> lines, bool fail, bool optimize) {
 			nodes.push_back(n);
 		}
 	}
+	
+	delete parser;
 	
 	build_tree(nodes, top);
 	find_variables(top);

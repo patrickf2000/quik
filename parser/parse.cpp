@@ -696,7 +696,7 @@ AstStruct *build_struct_var(Line ln) {
 }
 
 //Builds an AST node from a string of tokens
-AstNode *build_node(Line ln) {
+AstNode *QkParser::build_node(Line ln) {
 	auto tokens = ln.tokens;
 	if (tokens.size() == 0)
 		return nullptr;
