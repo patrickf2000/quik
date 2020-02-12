@@ -9,13 +9,13 @@ void QkParser::find_variables(AstNode *top) {
 		return;
 	}
 	
-	AstScope *scope = dynamic_cast<AstScope *>(top);
+	AstScope *scope = static_cast<AstScope *>(top);
 
 	for (auto node : top->children) {
 		switch (node->type) {
 			case AstType::FuncDec: {
-				AstFuncDec *fd = dynamic_cast<AstFuncDec *>(node);
-				AstScope *next = dynamic_cast<AstScope *>(fd->children.at(0));
+				AstFuncDec *fd = static_cast<AstFuncDec *>(node);
+				AstScope *next = static_cast<AstScope *>(fd->children.at(0));
 				next->vars = scope->vars;
 				
 				for (auto v : fd->args) {
@@ -53,7 +53,7 @@ void QkParser::find_variables(AstNode *top) {
 			
 			case AstType::ArrayDec:
 			case AstType::VarDec: {
-				AstVarDec *vd = dynamic_cast<AstVarDec *>(node);
+				AstVarDec *vd = static_cast<AstVarDec *>(node);
 			
 				Var v;
 				v.name = vd->get_name();
@@ -72,14 +72,14 @@ void QkParser::find_assign(AstNode *top, AstScope *scope) {
 		switch (node->type) {
 			case AstType::FuncDec: {
 				auto child = node->children.at(0);
-				auto n_scope = dynamic_cast<AstScope *>(child);
+				auto n_scope = static_cast<AstScope *>(child);
 				find_assign(child, n_scope); 
 			} break;
 			
 			case AstType::ArrayAssign:
 			case AstType::ArrayAccess:
 			case AstType::VarAssign: {
-				AstVarDec *va = dynamic_cast<AstVarDec *>(node);
+				AstVarDec *va = static_cast<AstVarDec *>(node);
 			
 				Var v = scope->vars[va->get_name()];
 				va->set_type(v.type);
@@ -101,7 +101,7 @@ void QkParser::find_cond(AstNode *top) {
 		auto node = top->children.at(i);
 		
 		if (node->type == AstType::FuncDec) {
-			AstScope *next = dynamic_cast<AstScope *>(node->children.at(0));
+			AstScope *next = static_cast<AstScope *>(node->children.at(0));
 			find_cond(next);
 		} else if (node->type == AstType::While) {
 			find_cond(node);
