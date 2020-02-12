@@ -13,6 +13,20 @@ void write(LtacFile *file) {
 	writer << std::endl;
 	writer << ".text" << std::endl;
 	writer << "\t.global main" << std::endl;
+	writer << std::endl;
+	
+	for (auto node : file->children) {
+		switch (node->type) {
+			case LTAC::Label: {
+				writer << "lbl " << node->val << std::endl;
+			} break;
+			
+			case LTAC::Setup: {
+				writer << "\tsetup" << std::endl;
+				writer << std::endl;
+			} break;
+		}
+	}
 	
 	writer.close();
 }

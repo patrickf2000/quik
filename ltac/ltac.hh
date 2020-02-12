@@ -60,6 +60,9 @@ enum class LTAC {
 //The base node
 class LtacNode {
 public:
+	explicit LtacNode() {}
+	explicit LtacNode(LTAC t) { type = t; }
+
 	LTAC type = LTAC::None;
 	std::string val;
 	std::vector<LtacNode *> args;
@@ -116,4 +119,5 @@ public:
 	std::string path = "";
 	
 	std::vector<LtacString *> str_pool;
+	std::vector<LtacNode *> children;
 };
