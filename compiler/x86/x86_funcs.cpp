@@ -236,9 +236,33 @@ void Asm_x86::build_func_call_i386(AstFuncCall *fc) {
 				std::string ln = "";
 			
 				switch (v.type) {
-					case DataType::Byte:
-					case DataType::Char:
-					case DataType::Short:
+					//Byte variables
+					case DataType::Byte: {
+						std::string ln = "movzx eax, BYTE PTR [ebp-";
+						ln += std::to_string(v.stack_pos) + "]";
+						
+						sec_text.push_back(ln);
+						sec_text.push_back("push eax");
+					} break;
+				
+					//Char variables
+					case DataType::Char: {
+						std::string ln = "movsx eax, BYTE PTR [ebp-";
+						ln += std::to_string(v.stack_pos) + "]";
+						
+						sec_text.push_back(ln);
+						sec_text.push_back("push eax");
+					} break;
+					
+					//Short values
+					case DataType::Short: {
+						std::string ln = "movsx eax, WORD PTR [ebp-";
+						ln += std::to_string(v.stack_pos) + "]";
+						
+						sec_text.push_back(ln);
+						sec_text.push_back("push eax");
+					} break;
+				
 					case DataType::Bool:
 					case DataType::Int: {
 						if (v.is_array) {
@@ -251,17 +275,19 @@ void Asm_x86::build_func_call_i386(AstFuncCall *fc) {
 							ln = "push DWORD PTR [ebp-";
 							ln += std::to_string(v.stack_pos) + "]";
 						}
+						
+						sec_text.push_back(ln);
 					} break;
 					case DataType::Float: {
 							ln = "fld qword [" + v.name + "]";
+							sec_text.push_back(ln);
 					} break;
 					case DataType::Str: {
 						ln = "push DWORD PTR [ebp-";
 						ln += std::to_string(v.stack_pos) + "]";
+						sec_text.push_back(ln);
 					} break;
 				}
-				
-				sec_text.push_back(ln);
 			} break;
 			
 			//An Int
