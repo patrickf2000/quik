@@ -9,11 +9,14 @@ set(PARSER_SRC
 	parser/analyzer.cpp
 	parser/ast.cpp
 	parser/build.cpp
+	parser/conditional.cpp
+	parser/funcs.cpp
 	parser/lex.cpp
 	parser/optimize.cpp
 	parser/parse.cpp
 	parser/strutils.cpp
 	parser/syntax.cpp
+	parser/vars.cpp
 )
 
 set(COMPILER_SRC
