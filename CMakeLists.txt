@@ -10,6 +10,7 @@ set(PARSER_SRC
 	parser/ast.cpp
 	parser/build.cpp
 	parser/conditional.cpp
+	parser/data.cpp
 	parser/funcs.cpp
 	parser/lex.cpp
 	parser/loop.cpp

@@ -28,4 +28,9 @@ public:
 	//Loops
 	AstLoop *build_loop(Line ln);
 	AstForEach *build_foreach(Line ln);
+	
+	//Arrays and structures
+	AstArrayDec *build_array(Line ln, bool is_float);
+	AstStructDec *build_struct_dec(Line ln);
+	AstStruct *build_struct_var(Line ln);
 };
