@@ -16,12 +16,6 @@ set(PARSER_SRC
 	parser/syntax.cpp
 )
 
-set(LTAC_SRC
-	ltac/ltac_build.cpp
-	ltac/ltac_func.cpp
-	ltac/ltac_vars.cpp
-)
-
 set(COMPILER_SRC
 	compiler/main.cpp
 	compiler/utils.cpp
@@ -30,7 +24,6 @@ set(COMPILER_SRC
 	compiler/armv7/armv7_funcs.cpp
 	compiler/armv7/armv7_utils.cpp
 	compiler/armv7/armv7_vars.cpp
-	compiler/ltac/ltac_x86_64.cpp
 	compiler/x86/asmx86.cpp
 	compiler/x86/x86_array.cpp
 	compiler/x86/x86_flow.cpp
@@ -41,15 +34,12 @@ set(COMPILER_SRC
 )
 
 add_library(qkparser ${PARSER_SRC})
-add_library(qkltac ${LTAC_SRC})
 
 add_executable(lextest parser/test/lex_test.cpp)
 add_executable(qkast parser/test/parser_test.cpp)
-add_executable(qkasm ltac/test/main.cpp)
 add_executable(quikc ${COMPILER_SRC})
 
 target_link_libraries(lextest qkparser)
 target_link_libraries(qkast qkparser)
-target_link_libraries(qkasm qkparser qkltac)
-target_link_libraries(quikc qkparser qkltac)
+target_link_libraries(quikc qkparser)
 
