@@ -24,4 +24,8 @@ public:
 	
 	//Conditionals
 	AstCond *build_conditional(Line ln);
+	
+	//Loops
+	AstLoop *build_loop(Line ln);
+	AstForEach *build_foreach(Line ln);
 };
