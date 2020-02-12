@@ -1,0 +1,21 @@
+include io
+
+func main
+	short s1 = 10
+	short s2 = 0xAAFF
+	
+	printf("%hi\n", s1)
+	printf("%x\n", s2)
+	puts("")
+	
+	s1 = 9
+	printf("%hi\n", s1)
+end
+
+#TEST
+#10
+#ffffaaff
+#
+#9
+
+

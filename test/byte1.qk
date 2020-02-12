@@ -1,0 +1,16 @@
+include io
+
+func main
+	byte b1 = 0xA
+	byte b2 = 0x11
+	
+	b1 = 0xFF
+	
+	printf("Val 1: %x\n", b1)
+	printf("Val 2: %x\n", b2)
+end
+
+#TEST
+#Val 1: ff
+#Val 2: 11
+
