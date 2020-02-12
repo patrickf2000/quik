@@ -82,88 +82,7 @@ AstNode *QkParser::build_node(Line ln) {
 		case TokenType::FOREACH: return build_foreach(ln);
 		
 		//Handle if the first node is an ID
-		case TokenType::ID: {
-			if (tokens.size() < 2) {
-				syntax_error(ln, "Only an ID was specified!");
-			}
-			
-			//Check for an array assignment
-			if (tokens.size() >= 6) {
-				auto t1 = tokens.at(1).type;
-				auto t2 = tokens.at(3).type;
-				auto t3 = tokens.at(4).type;
-				
-				if (t1 == TokenType::L_BRACKET && t2 == TokenType::R_BRACKET
-					&& t3 == TokenType::ASSIGN) {
-					Token index = tokens.at(2);
-					AstArrayAssign *assign = new AstArrayAssign(first.id);
-					
-					switch (index.type) {
-						case TokenType::ID: {
-							AstID *id = new AstID(index.id);
-							assign->index = id;
-						} break;
-						
-						case TokenType::NO: {
-							int val = std::stoi(index.id);
-							AstInt *i = new AstInt(val);
-							assign->index = i;
-						} break;
-						
-						default: syntax_error(ln, "Invalid array access.");
-					}
-					
-					build_var_parts(assign, 5, tokens);
-					return assign;
-				}
-			}
-			
-			//Build a function call
-			if (tokens.at(1).type == TokenType::LEFT_PAREN) {
-				return build_func_call(ln);
-				
-			//Build an assignment
-			} else if (tokens.at(1).type == TokenType::ASSIGN) {
-				if (tokens.size() < 3) {
-					syntax_error(ln, "Missing elements.");
-				}
-			
-				AstVarAssign *va = new AstVarAssign(tokens.at(0).id);
-				build_var_parts(va, 2, tokens);
-				return va;
-				
-			//Build a structure assignment
-			} else if (tokens.at(1).type == TokenType::DOT) {
-				if (tokens.size() < 5)
-					syntax_error(ln, "Missing elements.");
-				
-				if (tokens.at(3).type != TokenType::ASSIGN)
-					syntax_error(ln, "Expected \'=\'");
-			
-				Token s_var = tokens.at(0);
-				Token i_var = tokens.at(2);
-				
-				if (s_var.type != TokenType::ID)
-					syntax_error(ln, "Invalid structure assignment.");
-					
-				if (i_var.type != TokenType::ID)
-					syntax_error(ln, "Invalid structure member assignment.");
-				
-				AstStructMod *mod = new AstStructMod;
-				mod->str_name = s_var.id;
-				mod->var_name = i_var.id;
-				
-				build_var_parts(mod, 4, tokens);
-				return mod;
-			
-			//Build an increment
-			} else if (tokens.at(1).type == TokenType::D_PLUS) {
-				AstVarAssign *va = new AstVarAssign(tokens.at(0).id);
-				AstNode *inc = new AstNode(AstType::Inc);
-				va->children.push_back(inc);
-				return va;
-			}
-		}
+		case TokenType::ID: return build_id(ln);
 		
 		//Build variable declarations
 		//Build a byte assignment
@@ -200,6 +119,96 @@ AstNode *QkParser::build_node(Line ln) {
 		}
 	}
 
+	return nullptr;
+}
+
+//Builds a node based on an ID value
+AstNode *QkParser::build_id(Line ln) {
+	auto tokens = ln.tokens;
+	auto first = tokens.at(0);
+
+	if (tokens.size() < 2) {
+		syntax_error(ln, "Only an ID was specified!");
+	}
+
+	//Check for an array assignment
+	if (tokens.size() >= 6) {
+		auto t1 = tokens.at(1).type;
+		auto t2 = tokens.at(3).type;
+		auto t3 = tokens.at(4).type;
+		
+		if (t1 == TokenType::L_BRACKET && t2 == TokenType::R_BRACKET
+			&& t3 == TokenType::ASSIGN) {
+			Token index = tokens.at(2);
+			AstArrayAssign *assign = new AstArrayAssign(first.id);
+			
+			switch (index.type) {
+				case TokenType::ID: {
+					AstID *id = new AstID(index.id);
+					assign->index = id;
+				} break;
+				
+				case TokenType::NO: {
+					int val = std::stoi(index.id);
+					AstInt *i = new AstInt(val);
+					assign->index = i;
+				} break;
+				
+				default: syntax_error(ln, "Invalid array access.");
+			}
+			
+			build_var_parts(assign, 5, tokens);
+			return assign;
+		}
+	}
+
+	//Build a function call
+	if (tokens.at(1).type == TokenType::LEFT_PAREN) {
+		return build_func_call(ln);
+		
+	//Build an assignment
+	} else if (tokens.at(1).type == TokenType::ASSIGN) {
+		if (tokens.size() < 3) {
+			syntax_error(ln, "Missing elements.");
+		}
+
+		AstVarAssign *va = new AstVarAssign(tokens.at(0).id);
+		build_var_parts(va, 2, tokens);
+		return va;
+		
+	//Build a structure assignment
+	} else if (tokens.at(1).type == TokenType::DOT) {
+		if (tokens.size() < 5)
+			syntax_error(ln, "Missing elements.");
+		
+		if (tokens.at(3).type != TokenType::ASSIGN)
+			syntax_error(ln, "Expected \'=\'");
+
+		Token s_var = tokens.at(0);
+		Token i_var = tokens.at(2);
+		
+		if (s_var.type != TokenType::ID)
+			syntax_error(ln, "Invalid structure assignment.");
+			
+		if (i_var.type != TokenType::ID)
+			syntax_error(ln, "Invalid structure member assignment.");
+		
+		AstStructMod *mod = new AstStructMod;
+		mod->str_name = s_var.id;
+		mod->var_name = i_var.id;
+		
+		build_var_parts(mod, 4, tokens);
+		return mod;
+
+	//Build an increment
+	} else if (tokens.at(1).type == TokenType::D_PLUS) {
+		AstVarAssign *va = new AstVarAssign(tokens.at(0).id);
+		AstNode *inc = new AstNode(AstType::Inc);
+		va->children.push_back(inc);
+		return va;
+	}
+	
+	//TODO: Throw a syntax error, don't blow the thing up
 	return nullptr;
 }
 
