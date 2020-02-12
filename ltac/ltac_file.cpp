@@ -8,16 +8,18 @@
 void write(LtacFile *file) {
 	std::ofstream writer(file->path);
 	
-	writer << ".intel_syntax noprefix" << std::endl;
 	writer << ".data" << std::endl;
 	writer << std::endl;
-	writer << ".text" << std::endl;
-	writer << "\t.global main" << std::endl;
-	writer << std::endl;
+	writer << ".code" << std::endl;
 	
 	for (auto node : file->children) {
 		switch (node->type) {
+			case LTAC::Extern: {
+				writer << "extern " << node->val << std::endl;
+			} break;
+		
 			case LTAC::Label: {
+				writer << std::endl;
 				writer << "lbl " << node->val << std::endl;
 			} break;
 			

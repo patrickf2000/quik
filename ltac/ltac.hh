@@ -10,6 +10,7 @@ enum class LTAC {
 
 	//Functions
 	Label,
+	Extern,
 	Ret,
 	Call,
 	Setup,

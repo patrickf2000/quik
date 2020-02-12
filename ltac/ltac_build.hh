@@ -13,6 +13,7 @@ public:
 	void assemble(AstNode *top);
 	
 	//Function stuff
+	void build_extern(AstNode *node);
 	void build_func_dec(AstNode *node);
 	
 	//Returns the pointer to the abstract file
