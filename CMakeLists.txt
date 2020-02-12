@@ -43,8 +43,10 @@ add_library(qkparser ${PARSER_SRC})
 add_executable(lextest parser/test/lex_test.cpp)
 add_executable(qkast parser/test/parser_test.cpp)
 add_executable(quikc ${COMPILER_SRC})
+add_executable(qkasm ltac/test/main.cpp)
 
 target_link_libraries(lextest qkparser)
 target_link_libraries(qkast qkparser)
 target_link_libraries(quikc qkparser)
+target_link_libraries(qkasm qkparser)
 
