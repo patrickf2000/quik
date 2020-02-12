@@ -23,6 +23,7 @@ set(PARSER_SRC
 
 set(LTAC_SRC
 	ltac/ltac_build.cpp
+	ltac/ltac_file.cpp
 )
 
 set(COMPILER_SRC
