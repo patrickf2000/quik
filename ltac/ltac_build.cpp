@@ -19,6 +19,8 @@ void LTAC_Builder::assemble(AstNode *top) {
 				assemble(node);
 			} break;
 			
+			case AstType::Return: build_ret(node); break;
+			
 			case AstType::VarDec: build_var_dec(node); break;
 			case AstType::VarAssign: build_var_assign(node); break;
 		}

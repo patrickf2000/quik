@@ -16,6 +16,7 @@ public:
 	//Function stuff
 	void build_extern(AstNode *node);
 	void build_func_dec(AstNode *node);
+	void build_ret(AstNode *node);
 	
 	//Variable functions
 	void build_var_dec(AstNode *node);

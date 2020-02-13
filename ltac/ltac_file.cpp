@@ -59,6 +59,15 @@ void write(LtacFile *file) {
 				writer << "\tmov " << translate(node->args[0])
 					<< ", " << translate(node->args[1]) << std::endl;
 			} break;
+			
+			case LTAC::Leave: {
+				writer << "\tleave" << std::endl;
+			} break;
+			
+			case LTAC::Ret: {
+				writer << "\tret" << std::endl;
+				writer << std::endl;
+			} break;
 		}
 	}
 	

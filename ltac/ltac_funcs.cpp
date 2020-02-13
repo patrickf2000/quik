@@ -22,3 +22,12 @@ void LTAC_Builder::build_func_dec(AstNode *node) {
 	file->children.push_back(lbl);
 	file->children.push_back(setup);
 }
+
+//Builds a function return
+void LTAC_Builder::build_ret(AstNode *node) {
+	LtacNode *leave = new LtacNode(LTAC::Leave);
+	LtacNode *ret = new LtacNode(LTAC::Ret);
+	
+	file->children.push_back(leave);
+	file->children.push_back(ret);
+}
