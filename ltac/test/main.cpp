@@ -17,7 +17,7 @@ int main(int argc, char *argv[]) {
 	auto lines = load_source(argv[1]);
 	AstNode *top = build_ast(lines, true, false);
 	
-	LTAC_Builder *builder = new LTAC_Builder("out.asm");
+	LTAC_Builder *builder = new LTAC_Builder("out_test.asm");
 	builder->assemble(top);
 	LtacFile *file = builder->get_file();
 	write(file);

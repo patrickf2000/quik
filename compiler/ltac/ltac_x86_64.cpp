@@ -54,6 +54,23 @@ void LTAC_Generator::build_x86_64(LtacFile *file) {
 			case LTAC::Ret: {
 				writer << "\tret" << std::endl << std::endl;
 			} break;
+			
+			//Move
+			case LTAC::Mov: {
+				writer << "\tmov ";
+				
+				auto left = node->args[0];
+				auto right = node->args[1];
+				
+				if (right->type == LTAC::Int) {
+					writer << "DWORD PTR ";
+				}
+				
+				writer << build_operand(left);
+				writer << ", ";
+				writer << build_operand(right);
+				writer << std::endl;
+			} break;
 		}
 	}
 	
@@ -69,3 +86,30 @@ void LTAC_Generator::compile_x86_64(std::string bin) {
 	system(as_ln.c_str());
 	system(link_ln.c_str());
 }
+
+//Builds the operand of certain statements
+//Examples: registers, memory locations, raw values, etc
+std::string LTAC_Generator::build_operand(LtacNode *node) {
+	std::string ln = "";
+	
+	switch (node->type) {
+		case LTAC::Mem: {
+			LtacMem *mem = static_cast<LtacMem *>(node);
+			stack_pos += mem->index;
+			ln = "[rbp-" + std::to_string(stack_pos);
+			
+			if (mem->scale > 0)
+				ln += "*" + std::to_string(mem->scale);
+				
+			ln += "]";
+		} break;
+		
+		case LTAC::Int: {
+			LtacInt *i = static_cast<LtacInt *>(node);
+			ln = std::to_string(i->get_val());
+		} break;
+	}
+	
+	return ln;
+}
+
