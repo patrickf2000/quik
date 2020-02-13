@@ -28,13 +28,31 @@ void LTAC_Generator::build_x86_64(LtacFile *file) {
 	
 	for (auto node : file->children) {
 		switch (node->type) {
+			//Extern directives
 			case LTAC::Extern: {
 				writer << ".extern " << node->val << std::endl;
 			} break;
 		
-			case LTAC::Func: {
-				writer << std::endl;
+			//Functions and labels
+			case LTAC::Func: writer << std::endl;
+			case LTAC::Label: {
 				writer << node->val << ":" << std::endl;
+			} break;
+			
+			//Function setup
+			case LTAC::Setup: {
+				writer << "\tpush rbp" << std::endl;
+				writer << "\tmov rbp, rsp" << std::endl << std::endl;
+			} break;
+			
+			//Function end
+			case LTAC::Leave: {
+				writer << "\tleave" << std::endl;
+			} break;
+			
+			//Return
+			case LTAC::Ret: {
+				writer << "\tret" << std::endl << std::endl;
 			} break;
 		}
 	}
