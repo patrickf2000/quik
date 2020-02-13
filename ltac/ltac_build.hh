@@ -37,4 +37,7 @@ private:
 	//Variable stuff
 	std::map<std::string, Var> vars;
 	int stack_pos = 0;
+	
+	//Position control
+	int str_lbl = 0;
 };

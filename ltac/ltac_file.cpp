@@ -16,6 +16,11 @@ std::string translate(LtacNode *part) {
 				+ std::to_string(mem->scale) + "]";
 		} break;
 		
+		//Pointer
+		case LTAC::Ptr: {
+			ln = "*" + part->val;
+		} break;
+		
 		//Integers
 		case LTAC::Int: {
 			LtacInt *i = static_cast<LtacInt *>(part);

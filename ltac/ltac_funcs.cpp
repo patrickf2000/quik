@@ -34,12 +34,14 @@ void LTAC_Builder::build_func_call(AstNode *node) {
 		larg->args.push_back(reg);
 		
 		switch (arg->type) {
+			//Integers
 			case AstType::Int: {
 				AstInt *i = static_cast<AstInt *>(arg);
 				LtacInt *li = new LtacInt(i->get_val());
 				larg->args.push_back(li);
 			} break;
 			
+			//Variables
 			case AstType::Id: {
 				AstID *id = static_cast<AstID *>(arg);
 				Var v = vars[id->get_name()];
@@ -48,6 +50,21 @@ void LTAC_Builder::build_func_call(AstNode *node) {
 				mem->index = v.stack_pos;
 				mem->scale = 1;
 				larg->args.push_back(mem);
+			} break;
+			
+			//Strings
+			case AstType::Str: {
+				std::string s_name = "STR_" + std::to_string(str_lbl);
+				++str_lbl;
+				
+				AstString *str = static_cast<AstString *>(arg);
+				LtacString *lstr = new LtacString(s_name, str->get_val());
+				
+				LtacPtr *ptr = new LtacPtr;
+				ptr->val = s_name;
+				
+				file->str_pool.push_back(lstr);
+				larg->args.push_back(ptr);
 			} break;
 			
 			//TODO: Add the rest

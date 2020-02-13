@@ -51,6 +51,7 @@ enum class LTAC {
 	
 	//Memory
 	Mem,
+	Ptr,
 	
 	//Data
 	Byte,
@@ -77,6 +78,12 @@ public:
 	
 	int index = 0;
 	int scale = 1;
+};
+
+//Represents a pointer to a memory location
+class LtacPtr : public LtacNode {
+public:
+	explicit LtacPtr() { type = LTAC::Ptr; }
 };
 
 //Represents a variable
