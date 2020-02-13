@@ -22,6 +22,11 @@ std::string translate(LtacNode *part) {
 			ln = std::to_string(i->get_val());
 		} break;
 		
+		//Argument register
+		case LTAC::ArgReg: {
+			ln = "arx";
+		} break;
+		
 		//TODO: Add the rest
 	}
 	
@@ -48,6 +53,11 @@ void write(LtacFile *file) {
 			case LTAC::Label: {
 				writer << std::endl;
 				writer << "lbl " << node->val << std::endl;
+			} break;
+			
+			case LTAC::Call: {
+				writer << "\tcall " << node->val << std::endl;
+				writer << std::endl;
 			} break;
 			
 			case LTAC::Setup: {

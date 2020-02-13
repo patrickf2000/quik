@@ -44,6 +44,7 @@ enum class LTAC {
 	
 	//Registers
 	Reg,
+	ArgReg,
 	SpReg,
 	BpReg,
 	WReg,
