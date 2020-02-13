@@ -14,7 +14,7 @@ void LTAC_Builder::build_extern(AstNode *node) {
 void LTAC_Builder::build_func_dec(AstNode *node) {
 	AstFuncDec *fd = static_cast<AstFuncDec *>(node);
 	
-	LtacNode *lbl = new LtacNode(LTAC::Label);
+	LtacNode *lbl = new LtacNode(LTAC::Func);
 	lbl->val = fd->get_name();
 	
 	LtacNode *setup = new LtacNode(LTAC::Setup);

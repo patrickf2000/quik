@@ -60,9 +60,13 @@ void write(LtacFile *file) {
 			case LTAC::Extern: {
 				writer << "extern " << node->val << std::endl;
 			} break;
+			
+			case LTAC::Func: {
+				writer << std::endl;
+				writer << "func " << node->val << std::endl;
+			} break;
 		
 			case LTAC::Label: {
-				writer << std::endl;
 				writer << "lbl " << node->val << std::endl;
 			} break;
 			

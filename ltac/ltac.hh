@@ -9,6 +9,7 @@ enum class LTAC {
 	Section,
 
 	//Functions
+	Func,
 	Label,
 	Extern,
 	Ret,
