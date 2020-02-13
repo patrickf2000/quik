@@ -36,6 +36,7 @@ set(COMPILER_SRC
 	compiler/armv7/armv7_funcs.cpp
 	compiler/armv7/armv7_utils.cpp
 	compiler/armv7/armv7_vars.cpp
+	compiler/ltac/ltac_x86_64.cpp
 	compiler/x86/asmx86.cpp
 	compiler/x86/x86_array.cpp
 	compiler/x86/x86_flow.cpp
@@ -55,6 +56,6 @@ add_executable(qkasm ltac/test/main.cpp)
 
 target_link_libraries(lextest qkparser)
 target_link_libraries(qkast qkparser)
-target_link_libraries(quikc qkparser)
+target_link_libraries(quikc qkparser qkltac)
 target_link_libraries(qkasm qkparser qkltac)
 

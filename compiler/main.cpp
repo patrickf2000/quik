@@ -6,15 +6,15 @@
 #include <ast.hh>
 #include <build.hh>
 
-/*#include <ltac_build.hh>
-#include <ltac.hh>*/
+#include <ltac_build.hh>
+#include <ltac.hh>
 
 #include "utils.hh"
 #include "types.hh"
 
 #include "armv7/armv7.hh"
 #include "x86/asmx86.hh"
-//#include "ltac/ltac_gen.hh"
+#include "ltac/ltac_gen.hh"
 
 void help() {
 	std::cout << "help" << std::endl;
@@ -90,19 +90,21 @@ int main(int argc, char *argv[]) {
 	
 	//Check to see if we wish to use the experimental ltac layer
 	if (use_ltac) {
-		std::cout << "Error: LTAC currently unsupported." << std::endl;
-		
-		/*std::string path = std::string(inputs[0]);
+		std::string path = std::string(inputs[0]);
 		auto lines = load_source(path.c_str());
 		AstNode *top = build_ast(lines, true, false);
-		AsmFile *file = build_asm_file(top);
 		
-		LTAC_Generator gen("out");
-		gen.build_x86_64(file);
+		LTAC_Builder *builder = new LTAC_Builder("out");
+		builder->assemble(top);
+		LtacFile *asm_file = builder->get_file();
+		
+		LTAC_Generator gen;
+		gen.build_x86_64(asm_file);
 		gen.compile_x86_64("out");
 		
-		delete file;
-		delete top;*/
+		delete builder;
+		delete asm_file;
+		delete top;
 	} else {
 		//Iterate through each input and work on each file
 		//Build for ARM

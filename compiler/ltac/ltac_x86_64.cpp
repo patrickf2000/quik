@@ -7,16 +7,17 @@
 #include "ltac_gen.hh"
 
 //Generates code for the x86-64 platform
-void LTAC_Generator::build_x86_64(AsmFile *file) {
+void LTAC_Generator::build_x86_64(LtacFile *file) {
+	output = file->path;
 	std::ofstream writer(output + ".asm");
 	
 	//Write the data section
 	writer << ".intel_syntax noprefix" << std::endl;
 	writer << ".data" << std::endl;
 	
-	for (auto const& str : file->str_pool) {
-		writer << "\t" << str.first << ": .string \""
-			<< str.second << "\"" << std::endl;
+	for (auto str : file->str_pool) {
+		writer << "\t" << str->get_name() << ": .string \""
+			<< str->get_val() << "\"" << std::endl;
 	}
 	
 	//Write the code section
@@ -27,9 +28,13 @@ void LTAC_Generator::build_x86_64(AsmFile *file) {
 	
 	for (auto node : file->children) {
 		switch (node->type) {
-			case ltac::Label: {
-				auto name = node->children[0]->val;
-				writer << name << ":" << std::endl;
+			case LTAC::Extern: {
+				writer << ".extern " << node->val << std::endl;
+			} break;
+		
+			case LTAC::Func: {
+				writer << std::endl;
+				writer << node->val << ":" << std::endl;
 			} break;
 		}
 	}

@@ -10,6 +10,7 @@
 
 class LTAC_Builder {
 public:
+	explicit LTAC_Builder() { }
 	explicit LTAC_Builder(std::string output);
 	void assemble(AstNode *top);
 	
