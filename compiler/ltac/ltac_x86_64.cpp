@@ -95,8 +95,8 @@ std::string LTAC_Generator::build_operand(LtacNode *node) {
 	switch (node->type) {
 		case LTAC::Mem: {
 			LtacMem *mem = static_cast<LtacMem *>(node);
-			stack_pos += mem->index;
-			ln = "[rbp-" + std::to_string(stack_pos);
+			int loco = stack_base + mem->index;
+			ln = "[rbp-" + std::to_string(loco);
 			
 			if (mem->scale > 0)
 				ln += "*" + std::to_string(mem->scale);

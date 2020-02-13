@@ -14,5 +14,5 @@ protected:
 	std::string build_operand(LtacNode *node);
 private:
 	std::string output;
-	int stack_pos = 4;
+	int stack_base = 4;
 };

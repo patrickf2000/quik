@@ -48,7 +48,7 @@ void LTAC_Builder::build_func_call(AstNode *node) {
 				
 				LtacMem *mem = new LtacMem;
 				mem->index = v.stack_pos;
-				mem->scale = 1;
+				mem->scale = 0;
 				larg->args.push_back(mem);
 			} break;
 			
