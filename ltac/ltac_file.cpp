@@ -42,6 +42,12 @@ void write(LtacFile *file) {
 	std::ofstream writer(file->path);
 	
 	writer << ".data" << std::endl;
+	
+	for (auto str : file->str_pool) {
+		writer << str->get_name() << ": .string \""
+			<< str->get_val() << "\"" << std::endl;
+	}
+	
 	writer << std::endl;
 	writer << ".code" << std::endl;
 	
