@@ -57,18 +57,24 @@ void LTAC_Generator::build_x86_64(LtacFile *file) {
 			
 			//Move
 			case LTAC::Mov: {
-				writer << "\tmov ";
-				
+				//Perform some translations
 				auto left = node->args[0];
 				auto right = node->args[1];
+				
+				auto arg_left = build_operand(left);
+				auto arg_right = build_operand(right);
+				
+				if (arg_left == "" || arg_right == "")
+					break;
+				
+				//Write the code
+				writer << "\tmov ";
 				
 				if (right->type == LTAC::Int) {
 					writer << "DWORD PTR ";
 				}
 				
-				writer << build_operand(left);
-				writer << ", ";
-				writer << build_operand(right);
+				writer << arg_left << ", " << arg_right;
 				writer << std::endl;
 			} break;
 		}
