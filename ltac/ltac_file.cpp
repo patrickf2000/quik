@@ -5,6 +5,29 @@
 #include "ltac_file.hh"
 #include "ltac.hh"
 
+std::string translate(LtacNode *part) {
+	std::string ln = "";
+
+	switch (part->type) {
+		//Memory
+		case LTAC::Mem: {
+			LtacMem *mem = static_cast<LtacMem *>(part);
+			ln = "[base+" + std::to_string(mem->index) + "*"
+				+ std::to_string(mem->scale) + "]";
+		} break;
+		
+		//Integers
+		case LTAC::Int: {
+			LtacInt *i = static_cast<LtacInt *>(part);
+			ln = std::to_string(i->get_val());
+		} break;
+		
+		//TODO: Add the rest
+	}
+	
+	return ln;
+}
+
 void write(LtacFile *file) {
 	std::ofstream writer(file->path);
 	
@@ -14,6 +37,10 @@ void write(LtacFile *file) {
 	
 	for (auto node : file->children) {
 		switch (node->type) {
+			case LTAC::None: {
+				writer << std::endl;
+			} break;
+		
 			case LTAC::Extern: {
 				writer << "extern " << node->val << std::endl;
 			} break;
@@ -26,6 +53,11 @@ void write(LtacFile *file) {
 			case LTAC::Setup: {
 				writer << "\tsetup" << std::endl;
 				writer << std::endl;
+			} break;
+			
+			case LTAC::Mov: {
+				writer << "\tmov " << translate(node->args[0])
+					<< ", " << translate(node->args[1]) << std::endl;
 			} break;
 		}
 	}

@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 
 #include <ast.hh>
 
@@ -16,10 +17,22 @@ public:
 	void build_extern(AstNode *node);
 	void build_func_dec(AstNode *node);
 	
+	//Variable functions
+	void build_var_dec(AstNode *node);
+	void build_var_assign(AstNode *node);
+	void build_var_assign(AstVarDec *va, Var v);
+	
 	//Returns the pointer to the abstract file
 	LtacFile *get_file() {
 		return file;
 	}
+protected:
+	//Utility functions
+	int size_of(DataType t);
 private:
 	LtacFile *file;
+	
+	//Variable stuff
+	std::map<std::string, Var> vars;
+	int stack_pos = 0;
 };

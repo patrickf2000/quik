@@ -69,6 +69,15 @@ public:
 	std::vector<LtacNode *> args;
 };
 
+//Represents a memory address
+class LtacMem : public LtacNode {
+public:
+	explicit LtacMem() { type = LTAC::Mem; }
+	
+	int index = 0;
+	int scale = 1;
+};
+
 //Represents a variable
 class LtacVar : public LtacNode {
 public:
@@ -90,6 +99,21 @@ public:
 		name = n;
 		val = s;
 	}
+};
+
+//Represents an integer
+class LtacInt : public LtacVar {
+public:
+	explicit LtacInt() { type = LTAC::Int; }
+	explicit LtacInt(int i) {
+		type = LTAC::Int;
+		i_val = i;
+	}
+	
+	void set_val(int i) { i_val = i; }
+	int get_val() { return i_val; }
+private:
+	int i_val = 0;
 };
 
 //Represents a floating-point number
