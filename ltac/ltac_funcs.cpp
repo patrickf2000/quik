@@ -40,9 +40,18 @@ void LTAC_Builder::build_func_call(AstNode *node) {
 				larg->args.push_back(li);
 			} break;
 			
-			default: larg->args.push_back(new LtacNode(LTAC::Reg));
+			case AstType::Id: {
+				AstID *id = static_cast<AstID *>(arg);
+				Var v = vars[id->get_name()];
+				
+				LtacMem *mem = new LtacMem;
+				mem->index = v.stack_pos;
+				mem->scale = 1;
+				larg->args.push_back(mem);
+			} break;
 			
 			//TODO: Add the rest
+			default: larg->args.push_back(new LtacNode(LTAC::Reg));
 		}
 		
 		file->children.push_back(larg);
