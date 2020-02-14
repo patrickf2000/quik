@@ -2,6 +2,7 @@
 //Contains the functions for assembling function-related
 // declarations, calls, and controls
 #include "asmx86.hh"
+#include "x86_regs.hh"
 
 std::string call_regs[] = {
 	"rdi",

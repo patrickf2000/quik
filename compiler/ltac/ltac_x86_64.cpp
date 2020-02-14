@@ -5,6 +5,10 @@
 #include <ltac.hh>
 
 #include "ltac_gen.hh"
+#include "../x86/x86_regs.hh"
+
+int call_index = 0;
+int flt_call_index = 0;
 
 //Generates code for the x86-64 platform
 void LTAC_Generator::build_x86_64(LtacFile *file) {
@@ -42,12 +46,22 @@ void LTAC_Generator::build_x86_64(LtacFile *file) {
 			//Function setup
 			case LTAC::Setup: {
 				writer << "\tpush rbp" << std::endl;
-				writer << "\tmov rbp, rsp" << std::endl << std::endl;
+				writer << "\tmov rbp, rsp" << std::endl;
+				writer << "\tsub rsp, 48" << std::endl << std::endl;
 			} break;
 			
 			//Function end
 			case LTAC::Leave: {
 				writer << "\tleave" << std::endl;
+			} break;
+			
+			//Function call
+			case LTAC::Call: {
+				writer << "\tcall " << node->val << std::endl;
+				writer << std::endl;
+				
+				call_index = 0;
+				flt_call_index = 0;
 			} break;
 			
 			//Return
@@ -70,7 +84,7 @@ void LTAC_Generator::build_x86_64(LtacFile *file) {
 				//Write the code
 				writer << "\tmov ";
 				
-				if (right->type == LTAC::Int) {
+				if (right->type == LTAC::Int && left->type == LTAC::Mem) {
 					writer << "DWORD PTR ";
 				}
 				
@@ -87,7 +101,7 @@ void LTAC_Generator::build_x86_64(LtacFile *file) {
 //Compile
 void LTAC_Generator::compile_x86_64(std::string bin) {
 	std::string as_ln = "as " + output + ".asm -o " + output + ".o";
-	std::string link_ln = "gcc " + output + ".o -no-pie -o " + bin;
+	std::string link_ln = "gcc " + output + ".o -no-pie -lqkstdlib -o " + bin;
 	
 	system(as_ln.c_str());
 	system(link_ln.c_str());
@@ -110,9 +124,21 @@ std::string LTAC_Generator::build_operand(LtacNode *node) {
 			ln += "]";
 		} break;
 		
+		case LTAC::ArgReg: {
+			std::string reg = call_regs32[call_index];
+			++call_index;
+			
+			ln = reg;
+		} break;
+		
 		case LTAC::Int: {
 			LtacInt *i = static_cast<LtacInt *>(node);
 			ln = std::to_string(i->get_val());
+		} break;
+		
+		case LTAC::Ptr: {
+			LtacPtr *str = static_cast<LtacPtr *>(node);
+			ln = "OFFSET FLAT:" + str->val;
 		} break;
 	}
 	
