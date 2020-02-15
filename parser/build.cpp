@@ -144,7 +144,7 @@ AstNode *build_ast(std::vector<Line> lines, bool fail, bool optimize) {
 	//Optimize
 	if (optimize) {
 		OptimizeEngine *engine = new OptimizeEngine(top);
-		engine->remove_extern();
+		engine->remove_uncalled();
 		
 		delete engine;
 	}
