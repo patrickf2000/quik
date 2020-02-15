@@ -92,7 +92,7 @@ int main(int argc, char *argv[]) {
 	if (use_ltac) {
 		std::string path = std::string(inputs[0]);
 		auto lines = load_source(path.c_str());
-		AstNode *top = build_ast(lines, true, false);
+		AstNode *top = build_ast(lines, true, optimize);
 		
 		LTAC_Builder *builder = new LTAC_Builder("out");
 		builder->assemble(top);
