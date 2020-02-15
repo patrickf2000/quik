@@ -8,7 +8,6 @@
 #include "strutils.hh"
 #include "parse.hh"
 #include "syntax.hh"
-#include "optimize.hh"
 
 //Load the source file and run it through lex
 std::vector<Line> load_source(const char *path) {
@@ -142,9 +141,7 @@ AstNode *build_ast(std::vector<Line> lines, bool fail, bool optimize) {
 	
 	//Optimize
 	if (optimize) {
-		Optimize op(top);
-		op.rm_uncalled_funcs();
-		op.inline_funcs();
+		std::cout << "Warning: Optimization is not currently supported" << std::endl;
 	}
 	
 	return top;

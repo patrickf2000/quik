@@ -14,7 +14,6 @@ set(PARSER_SRC
 	parser/funcs.cpp
 	parser/lex.cpp
 	parser/loop.cpp
-	parser/optimize.cpp
 	parser/parse.cpp
 	parser/strutils.cpp
 	parser/syntax.cpp
