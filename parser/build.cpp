@@ -9,6 +9,8 @@
 #include "parse.hh"
 #include "syntax.hh"
 
+#include "optimization/optimize.hh"
+
 //Load the source file and run it through lex
 std::vector<Line> load_source(const char *path) {
 	std::vector<Line> lines;
@@ -141,7 +143,10 @@ AstNode *build_ast(std::vector<Line> lines, bool fail, bool optimize) {
 	
 	//Optimize
 	if (optimize) {
-		std::cout << "Warning: Optimization is not currently supported" << std::endl;
+		OptimizeEngine *engine = new OptimizeEngine(top);
+		engine->remove_extern();
+		
+		delete engine;
 	}
 	
 	return top;
