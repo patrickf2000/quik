@@ -19,7 +19,7 @@ enum class LTAC {
 	
 	//Data comparison
 	Mov,
-	Cmp,
+	ICmp,
 	
 	//Branching
 	Jmp,
@@ -59,6 +59,17 @@ enum class LTAC {
 	Int,
 	Float,
 	String
+};
+
+//Register types
+enum class RegType {
+	Basic,
+	BasicHalf,	//For chars, bytes, etc
+	Flt,
+	Vec,
+	Arg,
+	StackP,
+	BaseP
 };
 
 //The base node

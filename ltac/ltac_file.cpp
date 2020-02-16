@@ -98,8 +98,8 @@ void write(LtacFile *file) {
 				writer << "\tjmp " << node->val << std::endl;
 			} break;
 			
-			case LTAC::Cmp: {
-				writer << "\tcmp" << std::endl;
+			case LTAC::ICmp: {
+				writer << "\ticmp" << std::endl;
 				writer << std::endl;
 			} break;
 		}

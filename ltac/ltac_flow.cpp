@@ -11,6 +11,6 @@ void LTAC_Builder::build_conditional(AstNode *node) {
 	if (node->type == AstType::Else)
 		return;
 		
-	LtacNode *cmp = new LtacNode(LTAC::Cmp);
+	LtacNode *cmp = new LtacNode(LTAC::ICmp);
 	file->children.push_back(cmp);
 }
