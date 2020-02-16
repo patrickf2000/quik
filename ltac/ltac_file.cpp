@@ -93,6 +93,15 @@ void write(LtacFile *file) {
 				writer << "\tret" << std::endl;
 				writer << std::endl;
 			} break;
+			
+			case LTAC::Jmp: {
+				writer << "\tjmp " << node->val << std::endl;
+			} break;
+			
+			case LTAC::Cmp: {
+				writer << "\tcmp" << std::endl;
+				writer << std::endl;
+			} break;
 		}
 	}
 	

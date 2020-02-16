@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <stack>
 
 #include <ast.hh>
 
@@ -25,6 +26,9 @@ public:
 	void build_var_assign(AstNode *node);
 	void build_var_assign(AstVarDec *va, Var v);
 	
+	//Flow control
+	void build_conditional(AstNode *node);
+	
 	//Returns the pointer to the abstract file
 	LtacFile *get_file() {
 		return file;
@@ -41,4 +45,9 @@ private:
 	
 	//Position control
 	int str_lbl = 0;
+	
+	//Label control stuff
+	int lbl_count = 0;
+	std::stack<std::string> top_labels;
+	std::stack<std::string> labels;
 };
