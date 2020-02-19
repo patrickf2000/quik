@@ -34,6 +34,16 @@ void LTAC_Builder::build_var_assign(AstVarDec *va, Var v) {
 	auto first = va->children.at(0);
 	
 	switch (first->type) {
+		//Boolean values
+		case AstType::Bool: {
+			AstBool *bl = static_cast<AstBool *>(first);
+			int val = 0;
+			if (bl->get_val()) val = 1;
+			
+			LtacInt *li = new LtacInt(val);
+			node->args.push_back(li);
+		} break;
+	
 		//Integer values
 		case AstType::Int: {
 			AstInt *i = static_cast<AstInt *>(first);
