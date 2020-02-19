@@ -180,9 +180,6 @@ std::vector<Token> tokenize(std::string line) {
 			} else if (current == "float256") {
 				t.type = TokenType::FLOAT_256;
 				tokens.push_back(t);
-			} else if (current == "float80") {
-				t.type = TokenType::FLOAT_80;
-				tokens.push_back(t);
 				
 			//Double types
 			} else if (current == "double") {
@@ -439,7 +436,6 @@ TokenType str2type(std::string in) {
 	else if (in == "D_MUL") return TokenType::D_MUL;
 	else if (in == "FLOAT_128") return TokenType::FLOAT_128;
 	else if (in == "FLOAT_256") return TokenType::FLOAT_256;
-	else if (in == "FLOAT_80") return TokenType::FLOAT_80;
 	else if (in == "INT_128") return TokenType::INT_128;
 	else if (in == "INT_256") return TokenType::INT_256;
 	else if (in == "HEX") return TokenType::HEX;

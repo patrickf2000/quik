@@ -29,7 +29,6 @@ DataType ttype2dtype(TokenType t) {
 		case TokenType::INT_256: return DataType::Int256;
 		
 		case TokenType::FLOAT_64: return DataType::Float64;
-		case TokenType::FLOAT_80: return DataType::Float80;
 		case TokenType::FLOAT_128: return DataType::Float128;
 		case TokenType::FLOAT_256: return DataType::Float256;
 	}
@@ -97,7 +96,6 @@ AstNode *QkParser::build_node(Line ln) {
 		case TokenType::INT_128:
 		case TokenType::INT_256:
 		case TokenType::FLOAT_64:
-		case TokenType::FLOAT_80:
 		case TokenType::FLOAT_128:
 		case TokenType::FLOAT_256: {
 			if (tokens.size() > 4) {
