@@ -1,0 +1,50 @@
+# types1.fl
+
+# This annotation tells the compiler we only have one function
+@main
+
+# The basic types
+void x
+
+bool b1 = true
+bool b2 = false
+
+byte x1 = 0
+byte x2 = A
+
+ubyte ux1 = 0
+ubyte ux2 = FA
+
+short sh1 = 0
+ushort ush1 = 0
+
+int i1 = 0
+uint ui1 = 0
+
+long l1 = 0
+ulong l2 = 0
+
+float f1 = 3.14
+double f2 = 3.1400
+
+char c1 = 'A'
+char16 c2 = 'B'
+char32 c3 = 'C'
+
+# Vector types
+int64 iv1 = 1, 2
+int128 iv2 = 1, 2, 3, 4
+int256 iv3 = 1, 2, 3, 4, 5, 6, 7, 8
+
+float64 fv1 = 1.1, 2.2
+float128 fv2 = 1.1, 2.2, 3.3, 4.4
+float256 fv3 = 1.1, 2.2, 3.3, 4.4, 5.5, 6.6, 7.7, 8.8
+
+double128 dv1 = 1.1, 2.2
+double256 dv2 = 1.1, 2.2, 3.3, 4.4
+
+# Special types
+matrix m1 = [1, 2], [3, 4]
+str s = "Hello!"
+
+
