@@ -43,6 +43,11 @@ void LTAC_Builder::build_var_assign(AstVarDec *va, Var v) {
 			LtacInt *li = new LtacInt(val);
 			node->args.push_back(li);
 		} break;
+		
+		//Unsigned byte values
+		case AstType::Hex: {
+			auto *hex = static_cast<AstHex *>(first);
+		} break;
 	
 		//Integer values
 		case AstType::Int: {

@@ -66,6 +66,7 @@ void LTAC_Builder::assemble(AstNode *top) {
 //Increments the stack position based on variable datatype
 int LTAC_Builder::size_of(DataType t) {
 	switch (t) {
+		case DataType::Byte: return 1;
 		case DataType::Bool:
 		case DataType::Int: return 4;
 		
