@@ -97,20 +97,34 @@ enum TokenType {
 
 enum class DataType {
 	None,
-	Byte,
-	Char,
-	Short,
-	Int,
-	Float,
+	Void,
 	Bool,
-	Str,
+	Byte,
+	UByte,
+	Short,
+	UShort,
+	Int,
+	UInt,
+	Long,
+	ULong,
+	Float,
+	Double,
+	Char,
+	Char16,
+	Char32,
+	Int64,
 	Int128,
 	Int256,
+	UInt64,
+	UInt128,
+	UInt256,
+	Float64,
 	Float128,
 	Float256,
-	Float80,
-	Int64,
-	Float64
+	Double128,
+	Double256,
+	Matrix,
+	Str
 };
 
 enum class CondOp {

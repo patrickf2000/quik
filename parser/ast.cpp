@@ -38,7 +38,6 @@ std::string ast2str(AstType type) {
 		case AstType::Float64: return "Float64";
 		case AstType::Float128: return "Float128";
 		case AstType::Float256: return "Float256";
-		case AstType::Float80: return "Float80";
 				
 		case AstType::If: return "If";
 		case AstType::Elif: return "Elif";
@@ -82,7 +81,6 @@ std::string type2str(DataType type) {
 		case DataType::Float64: return "Float64";
 		case DataType::Float128: return "Float128";
 		case DataType::Float256: return "Float256";
-		case DataType::Float80: return "Float80";
 	}
 	
 	return "NONE";
