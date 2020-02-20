@@ -33,9 +33,24 @@ int main(int argc, char *argv[]) {
 	
 	for (int i = 1; i<argc; i++) {
 		std::string arg = std::string(argv[i]);
+		
+		if (arg == "-h") {
+			help();
+		} else if (arg == "-v") {
+			version();
+		} else if (arg[0] == '-') {
+			std::cout << "Error: Unknown command line option." << std::endl;
+			std::cout << std::endl;
+			help();
+		} else {
+			inputs.push_back(arg);
+		}
 	}
 	
-	help();
+	//db
+	for (auto i : inputs) {
+		std::cout << "IN: " << i << std::endl;
+	}
 	
 	return 0;
 }
