@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.0.0)
 project(quik)
 
-include_directories(parser)
+include_directories(parser config)
 
 add_compile_options(-g -std=c++11)
 
