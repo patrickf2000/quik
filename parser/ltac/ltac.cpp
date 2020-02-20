@@ -3,6 +3,30 @@
 
 #include "ltac.hh"
 
+std::string code2str(LtacNode *code_ln) {
+	std::string content = "";
+
+	switch (code_ln->type) {
+		case ltac::Func: {
+			auto fd = static_cast<LtacFunc *>(code_ln);
+			content += "func " + fd->name + "\n";
+		} break;
+		
+		case ltac::Ret: {
+			content += "\tret\n\n";
+		} break;
+		
+		case ltac::Var: {
+			auto var = static_cast<LtacVar *>(code_ln);
+			content = "\tmov [bp+" + std::to_string(var->pos) + "], ";
+			//content += code2str(code_ln->children[0]);
+			content += "\n";
+		} break;
+	}
+	
+	return content;
+}
+
 //Translates an LTAC IR to a string for printing or writing
 std::string ltac2str(LtacFile *file) {
 	std::string content = "";
@@ -15,16 +39,7 @@ std::string ltac2str(LtacFile *file) {
 	
 	//Print the code
 	for (auto code_ln : file->code->children) {
-		switch (code_ln->type) {
-			case ltac::Func: {
-				auto fd = static_cast<LtacFunc *>(code_ln);
-				content += "func " + fd->name + "\n";
-			} break;
-			
-			case ltac::Ret: {
-				content += "\tret\n\n";
-			} break;
-		}
+		content += code2str(code_ln);
 	}
 	
 	return content;

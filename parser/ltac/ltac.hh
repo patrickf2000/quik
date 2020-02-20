@@ -16,7 +16,8 @@ enum class ltac {
 	None,
 	Func,
 	Label,
-	Ret
+	Ret,
+	Var
 };
 
 // This relates to ltac data
@@ -79,6 +80,14 @@ public:
 	}
 	
 	std::string name = "";
+};
+
+//Variable assignment/declaration/operation
+class LtacVar : public LtacNode {
+public:
+	explicit LtacVar() { type = ltac::Var; }
+	int pos = 0;
+	int size = 0;
 };
 
 //Useful functions

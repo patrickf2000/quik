@@ -30,6 +30,9 @@ void LTAC_Builder::assemble(AstNode *top) {
 				auto rnode = new LtacNode(ltac::Ret);
 				file->code->children.push_back(rnode);
 			} break;
+			
+			case AstType::VarDec: build_var_dec(node);
+			case AstType::VarAssign: build_var_assign(node); break;
 		}
 	}
 }
