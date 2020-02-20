@@ -1,0 +1,17 @@
+include io
+
+func do_math(no1:int, no2:int)
+	int add_result = no1 + no2
+	int sub_result = no1 - no2
+	
+	return add_result, sub_result
+end
+
+func main
+	int x = 30
+	int y = 20
+	
+	int a1 = 0
+	int a2 = 0
+	a1, a2 = do_math(x, y)
+end

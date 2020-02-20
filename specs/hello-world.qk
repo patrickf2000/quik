@@ -1,7 +1,5 @@
-#Hello World
-# The ever classic hello world program
 include io
 
-func main()
-	puts("Hello, world!")
+func main
+	println("Hello, world!")
 end
