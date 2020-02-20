@@ -41,7 +41,12 @@ void LTAC_Builder::build_var_assign(AstNode *node) {
 		
 		//Other variables
 		case AstType::Id: {
-		
+			auto id = static_cast<AstID *>(val);
+			auto v2 = vars[id->get_name()];
+			
+			auto l_id = new LtacVar;
+			l_id->pos = v2.stack_pos;
+			var->children.push_back(l_id);
 		} break;
 		
 		//TODO: Add the rest

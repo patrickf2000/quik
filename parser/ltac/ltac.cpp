@@ -3,7 +3,7 @@
 
 #include "ltac.hh"
 
-std::string code2str(LtacNode *code_ln) {
+std::string code2str(LtacNode *code_ln, bool child=false) {
 	std::string content = "";
 
 	switch (code_ln->type) {
@@ -18,9 +18,15 @@ std::string code2str(LtacNode *code_ln) {
 		
 		case ltac::Var: {
 			auto var = static_cast<LtacVar *>(code_ln);
-			content = "\tmov [bp+" + std::to_string(var->pos) + "], ";
-			content += code2str(var->children[0]);
-			content += "\n";
+			std::string v_str = "[bp+" + std::to_string(var->pos) + "]";
+			
+			if (child) {
+				content = v_str;
+			} else {
+				content = "\tmov " + v_str + ", ";
+				content += code2str(var->children[0], true);
+				content += "\n";
+			}
 		} break;
 		
 		case ltac::Int: {
