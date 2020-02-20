@@ -11,6 +11,7 @@ class Compiler {
 public:
 	explicit Compiler(Config c);
 	void set_inputs(std::vector<std::string> inputs);
+	void assemble();
 private:
 	Config config;
 	
