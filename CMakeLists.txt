@@ -19,6 +19,7 @@ set(PARSER_SRC
 	parser/syntax.cpp
 	parser/vars.cpp
 	parser/optimization/funcs.cpp
+	parser/ltac/ltac.cpp
 )
 
 set(COMPILER_SRC
@@ -42,9 +43,11 @@ add_library(qkparser ${PARSER_SRC})
 
 add_executable(lextest parser/test/lex_test.cpp)
 add_executable(qkast parser/test/parser_test.cpp)
+add_executable(qkasm parser/test/ltac_test.cpp)
 add_executable(quikc ${COMPILER_SRC})
 
 target_link_libraries(lextest qkparser)
 target_link_libraries(qkast qkparser)
+target_link_libraries(qkasm qkparser)
 target_link_libraries(quikc qkparser)
 
