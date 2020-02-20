@@ -42,6 +42,7 @@ set(PARSER_SRC
 #)
 
 set(COMPILER_SRC
+	compiler/compiler.cpp
 	compiler/main.cpp
 	compiler/utils.cpp
 )

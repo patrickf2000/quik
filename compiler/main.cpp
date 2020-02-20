@@ -5,7 +5,13 @@
 
 #include <cc_config.hh>
 
+#include <ast.hh>
+#include <build.hh>
+#include <ltac/ltac.hh>
+#include <ltac/ltac_build.hh>
+
 #include "config.hh"
+#include "compiler.hh"
 
 void version();
 void help();
@@ -47,10 +53,23 @@ int main(int argc, char *argv[]) {
 		}
 	}
 	
-	//db
-	for (auto i : inputs) {
-		std::cout << "IN: " << i << std::endl;
-	}
+	//Compile
+	Compiler *compiler = new Compiler(config);
+	compiler->set_inputs(inputs);
+	
+	delete compiler;
+	
+	/*std::string in = inputs[0];
+	
+	auto lines = load_source(in.c_str());
+	AstNode *top = build_ast(lines, false, false);
+	
+	LTAC_Builder *builder = new LTAC_Builder;
+	LtacFile *file = builder->build_file(top);
+	
+	delete top;
+	delete builder;
+	delete file;*/
 	
 	return 0;
 }
