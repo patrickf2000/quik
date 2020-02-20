@@ -14,6 +14,14 @@ std::string ltac2str(LtacFile *file) {
 	content += "\n.code\n";
 	
 	//Print the code
+	for (auto code_ln : file->code->children) {
+		switch (code_ln->type) {
+			case ltac::Func: {
+				auto fd = static_cast<LtacFunc *>(code_ln);
+				content += "func " + fd->name + "\n";
+			} break;
+		}
+	}
 	
 	content += "\n";
 	return content;

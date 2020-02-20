@@ -12,7 +12,7 @@ enum class LtacType {
 };
 
 // This contains the actual instructions
-enum class LtacCode {
+enum class ltac {
 	None,
 	Func,
 	Label
@@ -31,6 +31,7 @@ enum class LtacData {
 class LtacNode {
 public:
 	LtacType node_type;
+	ltac type = ltac::None;		//Because most nodes are code/instruction nodes, we want this
 	std::vector<LtacNode *> children;
 };
 
@@ -62,6 +63,18 @@ public:
 	
 	LtacDataSec *data;
 	LtacCodeSec *code;
+};
+
+//Functions
+class LtacFunc : public LtacNode {
+public:
+	explicit LtacFunc() { type = ltac::Func; }
+	explicit LtacFunc(std::string n) {
+		type = ltac::Func;
+		name = n;
+	}
+	
+	std::string name = "";
 };
 
 //Useful functions
