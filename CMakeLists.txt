@@ -20,6 +20,7 @@ set(PARSER_SRC
 	parser/vars.cpp
 	parser/optimization/funcs.cpp
 	parser/ltac/ltac.cpp
+	parser/ltac/ltac_build.cpp
 )
 
 set(COMPILER_SRC
