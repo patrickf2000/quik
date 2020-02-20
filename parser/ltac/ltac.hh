@@ -15,7 +15,8 @@ enum class LtacType {
 enum class ltac {
 	None,
 	Func,
-	Label
+	Label,
+	Ret
 };
 
 // This relates to ltac data
@@ -30,6 +31,9 @@ enum class LtacData {
 //This is the base class for all nodes
 class LtacNode {
 public:
+	explicit LtacNode() {}
+	explicit LtacNode(ltac t) { type = t; }
+
 	LtacType node_type;
 	ltac type = ltac::None;		//Because most nodes are code/instruction nodes, we want this
 	std::vector<LtacNode *> children;

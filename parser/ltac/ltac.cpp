@@ -20,10 +20,13 @@ std::string ltac2str(LtacFile *file) {
 				auto fd = static_cast<LtacFunc *>(code_ln);
 				content += "func " + fd->name + "\n";
 			} break;
+			
+			case ltac::Ret: {
+				content += "\tret\n\n";
+			} break;
 		}
 	}
 	
-	content += "\n";
 	return content;
 }
 
