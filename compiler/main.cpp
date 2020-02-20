@@ -6,15 +6,15 @@
 #include <ast.hh>
 #include <build.hh>
 
-#include <ltac_build.hh>
-#include <ltac.hh>
+//#include <ltac_build.hh>
+//#include <ltac.hh>
 
 #include "utils.hh"
 #include "types.hh"
 
 #include "armv7/armv7.hh"
 #include "x86/asmx86.hh"
-#include "ltac/ltac_gen.hh"
+//#include "ltac/ltac_gen.hh"
 
 void help() {
 	std::cout << "help" << std::endl;
@@ -90,7 +90,8 @@ int main(int argc, char *argv[]) {
 	
 	//Check to see if we wish to use the experimental ltac layer
 	if (use_ltac) {
-		std::string path = std::string(inputs[0]);
+		std::cout << "Not currently supported." << std::endl;
+		/*std::string path = std::string(inputs[0]);
 		auto lines = load_source(path.c_str());
 		AstNode *top = build_ast(lines, true, optimize);
 		
@@ -104,7 +105,7 @@ int main(int argc, char *argv[]) {
 		
 		delete builder;
 		delete asm_file;
-		delete top;
+		delete top;*/
 	} else {
 		//Iterate through each input and work on each file
 		//Build for ARM
