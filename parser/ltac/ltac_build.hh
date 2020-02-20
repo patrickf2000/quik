@@ -7,4 +7,6 @@ class LTAC_Builder {
 public:
 	LTAC_Builder() {}
 	LtacFile *build_file(AstNode *top);
+protected:
+	void assemble(AstNode *top, LtacFile *file);
 };
