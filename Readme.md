@@ -1,7 +1,9 @@
 ## Quik
 
-### Note
-Check the dev branch for the latest progress; the master branch may not have all the latest commits.
+### Important Note
+I am in the process of a significant backend redesign. Basically, I'm developing a low-level IR between the Quik AST and the assembly code; as a result, the compiler is not fully working. I moved the original code into the backend.old folder.
+
+If you wish to use the last working version, please visit the v0.5 branch.
 
 ### Introduction
 This is the third version of my Quik programming language. Quik is a simple general-purpose systems programming language. Its similar to C in that its basically portable assembler, but its different in that its intended to be somewhat easier to use and understand, which still being able to interface with the underlying system libraries. This project contains the compiler, standard library, and tests. The compiler in turn is split into two parts: the parser library, which loads a source file and generates an AST; and the compiler, which calls the parser and generates Assembly.
