@@ -17,7 +17,9 @@ enum class ltac {
 	Func,
 	Label,
 	Ret,
-	Var
+	Var,
+	
+	Int
 };
 
 // This relates to ltac data
@@ -88,6 +90,18 @@ public:
 	explicit LtacVar() { type = ltac::Var; }
 	int pos = 0;
 	int size = 0;
+};
+
+//Integers
+class LtacInt : public LtacNode {
+public:
+	explicit LtacInt() { type = ltac::Int; }
+	explicit LtacInt(int i) {
+		type = ltac::Int;
+		val = i;
+	}
+	
+	int val = 0;
 };
 
 //Useful functions

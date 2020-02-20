@@ -19,8 +19,13 @@ std::string code2str(LtacNode *code_ln) {
 		case ltac::Var: {
 			auto var = static_cast<LtacVar *>(code_ln);
 			content = "\tmov [bp+" + std::to_string(var->pos) + "], ";
-			//content += code2str(code_ln->children[0]);
+			content += code2str(var->children[0]);
 			content += "\n";
+		} break;
+		
+		case ltac::Int: {
+			auto li = static_cast<LtacInt *>(code_ln);
+			content += std::to_string(li->val);
 		} break;
 	}
 	
