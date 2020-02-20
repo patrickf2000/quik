@@ -43,6 +43,7 @@ set(PARSER_SRC
 
 set(COMPILER_SRC
 	compiler/main.cpp
+	compiler/utils.cpp
 )
 
 add_library(qkparser ${PARSER_SRC})
