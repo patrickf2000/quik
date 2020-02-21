@@ -4,19 +4,13 @@
 @main
 
 # The basic types
-void x
-
 bool b1 = true
 bool b2 = false
 
 byte x1 = 0
 byte x2 = A
 
-ubyte ux1 = 0
-ubyte ux2 = FA
-
 short sh1 = 0
-ushort ush1 = 0
 
 int i1 = 0
 uint ui1 = 0

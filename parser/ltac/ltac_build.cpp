@@ -71,6 +71,7 @@ LtacNode *LTAC_Builder::build_string(AstNode *node) {
 //Increments the stack based on a datatype
 void LTAC_Builder::inc_stack(DataType type) {
 	switch (type) {
+		case DataType::Bool:
 		case DataType::Int: stack_pos += 4; break;
 		case DataType::Str: stack_pos += 8; break;
 		

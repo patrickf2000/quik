@@ -29,6 +29,13 @@ void LTAC_Builder::build_var_assign(AstNode *node) {
 	auto val = va->children[0];
 	
 	switch (val->type) {
+		//Booleans
+		case AstType::Bool: {
+			auto bl = static_cast<AstBool *>(val);
+			auto li = new LtacInt((int)bl->get_val());
+			var->children.push_back(li);
+		} break;
+	
 		//Integers
 		case AstType::Int: {
 			auto i = static_cast<AstInt *>(val);
