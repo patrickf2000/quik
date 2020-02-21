@@ -10,6 +10,8 @@
 #include "compiler.hh"
 #include "utils.hh"
 
+#include "x64/asm_x64.hh"
+
 Compiler::Compiler(Config c) {
 	config = c;
 }
@@ -41,7 +43,11 @@ void Compiler::assemble() {
 		file->name = asm_files[i];
 		
 		switch (config.arch) {
-			case CpuArch::Intel64: break;
+			case CpuArch::Intel64: {
+				Asm_x64 asm_builder(file);
+				asm_builder.write();
+			} break;
+			
 			case CpuArch::Intel32: break;
 			case CpuArch::Arm7: break;
 		}
