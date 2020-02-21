@@ -45,6 +45,8 @@ void LTAC_Builder::build_func(AstNode *node) {
 	auto l_fd = new LtacFunc(fd->get_name());
 	file->code->children.push_back(l_fd);
 	
+	l_fd->is_global = fd->is_global;
+	
 	//TODO: Add arguments
 }
 

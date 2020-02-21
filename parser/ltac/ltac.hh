@@ -86,6 +86,7 @@ public:
 	}
 	
 	std::string name = "";
+	bool is_global = false;
 };
 
 //Function calls

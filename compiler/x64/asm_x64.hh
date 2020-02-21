@@ -9,7 +9,6 @@ class Asm_x64 {
 public:
 	Asm_x64(LtacFile *f);
 	void build_PIC() { pic = true; }
-	void build_lib() { is_lib = true; }
 	void write();
 protected:
 	void build_data(LtacDataSec *data);
@@ -21,6 +20,5 @@ protected:
 private:
 	LtacFile *file;
 	bool pic = false;
-	bool is_lib = false;
 	std::ofstream writer;
 };

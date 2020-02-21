@@ -34,10 +34,13 @@ std::string call_flt_regs[] = {
 void Asm_x64::build_func(LtacNode *node) {
 	auto fd = static_cast<LtacFunc *>(node);
 	
-	if (is_lib) {
+	if (fd->is_global) {
 		writer << ".global " << fd->name << std::endl;
 		writer << ".type " << fd->name << ", @function";
 		writer << std::endl << std::endl;
+	} else if (fd->name == "main") {
+		writer << ".global main" << std::endl;
+		writer << std::endl;
 	}
 	
 	writer << fd->name << ":" << std::endl;

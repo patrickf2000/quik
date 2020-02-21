@@ -46,10 +46,8 @@ void Compiler::assemble() {
 			case CpuArch::Intel64: {
 				Asm_x64 asm_builder(file);
 				
-				if (config.out_type == BuildType::DynLib) {
+				if (config.out_type == BuildType::DynLib)
 					asm_builder.build_PIC();
-					asm_builder.build_lib();
-				}
 				
 				asm_builder.write();
 			} break;
