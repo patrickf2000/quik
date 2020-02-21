@@ -12,6 +12,8 @@ public:
 protected:
 	void build_data(LtacDataSec *data);
 	void build_code(LtacCodeSec *code);
+	
+	void build_func(LtacNode *node);
 private:
 	LtacFile *file;
 	std::ofstream writer;
