@@ -52,6 +52,8 @@ void Asm_x64::build_code(LtacCodeSec *code) {
 				writer << std::endl;
 			} break;
 			
+			case ltac::FuncCall: build_func_call(ln); break;
+			
 			case ltac::Var: build_var(ln); break;
 		}
 	}
