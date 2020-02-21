@@ -125,6 +125,9 @@ void print_tree(AstNode *node, int indent, bool nl) {
 			std::cout << " EXT";
 		}
 		
+		if (fd->is_global)
+			std::cout << " GLOBAL";
+		
 		std::cout << " ["  << fd->get_name() << "] ";
 			
 		if (fd->args.size() > 0) {

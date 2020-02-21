@@ -124,6 +124,9 @@ std::vector<Token> tokenize(std::string line) {
 			} else if (current == "extern") {
 				t.type = TokenType::EXTERN;
 				tokens.push_back(t);
+			} else if (current == "global") {
+				t.type = TokenType::GLOBAL;
+				tokens.push_back(t);
 			} else if (current == "end") {
 				t.type = TokenType::END;
 				tokens.push_back(t);
@@ -442,6 +445,7 @@ TokenType str2type(std::string in) {
 	else if (in == "AND") return TokenType::AND;
 	else if (in == "OR") return TokenType::OR;
 	else if (in == "XOR") return TokenType::XOR;
+	else if (in == "GLOBAL") return TokenType::GLOBAL;
 	
 	else if (in == "T_DOUBLE") return TokenType::T_DOUBLE;
 	else if (in == "DOUBLE_128") return TokenType::DOUBLE_128;

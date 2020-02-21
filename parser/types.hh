@@ -9,6 +9,7 @@ enum TokenType {
 	//Keywords
 	FUNC_DEC,
 	EXTERN,
+	GLOBAL,
 	END,
 	IF,
 	ELIF,

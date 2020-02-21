@@ -121,6 +121,7 @@ public:
 	}
 
 	std::vector<Var> args;
+	bool is_global = false;
 };
 
 //Extern function declarations

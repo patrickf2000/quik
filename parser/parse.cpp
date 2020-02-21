@@ -48,6 +48,7 @@ AstNode *QkParser::build_node(Line ln) {
 	switch (first.type) {
 		//Build a function declaration node
 		case TokenType::EXTERN:
+		case TokenType::GLOBAL:
 		case TokenType::FUNC_DEC: return build_func_dec(ln);
 	
 		//Build an End statement

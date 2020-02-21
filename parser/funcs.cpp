@@ -4,10 +4,14 @@
 AstFuncDec *QkParser::build_func_dec(Line ln) {
 	auto tokens = ln.tokens;
 	bool is_extern = false;
+	bool is_global = false;
 
 	//Perform checks
 	if (tokens.at(0).type == TokenType::EXTERN) {
 		is_extern = true;
+		tokens.erase(tokens.begin());
+	} else if (tokens.at(0).type == TokenType::GLOBAL) {
+		is_global = true;
 		tokens.erase(tokens.begin());
 	}
 	
@@ -21,6 +25,8 @@ AstFuncDec *QkParser::build_func_dec(Line ln) {
 	}
 	
 	AstFuncDec *fd = new AstFuncDec(id.id);
+	fd->is_global = is_global;
+	
 	if (is_extern)
 		fd = new AstExternFunc(id.id);
 
