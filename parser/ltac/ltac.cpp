@@ -67,6 +67,7 @@ std::string ltac2str(LtacFile *file) {
 			//Strings
 			case ltac::String: {
 				auto lstr = static_cast<LtacString *>(code_ln);
+				content += "\t";
 				content += lstr->name + ": string \"" + lstr->val + "\"\n";
 			} break;
 		}
