@@ -52,6 +52,7 @@ int main(int argc, char *argv[]) {
 	Compiler *compiler = new Compiler(config);
 	compiler->set_inputs(inputs);
 	compiler->assemble();
+	compiler->compile();
 	
 	delete compiler;
 	

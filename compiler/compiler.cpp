@@ -57,3 +57,15 @@ void Compiler::assemble() {
 		delete file;
 	}
 }
+
+//Assemble the assembly
+//TODO: Update not to use system calls
+void Compiler::compile() {
+	for (int i = 0; i<asm_files.size(); i++) {
+		std::string cmd = "as " + asm_files[i] + " -o ";
+		cmd += obj_files[i];
+		
+		system(cmd.c_str());
+	}
+}
+
