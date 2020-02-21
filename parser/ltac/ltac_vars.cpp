@@ -29,6 +29,15 @@ void LTAC_Builder::build_var_assign(AstNode *node) {
 	auto val = va->children[0];
 	
 	switch (val->type) {
+		//Bytes
+		case AstType::Hex: {
+			auto ch = static_cast<AstHex *>(val);
+			int c = (int)ch->get_val();
+			
+			auto lc = new LtacByte(c);
+			var->children.push_back(lc);
+		} break;
+	
 		//Chars
 		case AstType::Char: {
 			auto ch = static_cast<AstChar *>(val);
