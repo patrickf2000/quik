@@ -29,6 +29,7 @@ void LTAC_Builder::assemble(AstNode *top) {
 			case AstType::Return: {
 				auto rnode = new LtacNode(ltac::Ret);
 				file->code->children.push_back(rnode);
+				stack_pos = 0;
 			} break;
 			
 			case AstType::FuncCall: build_func_call(node); break;
@@ -47,7 +48,18 @@ void LTAC_Builder::build_func(AstNode *node) {
 	
 	l_fd->is_global = fd->is_global;
 	
-	//TODO: Add arguments
+	//Add the arguments
+	for (auto v : fd->args) {
+		inc_stack(v.type);
+		v.stack_pos = stack_pos;
+		vars[v.name] = v;
+		
+		auto var = new LtacVar;
+		var->pos = stack_pos;
+		var->d_type = v.type;
+		
+		l_fd->children.push_back(var);
+	}
 }
 
 //Builds a function call
@@ -91,6 +103,16 @@ LtacNode *LTAC_Builder::build_string(AstNode *node) {
 
 	file->data->children.push_back(lstr);
 	return lstr;
+}
+
+//Increments the stack based on a datatype
+void LTAC_Builder::inc_stack(DataType type) {
+	switch (type) {
+		case DataType::Int: stack_pos += 4; break;
+		case DataType::Str: stack_pos += 8; break;
+		
+		//TODO: Add the rest
+	}
 }
 
 

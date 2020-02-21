@@ -10,6 +10,14 @@ std::string code2str(LtacNode *code_ln, bool child=false) {
 		case ltac::Func: {
 			auto fd = static_cast<LtacFunc *>(code_ln);
 			content += "func " + fd->name + "\n";
+			
+			for (auto arg : fd->children) {
+				content += "\tldarg " + code2str(arg, true);
+				content += "\n";
+			}
+			
+			if (fd->children.size() > 0)
+				content += "\n";
 		} break;
 		
 		case ltac::Ret: {

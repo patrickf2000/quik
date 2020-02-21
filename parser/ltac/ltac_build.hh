@@ -17,6 +17,7 @@ protected:
 	void build_var_dec(AstNode *node);
 	void build_var_assign(AstNode *node);
 	LtacNode *build_string(AstNode *node);
+	void inc_stack(DataType type);
 	
 	LtacFile *file;
 private:
