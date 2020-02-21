@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 
+#include <ast.hh>
 #include <types.hh>
 
 // This relates to the overall node types
@@ -99,6 +100,7 @@ public:
 	}
 	
 	std::string name = "";
+	std::vector<Var> args;
 };
 
 //Variable assignment/declaration/operation

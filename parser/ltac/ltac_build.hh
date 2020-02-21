@@ -12,10 +12,17 @@ public:
 	LtacFile *build_file(AstNode *top);
 protected:
 	void assemble(AstNode *top);
+	
+	//Function stuff
 	void build_func(AstNode *node);
 	void build_func_call(AstNode *node);
+	void check_overload();
+	
+	//Variable stuff
 	void build_var_dec(AstNode *node);
 	void build_var_assign(AstNode *node);
+	
+	//Utility stuff
 	LtacNode *build_string(AstNode *node);
 	void inc_stack(DataType type);
 	
