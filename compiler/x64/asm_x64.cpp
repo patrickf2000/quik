@@ -28,7 +28,15 @@ void Asm_x64::write() {
 
 //Build the data section
 void Asm_x64::build_data(LtacDataSec *data) {
-
+	for (auto ln : data->children) {
+		switch (ln->type) {
+			case ltac::String: {
+				auto lstr = static_cast<LtacString *>(ln);
+				writer << "\t" << lstr->name << ": .string \"";
+				writer << lstr->val << "\"\n";
+			} break;
+		}
+	}
 }
 
 //Build the code section
@@ -66,6 +74,7 @@ void Asm_x64::build_var(LtacNode *node) {
 	auto src = node->children[0];
 	
 	switch (src->type) {
+		//Integers
 		case ltac::Int: {
 			writer << "\tmov DWORD PTR [rbp-";
 			writer << var->pos << "], ";
@@ -74,6 +83,17 @@ void Asm_x64::build_var(LtacNode *node) {
 			writer << li->val << std::endl;
 		} break;
 		
+		//Strings
+		case ltac::String: {
+			writer << "\tmov QWORD PTR [rbp-";
+			writer << var->pos << "], ";
+			writer << "OFFSET FLAT:";
+			
+			auto lstr = static_cast<LtacString *>(src);
+			writer << lstr->name << std::endl;
+		} break;
+		
+		//Variables
 		case ltac::Var: {
 			auto var2 = static_cast<LtacVar *>(src);
 			writer << std::endl;
