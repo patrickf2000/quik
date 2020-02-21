@@ -69,3 +69,24 @@ void Compiler::compile() {
 	}
 }
 
+//Link the object files
+//TODO: Do not use the system() function
+void Compiler::link() {
+	std::string ld_line = "ld ";
+
+	ld_line += "/usr/lib/x86_64-linux-gnu/crti.o ";
+	ld_line += "/usr/lib/x86_64-linux-gnu/crtn.o ";
+	ld_line += "/usr/lib/x86_64-linux-gnu/crt1.o -lc ";
+	ld_line += "-lqkstdlib ";
+
+	for (auto obj : obj_files) {
+		ld_line += obj + " ";
+	}
+	
+	ld_line += "-dynamic-linker /lib64/ld-linux-x86-64.so.2 ";
+	ld_line += "-o " + config.output;
+	
+	system(ld_line.c_str());
+}
+
+

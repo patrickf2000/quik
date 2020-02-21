@@ -13,6 +13,7 @@ public:
 	void set_inputs(std::vector<std::string> inputs);
 	void assemble();
 	void compile();
+	void link();
 private:
 	Config config;
 	

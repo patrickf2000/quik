@@ -53,6 +53,7 @@ int main(int argc, char *argv[]) {
 	compiler->set_inputs(inputs);
 	compiler->assemble();
 	compiler->compile();
+	compiler->link();
 	
 	delete compiler;
 	
