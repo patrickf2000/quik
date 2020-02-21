@@ -38,10 +38,13 @@ void Asm_x64::build_code(LtacCodeSec *code) {
 			case ltac::Func: build_func(ln); break;
 			
 			case ltac::Ret: {
+				writer << std::endl;
 				writer << "\tleave" << std::endl;
 				writer << "\tret" << std::endl;
 				writer << std::endl;
 			} break;
+			
+			case ltac::Var: build_var(ln); break;
 		}
 	}
 }
@@ -56,3 +59,30 @@ void Asm_x64::build_func(LtacNode *node) {
 	writer << "\tmov rbp, rsp" << std::endl;
 	writer << std::endl;
 }
+
+//Build a variable declaration
+void Asm_x64::build_var(LtacNode *node) {
+	auto var = static_cast<LtacVar *>(node);
+	auto src = node->children[0];
+	
+	switch (src->type) {
+		case ltac::Int: {
+			writer << "\tmov DWORD PTR [rbp-";
+			writer << var->pos << "], ";
+			
+			auto li = static_cast<LtacInt *>(src);
+			writer << li->val << std::endl;
+		} break;
+		
+		case ltac::Var: {
+			auto var2 = static_cast<LtacVar *>(src);
+			writer << std::endl;
+			writer << "\tmov eax, [rbp-" << var2->pos;
+			writer << "]" << std::endl;
+			
+			writer << "\tmov DWORD PTR [rbp-";
+			writer << var->pos << "], eax" << std::endl;
+		} break;
+	}
+}
+

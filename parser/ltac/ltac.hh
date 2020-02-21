@@ -3,6 +3,8 @@
 #include <vector>
 #include <string>
 
+#include <types.hh>
+
 // This relates to the overall node types
 enum class LtacType {
 	None,
@@ -90,6 +92,7 @@ public:
 	explicit LtacVar() { type = ltac::Var; }
 	int pos = 0;
 	int size = 0;
+	DataType d_type;
 };
 
 //Integers

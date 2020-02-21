@@ -27,6 +27,7 @@ void LTAC_Builder::build_var_assign(AstNode *node) {
 	
 	auto var = new LtacVar;
 	var->pos = v.stack_pos;
+	var->d_type = v.type;
 	
 	//Build the assigned value
 	auto val = va->children[0];
