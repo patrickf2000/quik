@@ -16,6 +16,18 @@ std::string code2str(LtacNode *code_ln, bool child=false) {
 			content += "\tret\n\n";
 		} break;
 		
+		case ltac::FuncCall: {
+			auto fc = static_cast<LtacFuncCall *>(code_ln);
+			content += "\tcall " + fc->name + " (";
+			
+			for (auto arg : fc->children) {
+				content += code2str(arg);
+				content += ",";
+			}
+			
+			content += ")\n\n";
+		} break;
+		
 		case ltac::Var: {
 			auto var = static_cast<LtacVar *>(code_ln);
 			std::string v_str = "[bp+" + std::to_string(var->pos) + "]";
@@ -33,6 +45,11 @@ std::string code2str(LtacNode *code_ln, bool child=false) {
 			auto li = static_cast<LtacInt *>(code_ln);
 			content += std::to_string(li->val);
 		} break;
+		
+		case ltac::String: {
+			auto lstr = static_cast<LtacString *>(code_ln);
+			content += lstr->name;
+		} break;
 	}
 	
 	return content;
@@ -45,6 +62,15 @@ std::string ltac2str(LtacFile *file) {
 	content += ".data\n";
 	
 	//Print the data
+	for (auto code_ln : file->data->children) {
+		switch (code_ln->type) {
+			//Strings
+			case ltac::String: {
+				auto lstr = static_cast<LtacString *>(code_ln);
+				content += lstr->name + ": string \"" + lstr->val + "\"\n";
+			} break;
+		}
+	}
 	
 	content += "\n.code\n";
 	

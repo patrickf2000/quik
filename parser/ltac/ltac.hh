@@ -17,11 +17,13 @@ enum class LtacType {
 enum class ltac {
 	None,
 	Func,
+	FuncCall,
 	Label,
 	Ret,
 	Var,
 	
-	Int
+	Int,
+	String
 };
 
 // This relates to ltac data
@@ -86,6 +88,18 @@ public:
 	std::string name = "";
 };
 
+//Function calls
+class LtacFuncCall : public LtacNode {
+public:
+	explicit LtacFuncCall() { type = ltac::FuncCall; }
+	explicit LtacFuncCall(std::string n) {
+		type = ltac::FuncCall;
+		name = n;
+	}
+	
+	std::string name = "";
+};
+
 //Variable assignment/declaration/operation
 class LtacVar : public LtacNode {
 public:
@@ -105,6 +119,20 @@ public:
 	}
 	
 	int val = 0;
+};
+
+//Strings
+class LtacString : public LtacNode {
+public:
+	explicit LtacString() { type = ltac::String; }
+	explicit LtacString(std::string n, std::string v) {
+		type = ltac::String;
+		name = n;
+		val = v;
+	}
+	
+	std::string name = "";
+	std::string val = "";
 };
 
 //Useful functions
