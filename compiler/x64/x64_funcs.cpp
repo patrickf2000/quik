@@ -48,6 +48,7 @@ void Asm_x64::build_func(LtacNode *node) {
 	//Setup the stack
 	writer << "\tpush rbp" << std::endl;
 	writer << "\tmov rbp, rsp" << std::endl;
+	writer << "\tsub rsp, 16" << std::endl;		//TODO: Determine me by math
 	writer << std::endl;
 	
 	//Retrieve the arguments
@@ -117,6 +118,7 @@ void Asm_x64::build_func_call(LtacNode *node) {
 			case ltac::Var: {
 				auto var = static_cast<LtacVar *>(arg);
 				
+				std::string instr = "mov";
 				std::string prefix = "DWORD PTR";
 				std::string reg = call_regs32[call_index];
 				
@@ -125,12 +127,13 @@ void Asm_x64::build_func_call(LtacNode *node) {
 					reg = call_regs[call_index];
 				}
 				
-				writer << "\tmov " << reg << ", ";
-				writer << prefix << " ";
-				
 				if (pic) {
-					writer << "-" << var->pos << "[rbp]";
+					writer << "\tmov " << reg << ", ";
+					writer << prefix << " -" << var->pos;
+					writer << "[rbp]";
 				} else {
+					writer << "\tmov " << reg << ", ";
+					writer << prefix << " ";
 					writer << "[rbp-" << var->pos << "]";
 				}
 				

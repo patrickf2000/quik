@@ -1,0 +1,18 @@
+extern func puts(s:str)
+extern func printf(s:str, i:int)
+
+# Our generic test function
+global func test1()
+	puts("Test 1- Success!")
+end
+
+# Test passing an integer
+global func test2(no:int)
+	printf("Success: %d\n", no)
+end
+
+# Test passing a string
+global func test3(s:str)
+	puts("Success: Your string:")
+	puts(s)
+end
