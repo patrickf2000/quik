@@ -49,6 +49,35 @@ void Asm_x64::build_func(LtacNode *node) {
 	writer << "\tpush rbp" << std::endl;
 	writer << "\tmov rbp, rsp" << std::endl;
 	writer << std::endl;
+	
+	//Retrieve the arguments
+	int call_index = 0;
+	int call_index_flt = 0;
+	
+	for (auto a : fd->children) {
+		auto arg = static_cast<LtacVar *>(a);
+		
+		switch (arg->d_type) {
+			//Integers
+			case DataType::Int: {
+				writer << "\tmov DWORD PTR [rbp-";
+				writer << arg->pos << "], " << call_regs32[call_index];
+				writer << std::endl;
+			} break;
+			
+			//Strings
+			case DataType::Str: {
+				writer << "\tmov QWORD PTR [rbp-";
+				writer << arg->pos << "], "  << call_regs[call_index];
+				writer << std::endl;
+			} break;
+		}
+		
+		++call_index;
+	}
+	
+	if (fd->children.size() > 0)
+		writer << std::endl;
 }
 
 //Build a function call
