@@ -17,7 +17,8 @@ void Asm_x64::write() {
 	
 	writer << std::endl;
 	writer << ".text" << std::endl;
-	writer << ".global main" << std::endl;
+	if (!is_lib)
+		writer << ".global main" << std::endl;
 	writer << std::endl;
 	
 	build_code(file->code);

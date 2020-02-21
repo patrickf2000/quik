@@ -33,6 +33,13 @@ std::string call_flt_regs[] = {
 //Build a function declaration
 void Asm_x64::build_func(LtacNode *node) {
 	auto fd = static_cast<LtacFunc *>(node);
+	
+	if (is_lib) {
+		writer << ".global " << fd->name << std::endl;
+		writer << ".type " << fd->name << ", @function";
+		writer << std::endl << std::endl;
+	}
+	
 	writer << fd->name << ":" << std::endl;
 	
 	//Setup the stack
@@ -57,8 +64,13 @@ void Asm_x64::build_func_call(LtacNode *node) {
 				auto reg = call_regs[call_index];
 				++call_index;
 				
-				writer << "\tmov " << reg << ", ";
-				writer << "OFFSET FLAT:" << lstr->name << std::endl;
+				if (pic) {
+					writer << "\tlea " << reg << ", ";
+					writer << lstr->name << "[rip]" << std::endl;
+				} else {
+					writer << "\tmov " << reg << ", ";
+					writer << "OFFSET FLAT:" << lstr->name << std::endl;
+				}
 			} break;
 			
 			//TODO: Add the rest
@@ -66,6 +78,8 @@ void Asm_x64::build_func_call(LtacNode *node) {
 	}
 	
 	//Call the function
-	writer << "\tcall " << fc->name << std::endl;
-	writer << std::endl;
+	writer << "\tcall " << fc->name;
+	if (pic)
+		writer << "@PLT";
+	writer << std::endl << std::endl;
 }
