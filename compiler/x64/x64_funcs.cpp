@@ -60,16 +60,24 @@ void Asm_x64::build_func(LtacNode *node) {
 		switch (arg->d_type) {
 			//Integers
 			case DataType::Int: {
-				writer << "\tmov DWORD PTR [rbp-";
-				writer << arg->pos << "], " << call_regs32[call_index];
-				writer << std::endl;
+				writer << "\tmov DWORD PTR ";
+				if (pic) {
+					writer << "-" << arg->pos << "[rbp], ";
+				} else {
+					writer <<"[rbp-" << arg->pos << "], ";
+				}
+				writer << call_regs32[call_index] << std::endl;
 			} break;
 			
 			//Strings
 			case DataType::Str: {
-				writer << "\tmov QWORD PTR [rbp-";
-				writer << arg->pos << "], "  << call_regs[call_index];
-				writer << std::endl;
+				writer << "\tmov QWORD PTR ";
+				if (pic) {
+					writer << "-" << arg->pos << "[rbp], ";
+				} else {
+					writer <<"[rbp-" << arg->pos << "], ";
+				}
+				writer << call_regs[call_index] << std::endl;
 			} break;
 		}
 		
