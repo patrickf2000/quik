@@ -71,11 +71,20 @@ void LTAC_Builder::build_func_call(AstNode *node) {
 	//Build the arguments
 	for (auto arg : fc->children) {
 		switch (arg->type) {
+			//Push an integer
+			case AstType::Int: {
+				auto i = static_cast<AstInt *>(arg);
+				auto li = new LtacInt(i->get_val());
+				l_fc->children.push_back(li);
+			} break;
+		
+			//Push a string
 			case AstType::Str: {
 				auto lstr = build_string(arg);
 				l_fc->children.push_back(lstr);
 			} break;
 			
+			//Push another variable
 			case AstType::Id: {
 				auto id = static_cast<AstID *>(arg);
 				auto v = vars[id->get_name()];
