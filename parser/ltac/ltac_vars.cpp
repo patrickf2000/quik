@@ -12,6 +12,7 @@ void LTAC_Builder::build_var_dec(AstNode *node) {
 	
 	switch (v.type) {
 		case DataType::Int: stack_pos += 4; break;
+		case DataType::Str: stack_pos += 8; break;
 		
 		//TODO: Add the rest
 	}

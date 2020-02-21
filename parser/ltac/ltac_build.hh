@@ -16,6 +16,7 @@ protected:
 	void build_func_call(AstNode *node);
 	void build_var_dec(AstNode *node);
 	void build_var_assign(AstNode *node);
+	LtacNode *build_string(AstNode *node);
 	
 	LtacFile *file;
 private:

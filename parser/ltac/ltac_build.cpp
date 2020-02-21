@@ -58,21 +58,28 @@ void LTAC_Builder::build_func_call(AstNode *node) {
 	for (auto arg : fc->children) {
 		switch (arg->type) {
 			case AstType::Str: {
-				auto str = static_cast<AstString *>(arg);
-				auto lstr = new LtacString;
-				
-				std::string name = "STR_" + std::to_string(str_count);
-				++str_count;
-				
-				lstr->name = name;
-				lstr->val = str->get_val();
-				
+				auto lstr = build_string(arg);
 				l_fc->children.push_back(lstr);
-				file->data->children.push_back(lstr);
 			} break;
 			
 			//TODO: Add the rest
 		}
 	}
 }
+
+//Builds a string variable (utility function)
+LtacNode *LTAC_Builder::build_string(AstNode *node) {
+	auto str = static_cast<AstString *>(node);
+	auto lstr = new LtacString;
+
+	std::string name = "STR_" + std::to_string(str_count);
+	++str_count;
+
+	lstr->name = name;
+	lstr->val = str->get_val();
+
+	file->data->children.push_back(lstr);
+	return lstr;
+}
+
 
