@@ -99,6 +99,16 @@ void Asm_x64::build_func_call(LtacNode *node) {
 	
 	for (auto arg : fc->children) {
 		switch (arg->type) {
+			//Raw integer arguments
+			case ltac::Int: {
+				auto li = static_cast<LtacInt *>(arg);
+				
+				writer << "\tmov " << call_regs32[call_index];
+				writer << ", " << li->val << std::endl;
+				
+				++call_index;
+			} break;
+		
 			//Raw string arguments
 			case ltac::String: {
 				auto lstr = static_cast<LtacString *>(arg);
