@@ -16,19 +16,22 @@ if [[ $1 == "armv7" ]] ; then
 	
 # Build for Intel
 else
+	./quikc ../stdlib/test.qk --shared
+	mv libout.so libqkstdlib.so
+
 	#Build 32-bit
-	./quikc ../stdlib/test.qk -c --lib -m i386
-
-	gcc -m32 -c ../stdlib/stdio.c
-	gcc -m32 -c ../stdlib/test.c -o test2.o
-
-	gcc -shared -m32 test.o test2.o stdio.o -o libqkstdlib32.so
+	#./quikc ../stdlib/test.qk -c --lib -m i386
+	#
+	#gcc -m32 -c ../stdlib/stdio.c
+	#gcc -m32 -c ../stdlib/test.c -o test2.o
+	#
+	#gcc -shared -m32 test.o test2.o stdio.o -o libqkstdlib32.so
 
 	#Build 64-bit
-	gcc -fPIC -c ../stdlib/stdio.c
-	gcc -fPIC -c ../stdlib/test.c -o test2.o
-
-	gcc -shared test2.o stdio.o -o libqkstdlib.so
+	#gcc -fPIC -c ../stdlib/stdio.c
+	#gcc -fPIC -c ../stdlib/test.c -o test2.o
+	#
+	#gcc -shared test2.o stdio.o -o libqkstdlib.so
 fi
 
 cd ..
