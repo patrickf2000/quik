@@ -29,7 +29,7 @@ std::string code2str(LtacNode *code_ln, bool child=false) {
 			content += "\tcall " + fc->name + " (";
 			
 			for (auto arg : fc->children) {
-				content += code2str(arg);
+				content += code2str(arg, true);
 				content += ",";
 			}
 			

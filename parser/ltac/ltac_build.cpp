@@ -76,6 +76,16 @@ void LTAC_Builder::build_func_call(AstNode *node) {
 				l_fc->children.push_back(lstr);
 			} break;
 			
+			case AstType::Id: {
+				auto id = static_cast<AstID *>(arg);
+				auto v = vars[id->get_name()];
+				
+				auto var = new LtacVar;
+				var->pos = v.stack_pos;
+				var->d_type = v.type;
+				l_fc->children.push_back(var);
+			} break;
+			
 			//TODO: Add the rest
 		}
 	}
