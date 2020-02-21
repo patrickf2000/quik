@@ -57,17 +57,6 @@ void Asm_x64::build_code(LtacCodeSec *code) {
 	}
 }
 
-//Build a function declaration
-void Asm_x64::build_func(LtacNode *node) {
-	auto fd = static_cast<LtacFunc *>(node);
-	writer << fd->name << ":" << std::endl;
-	
-	//Setup the stack
-	writer << "\tpush rbp" << std::endl;
-	writer << "\tmov rbp, rsp" << std::endl;
-	writer << std::endl;
-}
-
 //Build a variable declaration
 void Asm_x64::build_var(LtacNode *node) {
 	auto var = static_cast<LtacVar *>(node);
