@@ -5,3 +5,7 @@ extern func fflush(i:int)
 
 extern func input_int()
 extern func print_int(i:int)
+
+extern func println(s:str)
+extern func println(s:str, i:int)
+extern func println(s:str, s2:str)

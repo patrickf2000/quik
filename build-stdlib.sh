@@ -16,7 +16,7 @@ if [[ $1 == "armv7" ]] ; then
 	
 # Build for Intel
 else
-	./quikc ../stdlib/test.qk --shared
+	./quikc ../stdlib/io.qk --shared
 	mv libout.so libqkstdlib.so
 
 	#Build 32-bit

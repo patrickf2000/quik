@@ -1,0 +1,17 @@
+include io
+
+global func println(s:str)
+	puts(s)
+end
+
+global func println(s:str, i:int)
+	printf(s)
+	printf("%d\n", i)
+	fflush(0)
+end
+
+global func println(s:str, s2:str)
+	printf(s)
+	printf(s2)
+	puts("")
+end
