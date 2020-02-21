@@ -14,7 +14,7 @@ protected:
 	void assemble(AstNode *top);
 	
 	//Function stuff
-	void build_func(AstNode *node);
+	void build_func(AstNode *node, bool is_extern=false);
 	void build_func_call(AstNode *node);
 	void check_overload();
 	

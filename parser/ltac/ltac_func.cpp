@@ -6,7 +6,7 @@
 std::map<std::string, bool> funcs;
 
 //Builds a function
-void LTAC_Builder::build_func(AstNode *node) {
+void LTAC_Builder::build_func(AstNode *node, bool is_extern) {
 	auto fd = static_cast<AstFuncDec *>(node);
 	
 	//Check for overloading
@@ -35,8 +35,13 @@ void LTAC_Builder::build_func(AstNode *node) {
 	//Start building
 	auto l_fd = new LtacFunc(fn_name);
 	file->code->children.push_back(l_fd);
-	
 	l_fd->is_global = fd->is_global;
+	
+	//If its extern, build that
+	if (is_extern) {
+		l_fd->is_extern = true;
+		return;
+	}
 	
 	//Add the arguments
 	for (auto v : fd->args) {

@@ -9,6 +9,8 @@ std::string code2str(LtacNode *code_ln, bool child=false) {
 	switch (code_ln->type) {
 		case ltac::Func: {
 			auto fd = static_cast<LtacFunc *>(code_ln);
+			if (fd->is_extern)
+				content += "extern ";
 			content += "func " + fd->name + "\n";
 			
 			for (auto arg : fd->children) {

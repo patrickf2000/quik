@@ -34,6 +34,8 @@ std::string call_flt_regs[] = {
 void Asm_x64::build_func(LtacNode *node) {
 	auto fd = static_cast<LtacFunc *>(node);
 	
+	if (fd->is_extern) return;
+	
 	if (fd->is_global) {
 		writer << ".global " << fd->name << std::endl;
 		writer << ".type " << fd->name << ", @function";

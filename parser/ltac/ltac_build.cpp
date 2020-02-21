@@ -23,6 +23,8 @@ void LTAC_Builder::assemble(AstNode *top) {
 		switch (node->type) {
 			case AstType::Scope: assemble(node); break;
 			
+			case AstType::ExternFunc: build_func(node, true); break;
+			
 			case AstType::FuncDec: {
 				build_func(node);
 				assemble(node);
