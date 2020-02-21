@@ -30,12 +30,16 @@ int main(int argc, char *argv[]) {
 	
 	config.arch = CpuArch::Intel64;			// -m <x86_64, i386, armv7>
 	config.asm_type = Asm::Gas;					// -a <gas, nasm>
-	config.out_type = BuildType::Exe;		// -t <exe, slib, dlib>
+	config.out_type = BuildType::Exe;		// (nothing for executable)
+											// --static (for static library)
+											// --shared (for shared library)
 	
 	for (int i = 1; i<argc; i++) {
 		std::string arg = std::string(argv[i]);
 		
-		if (arg == "-h") {
+		if (arg == "--shared") {
+			config.out_type = BuildType::DynLib;
+		} else if (arg == "-h") {
 			help();
 		} else if (arg == "-v") {
 			version();

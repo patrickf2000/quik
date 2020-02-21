@@ -74,17 +74,29 @@ void Compiler::compile() {
 void Compiler::link() {
 	std::string ld_line = "ld ";
 
-	ld_line += "/usr/lib/x86_64-linux-gnu/crti.o ";
-	ld_line += "/usr/lib/x86_64-linux-gnu/crtn.o ";
-	ld_line += "/usr/lib/x86_64-linux-gnu/crt1.o -lc ";
-	ld_line += "-lqkstdlib ";
+	//Link an executable
+	if (config.out_type == BuildType::Exe) {
+		ld_line += "/usr/lib/x86_64-linux-gnu/crti.o ";
+		ld_line += "/usr/lib/x86_64-linux-gnu/crtn.o ";
+		ld_line += "/usr/lib/x86_64-linux-gnu/crt1.o -lc ";
+		ld_line += "-lqkstdlib ";
 
-	for (auto obj : obj_files) {
-		ld_line += obj + " ";
+		for (auto obj : obj_files) {
+			ld_line += obj + " ";
+		}
+		
+		ld_line += "-dynamic-linker /lib64/ld-linux-x86-64.so.2 ";
+		ld_line += "-o " + config.output;
+		
+	//Link a dynamic library
+	} else if (config.out_type == BuildType::DynLib) {
+		for (auto obj : obj_files) {
+			ld_line += obj + " ";
+		}
+		
+		ld_line += "-o lib" + config.output + ".so ";
+		ld_line += "-shared -lc";
 	}
-	
-	ld_line += "-dynamic-linker /lib64/ld-linux-x86-64.so.2 ";
-	ld_line += "-o " + config.output;
 	
 	system(ld_line.c_str());
 }
