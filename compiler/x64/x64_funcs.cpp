@@ -113,6 +113,31 @@ void Asm_x64::build_func_call(LtacNode *node) {
 				}
 			} break;
 			
+			//Other variables
+			case ltac::Var: {
+				auto var = static_cast<LtacVar *>(arg);
+				
+				std::string prefix = "DWORD PTR";
+				std::string reg = call_regs32[call_index];
+				
+				if (var->d_type == DataType::Str) {
+					prefix = "QWORD PTR";
+					reg = call_regs[call_index];
+				}
+				
+				writer << "\tmov " << reg << ", ";
+				writer << prefix << " ";
+				
+				if (pic) {
+					writer << "-" << var->pos << "[rbp]";
+				} else {
+					writer << "[rbp-" << var->pos << "]";
+				}
+				
+				writer << std::endl;
+				++call_index;
+			} break;
+			
 			//TODO: Add the rest
 		}
 	}
