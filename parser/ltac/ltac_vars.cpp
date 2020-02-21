@@ -41,6 +41,12 @@ void LTAC_Builder::build_var_assign(AstNode *node) {
 			var->children.push_back(li);
 		} break;
 		
+		//Strings
+		case AstType::Str: {
+			auto lstr = build_string(val);
+			var->children.push_back(lstr);
+		} break;
+		
 		//Other variables
 		case AstType::Id: {
 			auto id = static_cast<AstID *>(val);
