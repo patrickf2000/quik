@@ -51,7 +51,7 @@ std::string code2str(LtacNode *code_ln, bool child=false) {
 			}
 		} break;
 		
-		case ltac::Char:
+		case ltac::Byte:
 		case ltac::Int: {
 			auto li = static_cast<LtacInt *>(code_ln);
 			content += std::to_string(li->val);

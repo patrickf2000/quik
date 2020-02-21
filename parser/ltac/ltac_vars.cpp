@@ -34,7 +34,7 @@ void LTAC_Builder::build_var_assign(AstNode *node) {
 			auto ch = static_cast<AstChar *>(val);
 			int c = (int)ch->get_val();
 			
-			auto lc = new LtacChar(c);
+			auto lc = new LtacByte(c);
 			var->children.push_back(lc);
 		} break;
 	

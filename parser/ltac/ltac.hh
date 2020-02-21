@@ -24,7 +24,7 @@ enum class ltac {
 	Var,
 	
 	Int,
-	Char,
+	Byte,
 	String
 };
 
@@ -129,11 +129,11 @@ public:
 //Characters
 // The characters are encoded as ints, but they are
 //accessed and stored a little differently, hence separate class
-class LtacChar : public LtacInt {
+class LtacByte : public LtacInt {
 public:
-	explicit LtacChar() { type = ltac::Char; }
-	explicit LtacChar(int i) {
-		type = ltac::Char;
+	explicit LtacByte() { type = ltac::Byte; }
+	explicit LtacByte(int i) {
+		type = ltac::Byte;
 		val = i;
 	}
 };
