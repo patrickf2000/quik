@@ -24,6 +24,7 @@ private:
 	int stack_pos = 0;
 	std::map<std::string, Var> vars;
 	
-	//Other stuff
+	//String stuff
 	int str_count = 0;
+	std::map<std::string, std::string> dec_strings;
 };

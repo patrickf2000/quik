@@ -71,12 +71,21 @@ void LTAC_Builder::build_func_call(AstNode *node) {
 LtacNode *LTAC_Builder::build_string(AstNode *node) {
 	auto str = static_cast<AstString *>(node);
 	auto lstr = new LtacString;
+	std::string val = str->get_val();
+
+	if (dec_strings.find(val) != dec_strings.end()) {
+		lstr->name = dec_strings[val];
+		lstr->val = val;
+		return lstr;
+	}
 
 	std::string name = "STR_" + std::to_string(str_count);
 	++str_count;
 
 	lstr->name = name;
 	lstr->val = str->get_val();
+	
+	dec_strings[lstr->val] = lstr->name;
 
 	file->data->children.push_back(lstr);
 	return lstr;
