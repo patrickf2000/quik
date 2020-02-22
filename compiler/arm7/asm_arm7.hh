@@ -1,5 +1,8 @@
 #pragma once
 
+#include <vector>
+#include <string>
+
 #include <base/asm_base.hh>
 #include <ltac/ltac.hh>
 
@@ -11,4 +14,7 @@ public:
 	void build_code(LtacCodeSec *code);
 	
 	void build_func(LtacNode *node);
+	void build_ret(LtacNode *node);
+private:
+	std::vector<std::string> str_labels;
 };
