@@ -3,11 +3,12 @@
 #include <string>
 #include <fstream>
 
+#include <base/asm_base.hh>
 #include <ltac/ltac.hh>
 
-class Asm_x64 {
+class Asm_x64 : public AsmGen {
 public:
-	Asm_x64(LtacFile *f);
+	Asm_x64(LtacFile *f) : AsmGen(f) {}
 	void build_PIC() { pic = true; }
 	void write();
 protected:
@@ -18,7 +19,7 @@ protected:
 	void build_func_call(LtacNode *node);
 	void build_var(LtacNode *node);
 private:
-	LtacFile *file;
+	//LtacFile *file;
 	bool pic = false;
-	std::ofstream writer;
+	//std::ofstream writer;
 };

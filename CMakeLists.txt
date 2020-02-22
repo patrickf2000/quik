@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.0.0)
 project(quik)
 
-include_directories(parser config)
+include_directories(parser config compiler)
 
 add_compile_options(-g -std=c++11)
 
@@ -43,6 +43,7 @@ set(PARSER_SRC
 #)
 
 set(COMPILER_SRC
+	compiler/base/asm_base.cpp
 	compiler/x64/asm_x64.cpp
 	compiler/x64/x64_funcs.cpp
 	compiler/compiler.cpp

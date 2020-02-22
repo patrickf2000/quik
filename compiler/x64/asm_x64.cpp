@@ -3,10 +3,10 @@
 #include "asm_x64.hh"
 
 //The constructor where we set everything up
-Asm_x64::Asm_x64(LtacFile *f) {
+/*Asm_x64::Asm_x64(LtacFile *f) {
 	file = f;
 	writer = std::ofstream(file->name);
-}
+}*/
 
 //Write out the assembly code
 void Asm_x64::write() {
