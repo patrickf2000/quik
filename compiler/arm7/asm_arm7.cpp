@@ -50,6 +50,12 @@ void Asm_Arm7::build_var(LtacNode *node) {
 			writer << std::endl;			
 		} break;
 		
+		//Strings
+		case ltac::String: {
+			auto lstr = static_cast<LtacString *>(val);
+			writer << "\tldr r4, " << lstr->name << std::endl;
+		} break;
+		
 		//TODO: Add the rest
 	}
 	
