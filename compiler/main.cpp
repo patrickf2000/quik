@@ -37,7 +37,12 @@ int main(int argc, char *argv[]) {
 	for (int i = 1; i<argc; i++) {
 		std::string arg = std::string(argv[i]);
 		
-		if (arg == "--shared") {
+		if (arg == "-o") {
+			config.output = std::string(argv[i+1]);
+			++i;
+		} else if (arg == "-m") {
+			//TODO
+		} else if (arg == "--shared") {
 			config.out_type = BuildType::DynLib;
 		} else if (arg == "-h") {
 			help();
