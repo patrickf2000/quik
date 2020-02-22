@@ -25,23 +25,6 @@ set(PARSER_SRC
 	parser/ltac/ltac_vars.cpp
 )
 
-#set(COMPILER_SRC
-#	compiler/main.cpp
-#	compiler/utils.cpp
-#	compiler/armv7/armv7.cpp
-#	compiler/armv7/armv7_flow.cpp
-#	compiler/armv7/armv7_funcs.cpp
-#	compiler/armv7/armv7_utils.cpp
-#	compiler/armv7/armv7_vars.cpp
-#	compiler/x86/asmx86.cpp
-#	compiler/x86/x86_array.cpp
-#	compiler/x86/x86_flow.cpp
-#	compiler/x86/x86_funcs.cpp
-#	compiler/x86/x86_struct.cpp
-#	compiler/x86/x86_utils.cpp
-#	compiler/x86/x86_vars.cpp
-#)
-
 set(COMPILER_SRC
 	compiler/arm7/arm7_funcs.cpp
 	compiler/arm7/asm_arm7.cpp
