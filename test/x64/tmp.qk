@@ -1,0 +1,9 @@
+include io
+
+func main
+	println("Hello!")
+end
+
+#TEST
+#Hello!
+

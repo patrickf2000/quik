@@ -41,7 +41,19 @@ int main(int argc, char *argv[]) {
 			config.output = std::string(argv[i+1]);
 			++i;
 		} else if (arg == "-m") {
-			//TODO
+			auto arch = std::string(argv[i+1]);
+			++i;
+			
+			if (arch == "x86_64") {
+				config.arch = CpuArch::Intel64;
+			} else if (arch == "i386") {
+				config.arch = CpuArch::Intel32;
+			} else if (arch == "armv7") {
+				config.arch = CpuArch::Arm7;
+			} else {
+				std::cout << "Fatal: Unknown architecture: " << arch << std::endl;
+				return 1;
+			}
 		} else if (arg == "--shared") {
 			config.out_type = BuildType::DynLib;
 		} else if (arg == "-h") {
