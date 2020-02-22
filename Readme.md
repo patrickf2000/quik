@@ -3,6 +3,8 @@
 ### Important Note
 I am in the process of a significant backend redesign. Basically, I'm developing a low-level IR between the Quik AST and the assembly code; as a result, the compiler is not fully working. I moved the original code into the backend.old folder.
 
+Update: So while it's not currently at the same position as the v0.5 release, the backend is starting to work and can generate some Intel x86-64 Assembly and a little Arm v7 Assembly. I'm trying to keep all the architectures at the same level of support, but Intel x86-64 is going to get first priority. I'm hoping to get the Intel x86-64 back to where the original was within a week or two.
+
 If you wish to use the last working version, please visit the v0.5 branch.
 
 ### Introduction
