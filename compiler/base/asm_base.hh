@@ -9,7 +9,7 @@ class AsmGen {
 public:
 	AsmGen(LtacFile *f);
 	void build_PIC() { pic = true; }
-	void write();
+	void write(bool x86 = true);
 protected:
 	LtacFile *file;
 	bool pic = false;

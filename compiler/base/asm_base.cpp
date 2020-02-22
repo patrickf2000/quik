@@ -6,8 +6,9 @@ AsmGen::AsmGen(LtacFile *f) {
 }
 
 //Write out the base assembly code
-void AsmGen::write() {
-	writer << ".intel_syntax noprefix" << std::endl;
+void AsmGen::write(bool x86) {
+	if (x86)
+		writer << ".intel_syntax noprefix" << std::endl;
 	writer << ".data" << std::endl;
 	
 	build_data(file->data);

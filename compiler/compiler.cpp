@@ -60,7 +60,7 @@ void Compiler::assemble() {
 				if (config.out_type == BuildType::DynLib)
 					asm_builder.build_PIC();
 					
-				asm_builder.write();
+				asm_builder.write(false);
 			} break;
 		}
 		
