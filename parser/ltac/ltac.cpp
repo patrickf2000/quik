@@ -57,6 +57,11 @@ std::string code2str(LtacNode *code_ln, bool child=false) {
 			content += std::to_string(li->val);
 		} break;
 		
+		case ltac::Float: {
+			auto lf = static_cast<LtacFloat *>(code_ln);
+			content += lf->name;
+		} break;
+		
 		case ltac::String: {
 			auto lstr = static_cast<LtacString *>(code_ln);
 			content += lstr->name;
@@ -75,6 +80,14 @@ std::string ltac2str(LtacFile *file) {
 	//Print the data
 	for (auto code_ln : file->data->children) {
 		switch (code_ln->type) {
+			//Floats
+			case ltac::Float: {
+				auto lf = static_cast<LtacFloat *>(code_ln);
+				content += "\t" + lf->name + ": word ";
+				content += std::to_string(lf->val) + "\t#";
+				content+= std::to_string(lf->i_val) + "\n";
+			} break;
+		
 			//Strings
 			case ltac::String: {
 				auto lstr = static_cast<LtacString *>(code_ln);

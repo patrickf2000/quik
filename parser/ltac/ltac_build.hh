@@ -24,6 +24,7 @@ protected:
 	
 	//Utility stuff
 	LtacNode *build_string(AstNode *node);
+	LtacNode *build_float(AstNode *node);
 	void inc_stack(DataType type);
 	
 	LtacFile *file;
@@ -35,4 +36,8 @@ private:
 	//String stuff
 	int str_count = 0;
 	std::map<std::string, std::string> dec_strings;
+	
+	//Float stuff
+	int flt_count = 0;
+	std::map<float, std::string> dec_flt;
 };

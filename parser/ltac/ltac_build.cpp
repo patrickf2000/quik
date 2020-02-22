@@ -68,13 +68,36 @@ LtacNode *LTAC_Builder::build_string(AstNode *node) {
 	return lstr;
 }
 
+//Builds a float variable (utility function)
+LtacNode *LTAC_Builder::build_float(AstNode *node) {
+	auto flt = static_cast<AstFloat *>(node);
+	auto l_flt = new LtacFloat;
+	float val = flt->get_val();
+	
+	std::string name = "FLT_" + std::to_string(flt_count);
+	++flt_count;
+	
+	l_flt->name = name;
+	l_flt->val = val;
+	
+	char buf[32];
+	sprintf(buf, "%d", *(unsigned int*)&val);
+	l_flt->i_val = std::stoi(std::string(buf));
+	
+	dec_flt[val] = l_flt->name;
+	
+	file->data->children.push_back(l_flt);
+	return l_flt;
+}
+
 //Increments the stack based on a datatype
 void LTAC_Builder::inc_stack(DataType type) {
 	switch (type) {
 		case DataType::Byte:
 		case DataType::Char: stack_pos += 1; break;
 		case DataType::Bool:
-		case DataType::Int: stack_pos += 4; break;
+		case DataType::Int: 
+		case DataType::Float: stack_pos += 4; break;
 		case DataType::Str: stack_pos += 8; break;
 		
 		//TODO: Add the rest

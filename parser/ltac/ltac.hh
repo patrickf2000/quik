@@ -25,6 +25,7 @@ enum class ltac {
 	
 	Int,
 	Byte,
+	Float,
 	String
 };
 
@@ -136,6 +137,16 @@ public:
 		type = ltac::Byte;
 		val = i;
 	}
+};
+
+//Single-precision floats
+class LtacFloat : public LtacNode {
+public:
+	explicit LtacFloat() { type = ltac::Float; }
+	
+	float val = 0;
+	int i_val = 0;
+	std::string name = "";
 };
 
 //Strings
