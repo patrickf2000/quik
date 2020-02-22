@@ -88,16 +88,27 @@ void Compiler::link() {
 
 	//Link an executable
 	if (config.out_type == BuildType::Exe) {
-		ld_line += "/usr/lib/x86_64-linux-gnu/crti.o ";
-		ld_line += "/usr/lib/x86_64-linux-gnu/crtn.o ";
-		ld_line += "/usr/lib/x86_64-linux-gnu/crt1.o -lc ";
-		ld_line += "-lqkstdlib ";
+		if (config.arch == CpuArch::Arm7) {
+			ld_line += "/usr/lib/arm-linux-gnueabihf/crti.o ";
+			ld_line += "/usr/lib/arm-linux-gnueabihf/crtn.o ";
+			ld_line += "/usr/lib/arm-linux-gnueabihf/crt1.o ";
+		} else {
+			ld_line += "/usr/lib/x86_64-linux-gnu/crti.o ";
+			ld_line += "/usr/lib/x86_64-linux-gnu/crtn.o ";
+			ld_line += "/usr/lib/x86_64-linux-gnu/crt1.o -lqkstdlib ";
+		}
+		
+		ld_line += "-lc ";
 
 		for (auto obj : obj_files) {
 			ld_line += obj + " ";
 		}
 		
-		ld_line += "-dynamic-linker /lib64/ld-linux-x86-64.so.2 ";
+		if (config.arch == CpuArch::Arm7)
+			ld_line += "-dynamic-linker /lib/ld-linux-armhf.so.3 ";
+		else
+			ld_line += "-dynamic-linker /lib64/ld-linux-x86-64.so.2 ";
+		
 		ld_line += "-o " + config.output;
 		
 	//Link a dynamic library
