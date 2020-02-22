@@ -29,6 +29,14 @@ void Asm_x64::write() {
 void Asm_x64::build_data(LtacDataSec *data) {
 	for (auto ln : data->children) {
 		switch (ln->type) {
+			//Floats
+			case ltac::Float: {
+				auto lf = static_cast<LtacFloat *>(ln);
+				writer << "\t" << lf->name << ": .long ";
+				writer << std::to_string(lf->i_val) << std::endl;
+			} break;
+		
+			//Strings
 			case ltac::String: {
 				auto lstr = static_cast<LtacString *>(ln);
 				writer << "\t" << lstr->name << ": .string \"";
@@ -80,6 +88,17 @@ void Asm_x64::build_var(LtacNode *node) {
 			
 			auto li = static_cast<LtacInt *>(src);
 			writer << li->val << std::endl;
+		} break;
+		
+		//Floats
+		case ltac::Float: {
+			auto lf = static_cast<LtacFloat *>(src);
+		
+			writer << "\tmovss xmm0, DWORD PTR ";
+			writer << lf->name << "[rip]" << std::endl;
+			
+			writer << "\tmovss DWORD PTR [rbp-";
+			writer << var->pos << "], xmm0" << std::endl;
 		} break;
 		
 		//Strings
