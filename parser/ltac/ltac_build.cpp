@@ -98,7 +98,7 @@ void LTAC_Builder::inc_stack(DataType type) {
 		case DataType::Bool:
 		case DataType::Int: 
 		case DataType::Float: stack_pos += 4; break;
-		case DataType::Str: stack_pos += 8; break;
+		case DataType::Str: stack_pos += ptr_size; break;
 		
 		//TODO: Add the rest
 	}

@@ -39,7 +39,12 @@ void Compiler::assemble() {
 		auto lines = load_source(src_files[i].c_str());
 		AstNode *top = build_ast(lines, true, false);
 		
+		int ptr_size = 8;
+		if (config.arch == CpuArch::Arm7)
+			ptr_size = 4;
+		
 		LTAC_Builder *builder = new LTAC_Builder;
+		builder->set_ptr_size(ptr_size);
 		LtacFile *file = builder->build_file(top);
 		file->name = asm_files[i];
 		

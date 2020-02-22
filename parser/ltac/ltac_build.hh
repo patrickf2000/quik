@@ -9,6 +9,7 @@
 class LTAC_Builder {
 public:
 	LTAC_Builder() {}
+	void set_ptr_size(int size) { ptr_size = size; }
 	LtacFile *build_file(AstNode *top);
 protected:
 	void assemble(AstNode *top);
@@ -31,6 +32,7 @@ protected:
 private:
 	//Variable related stuff
 	int stack_pos = 0;
+	int ptr_size = 8;
 	std::map<std::string, Var> vars;
 	
 	//String stuff
