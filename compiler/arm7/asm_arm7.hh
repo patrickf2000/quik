@@ -14,6 +14,7 @@ public:
 	void build_code(LtacCodeSec *code);
 	
 	void build_func(LtacNode *node);
+	void build_func_call(LtacNode *node);
 	void build_ret(LtacNode *node);
 private:
 	std::vector<std::string> str_labels;

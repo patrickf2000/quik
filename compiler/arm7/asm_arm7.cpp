@@ -25,6 +25,7 @@ void Asm_Arm7::build_code(LtacCodeSec *code) {
 	for (auto ln : code->children) {
 		switch (ln->type) {
 			case ltac::Func: build_func(ln); break;
+			case ltac::FuncCall: build_func_call(ln); break;
 			case ltac::Ret: build_ret(ln); break;
 		}
 	}
@@ -48,6 +49,31 @@ void Asm_Arm7::build_func(LtacNode *node) {
 	
 	writer << "\tpush {fp, lr}" << std::endl;
 	writer << "\tadd fp, sp, #4" << std::endl;
+	writer << std::endl;
+}
+
+//Builds function calls
+void Asm_Arm7::build_func_call(LtacNode *node) {
+	auto fc = static_cast<LtacFuncCall *>(node);
+	int call_index = 0;
+	
+	//Build the arguments
+	for (auto arg : fc->children) {
+		switch (arg->type) {
+			//Strings
+			case ltac::String: {
+				auto str = static_cast<LtacString *>(arg);
+				writer << "\tldr r" << std::to_string(call_index);
+				writer << ", " << str->name << std::endl;
+				++call_index;
+			} break;
+			
+			//TODO: Add the rest
+		}
+	}
+	
+	//Finally, build the call
+	writer << "\tbl " << fc->name << std::endl;
 	writer << std::endl;
 }
 
