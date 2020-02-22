@@ -13,8 +13,22 @@ void Asm_Arm7::build_func(LtacNode *node) {
 	
 	writer << "\tpush {fp, lr}" << std::endl;
 	writer << "\tadd fp, sp, #4" << std::endl;
-	writer << "\tsub sp, sp, #16" << std::endl;
+	writer << "\tsub sp, sp, #8" << std::endl;
 	writer << std::endl;
+	
+	//Retrieve function arguments
+	int call_index = 0;
+	
+	for (auto arg : fd->children) {
+		auto var = static_cast<LtacVar *>(arg);
+		
+		writer << "\tstr r" << std::to_string(call_index);
+		writer << ", [fp, #-" << std::to_string(var->pos);
+		writer << "]" << std::endl;
+	}
+	
+	if (fd->children.size() > 0)
+		writer << std::endl;
 }
 
 //Builds function calls
@@ -53,7 +67,7 @@ void Asm_Arm7::build_func_call(LtacNode *node) {
 //Builds a function return
 void Asm_Arm7::build_ret(LtacNode *node) {
 	writer << "\tmov r0, #0" << std::endl;
-	writer << "\tsub sp, fp, #4" << std::endl;
+	//writer << "\tsub sp, fp, #4" << std::endl;
 	writer << "\tpop {fp, pc}" << std::endl;
 	writer << std::endl;
 }
