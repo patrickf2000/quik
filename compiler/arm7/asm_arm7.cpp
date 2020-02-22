@@ -27,6 +27,7 @@ void Asm_Arm7::build_code(LtacCodeSec *code) {
 			case ltac::Func: build_func(ln); break;
 			case ltac::FuncCall: build_func_call(ln); break;
 			case ltac::Ret: build_ret(ln); break;
+			case ltac::Var: build_var(ln); break;
 		}
 	}
 	
@@ -36,4 +37,24 @@ void Asm_Arm7::build_code(LtacCodeSec *code) {
 	writer << std::endl;
 }
 
+//Build variable declarations
+void Asm_Arm7::build_var(LtacNode *node) {
+	auto var = static_cast<LtacVar *>(node);
+	auto val = var->children[0];
+	
+	switch (val->type) {
+		//Integers
+		case ltac::Int: {
+			auto li = static_cast<LtacInt *>(val);
+			writer << "\tmov r4, #" << std::to_string(li->val);
+			writer << std::endl;			
+		} break;
+		
+		//TODO: Add the rest
+	}
+	
+	//Store the value
+	writer << "\tstr r4, [fp, #-" << std::to_string(var->pos);
+	writer << "]" << std::endl << std::endl;
+}
 
