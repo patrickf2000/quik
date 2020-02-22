@@ -11,6 +11,7 @@
 #include "utils.hh"
 
 #include "x64/asm_x64.hh"
+#include "arm7/asm_arm7.hh"
 
 Compiler::Compiler(Config c) {
 	config = c;
@@ -53,7 +54,14 @@ void Compiler::assemble() {
 			} break;
 			
 			case CpuArch::Intel32: break;
-			case CpuArch::Arm7: break;
+			case CpuArch::Arm7: {
+				Asm_Arm7 asm_builder(file);
+				
+				if (config.out_type == BuildType::DynLib)
+					asm_builder.build_PIC();
+					
+				asm_builder.write();
+			} break;
 		}
 		
 		delete top;
