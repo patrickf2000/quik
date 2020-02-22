@@ -10,6 +10,12 @@ void Asm_Arm7::build_code(LtacCodeSec *code) {
 	for (auto ln : code->children) {
 		switch (ln->type) {
 			case ltac::Func: build_func(ln); break;
+			
+			case ltac::Ret: {
+				writer << "\tmov r0, #0" << std::endl;
+				writer << "\tpop {fp, pc}" << std::endl;
+				writer << std::endl;
+			} break;
 		}
 	}
 }
