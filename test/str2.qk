@@ -1,0 +1,22 @@
+include io
+
+func writeln(s:str)
+	println(s)
+end
+
+func main
+	str s1 = "Hello!"
+	str s2 = "How are you?"
+	
+	writeln("Yo!")
+	writeln(s1)
+	writeln(s2)
+	writeln("We are done!")
+end
+
+#TEST
+#Yo!
+#Hello!
+#How are you?
+#We are done!
+

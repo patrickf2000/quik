@@ -1,0 +1,24 @@
+include io
+
+func main
+	int x = 5
+	int y = 20
+	int z = x
+	
+	println("X: ", x)
+	println("Y: ", y)
+	println("Z: ", z)
+	println("")
+	
+	z = y
+	
+	println("Z: ", z)
+end
+
+#TEST
+#X: 5
+#Y: 20
+#Z: 5
+#
+#Z: 20
+

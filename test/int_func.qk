@@ -1,0 +1,70 @@
+include io
+
+func print_two(n1:int, n2:int)
+	println("1: ", n1)
+	println("2: ", n2)
+	println("")
+	
+	int x = n2
+	println("X: ", x)
+end
+
+func print_four(n1:int, n2:int, n3:int, n4:int)
+	println("1: ", n1)
+	println("2: ", n2)
+	println("3: ", n3)
+	println("4: ", n4)
+end
+
+func main
+	int x = 5
+	int y = 20
+	
+	print_two(10, 20)
+	print_two(10, x)
+	print_two(x, x)
+	print_two(x, 50)
+	print_two(x, y)
+	
+	println("")
+	
+	print_four(1, 2, 3, 4)
+	print_four(x, y, 34, 56)
+	print_four(9, 10, x, y)
+end
+
+#TEST
+#1: 10
+#2: 20
+#
+#X: 20
+#1: 10
+#2: 5
+#
+#X: 5
+#1: 5
+#2: 5
+#
+#X: 5
+#1: 5
+#2: 50
+#
+#X: 50
+#1: 5
+#2: 20
+#
+#X: 20
+#
+#1: 1
+#2: 2
+#3: 3
+#4: 4
+#1: 5
+#2: 20
+#3: 34
+#4: 56
+#1: 9
+#2: 10
+#3: 5
+#4: 20
+
