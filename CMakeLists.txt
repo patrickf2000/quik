@@ -43,6 +43,7 @@ set(PARSER_SRC
 #)
 
 set(COMPILER_SRC
+	compiler/arm7/arm7_funcs.cpp
 	compiler/arm7/asm_arm7.cpp
 	compiler/base/asm_base.cpp
 	compiler/x64/asm_x64.cpp
