@@ -27,15 +27,23 @@ void LTAC_Builder::build_var_assign(AstNode *node) {
 	
 	//Build the assigned value
 	auto val = va->children[0];
+	auto lval = convert_ast_var(val);
+	var->children.push_back(lval);
 	
+	file->code->children.push_back(var);
+}
+
+//Converts an AST node to an LTAC node
+LtacNode *LTAC_Builder::convert_ast_var(AstNode *val) {
+	LtacNode *lval = new LtacNode;
+
 	switch (val->type) {
 		//Bytes
 		case AstType::Hex: {
 			auto ch = static_cast<AstHex *>(val);
 			int c = (int)ch->get_val();
 			
-			auto lc = new LtacByte(c);
-			var->children.push_back(lc);
+			lval = new LtacByte(c);
 		} break;
 	
 		//Chars
@@ -43,34 +51,29 @@ void LTAC_Builder::build_var_assign(AstNode *node) {
 			auto ch = static_cast<AstChar *>(val);
 			int c = (int)ch->get_val();
 			
-			auto lc = new LtacByte(c);
-			var->children.push_back(lc);
+			lval = new LtacByte(c);
 		} break;
 	
 		//Booleans
 		case AstType::Bool: {
 			auto bl = static_cast<AstBool *>(val);
-			auto li = new LtacInt((int)bl->get_val());
-			var->children.push_back(li);
+			lval = new LtacInt((int)bl->get_val());
 		} break;
 	
 		//Integers
 		case AstType::Int: {
 			auto i = static_cast<AstInt *>(val);
-			auto li = new LtacInt(i->get_val());
-			var->children.push_back(li);
+			lval = new LtacInt(i->get_val());
 		} break;
 		
 		//Floats
 		case AstType::Float: {
-			auto lf = build_float(val);
-			var->children.push_back(lf);
+			lval = build_float(val);
 		} break;
 		
 		//Strings
 		case AstType::Str: {
-			auto lstr = build_string(val);
-			var->children.push_back(lstr);
+			lval = build_string(val);
 		} break;
 		
 		//Other variables
@@ -80,11 +83,42 @@ void LTAC_Builder::build_var_assign(AstNode *node) {
 			
 			auto l_id = new LtacVar;
 			l_id->pos = v2.stack_pos;
-			var->children.push_back(l_id);
+			lval = l_id;
+		} break;
+		
+		//Math
+		case AstType::Math: {
+			auto math = new LtacMath;
+			math->init_val = convert_ast_var(val->children[0]);
+			
+			for (int i = 1; i<val->children.size(); i+=2) {
+				auto math_op = new LtacMathOp;
+			
+				auto op = val->children[i];
+				auto current = val->children[i+1];
+				
+				//Build the operator
+				switch (op->type) {
+					case AstType::Add: math_op->op = Operator::Add; break;
+					case AstType::Sub: math_op->op = Operator::Sub; break;
+					case AstType::Mul: math_op->op = Operator::Mul; break;
+					case AstType::Div: math_op->op = Operator::Div; break;
+					case AstType::Mod: math_op->op = Operator::Mod; break;
+				}
+				
+				//Build the operand
+				math_op->operand = convert_ast_var(current);
+				
+				//Add it
+				math->operations.push_back(math_op);
+			}
+			
+			lval = math;
 		} break;
 		
 		//TODO: Add the rest
 	}
 	
-	file->code->children.push_back(var);
+	return lval;
 }
+

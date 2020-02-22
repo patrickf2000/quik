@@ -26,7 +26,10 @@ enum class ltac {
 	Int,
 	Byte,
 	Float,
-	String
+	String,
+	
+	MathOp,
+	Math
 };
 
 // This relates to ltac data
@@ -35,6 +38,16 @@ enum class LtacData {
 	String,
 	Float,
 	Int
+};
+
+//Various operators (for math functions)
+enum class Operator {
+	None,
+	Add,
+	Sub,
+	Mul,
+	Div,
+	Mod
 };
 
 //The nodes for ltac
@@ -161,6 +174,24 @@ public:
 	
 	std::string name = "";
 	std::string val = "";
+};
+
+//Math operations
+class LtacMathOp : public LtacNode {
+public:
+	explicit LtacMathOp() { type = ltac::MathOp; }
+	
+	LtacNode *operand;
+	Operator op;
+};
+
+//Math
+class LtacMath : public LtacNode {
+public:
+	explicit LtacMath() { type = ltac::Math; }
+	
+	LtacNode *init_val;
+	std::vector<LtacMathOp *> operations;
 };
 
 //Useful functions

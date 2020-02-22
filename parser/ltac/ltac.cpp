@@ -66,6 +66,31 @@ std::string code2str(LtacNode *code_ln, bool child=false) {
 			auto lstr = static_cast<LtacString *>(code_ln);
 			content += lstr->name;
 		} break;
+		
+		case ltac::Math: {
+			auto math = static_cast<LtacMath *>(code_ln);
+			content += code2str(math->init_val, true) + "\n";
+			
+			for (auto op : math->operations) {
+				content += code2str(op);
+			}
+		} break;
+		
+		case ltac::MathOp: {
+			auto math_op = static_cast<LtacMathOp *>(code_ln);
+			content += "\t";
+			
+			switch (math_op->op) {
+				case Operator::Add: content += "add reg, "; break;
+				case Operator::Sub: content += "sub reg, "; break;
+				case Operator::Mul: content += "mul reg, "; break;
+				case Operator::Div: content += "div reg, "; break;
+				case Operator::Mod: content += "mod reg, "; break;
+			}
+			
+			content += code2str(math_op->operand, true);
+			content += "\n";
+		} break;
 	}
 	
 	return content;
