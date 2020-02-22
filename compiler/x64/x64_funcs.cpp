@@ -130,27 +130,35 @@ void Asm_x64::build_func_call(LtacNode *node) {
 			case ltac::Var: {
 				auto var = static_cast<LtacVar *>(arg);
 				
-				std::string instr = "mov";
-				std::string prefix = "DWORD PTR";
-				std::string reg = call_regs32[call_index];
-				
-				if (var->d_type == DataType::Str) {
-					prefix = "QWORD PTR";
-					reg = call_regs[call_index];
-				}
-				
-				if (pic) {
-					writer << "\tmov " << reg << ", ";
-					writer << prefix << " -" << var->pos;
-					writer << "[rbp]";
+				if (var->d_type == DataType::Float) {
+					std::string reg = call_flt_regs[call_index_flt];
+					++call_index_flt;
+					
+					writer << "\tcvtss2sd xmm0, DWORD PTR [rbp-";
+					writer << std::to_string(var->pos) + "]" << std::endl;
 				} else {
-					writer << "\tmov " << reg << ", ";
-					writer << prefix << " ";
-					writer << "[rbp-" << var->pos << "]";
+					std::string instr = "mov";
+					std::string prefix = "DWORD PTR";
+					std::string reg = call_regs32[call_index];
+					
+					if (var->d_type == DataType::Str) {
+						prefix = "QWORD PTR";
+						reg = call_regs[call_index];
+					}
+					
+					if (pic) {
+						writer << "\tmov " << reg << ", ";
+						writer << prefix << " -" << var->pos;
+						writer << "[rbp]";
+					} else {
+						writer << "\tmov " << reg << ", ";
+						writer << prefix << " ";
+						writer << "[rbp-" << var->pos << "]";
+					}
+					
+					writer << std::endl;
+					++call_index;
 				}
-				
-				writer << std::endl;
-				++call_index;
 			} break;
 			
 			//TODO: Add the rest
