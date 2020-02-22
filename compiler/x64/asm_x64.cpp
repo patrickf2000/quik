@@ -64,6 +64,15 @@ void Asm_x64::build_var(LtacNode *node) {
 	auto src = node->children[0];
 	
 	switch (src->type) {
+		//Character
+		case ltac::Byte: {
+			writer << "\tmov BYTE PTR [rbp-";
+			writer << var->pos << "], ";
+			
+			auto li = static_cast<LtacInt *>(src);
+			writer << li->val << std::endl;
+		} break;
+	
 		//Integers
 		case ltac::Int: {
 			writer << "\tmov DWORD PTR [rbp-";
