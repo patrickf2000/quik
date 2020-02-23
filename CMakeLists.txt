@@ -31,6 +31,7 @@ set(COMPILER_SRC
 	compiler/base/asm_base.cpp
 	compiler/x64/asm_x64.cpp
 	compiler/x64/x64_funcs.cpp
+	compiler/x64/x64_vars.cpp
 	compiler/compiler.cpp
 	compiler/main.cpp
 	compiler/utils.cpp
