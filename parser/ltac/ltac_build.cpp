@@ -12,8 +12,6 @@ LtacFile *LTAC_Builder::build_file(AstNode *top) {
 	
 	assemble(top);
 	
-	check_overload();
-	
 	return file;
 }
 

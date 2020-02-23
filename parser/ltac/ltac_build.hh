@@ -17,7 +17,6 @@ protected:
 	//Function stuff
 	LtacFunc *build_func(AstNode *node, bool is_extern=false);
 	void build_func_call(AstNode *node);
-	void check_overload();
 	
 	//Variable stuff
 	void build_var_dec(AstNode *node);

@@ -119,18 +119,7 @@ void LTAC_Builder::build_func_call(AstNode *node) {
 	}
 	
 	//Assign the function name
-	/*if (funcs.find(fn_name) != funcs.end()) {
-		l_fc->name = fn_name;
-	}*/
 	l_fc->name = fn_name;
 }
 
-//Scans the file to handle function overload
-void LTAC_Builder::check_overload() {
-	//First, scan function declarations
-	
-	//Next, rename based on parameters
-	
-	//Finally, adjust the function calls
-}
 
