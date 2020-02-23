@@ -53,7 +53,14 @@ enum class Operator {
 	Sub,
 	Mul,
 	Div,
-	Mod
+	Mod,
+	
+	Equal,
+	NotEqual,
+	Greater,
+	Less,
+	GreaterEq,
+	LessEq
 };
 
 //The nodes for ltac
