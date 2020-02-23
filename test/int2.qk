@@ -1,0 +1,51 @@
+include io
+
+func test1
+	int x = 7
+	int c = 8
+	
+	int y = x * 2 - c
+	
+	println("X: ", x)
+	println("Y: ", y)
+end
+
+func test2
+	int c = 100
+	int x = 20
+
+	int y1 = c + x
+    int y2 = c - x
+    int y3 = c * x
+    int y4 = c / x
+    int y5 = c % x
+    
+    println("x: ", x)
+    println("c: ", c)
+    println("")
+    println("", y1)
+    println("", y2)
+    println("", y3)
+    println("", y4)
+    println("", y5)
+end
+
+func main
+	test1()
+	println("")
+	test2()
+end
+
+#TEST
+#X: 7
+#Y: 6
+#
+#x: 20
+#c: 100
+#
+#120
+#80
+#2000
+#5
+#0
+
