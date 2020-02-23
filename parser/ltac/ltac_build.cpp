@@ -30,11 +30,13 @@ void LTAC_Builder::assemble(AstNode *top) {
 				assemble(node);
 				
 				int stack_size = 0;
-				while (stack_size < (stack_pos + 1))
-					if (stack_size < 16)
-						stack_size += 8;
-					else
-						stack_size += 16;
+				if (stack_pos > 0) {
+					while (stack_size < (stack_pos + 1))
+						if (stack_size < 16)
+							stack_size += 8;
+						else
+							stack_size += 16;
+				}
 				
 				func->stack_size = stack_size;
 				stack_pos = 0;
