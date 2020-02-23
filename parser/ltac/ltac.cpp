@@ -114,6 +114,22 @@ std::string code2str(LtacNode *code_ln, bool child=false) {
 			content += code2str(cmp->rval, true);
 			content += "\n";
 		} break;
+		
+		case ltac::Jmp: {
+			auto jmp = static_cast<LtacJmp *>(code_ln);
+			
+			switch (jmp->op) {
+				case Operator::None: content += "\tjmp "; break;
+				case Operator::Equal: content += "\tje "; break;
+				case Operator::NotEqual: content += "\tjne "; break;
+				case Operator::Greater: content += "\tjg "; break;
+				case Operator::Less: content += "\tjl "; break;
+				case Operator::GreaterEq: content += "\tjge "; break;
+				case Operator::LessEq: content += "\tjle "; break;
+			}
+			
+			content += jmp->dest + "\n";
+		} break;
 	}
 	
 	return content;

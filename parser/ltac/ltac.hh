@@ -35,7 +35,9 @@ enum class ltac {
 	Pop,
 	
 	Cmp,
-	ICmp
+	ICmp,
+	
+	Jmp
 };
 
 // This relates to ltac data
@@ -225,13 +227,22 @@ public:
 	
 	LtacNode *lval;
 	LtacNode *rval;
-	Operator op;
 };
 
 //Integer comparisons
 class LtacICmp : public LtacCmp {
 public:
 	explicit LtacICmp() { type = ltac::ICmp; }
+};
+
+//Jumps
+//Set the operator to none for unconditional jump
+class LtacJmp : public LtacNode {
+public:
+	explicit LtacJmp() { type = ltac::Jmp; }
+	
+	std::string dest;
+	Operator op = Operator::None;
 };
 
 //Useful functions

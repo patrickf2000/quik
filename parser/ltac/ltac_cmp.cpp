@@ -47,16 +47,24 @@ void LTAC_Builder::build_cmp(AstNode *node) {
 	//Set everything
 	lcmp->lval = lval;
 	lcmp->rval = rval;
-	
-	switch (cmp->get_op()) {
-		case CondOp::Equals: lcmp->op = Operator::NotEqual; break;
-		case CondOp::NotEquals: lcmp->op = Operator::Equal; break;
-		case CondOp::Greater: lcmp->op = Operator::LessEq; break;
-		case CondOp::GreaterEq: lcmp->op = Operator::LessEq; break;
-		case CondOp::Less: lcmp->op = Operator::GreaterEq; break;
-		case CondOp::LessEq: lcmp->op = Operator::GreaterEq; break;
-	}
+	file->code->children.push_back(lcmp);
 	
 	//Add the comparison
-	file->code->children.push_back(lcmp);
+	auto jmp = new LtacJmp;
+	auto default_jmp = new LtacJmp;
+	
+	switch (cmp->get_op()) {
+		case CondOp::Equals: jmp->op = Operator::NotEqual; break;
+		case CondOp::NotEquals: jmp->op = Operator::Equal; break;
+		case CondOp::Greater: jmp->op = Operator::LessEq; break;
+		case CondOp::GreaterEq: jmp->op = Operator::LessEq; break;
+		case CondOp::Less: jmp->op = Operator::GreaterEq; break;
+		case CondOp::LessEq: jmp->op = Operator::GreaterEq; break;
+	}
+	
+	jmp->dest = labels.top();
+	default_jmp->dest = end_lbls.top();
+	
+	file->code->children.push_back(jmp);
+	file->code->children.push_back(default_jmp);
 }
