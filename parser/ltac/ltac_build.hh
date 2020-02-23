@@ -1,6 +1,7 @@
 #pragma once
 
 #include <map>
+#include <stack>
 #include <string>
 
 #include "ltac.hh"
@@ -46,4 +47,8 @@ private:
 	//Float stuff
 	int flt_count = 0;
 	std::map<float, std::string> dec_flt;
+	
+	//Label stuff
+	int lbl_count = 0;
+	std::stack<std::string> labels;
 };

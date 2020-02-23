@@ -105,16 +105,27 @@ public:
 	LtacCodeSec *code;
 };
 
+//Labels
+class LtacLabel : public LtacNode {
+public:
+	explicit LtacLabel() { type = ltac::Label; }
+	explicit LtacLabel(std::string n) {
+		type = ltac::Label;
+		name = n;
+	}
+	
+	std::string name = "";
+};
+
 //Functions
-class LtacFunc : public LtacNode {
+class LtacFunc : public LtacLabel {
 public:
 	explicit LtacFunc() { type = ltac::Func; }
 	explicit LtacFunc(std::string n) {
 		type = ltac::Func;
 		name = n;
 	}
-	
-	std::string name = "";
+
 	int stack_size = 0;
 	bool is_global = false;
 	bool is_extern = false;

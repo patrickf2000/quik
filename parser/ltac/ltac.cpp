@@ -7,6 +7,11 @@ std::string code2str(LtacNode *code_ln, bool child=false) {
 	std::string content = "";
 
 	switch (code_ln->type) {
+		case ltac::Label: {
+			auto lbl = static_cast<LtacLabel *>(code_ln);
+			content += "lbl " + lbl->name + "\n";
+		} break;
+	
 		case ltac::Func: {
 			auto fd = static_cast<LtacFunc *>(code_ln);
 			if (fd->is_extern)
