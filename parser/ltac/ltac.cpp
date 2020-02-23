@@ -71,7 +71,7 @@ std::string code2str(LtacNode *code_ln, bool child=false) {
 			auto math = static_cast<LtacMath *>(code_ln);
 			content += code2str(math->init_val, true) + "\n";
 			
-			for (auto op : math->operations) {
+			for (auto op : math->children) {
 				content += code2str(op);
 			}
 		} break;
@@ -91,6 +91,9 @@ std::string code2str(LtacNode *code_ln, bool child=false) {
 			content += code2str(math_op->operand, true);
 			content += "\n";
 		} break;
+		
+		case ltac::Push: content += "\tpush reg\n"; break;
+		case ltac::Pop: content += "\tpop reg\n"; break;
 	}
 	
 	return content;

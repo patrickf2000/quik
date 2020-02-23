@@ -107,10 +107,20 @@ LtacNode *LTAC_Builder::convert_ast_var(AstNode *val) {
 				}
 				
 				//Build the operand
-				math_op->operand = convert_ast_var(current);
-				
-				//Add it
-				math->operations.push_back(math_op);
+				if (current->type == AstType::Math) {
+					math_op->operand = new LtacNode;
+					math->children.push_back(math_op);
+					
+					math->children.push_back(new LtacNode(ltac::Push));
+					
+					auto sub_math = convert_ast_var(current);
+					math->children.push_back(sub_math);
+					
+					math->children.push_back(new LtacNode(ltac::Pop));
+				} else {
+					math_op->operand = convert_ast_var(current);
+					math->children.push_back(math_op);
+				}
 			}
 			
 			lval = math;

@@ -29,7 +29,10 @@ enum class ltac {
 	String,
 	
 	MathOp,
-	Math
+	Math,
+	
+	Push,
+	Pop
 };
 
 // This relates to ltac data
@@ -191,7 +194,6 @@ public:
 	explicit LtacMath() { type = ltac::Math; }
 	
 	LtacNode *init_val;
-	std::vector<LtacMathOp *> operations;
 };
 
 //Useful functions
