@@ -26,14 +26,23 @@ void LTAC_Builder::assemble(AstNode *top) {
 			case AstType::ExternFunc: build_func(node, true); break;
 			
 			case AstType::FuncDec: {
-				build_func(node);
+				auto func = build_func(node);
 				assemble(node);
+				
+				int stack_size = 0;
+				while (stack_size < (stack_pos + 1))
+					if (stack_size < 16)
+						stack_size += 8;
+					else
+						stack_size += 16;
+				
+				func->stack_size = stack_size;
+				stack_pos = 0;
 			} break;
 			
 			case AstType::Return: {
 				auto rnode = new LtacNode(ltac::Ret);
 				file->code->children.push_back(rnode);
-				stack_pos = 0;
 			} break;
 			
 			case AstType::FuncCall: build_func_call(node); break;

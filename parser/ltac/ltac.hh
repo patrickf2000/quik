@@ -105,6 +105,7 @@ public:
 	}
 	
 	std::string name = "";
+	int stack_size = 0;
 	bool is_global = false;
 	bool is_extern = false;
 };

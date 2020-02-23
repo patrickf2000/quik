@@ -50,7 +50,12 @@ void Asm_x64::build_func(LtacNode *node) {
 	//Setup the stack
 	writer << "\tpush rbp" << std::endl;
 	writer << "\tmov rbp, rsp" << std::endl;
-	writer << "\tsub rsp, 16" << std::endl;		//TODO: Determine me by math
+	
+	int size = fd->stack_size;
+	if (size != 0) {
+		writer << "\tsub rsp, " << std::to_string(size) << std::endl;
+	}
+	
 	writer << std::endl;
 	
 	//Retrieve the arguments
