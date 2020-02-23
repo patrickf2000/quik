@@ -32,7 +32,10 @@ enum class ltac {
 	Math,
 	
 	Push,
-	Pop
+	Pop,
+	
+	Cmp,
+	ICmp
 };
 
 // This relates to ltac data
@@ -195,6 +198,22 @@ public:
 	explicit LtacMath() { type = ltac::Math; }
 	
 	LtacNode *init_val;
+};
+
+//Comparisons
+class LtacCmp : public LtacNode {
+public:
+	explicit LtacCmp() { type = ltac::Cmp; }
+	
+	LtacNode *lval;
+	LtacNode *rval;
+	Operator op;
+};
+
+//Integer comparisons
+class LtacICmp : public LtacCmp {
+public:
+	explicit LtacICmp() { type = ltac::ICmp; }
 };
 
 //Useful functions
