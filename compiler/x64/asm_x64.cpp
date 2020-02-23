@@ -27,6 +27,11 @@ void Asm_x64::build_data(LtacDataSec *data) {
 void Asm_x64::build_code(LtacCodeSec *code) {
 	for (auto ln : code->children) {
 		switch (ln->type) {
+			case ltac::Label: {
+				auto label = static_cast<LtacLabel *>(ln);
+				writer << label->name << ":" << std::endl;
+			} break;
+			
 			case ltac::Func: build_func(ln); break;
 			
 			case ltac::Ret: {
@@ -39,6 +44,8 @@ void Asm_x64::build_code(LtacCodeSec *code) {
 			case ltac::FuncCall: build_func_call(ln); break;
 			
 			case ltac::Var: build_var(ln); break;
+			
+			case ltac::Jmp: build_jmp(ln); break;
 		}
 	}
 }

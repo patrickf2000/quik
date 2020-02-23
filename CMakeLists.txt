@@ -31,6 +31,7 @@ set(COMPILER_SRC
 	compiler/arm7/asm_arm7.cpp
 	compiler/base/asm_base.cpp
 	compiler/x64/asm_x64.cpp
+	compiler/x64/x64_flow.cpp
 	compiler/x64/x64_funcs.cpp
 	compiler/x64/x64_vars.cpp
 	compiler/compiler.cpp

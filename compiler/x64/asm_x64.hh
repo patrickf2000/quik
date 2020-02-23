@@ -18,4 +18,6 @@ protected:
 	
 	void build_var(LtacNode *node);
 	void build_int_math(LtacVar *var, LtacNode *src);
+	
+	void build_jmp(LtacNode *node);
 };
