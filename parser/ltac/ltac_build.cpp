@@ -67,8 +67,8 @@ void LTAC_Builder::assemble(AstNode *top) {
 				
 				if (node->type != AstType::Else)
 					build_cmp(node);
-				
-				assemble(node);
+				else
+					assemble(node);
 				
 				auto lbl = new LtacLabel(name);
 				file->code->children.push_back(lbl);

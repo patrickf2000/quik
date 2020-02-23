@@ -66,5 +66,6 @@ void LTAC_Builder::build_cmp(AstNode *node) {
 	default_jmp->dest = end_lbls.top();
 	
 	file->code->children.push_back(jmp);
+	assemble(node);
 	file->code->children.push_back(default_jmp);
 }
