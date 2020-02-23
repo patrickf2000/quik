@@ -51,4 +51,5 @@ private:
 	//Label stuff
 	int lbl_count = 0;
 	std::stack<std::string> labels;
+	std::stack<std::string> end_lbls;
 };

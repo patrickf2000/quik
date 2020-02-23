@@ -52,12 +52,30 @@ void LTAC_Builder::assemble(AstNode *top) {
 			case AstType::VarAssign: build_var_assign(node); break;
 			
 			//Comparisons
-			case AstType::If: {
+			case AstType::If: 
+			case AstType::Elif: {
 				std::string name = "L" + std::to_string(lbl_count);
 				++lbl_count;
 				labels.push(name);
-			
+				
+				if (node->type == AstType::If) {
+					std::string end_name = "L" + std::to_string(lbl_count);
+					++lbl_count;
+					end_lbls.push(end_name);	
+				}
+				
 				build_cmp(node); 
+				
+				auto lbl = new LtacLabel(name);
+				file->code->children.push_back(lbl);
+			} break;
+			
+			case AstType::EndIf: {
+				auto name = end_lbls.top();
+				end_lbls.pop();
+				
+				auto lbl = new LtacLabel(name);
+				file->code->children.push_back(lbl);
 			} break;
 		}
 	}
