@@ -1,5 +1,42 @@
 #include "asm_x64.hh"
 
+//Integer comparison
+void Asm_x64::build_icmp(LtacNode *node) {
+	auto cmp = static_cast<LtacCmp *>(node);
+	
+	//Build the left value
+	switch (cmp->lval->type) {
+		case ltac::Int: {
+			auto i = static_cast<LtacInt *>(cmp->lval);
+			writer << "\tmov eax, " << std::to_string(i->val);
+			writer << std::endl;
+		} break;
+		
+		case ltac::Var: {
+			auto var = static_cast<LtacVar *>(cmp->lval);
+			writer << "\tmov eax, DWORD PTR [rbp-";
+			writer << std::to_string(var->pos) << "]";
+			writer << std::endl;
+		} break;
+	}
+	
+	//Compare with the right value
+	writer << "\tcmp eax, ";
+	
+	switch (cmp->rval->type) {
+		case ltac::Int: {
+			auto i = static_cast<LtacInt *>(cmp->rval);
+			writer << std::to_string(i->val) << std::endl;
+		} break;
+		
+		case ltac::Var: {
+			auto var = static_cast<LtacVar *>(cmp->rval);
+			writer << "[rbp-" << std::to_string(var->pos);
+			writer << "]" << std::endl;
+		} break;
+	}
+}
+
 //Build jumps (all kinds)
 void Asm_x64::build_jmp(LtacNode *node) {
 	auto jmp = static_cast<LtacJmp *>(node);
