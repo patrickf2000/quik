@@ -95,14 +95,19 @@ std::string code2str(LtacNode *code_ln, bool child=false) {
 		case ltac::Push: content += "\tpush reg\n"; break;
 		case ltac::Pop: content += "\tpop reg\n"; break;
 		
-		case ltac::ICmp: content += "i";
+		case ltac::ICmp:
 		case ltac::Cmp: {
 			auto cmp = static_cast<LtacCmp *>(code_ln);
 			
-			content += "cmp ";
+			if (code_ln->type == ltac::ICmp)
+				content += "\ticmp ";
+			else
+				content += "\tcmp ";
+			
 			content += code2str(cmp->lval, true);
 			content += ", ";
 			content += code2str(cmp->rval, true);
+			content += "\n";
 		} break;
 	}
 	

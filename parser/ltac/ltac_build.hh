@@ -28,6 +28,10 @@ protected:
 	LtacNode *build_float(AstNode *node);
 	void inc_stack(DataType type);
 	
+	//Comparisons
+	DataType determine_type(LtacNode *node);
+	void build_cmp(AstNode *node);
+	
 	LtacFile *file;
 private:
 	//Variable related stuff

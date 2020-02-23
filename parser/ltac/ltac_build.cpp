@@ -23,6 +23,7 @@ void LTAC_Builder::assemble(AstNode *top) {
 			
 			case AstType::ExternFunc: build_func(node, true); break;
 			
+			//Function declarations
 			case AstType::FuncDec: {
 				auto func = build_func(node);
 				assemble(node);
@@ -49,6 +50,8 @@ void LTAC_Builder::assemble(AstNode *top) {
 			
 			case AstType::VarDec: build_var_dec(node);
 			case AstType::VarAssign: build_var_assign(node); break;
+			
+			case AstType::If: build_cmp(node); break;
 		}
 	}
 }
