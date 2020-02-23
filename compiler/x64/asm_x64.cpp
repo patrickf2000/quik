@@ -98,6 +98,80 @@ void Asm_x64::build_var(LtacNode *node) {
 			writer << "\tmov DWORD PTR [rbp-";
 			writer << var->pos << "], eax" << std::endl;
 		} break;
+		
+		//Math expressions
+		case ltac::Math: {
+			if (var->d_type == DataType::Int)
+				build_int_math(var, src);
+		} break;
 	}
 }
+
+//Builds integer math expressions
+void Asm_x64::build_int_math(LtacVar *var, LtacNode *src) {
+	auto math = static_cast<LtacMath *>(src);
+	
+	//Build the first value
+	auto first = math->init_val;
+	
+	switch (first->type) {
+		//An integer
+		case ltac::Int: {
+			auto i = static_cast<LtacInt *>(first);
+			writer << "\tmov eax, " << std::to_string(i->val) << std::endl;
+		} break;
+		
+		//A variable
+		case ltac::Var: {
+			auto id = static_cast<LtacVar *>(first);
+			writer << "\tmov eax, [rbp-" << std::to_string(id->pos);
+			writer << "]" << std::endl;
+		} break;
+	}
+	
+	//Build the other parts
+	for (auto node : math->children) {
+		auto math_op = static_cast<LtacMathOp *>(node);
+		bool is_mod = false;
+		
+		//Build the operator
+		switch (math_op->op) {
+			case Operator::Add: writer << "\tadd eax, "; break;
+			case Operator::Sub: writer << "\tsub eax, "; break;
+			case Operator::Mul: writer << "\timul eax, "; break;
+			case Operator::Div: {
+				writer << "\tcdq" << std::endl;
+				writer << "\tidiv "; 
+			} break;
+			case Operator::Mod: {
+				writer << "\tcdq" << std::endl;
+				writer << "\tidiv ";
+				is_mod = true;
+			} break;
+		}
+		
+		//Build the operand
+		switch (math_op->operand->type) {
+			case ltac::Int: {
+				auto i = static_cast<LtacInt *>(math_op->operand);
+				writer << std::to_string(i->val) << std::endl;
+			} break;
+			
+			case ltac::Var: {
+				auto id = static_cast<LtacVar *>(math_op->operand);
+				writer << "DWORD PTR ";
+				writer << "[rbp-" << std::to_string(id->pos) << "]";
+				writer << std::endl;
+			} break;
+		}
+		
+		if (is_mod)
+			writer << "\tmov eax, edx" << std::endl;
+	}
+	
+	//Save the result back to the variable
+	writer << "\tmov DWORD PTR [rbp-" << std::to_string(var->pos);
+	writer << "], eax" << std::endl << std::endl;
+}
+
 
