@@ -53,7 +53,8 @@ void LTAC_Builder::assemble(AstNode *top) {
 			
 			//Comparisons
 			case AstType::If: 
-			case AstType::Elif: {
+			case AstType::Elif: 
+			case AstType::Else: {
 				std::string name = "L" + std::to_string(lbl_count);
 				++lbl_count;
 				labels.push(name);
@@ -64,7 +65,10 @@ void LTAC_Builder::assemble(AstNode *top) {
 					end_lbls.push(end_name);	
 				}
 				
-				build_cmp(node); 
+				if (node->type != AstType::Else)
+					build_cmp(node);
+				
+				assemble(node);
 				
 				auto lbl = new LtacLabel(name);
 				file->code->children.push_back(lbl);
