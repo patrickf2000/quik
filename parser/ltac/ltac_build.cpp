@@ -47,6 +47,9 @@ void LTAC_Builder::assemble(AstNode *top) {
 			
 			case AstType::VarDec: build_var_dec(node);
 			case AstType::VarAssign: build_var_assign(node); break;
+			case AstType::MultiVarAssign: {
+				build_multi_var_assign(node);
+			} break;
 			
 			//Comparisons
 			case AstType::If: 

@@ -23,6 +23,7 @@ protected:
 	//Variable stuff
 	void build_var_dec(AstNode *node);
 	void build_var_assign(AstNode *node);
+	void build_multi_var_assign(AstNode *node);
 	LtacNode *convert_ast_var(AstNode *val);
 	
 	//Utility stuff

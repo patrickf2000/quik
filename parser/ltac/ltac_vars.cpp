@@ -33,6 +33,25 @@ void LTAC_Builder::build_var_assign(AstNode *node) {
 	file->code->children.push_back(var);
 }
 
+//Build a multi-var variable assignment
+void LTAC_Builder::build_multi_var_assign(AstNode *node) {
+	auto mva = static_cast<AstMultiVarAssign *>(node);
+	auto fc = build_func_call(mva->children[0]);
+	
+	for (auto var : mva->vars) {
+		auto id = static_cast<AstID *>(var);
+		auto v = vars[id->get_name()];
+		
+		auto lvar = new LtacVar;
+		lvar->pos = v.stack_pos;
+		lvar->d_type = v.type;
+		
+		fc->ret_dest.push_back(lvar);
+	}
+	
+	file->code->children.push_back(fc);
+}
+
 //Converts an AST node to an LTAC node
 LtacNode *LTAC_Builder::convert_ast_var(AstNode *val) {
 	LtacNode *lval = new LtacNode;
