@@ -44,7 +44,19 @@ std::string code2str(LtacNode *code_ln, bool child=false) {
 		
 		case ltac::FuncCall: {
 			auto fc = static_cast<LtacFuncCall *>(code_ln);
-			content += "\tcall " + fc->name + " (";
+			
+			if (fc->ret_dest.size() > 0 || child) {
+				if (!child)
+					content += "\t";
+				for (auto var : fc->ret_dest) {
+					content += "[bp-" + std::to_string(var->pos) + "] ";
+				}
+				content += "= ";
+			} else {
+				content += "\tcall ";
+			}
+			
+			content += fc->name + " (";
 			
 			for (auto arg : fc->children) {
 				content += code2str(arg, true);

@@ -60,7 +60,7 @@ LtacFunc *LTAC_Builder::build_func(AstNode *node, bool is_extern) {
 }
 
 //Builds a function call
-void LTAC_Builder::build_func_call(AstNode *node) {
+LtacFuncCall *LTAC_Builder::build_func_call(AstNode *node) {
 	auto fc = static_cast<AstFuncCall *>(node);
 	auto fn_name = fc->get_name();
 	
@@ -72,7 +72,6 @@ void LTAC_Builder::build_func_call(AstNode *node) {
 	
 	//Start building
 	auto l_fc = new LtacFuncCall(fn_name);
-	file->code->children.push_back(l_fc);
 	
 	//Build the arguments
 	for (auto arg : fc->children) {
@@ -120,6 +119,8 @@ void LTAC_Builder::build_func_call(AstNode *node) {
 	
 	//Assign the function name
 	l_fc->name = fn_name;
+	
+	return l_fc;
 }
 
 //Builds a return statement

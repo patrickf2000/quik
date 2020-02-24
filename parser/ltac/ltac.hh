@@ -133,6 +133,15 @@ public:
 	bool is_extern = false;
 };
 
+//Variable assignment/declaration/operation
+class LtacVar : public LtacNode {
+public:
+	explicit LtacVar() { type = ltac::Var; }
+	int pos = 0;
+	int size = 0;
+	DataType d_type;
+};
+
 //Function calls
 class LtacFuncCall : public LtacNode {
 public:
@@ -144,15 +153,7 @@ public:
 	
 	std::string name = "";
 	std::vector<Var> args;
-};
-
-//Variable assignment/declaration/operation
-class LtacVar : public LtacNode {
-public:
-	explicit LtacVar() { type = ltac::Var; }
-	int pos = 0;
-	int size = 0;
-	DataType d_type;
+	std::vector<LtacVar *> ret_dest;
 };
 
 //Integers

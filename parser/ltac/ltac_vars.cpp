@@ -87,6 +87,12 @@ LtacNode *LTAC_Builder::convert_ast_var(AstNode *val) {
 			lval = l_id;
 		} break;
 		
+		//Function class
+		case AstType::FuncCall: {
+			auto fc = build_func_call(val);
+			lval = fc;
+		} break;
+		
 		//Math
 		case AstType::Math: {
 			auto math = new LtacMath;

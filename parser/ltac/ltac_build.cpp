@@ -40,7 +40,10 @@ void LTAC_Builder::assemble(AstNode *top) {
 			
 			case AstType::Return: build_ret(node); break;
 			
-			case AstType::FuncCall: build_func_call(node); break;
+			case AstType::FuncCall: {
+				auto l_fc = build_func_call(node);
+				file->code->children.push_back(l_fc);
+			} break;
 			
 			case AstType::VarDec: build_var_dec(node);
 			case AstType::VarAssign: build_var_assign(node); break;
