@@ -33,7 +33,7 @@ protected:
 	
 	//Comparisons
 	DataType determine_type(LtacNode *node);
-	void build_cmp(AstNode *node, bool asm_body = true);
+	void build_cmp(AstNode *node, bool is_loop = false);
 	
 	LtacFile *file;
 private:
