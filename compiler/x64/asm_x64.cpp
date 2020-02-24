@@ -33,15 +33,8 @@ void Asm_x64::build_code(LtacCodeSec *code) {
 			} break;
 			
 			case ltac::Func: build_func(ln); break;
-			
-			case ltac::Ret: {
-				writer << std::endl;
-				writer << "\tleave" << std::endl;
-				writer << "\tret" << std::endl;
-				writer << std::endl;
-			} break;
-			
 			case ltac::FuncCall: build_func_call(ln); break;
+			case ltac::Ret: build_ret(ln); break;
 			
 			case ltac::Var: build_var(ln); break;
 			

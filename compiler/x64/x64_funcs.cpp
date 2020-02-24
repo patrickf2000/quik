@@ -30,6 +30,13 @@ std::string call_flt_regs[] = {
 	"xmm7"
 };
 
+std::string ret_regs32[] {
+	"eax",
+	"r10d",
+	"r11d",
+	"r12d"
+};
+
 //Build a function declaration
 void Asm_x64::build_func(LtacNode *node) {
 	auto fd = static_cast<LtacFunc *>(node);
@@ -176,3 +183,33 @@ void Asm_x64::build_func_call(LtacNode *node) {
 		writer << "@PLT";
 	writer << std::endl << std::endl;
 }
+
+//Builds a function return
+void Asm_x64::build_ret(LtacNode *node) {
+	writer << std::endl;
+	int ret_index = 0;
+
+	for (auto val : node->children) {
+		auto reg = ret_regs32[ret_index];
+		++ret_index;
+	
+		switch (val->type) {
+			case ltac::Var: {
+				auto var = static_cast<LtacVar *>(val);
+				
+				writer << "\tmov " << reg << ", [rbp-";
+				writer << std::to_string(var->pos) << "]";
+				writer << std::endl;
+			} break;
+			
+			//TODO: Add the rest
+		}
+	}
+
+	writer << std::endl;
+	writer << "\tleave" << std::endl;
+	writer << "\tret" << std::endl;
+	writer << std::endl;
+}
+
+

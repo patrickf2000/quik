@@ -61,6 +61,14 @@ void Asm_x64::build_var(LtacNode *node) {
 			if (var->d_type == DataType::Int)
 				build_int_math(var, src);
 		} break;
+		
+		//Function calls
+		case ltac::FuncCall: {
+			build_func_call(src);
+			
+			writer << "\tmov DWORD PTR [rbp-";
+			writer << var->pos << "], eax" << std::endl;
+		} break;
 	}
 }
 
