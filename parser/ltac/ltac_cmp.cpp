@@ -23,7 +23,7 @@ DataType LTAC_Builder::determine_type(LtacNode *node) {
 	return type;
 }
 
-void LTAC_Builder::build_cmp(AstNode *node) {
+void LTAC_Builder::build_cmp(AstNode *node, bool asm_body) {
 	auto cmp = static_cast<AstCond *>(node);
 	auto lcmp = new LtacCmp;
 	
@@ -66,6 +66,7 @@ void LTAC_Builder::build_cmp(AstNode *node) {
 	default_jmp->dest = end_lbls.top();
 	
 	file->code->children.push_back(jmp);
-	assemble(node);
+	if (asm_body)
+		assemble(node);
 	file->code->children.push_back(default_jmp);
 }
