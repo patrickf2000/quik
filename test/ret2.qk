@@ -1,0 +1,45 @@
+include io
+
+func multi
+	int x1 = 10
+	int x2 = 20
+	int x3 = 30
+	int x4 = 40
+	
+	return x1, x2, x3, x4
+end
+
+func print_four(n1:int, n2:int, n3:int, n4:int)
+	println("N1: ", n1)
+	println("N2: ", n2)
+	println("N3: ", n3)
+	println("N4: ", n4)
+end
+
+func main
+	int n1 = 0
+	int n2 = 0
+	int n3 = 0
+	int n4 = 0
+	
+	println("Before:")
+	print_four(n1, n2, n3, n4)
+	
+	n1, n2, n3, n4 = multi()
+	
+	println("After:")
+	print_four(n1, n2, n3, n4)
+end
+
+#TEST
+#Before:
+#N1: 0
+#N2: 0
+#N3: 0
+#N4: 0
+#After:
+#N1: 10
+#N2: 20
+#N3: 30
+#N4: 40
+

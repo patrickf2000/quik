@@ -1,0 +1,36 @@
+include io
+
+func multi_math(n1:int, n2:int)
+	int a1 = n1 + n2
+	int a2 = n1 * n2
+	return a1, a2
+end
+
+func blow_up(n1:int)
+	int answer = n1 * n1
+	answer = answer + 1
+	return answer
+end
+
+func main
+	int x = 3
+	int y = 2
+	
+	println("X: ", x)
+	x = blow_up(x)
+	println("After: ", x)
+	
+	x, y = multi_math(10, 20)
+	
+	println("")
+	println("X: ", x)
+	println("Y: ", y)
+end
+
+#TEST
+#X: 3
+#After: 10
+#
+#X: 30
+#Y: 200
+
