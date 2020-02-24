@@ -149,11 +149,9 @@ AstFuncCall *QkParser::build_func_call(Line ln) {
 AstReturn *QkParser::build_ret(Line ln) {
 	auto tokens = ln.tokens;
 	AstReturn *node = new AstReturn;
-			
-	if (tokens.size() > 2) {
-		syntax_error(ln, "Too many arguments in return statement.");
-	} else if (tokens.size() == 2) {
-		auto t = tokens.at(1);
+	
+	for (int i = 1; i<tokens.size(); i++) {
+		auto t = tokens.at(i);
 		
 		switch (t.type) {
 			case TokenType::ID: {
