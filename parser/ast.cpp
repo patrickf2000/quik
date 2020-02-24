@@ -13,6 +13,7 @@ std::string ast2str(AstType type) {
 		case AstType::End: return "End";
 		case AstType::VarDec: return "VarDec";
 		case AstType::VarAssign: return "VarAssign";
+		case AstType::MultiVarAssign: return "MultiVarAssign";
 		case AstType::Math: return "Math";
 		case AstType::Int: return "Int";
 		case AstType::Hex: return "Hex";
@@ -149,6 +150,15 @@ void print_tree(AstNode *node, int indent, bool nl) {
 		AstVarDec *vd = dynamic_cast<AstVarDec *>(node);
 		std::cout << " [" << vd->get_name() << "] ("
 			<< type2str(vd->get_type()) << ")";
+			
+	} else if (node->type == AstType::MultiVarAssign) {
+		auto mva = static_cast<AstMultiVarAssign *>(node);
+		std::cout << " <";
+		for (auto id : mva->vars) {
+			auto aid = static_cast<AstID *>(id);
+			std::cout << "{" << aid->get_name() << "} ";
+		}
+		std::cout << ">";
 			
 	} else if (node->type == AstType::If || node->type == AstType::Elif || node->type == AstType::While) {
 		AstCond *cond = dynamic_cast<AstCond *>(node);

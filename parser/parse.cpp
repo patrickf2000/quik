@@ -177,7 +177,24 @@ AstNode *QkParser::build_id(Line ln) {
 		
 	//Build a multiple variable assignment
 	} else if (tokens.at(1).type == TokenType::COMMA) {
-		return new AstMultiVarAssign;
+		auto mva = new AstMultiVarAssign;
+		int start = 1;
+		
+		for (int i = 0; i<tokens.size(); i+=2) {
+			Token v = tokens.at(i);
+			Token sym = tokens.at(i+1);
+				
+			AstID *var = new AstID(v.id);
+			mva->vars.push_back(var);
+			
+			if (sym.type == TokenType::ASSIGN) {
+				start = i + 1;
+				break;
+			}
+		}
+		
+		build_var_parts(mva, start + 1, tokens);
+		return mva;
 		
 	//Build a structure assignment
 	} else if (tokens.at(1).type == TokenType::DOT) {
