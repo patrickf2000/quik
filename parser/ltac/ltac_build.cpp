@@ -38,10 +38,7 @@ void LTAC_Builder::assemble(AstNode *top) {
 				stack_pos = 0;
 			} break;
 			
-			case AstType::Return: {
-				auto rnode = new LtacNode(ltac::Ret);
-				file->code->children.push_back(rnode);
-			} break;
+			case AstType::Return: build_ret(node); break;
 			
 			case AstType::FuncCall: build_func_call(node); break;
 			

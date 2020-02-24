@@ -122,4 +122,29 @@ void LTAC_Builder::build_func_call(AstNode *node) {
 	l_fc->name = fn_name;
 }
 
+//Builds a return statement
+void LTAC_Builder::build_ret(AstNode *node) {
+	auto rnode = new LtacNode(ltac::Ret);
+	file->code->children.push_back(rnode);
+	
+	//Build any return statement values
+	for (auto arg : node->children) {
+		switch (arg->type) {
+			//Variables
+			case AstType::Id: {
+				auto id = static_cast<AstID *>(arg);
+				auto v = vars[id->get_name()];
+				
+				auto var = new LtacVar;
+				var->pos = v.stack_pos;
+				var->d_type = v.type;
+				rnode->children.push_back(var);
+			} break;
+			
+			//TODO: Add the rest
+		}
+	}
+}
+
+
 

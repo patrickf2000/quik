@@ -28,7 +28,18 @@ std::string code2str(LtacNode *code_ln, bool child=false) {
 		} break;
 		
 		case ltac::Ret: {
-			content += "\tret\n\n";
+			content += "\tret ";
+			
+			if (code_ln->children.size() > 0) {
+				content += "(";
+				for (auto arg : code_ln->children) {
+					content += code2str(arg, true);
+					content += ", ";
+				}
+				content += ")";
+			}
+			
+			content += "\n\n";
 		} break;
 		
 		case ltac::FuncCall: {
