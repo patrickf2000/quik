@@ -175,6 +175,10 @@ AstNode *QkParser::build_id(Line ln) {
 		build_var_parts(va, 2, tokens);
 		return va;
 		
+	//Build a multiple variable assignment
+	} else if (tokens.at(1).type == TokenType::COMMA) {
+		return new AstMultiVarAssign;
+		
 	//Build a structure assignment
 	} else if (tokens.at(1).type == TokenType::DOT) {
 		if (tokens.size() < 5)

@@ -38,6 +38,7 @@ enum AstType {
 	//Variable stuff
 	VarDec,
 	VarAssign,
+	MultiVarAssign,
 	Id,
 	Int,
 	Hex,
@@ -441,6 +442,16 @@ public:
 	void set_val(std::string s) { val = s; }
 private:
 	std::string val = "";
+};
+
+//Mutli-variable assignment
+class AstMultiVarAssign : public AstNode {
+public:
+	explicit AstMultiVarAssign() { 
+		type = AstType::MultiVarAssign;
+	}
+	
+	std::vector<AstID *> vars;
 };
 
 //The array type
