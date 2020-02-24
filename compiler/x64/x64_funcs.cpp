@@ -105,7 +105,7 @@ void Asm_x64::build_func(LtacNode *node) {
 
 //Build a function call
 void Asm_x64::build_func_call(LtacNode *node) {
-	auto fc = static_cast<LtacFunc *>(node);
+	auto fc = static_cast<LtacFuncCall *>(node);
 	
 	//Add the arguments
 	int call_index = 0;
@@ -182,6 +182,22 @@ void Asm_x64::build_func_call(LtacNode *node) {
 	if (pic)
 		writer << "@PLT";
 	writer << std::endl << std::endl;
+	
+	//If we have any destination variables to store, do that
+	if (fc->ret_dest.size() > 0) {
+		int ret_index = 0;
+		
+		for (auto var : fc->ret_dest) {
+			auto reg = ret_regs32[ret_index];
+			++ret_index;
+		
+			writer << "\tmov DWORD PTR [rbp-";
+			writer << std::to_string(var->pos) + "], ";
+			writer << reg << std::endl;
+		}
+		
+		writer << std::endl;
+	}
 }
 
 //Builds a function return
