@@ -1,0 +1,42 @@
+include io
+
+func main
+	int x = 0
+	
+	while (x < 5)
+		println("Outer")	
+		x = x + 1
+	
+		int y = 0
+		while (y < 3)
+			println("Inner!")
+			y = y + 1
+		end
+	end
+	
+	println("Done")
+end
+
+#TEST
+#Outer
+#Inner!
+#Inner!
+#Inner!
+#Outer
+#Inner!
+#Inner!
+#Inner!
+#Outer
+#Inner!
+#Inner!
+#Inner!
+#Outer
+#Inner!
+#Inner!
+#Inner!
+#Outer
+#Inner!
+#Inner!
+#Inner!
+#Done
+

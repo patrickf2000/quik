@@ -1,0 +1,34 @@
+include io
+
+func main
+	int x = 0
+	
+	while (x < 10)
+		if (x == 5)
+			println("Half way!!")
+		elif (x == 7)
+			println("Almost there!")
+		end
+	
+		println("", x)
+		x = x + 1
+	end
+	
+	println("Done")
+end
+
+#TEST
+#0
+#1
+#2
+#3
+#4
+#Half way!!
+#5
+#6
+#Almost there!
+#7
+#8
+#9
+#Done
+
