@@ -106,6 +106,9 @@ void LTAC_Builder::assemble(AstNode *top) {
 				//Insert the comparison label
 				lbl = new LtacLabel(cmp_lbl);
 				file->code->children.push_back(lbl);
+				
+				//Build the comparison
+				build_cmp(node, true);
 			} break;
 		}
 	}

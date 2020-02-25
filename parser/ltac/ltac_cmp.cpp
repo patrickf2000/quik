@@ -80,6 +80,20 @@ void LTAC_Builder::build_cond_cmp(AstCond *cmp) {
 
 //Builds a loop-style conditional
 void LTAC_Builder::build_loop_cmp(AstCond *cmp) {
-
+	auto jmp = new LtacJmp;
+	jmp->dest = labels.top();
+	
+	labels.pop();
+	
+	switch (cmp->get_op()) {
+		case CondOp::Equals: jmp->op = Operator::Equal; break;
+		case CondOp::NotEquals: jmp->op = Operator::NotEqual; break;
+		case CondOp::Greater: jmp->op = Operator::Greater; break;
+		case CondOp::GreaterEq: jmp->op = Operator::GreaterEq; break;
+		case CondOp::Less: jmp->op = Operator::Less; break;
+		case CondOp::LessEq: jmp->op = Operator::LessEq; break;
+	}
+	
+	file->code->children.push_back(jmp);
 }
 
