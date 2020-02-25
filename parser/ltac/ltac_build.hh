@@ -34,6 +34,8 @@ protected:
 	//Comparisons
 	DataType determine_type(LtacNode *node);
 	void build_cmp(AstNode *node, bool is_loop = false);
+	void build_cond_cmp(AstCond *cmp);
+	void build_loop_cmp(AstCond *cmp);
 	
 	LtacFile *file;
 private:

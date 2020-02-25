@@ -50,6 +50,14 @@ void LTAC_Builder::build_cmp(AstNode *node, bool is_loop) {
 	file->code->children.push_back(lcmp);
 	
 	//Add the comparison
+	if (is_loop)
+		build_loop_cmp(cmp);
+	else
+		build_cond_cmp(cmp);
+}
+
+//Builds an if/else-style conditional
+void LTAC_Builder::build_cond_cmp(AstCond *cmp) {
 	auto jmp = new LtacJmp;
 	auto default_jmp = new LtacJmp;
 	
@@ -66,8 +74,12 @@ void LTAC_Builder::build_cmp(AstNode *node, bool is_loop) {
 	default_jmp->dest = end_lbls.top();
 	
 	file->code->children.push_back(jmp);
-	assemble(node);
+	assemble(cmp);
 	file->code->children.push_back(default_jmp);
 }
 
+//Builds a loop-style conditional
+void LTAC_Builder::build_loop_cmp(AstCond *cmp) {
+
+}
 
