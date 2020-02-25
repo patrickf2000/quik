@@ -83,33 +83,7 @@ void LTAC_Builder::assemble(AstNode *top) {
 			} break;
 			
 			//Loops
-			case AstType::While: {
-				//Generate the label names
-				std::string top_lbl = "L" + std::to_string(lbl_count);
-				++lbl_count;
-				labels.push(top_lbl);
-				
-				std::string cmp_lbl = "L" + std::to_string(lbl_count);
-				++lbl_count;
-				
-				//Jump to the comparison label
-				auto jmp = new LtacJmp;
-				jmp->dest = cmp_lbl;
-				file->code->children.push_back(jmp);
-				
-				auto lbl = new LtacLabel(top_lbl);
-				file->code->children.push_back(lbl);
-				
-				//Assemble the body
-				assemble(node);
-				
-				//Insert the comparison label
-				lbl = new LtacLabel(cmp_lbl);
-				file->code->children.push_back(lbl);
-				
-				//Build the comparison
-				build_cmp(node, true);
-			} break;
+			case AstType::While: build_while(node); break;
 		}
 	}
 }

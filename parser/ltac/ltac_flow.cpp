@@ -23,6 +23,36 @@ DataType LTAC_Builder::determine_type(LtacNode *node) {
 	return type;
 }
 
+//Builds while-loop nodes
+void LTAC_Builder::build_while(AstNode *node) {
+	//Generate the label names
+	std::string top_lbl = "L" + std::to_string(lbl_count);
+	++lbl_count;
+	labels.push(top_lbl);
+
+	std::string cmp_lbl = "L" + std::to_string(lbl_count);
+	++lbl_count;
+
+	//Jump to the comparison label
+	auto jmp = new LtacJmp;
+	jmp->dest = cmp_lbl;
+	file->code->children.push_back(jmp);
+
+	auto lbl = new LtacLabel(top_lbl);
+	file->code->children.push_back(lbl);
+
+	//Assemble the body
+	assemble(node);
+
+	//Insert the comparison label
+	lbl = new LtacLabel(cmp_lbl);
+	file->code->children.push_back(lbl);
+
+	//Build the comparison
+	build_cmp(node, true);
+}
+
+//Builds conditional statements
 void LTAC_Builder::build_cmp(AstNode *node, bool is_loop) {
 	auto cmp = static_cast<AstCond *>(node);
 	auto lcmp = new LtacCmp;
@@ -72,6 +102,8 @@ void LTAC_Builder::build_cond_cmp(AstCond *cmp) {
 	
 	jmp->dest = labels.top();
 	default_jmp->dest = end_lbls.top();
+	
+	labels.pop();
 	
 	file->code->children.push_back(jmp);
 	assemble(cmp);
