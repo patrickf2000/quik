@@ -1,0 +1,87 @@
+include io
+
+func op1(x:int, y:int)
+	if (x < y)
+		println("Less")
+	elif (x > y)
+		println("Greater")
+	else
+		println("Equal")
+	end
+end
+
+func op2(x:int, y:int)
+	if (x >= y)
+		println("At least greater")
+	else
+		println("Less")
+	end
+end
+
+func op3(x:int, y:int)
+	if (x <= y)
+		println("At least less")
+	else
+		println("Greater")
+	end
+end
+
+func op4(x:int, y:int)
+	if (x != y)
+		println("Not equal")
+	else
+		println("Equal")
+	end
+end
+
+func op5(x:int, y:int)
+	if (x == y)
+		println("Equal")
+	else
+		println("Not equal!")
+	end
+end
+
+func main
+	op1(10, 20)
+	op1(20, 10)
+	op1(5, 5)
+	println("")
+	
+	op2(10, 10)
+	op2(11, 10)
+	op2(1, 10)
+	println("")
+	
+	op3(1, 10)
+	op3(10, 10)
+	op3(20, 10)
+	println("")
+	
+	op4(10, 20)
+	op4(10, 10)
+	println("")
+	
+	op5(10, 20)
+	op5(10, 10)
+end
+
+#TEST
+#Less
+#Greater
+#Equal
+#
+#At least greater
+#At least greater
+#Less
+#
+#At least less
+#At least less
+#Greater
+#
+#Not equal
+#Equal
+#
+#Not equal!
+#Equal
+

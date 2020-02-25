@@ -95,9 +95,9 @@ void LTAC_Builder::build_cond_cmp(AstCond *cmp) {
 		case CondOp::Equals: jmp->op = Operator::NotEqual; break;
 		case CondOp::NotEquals: jmp->op = Operator::Equal; break;
 		case CondOp::Greater: jmp->op = Operator::LessEq; break;
-		case CondOp::GreaterEq: jmp->op = Operator::LessEq; break;
+		case CondOp::GreaterEq: jmp->op = Operator::Less; break;
 		case CondOp::Less: jmp->op = Operator::GreaterEq; break;
-		case CondOp::LessEq: jmp->op = Operator::GreaterEq; break;
+		case CondOp::LessEq: jmp->op = Operator::Greater; break;
 	}
 	
 	jmp->dest = labels.top();
