@@ -60,6 +60,8 @@ void Asm_x64::build_var(LtacNode *node) {
 		case ltac::Math: {
 			if (var->d_type == DataType::Int)
 				build_int_math(var, src);
+			else if (var->d_type == DataType::Float)
+				build_float_math(var, src);
 		} break;
 		
 		//Function calls
@@ -138,4 +140,60 @@ void Asm_x64::build_int_math(LtacVar *var, LtacNode *src) {
 	writer << "\tmov DWORD PTR [rbp-" << std::to_string(var->pos);
 	writer << "], eax" << std::endl << std::endl;
 }
+
+//Builds floating-point math expressions
+void Asm_x64::build_float_math(LtacVar *var, LtacNode *src) {
+	auto math = static_cast<LtacMath *>(src);
+	
+	//Build the first value
+	auto first = math->init_val;
+	
+	switch (first->type) {
+		//An integer
+		case ltac::Float: {
+			auto i = static_cast<LtacFloat *>(first);
+			writer << "\tmovss xmm0, [" << i->name << "]" << std::endl;
+		} break;
+		
+		//A variable
+		case ltac::Var: {
+			auto id = static_cast<LtacVar *>(first);
+			writer << "\tmovss xmm0, [rbp-" << std::to_string(id->pos);
+			writer << "]" << std::endl;
+		} break;
+	}
+	
+	//Build the other parts
+	for (auto node : math->children) {
+		auto math_op = static_cast<LtacMathOp *>(node);
+		
+		//Build the operator
+		switch (math_op->op) {
+			case Operator::Add: writer << "\taddss xmm0, "; break;
+			case Operator::Sub: writer << "\tsubss xmm0, "; break;
+			case Operator::Mul: writer << "\tmulss xmm0, "; break;
+			case Operator::Div: writer << "\tdivss xmm0, "; break;
+		}
+		
+		//Build the operand
+		switch (math_op->operand->type) {
+			case ltac::Float: {
+				auto i = static_cast<LtacFloat *>(math_op->operand);
+				writer << "[" << i->name << "]" << std::endl;
+			} break;
+			
+			case ltac::Var: {
+				auto id = static_cast<LtacVar *>(math_op->operand);
+				writer << "DWORD PTR ";
+				writer << "[rbp-" << std::to_string(id->pos) << "]";
+				writer << std::endl;
+			} break;
+		}
+	}
+	
+	//Save the result back to the variable
+	writer << "\tmovss DWORD PTR [rbp-" << std::to_string(var->pos);
+	writer << "], xmm0" << std::endl << std::endl;
+}
+
 
