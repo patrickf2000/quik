@@ -39,8 +39,8 @@ void Asm_x64::build_icmp(LtacNode *node) {
 		} break;
 		
 		case ltac::FuncCall: {
-			ln = "\tmov ebx, eax\n" + ln;
-			ln += "ebx\n";
+			writer << "\tmov ebx, eax" << std::endl;
+			ln = "\tcmp ebx, eax\n";
 			build_func_call(cmp->rval);
 		} break;
 	}
