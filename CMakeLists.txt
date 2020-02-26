@@ -20,6 +20,7 @@ set(PARSER_SRC
 	parser/vars.cpp
 	parser/optimization/funcs.cpp
 	parser/ltac/ltac.cpp
+	parser/ltac/ltac_array.cpp
 	parser/ltac/ltac_build.cpp
 	parser/ltac/ltac_flow.cpp
 	parser/ltac/ltac_func.cpp

@@ -156,6 +156,18 @@ std::string code2str(LtacNode *code_ln, bool child=false) {
 			
 			content += jmp->dest + "\n";
 		} break;
+		
+		case ltac::Array: {
+			auto array = static_cast<LtacArray *>(code_ln);
+			content += "\t[bp+" + std::to_string(array->stack_pos) + "] * ";
+			content += std::to_string(array->size) + "\n";
+			
+			for (auto node : array->children) {
+				content += "\t  " + code2str(node, true) + "\n";
+			}
+			
+			content += "\n";
+		} break;
 	}
 	
 	return content;

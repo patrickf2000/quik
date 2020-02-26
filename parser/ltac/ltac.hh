@@ -22,6 +22,7 @@ enum class ltac {
 	Label,
 	Ret,
 	Var,
+	Array,
 	
 	Int,
 	Byte,
@@ -202,6 +203,16 @@ public:
 	
 	std::string name = "";
 	std::string val = "";
+};
+
+//Arrays
+class LtacArray : public LtacNode {
+public:
+	explicit LtacArray() { type = ltac::Array; }
+	
+	int stack_pos = 0;
+	int size = 0;
+	DataType d_type;
 };
 
 //Math operations

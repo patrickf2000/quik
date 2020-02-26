@@ -26,6 +26,9 @@ protected:
 	void build_multi_var_assign(AstNode *node);
 	LtacNode *convert_ast_var(AstNode *val);
 	
+	//Array stuff
+	void build_array_dec(AstNode *node);
+	
 	//Utility stuff
 	LtacNode *build_string(AstNode *node);
 	LtacNode *build_float(AstNode *node);
