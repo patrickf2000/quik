@@ -25,20 +25,27 @@ void Asm_x64::build_icmp(LtacNode *node) {
 	}
 	
 	//Compare with the right value
-	writer << "\tcmp eax, ";
+	std::string ln = "\tcmp eax, ";
 	
 	switch (cmp->rval->type) {
 		case ltac::Int: {
 			auto i = static_cast<LtacInt *>(cmp->rval);
-			writer << std::to_string(i->val) << std::endl;
+			ln += std::to_string(i->val) + "\n";
 		} break;
 		
 		case ltac::Var: {
 			auto var = static_cast<LtacVar *>(cmp->rval);
-			writer << "[rbp-" << std::to_string(var->pos);
-			writer << "]" << std::endl;
+			ln += "[rbp-" + std::to_string(var->pos) + "]\n";
+		} break;
+		
+		case ltac::FuncCall: {
+			ln = "\tmov ebx, eax\n" + ln;
+			ln += "ebx\n";
+			build_func_call(cmp->rval);
 		} break;
 	}
+	
+	writer << ln;
 }
 
 //Build jumps (all kinds)
