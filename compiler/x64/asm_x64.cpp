@@ -36,6 +36,8 @@ void Asm_x64::build_code(LtacCodeSec *code) {
 			case ltac::FuncCall: build_func_call(ln); break;
 			case ltac::Ret: build_ret(ln); break;
 			
+			case ltac::Array: build_array(ln); break;
+			
 			case ltac::Var: build_var(ln); break;
 			
 			case ltac::ICmp: build_icmp(ln); break;
