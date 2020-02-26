@@ -1,0 +1,39 @@
+include io
+
+func triple(x:int)
+	int answer = x * 3
+	return answer
+end
+
+func get_val
+	int v = 10
+	println("V: ", v)
+	return v
+end
+
+func run_test(x:int)
+	println("X in: ", x)
+	
+	if (triple(x) > get_val())
+		println("Greater than 10!")
+	else
+		println("Less!")
+	end
+end
+
+func main
+	int x = 7
+	run_test(x)
+	
+	x = 1
+	run_test(x)
+end
+
+#TEST
+#X in: 7
+#V: 10
+#Greater than 10!
+#X in: 1
+#V: 10
+#Less!
+
