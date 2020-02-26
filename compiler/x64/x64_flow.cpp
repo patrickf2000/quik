@@ -18,6 +18,10 @@ void Asm_x64::build_icmp(LtacNode *node) {
 			writer << std::to_string(var->pos) << "]";
 			writer << std::endl;
 		} break;
+		
+		case ltac::FuncCall: {
+			build_func_call(cmp->lval);
+		} break;
 	}
 	
 	//Compare with the right value

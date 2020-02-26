@@ -65,6 +65,12 @@ void LTAC_Builder::build_cmp(AstNode *node, bool is_loop) {
 	auto l_type = determine_type(lval);
 	auto r_type = determine_type(rval);
 	
+	//TODO: Remove me
+	//This is for testing
+	if (cmp->lval->type == AstType::FuncCall) {
+		l_type = DataType::Int;
+	}
+	
 	if (l_type != r_type) {
 		Line ln;
 		syntax_error(ln, "You can only compare values of the same type.");
