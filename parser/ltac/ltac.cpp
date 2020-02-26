@@ -63,7 +63,10 @@ std::string code2str(LtacNode *code_ln, bool child=false) {
 				content += ",";
 			}
 			
-			content += ")\n\n";
+			content += ")";
+			
+			if (!child)
+				content += "\n\n";
 		} break;
 		
 		case ltac::Var: {
