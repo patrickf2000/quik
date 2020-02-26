@@ -1,0 +1,32 @@
+include io
+
+func main
+	float no1 = 4.5243
+	float no2 = 9.2432
+	
+	printf("No1: %f\n", no1)
+	printf("No2: %f\n\n", no2)
+	
+	float answer = no1 + no2 + 3.12
+	
+	printf("Answer: %f\n", answer)
+	
+	float answer2 = no1 * no2
+	printf("no1 x no2: %f\n", answer2)
+	
+	float answer3 = no2 - no1
+	printf("no1 - no2: %f\n", answer3)
+	
+	float answer4 = no1 / no2
+	printf("no1 / no2: %f\n", answer4)
+end
+
+#TEST
+#No1: 4.524300
+#No2: 9.243200
+#
+#Answer: 16.887501
+#no1 x no2: 41.819012
+#no1 - no2: 4.718900
+#no1 / no2: 0.489473
+
