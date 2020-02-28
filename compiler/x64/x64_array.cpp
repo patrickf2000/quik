@@ -20,6 +20,16 @@ void Asm_x64::build_array(LtacNode *node) {
 				writer << i->val << std::endl;
 			} break;
 			
+			//Floating point numbers
+			case ltac::Float: {
+				auto f = static_cast<LtacFloat *>(child);
+				
+				writer << "\tmovss xmm0, DWORD PTR ";
+				writer << f->name << "[rip]" << std::endl;
+				writer << "\tmovss DWORD PTR " << addr << ", ";
+				writer << "xmm0" << std::endl;
+			} break;
+			
 			//TODO: Add the rest
 		}
 	}
