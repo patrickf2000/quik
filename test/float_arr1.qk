@@ -1,0 +1,16 @@
+include io
+
+func main
+	float[4] numbers = 1.1, 2.2, 3.3, 4.4
+	
+	float x = numbers[1]
+	printf("%f\n", x)
+	
+	x = numbers[3]
+	printf("%f\n", x)
+end
+
+#TEST
+#2.200000
+#4.400000
+
