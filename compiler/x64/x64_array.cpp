@@ -36,3 +36,28 @@ void Asm_x64::build_array(LtacNode *node) {
 	
 	writer << std::endl;
 }
+
+//Builds an array access
+void Asm_x64::build_array_acc(LtacNode *node) {
+	auto acc = static_cast<LtacArrayAcc *>(node);
+	auto child = acc->children[0];
+	
+	int pos = acc->stack_pos;
+	int size = acc->size;
+	
+	switch (child->type) {
+		//Integer index
+		case ltac::Int: {
+			auto li = static_cast<LtacInt *>(child);
+			int offset = pos - (size * li->val);
+			
+			writer << "\tmovss xmm1, [rbp-" << offset;
+			writer << "]" << std::endl << std::endl;
+		} break;
+		
+		//Variable index
+		case ltac::Var: {
+		
+		} break;
+	}
+}

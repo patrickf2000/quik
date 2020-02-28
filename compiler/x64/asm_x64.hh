@@ -22,6 +22,7 @@ protected:
 	void build_float_math(LtacVar *var, LtacNode *src);
 	
 	void build_array(LtacNode *node);
+	void build_array_acc(LtacNode *node);
 	
 	void build_icmp(LtacNode *node);
 	void build_jmp(LtacNode *node);

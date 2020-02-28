@@ -71,6 +71,24 @@ void Asm_x64::build_var(LtacNode *node) {
 			writer << "\tmov DWORD PTR [rbp-";
 			writer << var->pos << "], eax" << std::endl;
 		} break;
+		
+		//Array access
+		case ltac::ArrayAcc: {
+			build_array_acc(src);
+			
+			switch (var->d_type) {
+				//Ints
+				case DataType::Int: {
+				
+				} break;
+				
+				//Floats
+				case DataType::Float: {
+					writer << "\tmovss DWORD PTR [rbp-";
+					writer << var->pos << "], xmm1" << std::endl;
+				} break;
+			}
+		} break;
 	}
 }
 
