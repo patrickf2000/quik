@@ -168,6 +168,15 @@ std::string code2str(LtacNode *code_ln, bool child=false) {
 			
 			content += "\n";
 		} break;
+		
+		case ltac::ArrayAcc: {
+			auto acc = static_cast<LtacArrayAcc *>(code_ln);
+			content += "[bp+" + std::to_string(acc->stack_pos) + "+";
+			
+			auto child = acc->children[0];
+			content += code2str(child, true);
+			content += "]";
+		} break;
 	}
 	
 	return content;

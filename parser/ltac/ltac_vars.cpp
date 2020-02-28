@@ -112,6 +112,12 @@ LtacNode *LTAC_Builder::convert_ast_var(AstNode *val) {
 			lval = fc;
 		} break;
 		
+		//Array access
+		case AstType::ArrayAccess: {
+			auto arr = build_array_acc(val);
+			lval = arr;
+		} break;
+		
 		//Math
 		case AstType::Math: {
 			auto math = new LtacMath;

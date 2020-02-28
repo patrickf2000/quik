@@ -23,6 +23,7 @@ enum class ltac {
 	Ret,
 	Var,
 	Array,
+	ArrayAcc,
 	
 	Int,
 	Byte,
@@ -213,6 +214,12 @@ public:
 	int stack_pos = 0;
 	int size = 0;
 	DataType d_type;
+};
+
+//Array access
+class LtacArrayAcc : public LtacArray {
+public:
+	explicit LtacArrayAcc() { type = ltac::ArrayAcc; }
 };
 
 //Math operations

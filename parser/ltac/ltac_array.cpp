@@ -18,4 +18,42 @@ void LTAC_Builder::build_array_dec(AstNode *node) {
 	}
 	
 	file->code->children.push_back(l_array);
+	
+	//Save the array to the variables array
+	Var v;
+	v.name = array_dec->get_name();
+	v.type = array_dec->get_type();
+	v.is_array = true;
+	v.is_param = false;
+	v.size = size;
+	v.stack_pos = stack_pos;
+	vars[v.name] = v;
+}
+
+//Builds array access
+LtacArrayAcc *LTAC_Builder::build_array_acc(AstNode *node) {
+	auto ast_acc = static_cast<AstArrayAcc *>(node);
+	auto acc = new LtacArrayAcc;
+	
+	Var v = vars[ast_acc->get_name()];
+	acc->stack_pos = v.stack_pos;
+	
+	auto index = ast_acc->children[0];
+	
+	switch (index->type) {
+		//Integer being used for index
+		case AstType::Int: {
+			auto i = static_cast<AstInt *>(index);
+			auto li = new LtacInt(i->get_val());
+			
+			acc->children.push_back(li);
+		} break;
+		
+		//Variable being used for index
+		case AstType::Id: {
+		
+		} break;
+	}
+	
+	return acc;
 }
