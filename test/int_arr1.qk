@@ -1,0 +1,20 @@
+include io
+
+func main
+	int[9] numbers = 9, 8, 7, 6, 5, 4, 3, 2, 1
+	
+	int no = numbers[0]
+	println("", no)
+	
+	no = numbers[1]
+	println("", no)
+	
+	no = numbers[7]
+	println("", no)
+end
+
+#TEST
+#9
+#8
+#2
+
