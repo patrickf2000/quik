@@ -5,7 +5,7 @@ void Asm_x64::build_array(LtacNode *node) {
 	auto array = static_cast<LtacArray *>(node);
 	
 	int pos = array->stack_pos;
-	int size = array->size;
+	int size = array->type_size;
 	
 	for (auto child : array->children) {
 		std::string addr = "[rbp-" + std::to_string(pos) + "]";
