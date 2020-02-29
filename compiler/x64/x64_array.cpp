@@ -43,7 +43,7 @@ void Asm_x64::build_array_acc(LtacNode *node) {
 	auto child = acc->children[0];
 	
 	int pos = acc->stack_pos;
-	int size = acc->size;
+	int size = acc->type_size;
 	
 	switch (child->type) {
 		//Integer index

@@ -213,6 +213,7 @@ public:
 	
 	int stack_pos = 0;
 	int size = 0;
+	int type_size = 1;
 	DataType d_type;
 };
 

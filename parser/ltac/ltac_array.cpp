@@ -10,6 +10,7 @@ void LTAC_Builder::build_array_dec(AstNode *node) {
 	
 	l_array->stack_pos = stack_pos;
 	l_array->size = size;
+	l_array->type_size = 4;
 	l_array->d_type = array_dec->get_type();
 	
 	for (auto child : array_dec->children) {
@@ -37,7 +38,7 @@ LtacArrayAcc *LTAC_Builder::build_array_acc(AstNode *node) {
 	
 	Var v = vars[ast_acc->get_name()];
 	acc->stack_pos = v.stack_pos;
-	acc->size = 4;
+	acc->type_size = 4;
 	
 	auto index = ast_acc->children[0];
 	
