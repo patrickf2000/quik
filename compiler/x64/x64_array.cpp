@@ -51,8 +51,19 @@ void Asm_x64::build_array_acc(LtacNode *node) {
 			auto li = static_cast<LtacInt *>(child);
 			int offset = pos - (size * li->val);
 			
-			writer << "\tmovss xmm1, [rbp-" << offset;
-			writer << "]" << std::endl << std::endl;
+			switch (acc->d_type) {
+				//Integer arrays
+				case DataType::Int: {
+					writer << "\tmov ebx, [rbp-" << offset;
+					writer << "]" << std::endl;
+				} break;
+				
+				//Float arrays
+				case DataType::Float: {
+					writer << "\tmovss xmm1, [rbp-" << offset;
+					writer << "]" << std::endl;
+				} break;
+			}
 		} break;
 		
 		//Variable index

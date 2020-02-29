@@ -39,6 +39,7 @@ LtacArrayAcc *LTAC_Builder::build_array_acc(AstNode *node) {
 	Var v = vars[ast_acc->get_name()];
 	acc->stack_pos = v.stack_pos;
 	acc->type_size = 4;
+	acc->d_type = v.type;
 	
 	auto index = ast_acc->children[0];
 	

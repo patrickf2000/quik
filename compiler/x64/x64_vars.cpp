@@ -79,7 +79,8 @@ void Asm_x64::build_var(LtacNode *node) {
 			switch (var->d_type) {
 				//Ints
 				case DataType::Int: {
-				
+					writer << "\tmov DWORD PTR [rbp-";
+					writer << var->pos << "], ebx" << std::endl;
 				} break;
 				
 				//Floats
@@ -88,6 +89,8 @@ void Asm_x64::build_var(LtacNode *node) {
 					writer << var->pos << "], xmm1" << std::endl;
 				} break;
 			}
+			
+			writer << std::endl;
 		} break;
 	}
 }
