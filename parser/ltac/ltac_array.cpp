@@ -54,7 +54,13 @@ LtacArrayAcc *LTAC_Builder::build_array_acc(AstNode *node) {
 		
 		//Variable being used for index
 		case AstType::Id: {
-		
+			auto id = static_cast<AstID *>(index);
+			auto lv = new LtacVar;
+			auto v2 = vars[id->get_name()];
+			
+			lv->pos = v2.stack_pos;
+			lv->d_type = v2.type;
+			acc->children.push_back(lv);
 		} break;
 	}
 	
