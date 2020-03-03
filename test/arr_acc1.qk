@@ -1,0 +1,29 @@
+include io
+
+func test_int
+	int[9] numbers = 9, 8, 7, 6, 5, 4, 3, 2, 1
+	int x = 3
+	
+	int no = numbers[x]
+	println("Int: ", no)
+end
+
+func test_float
+	float[4] numbers = 1.1, 2.2, 3.3, 4.4
+	int x = 2
+	
+	float no = numbers[x]
+	printf("No: %f\n", no)
+end
+
+func main
+	test_int()
+	println("")
+	test_float()
+end
+
+#TEST
+#Int: 6
+#
+#No: 3.300000
+
