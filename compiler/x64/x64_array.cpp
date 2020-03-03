@@ -68,7 +68,29 @@ void Asm_x64::build_array_acc(LtacNode *node) {
 		
 		//Variable index
 		case ltac::Var: {
-		
+			auto lv = static_cast<LtacVar *>(child);
+			
+			switch (acc->d_type) {
+				//Integer arrays
+				case DataType::Int: {
+					writer << "\tmov eax, DWORD PTR [rbp-" << lv->pos;
+					writer << "]" << std::endl;
+					writer << "\tcdqe" << std::endl;
+					
+					writer << "\tmov ebx, DWORD PTR [rbp-" << pos << "+rax*";
+					writer << size << "]" << std::endl;
+				} break;
+				
+				//Float arrays
+				case DataType::Float: {
+					writer << "\tmov eax, DWORD PTR [rbp-" << lv->pos;
+					writer << "]" << std::endl;
+					writer << "\tcdqe" << std::endl;
+					
+					writer << "\tmovss xmm1, DWORD PTR [rbp-" << pos << "+rax*";
+					writer << size << "]" << std::endl;
+				} break;
+			}
 		} break;
 	}
 }
