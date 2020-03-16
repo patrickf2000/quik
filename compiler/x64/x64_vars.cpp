@@ -70,7 +70,15 @@ void Asm_x64::build_var(LtacNode *node) {
 					writer << var->pos << "], xmm0" << std::endl;
 				} break;
 				
-				//TODO: Add rest
+				//256-bit vector types
+				case DataType::Int256:
+				case DataType::Float256: {
+					writer << "\tvmovups ymm0, [rbp-" << var2->pos;
+					writer << "]" << std::endl;
+					
+					writer << "\tvmovups [rbp-";
+					writer << var->pos << "], ymm0" << std::endl;
+				} break;
 			}
 		} break;
 		
