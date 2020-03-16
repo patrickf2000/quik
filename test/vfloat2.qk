@@ -1,0 +1,28 @@
+include io
+
+func main
+	float[12] numbers = 1.1, 2.2, 3.3, 4.4, 10.10, 20.20, 30.30, 40.40, 2.2, 4.4, 6.6, 8.8
+	float128 answer = numbers
+	
+	# Add
+	int index = 4
+	while (index < 12)
+		answer = answer ++ numbers[index]
+		index = index + 4
+	end
+	
+	# Print the result
+	index = 0
+	while (index < 4)
+		float no = answer[index]
+		printf("%f\n", no)
+		index = index + 1
+	end
+end
+
+#TEST
+#13.400001
+#26.800001
+#40.199997
+#53.600002
+
