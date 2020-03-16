@@ -10,6 +10,11 @@ void LTAC_Builder::build_var_dec(AstNode *node) {
 	v.is_array = false;
 	v.is_param = false;
 	
+	if (v.type == DataType::Int128 || v.type == DataType::Int256
+		|| v.type == DataType::Float128 || v.type == DataType::Float256) {
+		v.is_array = true;	
+	}
+	
 	inc_stack(v.type);
 	
 	v.stack_pos = stack_pos;
@@ -20,6 +25,12 @@ void LTAC_Builder::build_var_dec(AstNode *node) {
 void LTAC_Builder::build_var_assign(AstNode *node) {
 	auto va = static_cast<AstVarAssign *>(node);
 	auto v = vars[va->get_name()];
+	
+	if (v.type == DataType::Int128 || v.type == DataType::Int256
+		|| v.type == DataType::Float128 || v.type == DataType::Float256) {
+		build_vector_dec(va);
+		return;	
+	}
 	
 	auto var = new LtacVar;
 	var->pos = v.stack_pos;
@@ -163,4 +174,21 @@ LtacNode *LTAC_Builder::convert_ast_var(AstNode *val) {
 	
 	return lval;
 }
+
+//Builds a vector variable declaration
+void LTAC_Builder::build_vector_dec(AstVarAssign *va) {
+	auto *vector = new LtacArray;
+	vector->stack_pos = stack_pos;
+	vector->size = va->children.size();
+	vector->type_size = 4;
+	vector->d_type = va->get_type();
+	
+	for (auto child : va->children) {
+		auto node = convert_ast_var(child);
+		vector->children.push_back(node);
+	}
+	
+	file->code->children.push_back(vector);
+}
+
 
