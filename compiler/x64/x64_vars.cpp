@@ -251,6 +251,11 @@ void Asm_x64::build_float_math(LtacVar *var, LtacNode *src) {
 void Asm_x64::build_vector_math(LtacVar *var, LtacNode *src) {
 	auto math = static_cast<LtacMath *>(src);
 	
+	//Determine if we are using 256-bit registers
+	bool islong = false;
+	if (var->d_type == DataType::Int256 || var->d_type == DataType::Float256)
+		islong = true;
+	
 	//Print the first value
 	auto first = math->init_val;
 	
@@ -258,7 +263,13 @@ void Asm_x64::build_vector_math(LtacVar *var, LtacNode *src) {
 		//Variables
 		case ltac::Var: {
 			auto id = static_cast<LtacVar *>(first);
-			writer << "\tmovups xmm0, [rbp-" << std::to_string(id->pos);
+			
+			if (islong)
+				writer << "\tvmovups ymm0, ";
+			else
+				writer << "\tmovups ymm0, ";
+			
+			writer << "[rbp-" << std::to_string(id->pos);
 			writer << "]" << std::endl;
 		} break;
 		
@@ -301,7 +312,13 @@ void Asm_x64::build_vector_math(LtacVar *var, LtacNode *src) {
 			
 			//Float 256
 			case DataType::Float256: {
-			
+				switch (math_op->op) {
+					case Operator::Add: ln += "vhaddps ymm0, ymm0, "; break;
+					case Operator::PAdd: ln += "vaddps ymm0, ymm0, "; break;
+					case Operator::Sub: ln += "vsubps ymm0, ymm0, "; break;
+					case Operator::Mul: ln += "vmulps ymm0, ymm0, "; break;
+					case Operator::Div: ln += "vdivps ymm0, ymm0, "; break;
+				}
 			} break;
 		}
 		
@@ -342,7 +359,10 @@ void Asm_x64::build_vector_math(LtacVar *var, LtacNode *src) {
 					} break;
 				}
 			
-				ln += "xmm1";
+				if (islong)
+					ln += "ymm1";
+				else
+					ln += "xmm1";
 			} break;
 			
 			//TODO: Add rest
@@ -353,7 +373,13 @@ void Asm_x64::build_vector_math(LtacVar *var, LtacNode *src) {
 	}
 	
 	//Save results back to the variable
-	writer << "\tmovups [rbp-" << std::to_string(var->pos) << "], xmm0";
+	std::string mem = "[rbp-" + std::to_string(var->pos) + "]";
+	
+	if (islong)
+		writer << "\tvmovups " << mem << ", ymm0";
+	else
+		writer << "\tmovups " << mem << ", xmm0";
+	
 	writer << std::endl << std::endl;
 }
 
