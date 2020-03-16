@@ -28,8 +28,10 @@ void LTAC_Builder::build_var_assign(AstNode *node) {
 	
 	if (v.type == DataType::Int128 || v.type == DataType::Int256
 		|| v.type == DataType::Float128 || v.type == DataType::Float256) {
-		build_vector_dec(va);
-		return;	
+		if (va->children[0]->type != AstType::Math) {
+			build_vector_dec(va);	
+			return;
+		}
 	}
 	
 	auto var = new LtacVar;
