@@ -62,7 +62,9 @@ void Asm_x64::build_var(LtacNode *node) {
 				case DataType::Int: build_int_math(var, src); break;
 				case DataType::Float: build_float_math(var, src); break;
 				case DataType::Int128:
-				case DataType::Int256: build_vint_math(var, src); break;
+				case DataType::Int256:
+				case DataType::Float128:
+				case DataType::Float256: build_vector_math(var, src); break;
 			}
 		} break;
 		
@@ -220,7 +222,7 @@ void Asm_x64::build_float_math(LtacVar *var, LtacNode *src) {
 }
 
 //Builds vector integer math
-void Asm_x64::build_vint_math(LtacVar *var, LtacNode *src) {
+void Asm_x64::build_vector_math(LtacVar *var, LtacNode *src) {
 	auto math = static_cast<LtacMath *>(src);
 	
 	//Print the first value
