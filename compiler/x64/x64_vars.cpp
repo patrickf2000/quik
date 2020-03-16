@@ -281,6 +281,14 @@ void Asm_x64::build_vector_math(LtacVar *var, LtacNode *src) {
 					} break;
 					
 					//By-variable access
+					case ltac::Var: {
+						auto lv = static_cast<LtacVar *>(child);
+						writer << "\tmov eax, DWORD PTR [rbp-" << std::to_string(lv->pos);
+						writer << "]" << std::endl;
+						writer << "\tcdqe" << std::endl;
+						writer << "\tmovups xmm1, [rbp-" << std::to_string(pos);
+						writer << "+rax*4]" << std::endl;
+					} break;
 				}
 			
 				ln += "xmm1";
