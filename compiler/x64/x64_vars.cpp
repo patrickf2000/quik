@@ -49,11 +49,29 @@ void Asm_x64::build_var(LtacNode *node) {
 		case ltac::Var: {
 			auto var2 = static_cast<LtacVar *>(src);
 			writer << std::endl;
-			writer << "\tmov eax, [rbp-" << var2->pos;
-			writer << "]" << std::endl;
 			
-			writer << "\tmov DWORD PTR [rbp-";
-			writer << var->pos << "], eax" << std::endl;
+			switch (var->d_type) {
+				//Integers
+				case DataType::Int: {
+					writer << "\tmov eax, [rbp-" << var2->pos;
+					writer << "]" << std::endl;
+					
+					writer << "\tmov DWORD PTR [rbp-";
+					writer << var->pos << "], eax" << std::endl;
+				} break;
+				
+				//128-bit vector types
+				case DataType::Int128:
+				case DataType::Float128: {
+					writer << "\tmovups xmm0, [rbp-" << var2->pos;
+					writer << "]" << std::endl;
+					
+					writer << "\tmovups [rbp-";
+					writer << var->pos << "], xmm0" << std::endl;
+				} break;
+				
+				//TODO: Add rest
+			}
 		} break;
 		
 		//Math expressions
