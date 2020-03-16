@@ -267,7 +267,7 @@ void Asm_x64::build_vector_math(LtacVar *var, LtacNode *src) {
 			if (islong)
 				writer << "\tvmovups ymm0, ";
 			else
-				writer << "\tmovups ymm0, ";
+				writer << "\tmovups xmm0, ";
 			
 			writer << "[rbp-" << std::to_string(id->pos);
 			writer << "]" << std::endl;
