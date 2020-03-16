@@ -177,6 +177,11 @@ void Asm_x64::build_func_call(LtacNode *node) {
 		}
 	}
 	
+	//Tell the function about floating-point arguments
+	if (call_index_flt > 0) {
+		writer << "\tmov eax, " << call_index_flt << std::endl;
+	}
+	
 	//Call the function
 	writer << "\tcall " << fc->name;
 	if (pic)
