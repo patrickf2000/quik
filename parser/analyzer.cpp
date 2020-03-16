@@ -30,6 +30,7 @@ void QkParser::find_variables(AstNode *top) {
 			case AstType::Else:
 			case AstType::While: {
 				AstScope *s = new AstScope;
+				s->vars = scope->vars;
 				s->children = node->children;
 				
 				find_variables(s);
@@ -54,12 +55,17 @@ void QkParser::find_variables(AstNode *top) {
 			case AstType::ArrayDec:
 			case AstType::VarDec: {
 				AstVarDec *vd = static_cast<AstVarDec *>(node);
+				auto name = vd->get_name();
+				
+				if (scope->vars.find(name) != scope->vars.end()) {
+					syntax_error(node->ln, "Duplicate variable declaration.");
+				}
 			
 				Var v;
-				v.name = vd->get_name();
+				v.name = name;
 				v.type = vd->get_type();
 				v.is_param = false;
-				scope->vars[vd->get_name()] = v;
+				scope->vars[name] = v;
 			} break;
 		}
 	}
