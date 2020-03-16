@@ -52,6 +52,69 @@ void LTAC_Builder::build_while(AstNode *node) {
 	build_cmp(node, true);
 }
 
+//Build loop nodes
+void LTAC_Builder::build_loop(AstNode *node) {
+	auto loop = static_cast<AstLoop *>(node);
+
+	//Generate the label names
+	std::string top_lbl = "L" + std::to_string(lbl_count);
+	++lbl_count;
+
+	std::string cmp_lbl = "L" + std::to_string(lbl_count);
+	++lbl_count;
+	
+	//Build the internal index
+	stack_pos += 4;
+	int pos = stack_pos;
+	
+	auto ivar = new LtacVar;
+	ivar->pos = pos;
+	ivar->d_type = DataType::Int;
+	ivar->children.push_back(new LtacInt(0));
+	
+	file->code->children.push_back(ivar);
+	
+	//Generate the top label
+	auto lbl = new LtacLabel(top_lbl);
+	file->code->children.push_back(lbl);
+	
+	//Assemble the body
+	assemble(node);
+	
+	//Increment the internal index
+	ivar->children.clear();
+	
+	auto math = new LtacMath;
+	math->init_val = ivar;
+	
+	auto mathop = new LtacMathOp;
+	mathop->op = Operator::Add;
+	mathop->operand = new LtacInt(1);
+	math->children.push_back(mathop);
+	
+	auto ivar2 = new LtacVar;
+	ivar2->pos = pos;
+	ivar2->d_type = DataType::Int;
+	
+	ivar2->children.push_back(math);
+	file->code->children.push_back(ivar2);
+
+	//Insert the comparison label
+	lbl = new LtacLabel(cmp_lbl);
+	file->code->children.push_back(lbl);
+
+	//Build the comparison
+	auto cmp = new LtacICmp;
+	cmp->lval = ivar;
+	cmp->rval = convert_ast_var(loop->param);
+	file->code->children.push_back(cmp);
+	
+	auto jmp = new LtacJmp;
+	jmp->op = Operator::Less;
+	jmp->dest = top_lbl;
+	file->code->children.push_back(jmp);
+}
+
 //Builds conditional statements
 void LTAC_Builder::build_cmp(AstNode *node, bool is_loop) {
 	auto cmp = static_cast<AstCond *>(node);
