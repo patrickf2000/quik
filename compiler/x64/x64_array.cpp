@@ -84,7 +84,9 @@ void Asm_x64::build_array_acc(LtacNode *node) {
 				} break;
 				
 				//Float arrays
-				case DataType::Float: {
+				case DataType::Float: 
+				case DataType::Float128:
+				case DataType::Float256: {
 					writer << "\tmov eax, DWORD PTR [rbp-" << lv->pos;
 					writer << "]" << std::endl;
 					writer << "\tcdqe" << std::endl;
