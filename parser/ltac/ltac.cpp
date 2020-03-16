@@ -117,6 +117,8 @@ std::string code2str(LtacNode *code_ln, bool child=false) {
 				case Operator::Mul: content += "mul reg, "; break;
 				case Operator::Div: content += "div reg, "; break;
 				case Operator::Mod: content += "mod reg, "; break;
+				
+				case Operator::PAdd: content += "padd reg, "; break;
 			}
 			
 			content += code2str(math_op->operand, true);

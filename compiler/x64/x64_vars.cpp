@@ -244,6 +244,8 @@ void Asm_x64::build_vint_math(LtacVar *var, LtacNode *src) {
 		//Build the operator
 		switch (math_op->op) {
 			case Operator::Add: writer << "\tphaddd xmm1, "; break;
+			case Operator::PAdd: writer << "\taddps xmm1, "; break;
+			case Operator::Mul: writer << "\tpmulld xmm1, "; break;
 			
 			//TODO: Add rest
 		}

@@ -59,6 +59,9 @@ enum class Operator {
 	Div,
 	Mod,
 	
+	PAdd,
+	PSub,
+	
 	Equal,
 	NotEqual,
 	Greater,

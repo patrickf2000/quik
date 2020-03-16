@@ -149,6 +149,8 @@ LtacNode *LTAC_Builder::convert_ast_var(AstNode *val) {
 					case AstType::Mul: math_op->op = Operator::Mul; break;
 					case AstType::Div: math_op->op = Operator::Div; break;
 					case AstType::Mod: math_op->op = Operator::Mod; break;
+					
+					case AstType::Inc: math_op->op = Operator::PAdd; break;
 				}
 				
 				//Build the operand
