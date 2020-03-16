@@ -1,0 +1,89 @@
+include io
+
+func hadd
+	float128 n1 = 1.1, 2.2, 3.3, 4.4
+	float128 n2 = 10.1, 20.2, 30.3, 40.4
+	float128 answer = n2 + n1
+	
+	# Print the result
+	int index = 0
+	while (index < 4)
+		float no = answer[index]
+		printf("%f\n", no)
+		index = index + 1
+	end
+end
+
+func add
+	float128 n1 = 1.1, 2.2, 3.3, 4.4
+	float128 n2 = 10.1, 20.2, 30.3, 40.4
+	float128 answer = n2 ++ n1
+	
+	# Print the result
+	int index = 0
+	while (index < 4)
+		float no = answer[index]
+		printf("%f\n", no)
+		index = index + 1
+	end
+end
+
+func sub
+	float128 n1 = 1.1, 2.2, 3.3, 4.4
+	float128 n2 = 10.1, 20.2, 30.3, 40.4
+	float128 answer = n2 - n1
+	
+	# Print the result
+	int index = 0
+	while (index < 4)
+		float no = answer[index]
+		printf("%f\n", no)
+		index = index + 1
+	end
+end
+
+func mp
+	float128 n1 = 1.1, 2.2, 3.3, 4.4
+	float128 n2 = 10.1, 20.2, 30.3, 40.4
+	float128 answer = n2 * n1
+	
+	# Print the result
+	int index = 0
+	while (index < 4)
+		float no = answer[index]
+		printf("%f\n", no)
+		index = index + 1
+	end
+end
+
+func main
+	hadd()
+	println("")
+	add()
+	println("")
+	sub()
+	println("")
+	mp()
+end
+
+#TEST
+#30.300001
+#70.699997
+#3.300000
+#7.700000
+#
+#11.200001
+#22.400002
+#33.599998
+#44.800003
+#
+#9.000000
+#18.000000
+#27.000000
+#36.000000
+#
+#11.110001
+#44.440002
+#99.989998
+#177.760010
+
