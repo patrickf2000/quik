@@ -247,6 +247,7 @@ void Asm_x64::build_vector_math(LtacVar *var, LtacNode *src) {
 		switch (math_op->op) {
 			case Operator::Add: writer << "\tphaddd xmm1, "; break;
 			case Operator::PAdd: writer << "\taddps xmm1, "; break;
+			case Operator::Sub: writer << "\tpsubb xmm1, "; break;
 			case Operator::Mul: writer << "\tpmulld xmm1, "; break;
 			
 			//TODO: Add rest
