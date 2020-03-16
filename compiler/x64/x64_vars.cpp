@@ -232,7 +232,7 @@ void Asm_x64::build_vector_math(LtacVar *var, LtacNode *src) {
 		//Variables
 		case ltac::Var: {
 			auto id = static_cast<LtacVar *>(first);
-			writer << "\tmovups xmm1, [rbp-" << std::to_string(id->pos);
+			writer << "\tmovups xmm0, [rbp-" << std::to_string(id->pos);
 			writer << "]" << std::endl;
 		} break;
 		
@@ -242,31 +242,59 @@ void Asm_x64::build_vector_math(LtacVar *var, LtacNode *src) {
 	//Build the rest of the equation
 	for (auto node : math->children) {
 		auto math_op = static_cast<LtacMathOp *>(node);
+		std::string ln = "\t";
 		
 		//Build the operator
 		switch (math_op->op) {
-			case Operator::Add: writer << "\tphaddd xmm1, "; break;
-			case Operator::PAdd: writer << "\taddps xmm1, "; break;
-			case Operator::Sub: writer << "\tpsubb xmm1, "; break;
-			case Operator::Mul: writer << "\tpmulld xmm1, "; break;
+			case Operator::Add: ln += "phaddd xmm0, "; break;
+			case Operator::PAdd: ln += "addps xmm0, "; break;
+			case Operator::Sub: ln += "psubb xmm0, "; break;
+			case Operator::Mul: ln += "pmulld xmm0, "; break;
 			
 			//TODO: Add rest
 		}
 		
 		//Build the operand
 		switch (math_op->operand->type) {
+			//Other variables
 			case ltac::Var: {
 				auto id = static_cast<LtacVar *>(math_op->operand);
-				writer << "[rbp-" << std::to_string(id->pos) << "]";
-				writer << std::endl;
+				ln += "[rbp-" + std::to_string(id->pos) + "]";
+			} break;
+			
+			//The index of an array
+			case ltac::ArrayAcc: {
+				auto acc = static_cast<LtacArrayAcc *>(math_op->operand);
+				auto child = acc->children[0];
+				
+				int pos = acc->stack_pos;
+				int size = acc->type_size;
+				
+				switch (child->type) {
+					//Integer access
+					case ltac::Int: {
+						auto li = static_cast<LtacInt *>(child);
+						int offset = pos - (size * li->val);
+						
+						writer << "\tmovups xmm1, [rbp-" + std::to_string(offset);
+						writer << "]" << std::endl;
+					} break;
+					
+					//By-variable access
+				}
+			
+				ln += "xmm1";
 			} break;
 			
 			//TODO: Add rest
 		}
+		
+		//Write out the line
+		writer << ln << std::endl;
 	}
 	
 	//Save results back to the variable
-	writer << "\tmovups [rbp-" << std::to_string(var->pos) << "], xmm1";
+	writer << "\tmovups [rbp-" << std::to_string(var->pos) << "], xmm0";
 	writer << std::endl << std::endl;
 }
 
