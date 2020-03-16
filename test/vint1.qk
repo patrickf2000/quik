@@ -1,0 +1,28 @@
+include io
+
+func main
+	int[12] numbers = 1, 2, 3, 4, 10, 20, 30, 40, 2, 4, 6, 8
+	int128 answer = numbers
+	
+	# Add
+	int index = 4
+	while (index < 12)
+		answer = answer ++ numbers[index]
+		index = index + 4
+	end
+	
+	# Print the result
+	index = 0
+	while (index < 4)
+		int no = answer[index]
+		println("", no)
+		index = index + 1
+	end
+end
+
+#TEST
+#13
+#26
+#39
+#52
+
