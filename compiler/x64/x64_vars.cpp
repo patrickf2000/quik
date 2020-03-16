@@ -263,13 +263,38 @@ void Asm_x64::build_vector_math(LtacVar *var, LtacNode *src) {
 		std::string ln = "\t";
 		
 		//Build the operator
-		switch (math_op->op) {
-			case Operator::Add: ln += "phaddd xmm0, "; break;
-			case Operator::PAdd: ln += "addps xmm0, "; break;
-			case Operator::Sub: ln += "psubb xmm0, "; break;
-			case Operator::Mul: ln += "pmulld xmm0, "; break;
+		//Intel is a pain :)
+		switch (var->d_type) {
+			//Int 128
+			case DataType::Int128: {
+				switch (math_op->op) {
+					case Operator::Add: ln += "phaddd xmm0, "; break;
+					case Operator::PAdd: ln += "addps xmm0, "; break;
+					case Operator::Sub: ln += "psubb xmm0, "; break;
+					case Operator::Mul: ln += "pmulld xmm0, "; break;
+				}
+			} break;
 			
-			//TODO: Add rest
+			//Int 256
+			case DataType::Int256: {
+			
+			} break;
+			
+			//Float 128
+			case DataType::Float128: {
+				switch (math_op->op) {
+					case Operator::Add: ln += "haddps xmm0, "; break;
+					case Operator::PAdd: ln += "addps xmm0, "; break;
+					case Operator::Sub: ln += "subps xmm0, "; break;
+					case Operator::Mul: ln += "mulps xmm0, "; break;
+					case Operator::Div: ln += "divps xmm0, "; break;
+				}
+			} break;
+			
+			//Float 256
+			case DataType::Float256: {
+			
+			} break;
 		}
 		
 		//Build the operand
