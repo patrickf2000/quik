@@ -296,7 +296,12 @@ void Asm_x64::build_vector_math(LtacVar *var, LtacNode *src) {
 			
 			//Int 256
 			case DataType::Int256: {
-			
+				switch (math_op->op) {
+					case Operator::Add: ln += "vphaddd ymm0, ymm0, "; break;
+					case Operator::PAdd: ln += "vpaddd ymm0, ymm0, "; break;
+					case Operator::Sub: ln += "vpsubb ymm0, ymm0, "; break;
+					case Operator::Mul: ln += "vpmulld ymm0, ymm0, "; break;
+				}
 			} break;
 			
 			//Float 128
