@@ -1,0 +1,37 @@
+include io
+
+func main
+	int index = 100
+	int i = 3
+
+	loop 5
+		println("Hello!")
+		
+		loop i
+			println("Inner")
+		end
+	end
+end
+
+#TEST
+#Hello!
+#Inner
+#Inner
+#Inner
+#Hello!
+#Inner
+#Inner
+#Inner
+#Hello!
+#Inner
+#Inner
+#Inner
+#Hello!
+#Inner
+#Inner
+#Inner
+#Hello!
+#Inner
+#Inner
+#Inner
+
