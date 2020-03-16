@@ -72,7 +72,9 @@ void Asm_x64::build_array_acc(LtacNode *node) {
 			
 			switch (acc->d_type) {
 				//Integer arrays
-				case DataType::Int: {
+				case DataType::Int: 
+				case DataType::Int128:
+				case DataType::Int256: {
 					writer << "\tmov eax, DWORD PTR [rbp-" << lv->pos;
 					writer << "]" << std::endl;
 					writer << "\tcdqe" << std::endl;

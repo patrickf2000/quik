@@ -20,6 +20,7 @@ protected:
 	void build_var(LtacNode *node);
 	void build_int_math(LtacVar *var, LtacNode *src);
 	void build_float_math(LtacVar *var, LtacNode *src);
+	void build_vint_math(LtacVar *var, LtacNode *src);
 	
 	void build_array(LtacNode *node);
 	void build_array_acc(LtacNode *node);

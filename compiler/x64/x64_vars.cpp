@@ -58,10 +58,12 @@ void Asm_x64::build_var(LtacNode *node) {
 		
 		//Math expressions
 		case ltac::Math: {
-			if (var->d_type == DataType::Int)
-				build_int_math(var, src);
-			else if (var->d_type == DataType::Float)
-				build_float_math(var, src);
+			switch (var->d_type) {
+				case DataType::Int: build_int_math(var, src); break;
+				case DataType::Float: build_float_math(var, src); break;
+				case DataType::Int128:
+				case DataType::Int256: build_vint_math(var, src); break;
+			}
 		} break;
 		
 		//Function calls
@@ -217,4 +219,49 @@ void Asm_x64::build_float_math(LtacVar *var, LtacNode *src) {
 	writer << "], xmm0" << std::endl << std::endl;
 }
 
+//Builds vector integer math
+void Asm_x64::build_vint_math(LtacVar *var, LtacNode *src) {
+	auto math = static_cast<LtacMath *>(src);
+	
+	//Print the first value
+	auto first = math->init_val;
+	
+	switch (first->type) {
+		//Variables
+		case ltac::Var: {
+			auto id = static_cast<LtacVar *>(first);
+			writer << "\tmovups xmm1, [rbp-" << std::to_string(id->pos);
+			writer << "]" << std::endl;
+		} break;
+		
+		//TODO: Add rest (we support constants)
+	}
+	
+	//Build the rest of the equation
+	for (auto node : math->children) {
+		auto math_op = static_cast<LtacMathOp *>(node);
+		
+		//Build the operator
+		switch (math_op->op) {
+			case Operator::Add: writer << "\tphaddd xmm1, "; break;
+			
+			//TODO: Add rest
+		}
+		
+		//Build the operand
+		switch (math_op->operand->type) {
+			case ltac::Var: {
+				auto id = static_cast<LtacVar *>(math_op->operand);
+				writer << "[rbp-" << std::to_string(id->pos) << "]";
+				writer << std::endl;
+			} break;
+			
+			//TODO: Add rest
+		}
+	}
+	
+	//Save results back to the variable
+	writer << "\tmovups [rbp-" << std::to_string(var->pos) << "], xmm1";
+	writer << std::endl << std::endl;
+}
 
