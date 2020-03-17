@@ -25,8 +25,14 @@ void LTAC_Builder::assemble(AstNode *top) {
 			
 			//Function declarations
 			case AstType::FuncDec: {
+				if (!has_func_calls(node))
+					enable_rvar = true;
+			
 				auto func = build_func(node);
 				assemble(node);
+				
+				enable_rvar = false;
+				rvar_index = 0;
 				
 				int stack_size = 0;
 				if (stack_pos > 0) {

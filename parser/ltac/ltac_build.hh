@@ -16,6 +16,7 @@ protected:
 	void assemble(AstNode *top);
 	
 	//Function stuff
+	bool has_func_calls(AstNode *top);
 	LtacFunc *build_func(AstNode *node, bool is_extern=false);
 	LtacFuncCall *build_func_call(AstNode *node);
 	void build_ret(AstNode *node);
@@ -51,6 +52,10 @@ private:
 	int stack_pos = 0;
 	int ptr_size = 8;
 	std::map<std::string, Var> vars;
+	
+	//Register variable
+	bool enable_rvar = false;
+	int rvar_index = 0;
 	
 	//String stuff
 	int str_count = 0;

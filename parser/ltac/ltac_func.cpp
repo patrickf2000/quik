@@ -5,6 +5,21 @@
 
 std::map<std::string, bool> funcs;
 
+//Checks to see if a portion of a tree has any function calls
+bool LTAC_Builder::has_func_calls(AstNode *top) {
+	bool found = false;
+
+	for (auto node : top->children) {
+		if (node->type == AstType::FuncCall)
+			return true;
+			
+		if (node->children.size() > 0)
+			found = has_func_calls(node);
+	}
+	
+	return found;
+}
+
 //Builds a function
 LtacFunc *LTAC_Builder::build_func(AstNode *node, bool is_extern) {
 	auto fd = static_cast<AstFuncDec *>(node);
