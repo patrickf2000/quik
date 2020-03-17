@@ -6,6 +6,8 @@
 #include <base/asm_base.hh>
 #include <ltac/ltac.hh>
 
+extern std::string var_regs[];
+
 class Asm_x64 : public AsmGen {
 public:
 	Asm_x64(LtacFile *f) : AsmGen(f) {}

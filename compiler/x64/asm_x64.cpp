@@ -2,6 +2,17 @@
 
 #include "asm_x64.hh"
 
+std::string var_regs[] = {
+	"r8d",
+	"r9d",
+	"r10d",
+	"r11d",
+	"r12d",
+	"r13d",
+	"r14d",
+	"r15d"
+};
+
 //Build the data section
 void Asm_x64::build_data(LtacDataSec *data) {
 	for (auto ln : data->children) {

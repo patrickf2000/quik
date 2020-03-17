@@ -17,8 +17,12 @@ void Asm_x64::build_var(LtacNode *node) {
 	
 		//Integers
 		case ltac::Int: {
-			writer << "\tmov DWORD PTR [rbp-";
-			writer << var->pos << "], ";
+			if (var->rvar == -1) {
+				writer << "\tmov DWORD PTR [rbp-";
+				writer << var->pos << "], ";
+			} else {
+				writer << "\tmov " << var_regs[var->rvar] << ", ";
+			}
 			
 			auto li = static_cast<LtacInt *>(src);
 			writer << li->val << std::endl;
@@ -53,11 +57,19 @@ void Asm_x64::build_var(LtacNode *node) {
 			switch (var->d_type) {
 				//Integers
 				case DataType::Int: {
-					writer << "\tmov eax, [rbp-" << var2->pos;
-					writer << "]" << std::endl;
+					if (var2->rvar == -1) {
+						writer << "\tmov eax, [rbp-" << var2->pos;
+						writer << "]" << std::endl;
+					} else {
+						writer << "\tmov eax, " << var_regs[var2->rvar] << std::endl;
+					}
 					
-					writer << "\tmov DWORD PTR [rbp-";
-					writer << var->pos << "], eax" << std::endl;
+					if (var->rvar == -1) {
+						writer << "\tmov DWORD PTR [rbp-";
+						writer << var->pos << "], eax" << std::endl;
+					} else {
+						writer << "\tmov " << var_regs[var->rvar] << ", eax" << std::endl;
+					}
 				} break;
 				
 				//128-bit vector types
@@ -142,8 +154,13 @@ void Asm_x64::build_int_math(LtacVar *var, LtacNode *src) {
 		//A variable
 		case ltac::Var: {
 			auto id = static_cast<LtacVar *>(first);
-			writer << "\tmov eax, [rbp-" << std::to_string(id->pos);
-			writer << "]" << std::endl;
+			
+			if (id->rvar == -1) {
+				writer << "\tmov eax, [rbp-" << std::to_string(id->pos);
+				writer << "]" << std::endl;
+			} else {
+				writer << "\tmov eax, " << var_regs[id->rvar] << std::endl;
+			}
 		} break;
 	}
 	
@@ -188,8 +205,13 @@ void Asm_x64::build_int_math(LtacVar *var, LtacNode *src) {
 	}
 	
 	//Save the result back to the variable
-	writer << "\tmov DWORD PTR [rbp-" << std::to_string(var->pos);
-	writer << "], eax" << std::endl << std::endl;
+	if (var->rvar == -1) {
+		writer << "\tmov DWORD PTR [rbp-" << std::to_string(var->pos);
+		writer << "], eax" << std::endl << std::endl;
+	} else {
+		writer << "\tmov " << var_regs[var->rvar] << ", eax" << std::endl;
+		writer << std::endl;
+	}
 }
 
 //Builds floating-point math expressions

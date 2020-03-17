@@ -14,8 +14,14 @@ void Asm_x64::build_icmp(LtacNode *node) {
 		
 		case ltac::Var: {
 			auto var = static_cast<LtacVar *>(cmp->lval);
-			writer << "\tmov eax, DWORD PTR [rbp-";
-			writer << std::to_string(var->pos) << "]";
+			
+			if (var->rvar == -1) {
+				writer << "\tmov eax, DWORD PTR [rbp-";
+				writer << std::to_string(var->pos) << "]";
+			} else {
+				writer << "\tmov eax, " << var_regs[var->rvar];
+			}
+			
 			writer << std::endl;
 		} break;
 		
@@ -35,7 +41,11 @@ void Asm_x64::build_icmp(LtacNode *node) {
 		
 		case ltac::Var: {
 			auto var = static_cast<LtacVar *>(cmp->rval);
-			ln += "[rbp-" + std::to_string(var->pos) + "]\n";
+			
+			if (var->rvar == -1)
+				ln += "[rbp-" + std::to_string(var->pos) + "]\n";
+			else
+				ln += var_regs[var->rvar] + "\n";
 		} break;
 		
 		case ltac::FuncCall: {

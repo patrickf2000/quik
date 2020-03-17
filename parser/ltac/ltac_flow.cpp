@@ -64,11 +64,19 @@ void LTAC_Builder::build_loop(AstNode *node) {
 	++lbl_count;
 	
 	//Build the internal index
-	stack_pos += 4;
-	int pos = stack_pos;
-	
 	auto ivar = new LtacVar;
-	ivar->pos = pos;
+	int pos = 0;
+	
+	if (enable_rvar) {
+		pos = rvar_index;
+		++rvar_index;
+		ivar->rvar = pos;
+	} else {
+		stack_pos += 4;
+		pos = stack_pos;
+		ivar->pos = pos;
+	}
+	
 	ivar->d_type = DataType::Int;
 	ivar->children.push_back(new LtacInt(0));
 	
@@ -93,8 +101,13 @@ void LTAC_Builder::build_loop(AstNode *node) {
 	math->children.push_back(mathop);
 	
 	auto ivar2 = new LtacVar;
-	ivar2->pos = pos;
 	ivar2->d_type = DataType::Int;
+	
+	if (enable_rvar) {
+		ivar2->rvar = pos;
+	} else {
+		ivar2->pos = pos;
+	}
 	
 	ivar2->children.push_back(math);
 	file->code->children.push_back(ivar2);

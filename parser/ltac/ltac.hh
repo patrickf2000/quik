@@ -145,6 +145,8 @@ public:
 	int pos = 0;
 	int size = 0;
 	DataType d_type;
+	
+	int rvar = -1;
 };
 
 //Function calls
