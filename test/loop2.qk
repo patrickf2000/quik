@@ -1,0 +1,22 @@
+include io
+
+func add
+	int answer = 0
+	int index = 2
+	
+	loop 10
+		answer = answer + index
+		index = index + 1
+	end
+	
+	return answer
+end
+
+func main
+	int answer = add()
+	println("Answer: ", answer)
+end
+
+#TEST
+#Answer: 65
+
