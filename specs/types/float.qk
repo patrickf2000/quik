@@ -1,0 +1,10 @@
+# float.qk
+# Single-precision floating-point type and assignment
+
+func main
+	float f1 = 3.14
+	float f2 = 51.843
+	float f3 = f1
+	
+	f3 = f2
+end

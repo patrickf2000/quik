@@ -1,0 +1,10 @@
+# double.qk
+# Single-precision floating-point type and assignment
+
+func main
+	double d1 = 3.14
+	double d2 = 51.843
+	double d3 = d1
+	
+	d3 = d2
+end

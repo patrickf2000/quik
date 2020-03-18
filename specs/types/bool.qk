@@ -1,0 +1,13 @@
+# bool1.qk
+# Basic boolean type and assignment
+
+func main
+	bool b1 = true
+	bool b2 = false
+	bool b3 = b1
+	
+	b3 = b2
+	
+	bool ib1 = 1
+	bool ib2 = 0
+end

@@ -1,0 +1,10 @@
+# int.qk
+# Basic signed integer type and assignment
+
+func main
+	uint ui1 = 9
+	uint ui2 = 100
+	uint ui3 = ui1
+	
+	ui3 = ui2
+end

@@ -1,0 +1,10 @@
+# char.qk
+# Basic char assignment
+
+func main
+	char c1 = 'A'
+	char c2 = '@'
+	char c3 = c1
+	
+	c3 = c2
+end

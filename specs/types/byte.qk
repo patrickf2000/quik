@@ -1,0 +1,10 @@
+# byte.qk
+# Basic byte type and assignment
+
+func main
+	byte b1 = 0xF
+	byte b2 = 0xA
+	byte b3 = b1
+	
+	b3 = b2
+end

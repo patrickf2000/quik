@@ -1,0 +1,10 @@
+# ushort.qk
+# Basic unsigned short type and assignment
+
+func main
+	ushort s1 = 9
+	ushort s2 = 0xFA
+	ushort s3 = s1
+	
+	s3 = s2
+end

@@ -1,0 +1,12 @@
+# int.qk
+# Basic signed integer type and assignment
+
+func main
+	int i1 = 9
+	int i2 = 100
+	int i3 = i1
+	
+	i3 = i2
+	
+	int i4 = -7
+end

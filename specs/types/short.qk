@@ -1,0 +1,12 @@
+# short.qk
+# Basic signed short type and assignment
+
+func main
+	short s1 = 9
+	short s2 = 0xFA
+	short s3 = s1
+	
+	s3 = s2
+	
+	short s4 = -1
+end
