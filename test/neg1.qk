@@ -1,0 +1,14 @@
+include io
+
+func main
+	int x = -5 - -1
+	println("X: ", x)
+	
+	float x2 = -3.14
+	printf("Negative float: %f\n", x2)
+end
+
+#TEST
+#X: -4
+#Negative float: -3.140000
+
