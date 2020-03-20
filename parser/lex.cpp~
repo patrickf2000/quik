@@ -18,22 +18,9 @@ bool is_separator(char c) {
 }
 
 bool is_int(std::string s) {
-	int index = 0;
-	
 	for (char c : s) {
-		if (c == '-') {
-			if (index > 0) {
-				return false;
-			}
-			
-			++index;
-			continue;
-		}
-		
 		if (!isdigit(c))
 			return false;
-			
-		++index;
 	}
 	return true;
 }
@@ -65,26 +52,6 @@ bool is_hex(std::string s) {
 	return true;
 }
 
-bool is_last_op(std::vector<Token> tokens) {
-	auto t = tokens.at(tokens.size()-1);
-	
-	switch (t.type) {
-		case TokenType::ASSIGN:
-		case TokenType::PLUS:
-		case TokenType::MINUS:
-		case TokenType::MUL:
-		case TokenType::DIV:
-		case TokenType::MOD:
-		case TokenType::D_PLUS:
-		case TokenType::D_MUL:
-		case TokenType::AND:
-		case TokenType::OR:
-		case TokenType::XOR: return true;
-	}
-	
-	return false;
-}
-
 //Tokenize a string
 std::vector<Token> tokenize(std::string line) {
 	line += " ";	//No purpose, makes my life easier :)
@@ -93,7 +60,6 @@ std::vector<Token> tokenize(std::string line) {
 	std::string current = "";
 	bool in_quote = false;
 	bool skip_next = false;
-	char last = 0;
 	
 	for (int i = 0; i<line.length(); i++) {
 		char c = line[i];
@@ -148,11 +114,6 @@ std::vector<Token> tokenize(std::string line) {
 					current += c;
 					continue;
 				}
-			}
-			
-			if (c == '-' && is_last_op(tokens)) {
-				current += c;
-				continue;
 			}
 			
 			//Check for keywords
@@ -425,8 +386,6 @@ std::vector<Token> tokenize(std::string line) {
 		} else {
 			current += c;
 		}
-		
-		last = c;
 	}
 	
 	return tokens;
