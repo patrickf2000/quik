@@ -39,9 +39,22 @@ bool is_int(std::string s) {
 }
 
 bool is_dec(std::string s) {
+	int index = 0;
+
 	for (char c : s) {
+		if (c == '-') {
+			if (index > 0) {
+				return false;
+			}
+			
+			++index;
+			continue;
+		}
+	
 		if (!isdigit(c) && c != '.')
 			return false;
+			
+		++index;
 	}
 	
 	return true;
