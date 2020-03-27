@@ -1,0 +1,13 @@
+# assign.qk
+# The spec file for the assignment operator
+
+func main
+	int x = 5
+	x = 9
+	
+	int y = 6 + x
+	x = y + 1
+	
+	float x2 = 10.0
+	bool b1 = true
+end

@@ -1,0 +1,13 @@
+# sub.qk
+# The spec file for the subtraction operator
+
+func main
+	int x = 5
+	int y = 7
+	y = x - y - 9
+	x = -72 - 9
+	
+	float f1 = 3.14
+	float f2 = f1 - 8
+	f2 = f1 - 100
+end
