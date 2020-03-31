@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.0.0)
 project(quik)
 
-include_directories(parser config compiler)
+include_directories(parser config compiler ltac)
 
 add_compile_options(-g -std=c++11)
 
@@ -19,12 +19,15 @@ set(PARSER_SRC
 	parser/syntax.cpp
 	parser/vars.cpp
 	parser/optimization/funcs.cpp
-	parser/ltac/ltac.cpp
-	parser/ltac/ltac_array.cpp
-	parser/ltac/ltac_build.cpp
-	parser/ltac/ltac_flow.cpp
-	parser/ltac/ltac_func.cpp
-	parser/ltac/ltac_vars.cpp
+)
+
+set(LTAC_SRC
+	ltac/ltac.cpp
+	ltac/ltac_array.cpp
+	ltac/ltac_build.cpp
+	ltac/ltac_flow.cpp
+	ltac/ltac_func.cpp
+	ltac/ltac_vars.cpp
 )
 
 set(COMPILER_SRC
@@ -42,12 +45,14 @@ set(COMPILER_SRC
 )
 
 add_library(qkparser ${PARSER_SRC})
+add_library(qkltac ${LTAC_SRC})
 
 add_executable(lextest parser/test/lex_test.cpp)
 add_executable(qkast parser/test/parser_test.cpp)
 add_executable(qkasm parser/test/ltac_test.cpp)
 add_executable(quikc ${COMPILER_SRC})
 
+target_link_libraries(qkparser qkltac)
 target_link_libraries(lextest qkparser)
 target_link_libraries(qkast qkparser)
 target_link_libraries(qkasm qkparser)

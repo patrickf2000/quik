@@ -4,7 +4,7 @@
 #include <fstream>
 
 #include <base/asm_base.hh>
-#include <ltac/ltac.hh>
+#include <ltac.hh>
 
 extern std::string var_regs[];
 

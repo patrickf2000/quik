@@ -4,7 +4,7 @@
 #include <string>
 
 #include <base/asm_base.hh>
-#include <ltac/ltac.hh>
+#include <ltac.hh>
 
 class Asm_Arm7 : public AsmGen {
 public:

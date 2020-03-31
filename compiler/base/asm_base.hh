@@ -3,7 +3,7 @@
 #include <string>
 #include <fstream>
 
-#include <ltac/ltac.hh>
+#include <ltac.hh>
 
 class AsmGen {
 public:

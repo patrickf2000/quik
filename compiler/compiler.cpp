@@ -4,8 +4,8 @@
 
 #include <ast.hh>
 #include <build.hh>
-#include <ltac/ltac.hh>
-#include <ltac/ltac_build.hh>
+#include <ltac.hh>
+#include <ltac_build.hh>
 
 #include "compiler.hh"
 #include "utils.hh"

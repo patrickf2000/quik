@@ -3,8 +3,8 @@
 
 #include <build.hh>
 #include <ast.hh>
-#include <ltac/ltac.hh>
-#include <ltac/ltac_build.hh>
+#include <ltac.hh>
+#include <ltac_build.hh>
 
 int main(int argc, char *argv[]) {
 	if (argc == 1) {
