@@ -15,7 +15,7 @@ else
 fi
 
 INPUT="$1"
-expected=`./get_out.py $INPUT`
+expected=`./test.py $INPUT`
 
 build/quikc $INPUT -o build/out.bin $arch_cmd
 actual=`build/out.bin`
