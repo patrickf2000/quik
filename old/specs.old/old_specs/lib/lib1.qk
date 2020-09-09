@@ -1,6 +1,0 @@
-# Build by passing the --lib flag
-include io
-
-func sayHello
-	puts("Hello!")
-end

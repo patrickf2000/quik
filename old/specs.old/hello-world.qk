@@ -1,5 +1,0 @@
-include io
-
-func main
-	println("Hello, world!")
-end
