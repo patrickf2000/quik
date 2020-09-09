@@ -91,9 +91,26 @@ public:
 	explicit AstNode() {}
 	explicit AstNode(AstType t) { type = t; }
 	virtual ~AstNode() {}
+    
+    virtual std::string writeDot(std::string prefix = "") {
+        return "";
+    }
+    
+    std::string writeDotStd(std::string prefix, std::string val, std::string color = "");
+    std::string writeDotParent(std::string prefix, std::string nodeName, std::string shape = "");
+    
 	AstType type;
 	std::vector<AstNode *> children;
 	Line ln;
+};
+
+// The top-most AST node
+class AstTree : public AstNode {
+public:
+    AstTree(std::string file) { this->file = file; }
+    std::string writeDot();
+private:
+    std::string file;
 };
 
 //The base class for nodes that have a string attribute
@@ -110,6 +127,8 @@ class AstScope : public AstAttrNode {
 public:
 	AstScope() { type = AstType::Scope; }
 	std::map<std::string, Var> vars;
+    
+    std::string writeDot(std::string prefix = "");
 };
 
 //The function declaration type
@@ -120,6 +139,8 @@ public:
 		type = AstType::FuncDec;
 		name = n;
 	}
+    
+    std::string writeDot(std::string prefix = "");
 
 	std::vector<Var> args;
 	bool is_global = false;
@@ -133,6 +154,8 @@ public:
 		type = AstType::ExternFunc;
 		name = n;
 	}
+    
+    std::string writeDot(std::string prefix = "") { return ""; }
 };
 
 //The function call type
@@ -143,12 +166,16 @@ public:
 		type = AstType::FuncCall;
 		name = n;
 	}
+    
+    std::string writeDot(std::string prefix = "");
 };
 
 //The return keyword
 class AstReturn : public AstNode {
 public:
 	AstReturn() { type = AstType::Return; }
+    
+    std::string writeDot(std::string prefix = "") { return ""; }
 };
 
 //Structure declarations
@@ -159,12 +186,16 @@ public:
 		type = AstType::StructDec;
 		name = n;
 	}
+    
+    std::string writeDot(std::string prefix = "") { return ""; }
 };
 
 //A struct variable
 class AstStruct : public AstNode {
 public:
 	explicit AstStruct() { type = AstType::Struct; }
+    
+    std::string writeDot(std::string prefix = "") { return ""; }
 	
 	std::string str_name = "";		//Refers to the structure being used
 	std::string var_name = "";		//The name of our structure variable
@@ -174,12 +205,14 @@ public:
 class AstStructAcc : public AstStruct {
 public:
 	explicit AstStructAcc() { type = AstType::StructAcc; }
+    std::string writeDot(std::string prefix = "") { return ""; }
 };
 
 //A struct modification
 class AstStructMod : public AstStruct {
 public:
 	explicit AstStructMod() { type = AstType::StructMod; }
+    std::string writeDot(std::string prefix = "") { return ""; }
 };
 
 //The base class for conditionals
@@ -198,29 +231,35 @@ private:
 class AstIf : public AstCond {
 public:
 	AstIf() { type = AstType::If; }
+    std::string writeDot(std::string prefix = "") { return ""; }
 };
 
 class AstElif : public AstCond {
 public:
 	AstElif() { type = AstType::Elif; }
+    std::string writeDot(std::string prefix = "") { return ""; }
 };
 
 //The else keyword
 class AstElse : public AstNode {
 public:
 	AstElse() { type = AstType::Else; }
+    std::string writeDot(std::string prefix = "") { return ""; }
 };
 
 //The while keyword
 class AstWhile : public AstCond {
 public:
 	AstWhile() { type = AstType::While; }
+    std::string writeDot(std::string prefix = "") { return ""; }
 };
 
 //The loop keyword
 class AstLoop : public AstNode {
 public:
 	AstLoop() { type = AstType::Loop; }
+    std::string writeDot(std::string prefix = "") { return ""; }
+    
 	AstNode *param;
 	std::string i_var = "";
 };
@@ -229,6 +268,8 @@ public:
 class AstForEach : public AstAttrNode {
 public:
 	AstForEach() { type = AstType::ForEach; }
+    std::string writeDot(std::string prefix = "") { return ""; }
+    
 	std::string i_var = "";		//Index
 	std::string r_var = "";		//Range
 	std::string i_var_in = "";	//Internal index counter
@@ -243,6 +284,8 @@ public:
 		type = AstType::VarDec;
 		name = n;
 	}
+    
+    std::string writeDot(std::string prefix = "") { return ""; }
 	
 	DataType get_type() { return dtype; }
 	void set_type(DataType t) { dtype = t; }
@@ -258,12 +301,15 @@ public:
 		type = AstType::VarAssign;
 		name = n;
 	}
+    
+    std::string writeDot(std::string prefix = "") { return ""; }
 };
 
 //Represents a math operation
 class AstMath : public AstNode {
 public:
 	explicit AstMath() { type = AstType::Math; }
+    std::string writeDot(std::string prefix = "") { return ""; }
 };
 
 //The ID type
@@ -274,6 +320,8 @@ public:
 		type = AstType::Id;
 		name = n;
 	}
+    
+    std::string writeDot(std::string prefix = "");
 };
 
 //The Integer type
@@ -287,6 +335,9 @@ public:
 	
 	int get_val() { return no; }
 	void set_val(int i) { no = i; }
+    
+    std::string writeDot(std::string prefix = "");
+    
 private:
 	int no = 0;
 };
@@ -308,6 +359,9 @@ public:
 		ss.flags(std::ios_base::hex);
 		ss >> byte;
 	}
+    
+    std::string writeDot(std::string prefix = "") { return ""; }
+    
 private:
 	unsigned short byte;
 };
@@ -323,6 +377,8 @@ public:
 	
 	char get_val() { return ch; }
 	void set_val(char c) { ch = c; }
+    
+    std::string writeDot(std::string prefix = "") { return ""; }
 private:
 	char ch = 0;
 };
@@ -338,6 +394,8 @@ public:
 	
 	bool get_val() { return val; }
 	void set_val(bool b) { val = b; }
+    
+    std::string writeDot(std::string prefix = "") { return ""; }
 private:
 	bool val = false;
 };
@@ -353,6 +411,8 @@ public:
 	
 	float get_val() { return no; }
 	void set_val(float n) { no = n; }
+    
+    std::string writeDot(std::string prefix = "") { return ""; }
 protected:
 	float no = 0;
 };
@@ -365,6 +425,8 @@ public:
 		type = AstType::Int64;
 		dtype = DataType::Int64;
 	}
+    
+    std::string writeDot(std::string prefix = "") { return ""; }
 };
 
 //The int-128 type
@@ -375,6 +437,8 @@ public:
 		type = AstType::Int128;
 		dtype = DataType::Int128;
 	}
+    
+    std::string writeDot(std::string prefix = "") { return ""; }
 };
 
 //The int-256 type
@@ -385,6 +449,8 @@ public:
 		type = AstType::Int256;
 		dtype = DataType::Int256;
 	}
+    
+    std::string writeDot(std::string prefix = "") { return ""; }
 };
 
 //The float-64 type
@@ -395,6 +461,8 @@ public:
 		type = AstType::Float64;
 		dtype = DataType::Float64;
 	}
+    
+    std::string writeDot(std::string prefix = "") { return ""; }
 };
 
 //The float-80 type
@@ -407,6 +475,8 @@ public:
 		type = AstType::Float80;
 		no = n;
 	}
+    
+    std::string writeDot(std::string prefix = "") { return ""; }
 };
 
 //The float-128 type
@@ -417,6 +487,8 @@ public:
 		type = AstType::Float128;
 		dtype = DataType::Float128;
 	}
+    
+    std::string writeDot(std::string prefix = "") { return ""; }
 };
 
 //The float-256 type
@@ -427,6 +499,8 @@ public:
 		type = AstType::Float256;
 		dtype = DataType::Float256;
 	}
+    
+    std::string writeDot(std::string prefix = "") { return ""; }
 };
 
 //The string type
@@ -440,6 +514,8 @@ public:
 	
 	std::string get_val() { return val; }
 	void set_val(std::string s) { val = s; }
+    
+    std::string writeDot(std::string prefix = "");
 private:
 	std::string val = "";
 };
@@ -450,6 +526,8 @@ public:
 	explicit AstMultiVarAssign() { 
 		type = AstType::MultiVarAssign;
 	}
+    
+    std::string writeDot(std::string prefix = "") { return ""; }
 	
 	std::vector<AstID *> vars;
 };
@@ -461,6 +539,8 @@ public:
 	
 	int get_size() { return size; }
 	void set_size(int s) { size = s; }
+    
+    std::string writeDot(std::string prefix = "") { return ""; }
 private:
 	int size;
 };
@@ -473,6 +553,8 @@ public:
 		type = AstType::ArrayAccess;
 		name = n;
 	}
+    
+    std::string writeDot(std::string prefix = "") { return ""; }
 };
 
 //Array assignment
@@ -483,10 +565,9 @@ public:
 		type = AstType::ArrayAssign;
 		name = n;
 	}
+    
+    std::string writeDot(std::string prefix = "") { return ""; }
 	
 	AstNode *index;
 };
 
-//Debugging stuff
-std::string ast2str(AstType type);
-void print_tree(AstNode *node, int indent = 0, bool nl=true);

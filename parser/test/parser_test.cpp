@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <cstdlib>
 
 #include <lex.hh>
 #include <ast.hh>
@@ -10,38 +11,27 @@
 
 int main(int argc, char *argv[]) {
 	if (argc == 1) {
-		Line l;
-		l.no = 1;
-		
-		std::string ln = "";
-		std::cout << "$> ";
-		std::getline(std::cin, ln);
-		
-		l.original = ln;
-		l.tokens = tokenize(ln);
-		
-		QkParser *parser = new QkParser;
-		AstNode *node = parser->build_node(l);
-		
-		std::cout << std::endl << "AST: " << std::endl;
-		print_tree(node);
-		
-		delete node;
-		delete parser;
-	} else {
-		bool optimize = false;
-		if (argc == 3) {
-			if (std::string(argv[2]) == "--optimize") {
-				optimize = true;
-			}
-		}
-	
-		auto lines = load_source(argv[1]);
-		AstNode *top = build_ast(lines, false, optimize);
-		print_tree(top);
-		
-		delete top;
+		std::cout << "Error: No input file." << std::endl;
+        return 1;
 	}
+    
+    bool optimize = false;
+    if (argc == 3) {
+        if (std::string(argv[2]) == "--optimize") {
+            optimize = true;
+        }
+    }
+	
+    auto lines = load_source(argv[1]);
+    AstTree *tree = build_ast(lines, false, optimize);
+    
+    std::ofstream writer("ast.dot");
+    writer << tree->writeDot() << std::endl;
+    writer.close();
+    
+    system("dot ast.dot -Tpng -o ast.png");
+		
+    delete tree;
 	
 	return 0;
 }

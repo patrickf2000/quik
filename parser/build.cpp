@@ -100,7 +100,7 @@ std::vector<Line> load_source(const char *path) {
 }
 
 //Takes each line and builds the AST
-AstNode *build_ast(std::vector<Line> lines, bool fail, bool optimize) {
+AstTree *build_ast(std::vector<Line> lines, bool fail, bool optimize) {
 	AstScope *top = new AstScope;
 	std::vector<AstNode *> nodes;
 	
@@ -149,5 +149,7 @@ AstNode *build_ast(std::vector<Line> lines, bool fail, bool optimize) {
 		delete engine;
 	}
 	
-	return top;
+    AstTree *tree = new AstTree("file");
+    tree->children.push_back(top);
+	return tree;
 }
