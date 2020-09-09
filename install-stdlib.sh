@@ -13,8 +13,8 @@ if [ ! -f ./build/libqkstdlib.so ] ; then
 	exit 1
 fi
 
-sudo cp -v ./build/libqkstdlib.so /usr/local/lib
-sudo cp -v ./build/libqkstdlib32.so /usr/local/lib
+sudo cp -v ./build/libqkstdlib.so /usr/lib
+sudo cp -v ./build/libqkstdlib32.so /usr/lib
 sudo ldconfig
 
 echo "Done!"

@@ -80,6 +80,10 @@ AstFuncDec *QkParser::build_func_dec(Line ln) {
 					syntax_error(ln, "Invalid parameter syntax.");
 				}
 				
+                if (i+2 >= tokens.size()) {
+                    continue;
+                }
+                
 				Token nt1 = tokens[i+1];
 				Token nt2 = tokens[i+2];
 				

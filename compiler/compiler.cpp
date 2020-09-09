@@ -98,9 +98,9 @@ void Compiler::link() {
 			ld_line += "/usr/lib/arm-linux-gnueabihf/crtn.o ";
 			ld_line += "/usr/lib/arm-linux-gnueabihf/crt1.o ";
 		} else {
-			ld_line += "/usr/lib/x86_64-linux-gnu/crti.o ";
-			ld_line += "/usr/lib/x86_64-linux-gnu/crtn.o ";
-			ld_line += "/usr/lib/x86_64-linux-gnu/crt1.o -lqkstdlib ";
+			ld_line += "/usr/lib/crti.o ";
+			ld_line += "/usr/lib/crtn.o ";
+			ld_line += "/usr/lib/crt1.o -lqkstdlib ";
 		}
 		
 		ld_line += "-lc ";
