@@ -43,6 +43,7 @@ void confirm(std::vector<Token> actual, std::vector<Token> expected) {
 void test(const char *path, bool verbose) {
 	std::cout << "Lexical test..." << std::endl;
 	std::vector<std::string> content;
+    Scanner *scanner = new Scanner;
 	
 	//First, load the test file
 	std::ifstream reader(path);
@@ -82,9 +83,9 @@ void test(const char *path, bool verbose) {
 				if (contains(current, '>')) {
 					std::string type = strtok((char *)current.c_str(), ">");
 					t.id = strtok(NULL, ">");
-					t.type = str2type(type);
+					t.type = scanner->str2type(type);
 				} else {
-					t.type = str2type(current);
+					t.type = scanner->str2type(current);
 				}
 				
 				expected.push_back(t);
@@ -94,11 +95,13 @@ void test(const char *path, bool verbose) {
 			}
 		}
 		
-		auto actual = tokenize(input);
+		auto actual = scanner->tokenize(input);
 		confirm(actual, expected);
 	}
 	
 	std::cout << std::endl;
+    
+    delete scanner;
 }
 
 int main(int argc, char **argv) {

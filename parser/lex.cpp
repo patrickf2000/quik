@@ -98,14 +98,169 @@ bool is_last_op(std::vector<Token> tokens) {
 	return false;
 }
 
+//Check for keywords
+TokenType getKeyword(std::string current) {
+
+    //Function keywords
+    if (current == "func") return TokenType::FUNC_DEC;
+    else if (current == "extern") return TokenType::EXTERN;
+    else if (current == "global") return TokenType::GLOBAL;
+    else if (current == "end") return TokenType::END;
+    else if (current == "return") return TokenType::RETURN;
+    				
+    //Structure
+    else if (current == "struct") return TokenType::STRUCT;
+    		
+    //Variable types
+    else if (current == "byte") return TokenType::T_BYTE;
+    else if (current == "char") return TokenType::T_CHAR;
+    else if (current == "short") return TokenType::T_SHORT;
+    else if (current == "bool") return TokenType::T_BOOL;
+    else if (current == "str") return TokenType::T_STR;
+    	
+    //Integer types
+    else if (current == "int") return TokenType::T_INT;
+    else if (current == "int64") return TokenType::INT_64;
+    else if (current == "int128") return TokenType::INT_128;
+    else if (current == "int256") return TokenType::INT_256;
+    
+    //Floating-point types
+    else if (current == "float") return TokenType::T_FLOAT;
+    else if (current == "float64") return TokenType::FLOAT_64;
+    else if (current == "float128") return TokenType::FLOAT_128;
+    else if (current == "float256") return TokenType::FLOAT_256;
+    
+    //Double types
+    else if (current == "double") return TokenType::T_DOUBLE;
+    else if (current == "double128") return TokenType::DOUBLE_128;
+    else if (current == "double256") return TokenType::DOUBLE_256;
+				
+    //Unsigned integers
+    else if (current == "uint") return TokenType::T_UINT;
+    else if (current == "uint64") return TokenType::UINT_64;
+    else if (current == "uint128") return TokenType::UINT_128;
+    else if (current == "uint256") return TokenType::UINT_256;
+    	
+    //Conditional stuff
+    else if (current == "if") return TokenType::IF;
+    else if (current == "elif") return TokenType::ELIF;
+    else if (current == "else") return TokenType::ELSE;
+    	
+    //Loops
+    else if (current == "while") return TokenType::WHILE;
+    else if (current == "loop") return TokenType::LOOP;
+    else if (current == "foreach") return TokenType::FOREACH;
+    
+    //Booleans
+    else if (current == "true") return TokenType::B_TRUE;
+    else if (current == "false") return TokenType::B_FALSE;
+    
+    // Constants/literals
+    else if (is_int(current)) return TokenType::NO;
+    else if (is_dec(current)) return TokenType::DEC;
+    else if (is_hex(current)) return TokenType::HEX;    
+    else return TokenType::ID;
+}
+
+//Check to see if the separator is also a token
+TokenType Scanner::getSymbol(char c, int i, std::string line) {
+    switch (c) {
+        case '.': return TokenType::DOT;
+        case '(': return TokenType::LEFT_PAREN;
+        case ')': return TokenType::RIGHT_PAREN;
+        case '[': return TokenType::L_BRACKET;
+        case ']': return TokenType::R_BRACKET;
+        case ',': return TokenType::COMMA;
+        case ':': return TokenType::COLON;
+        case '-': return TokenType::MINUS;
+        case '/': return TokenType::DIV;
+        case '%': return TokenType::MOD;
+        
+        case '=': {
+            if (line[i+1] == '=') {
+                skip_next = true;
+                return TokenType::EQUALS;
+            }
+            
+            return TokenType::ASSIGN;
+        } break;
+        
+        case '!': {
+            if (line[i+1] == '=') {
+                skip_next = true;
+                return TokenType::NOT_EQUAL;
+            }
+            
+            return TokenType::NOT;
+        } break;
+        
+        case '>': {
+            if (line[i+1] == '=') {
+                skip_next = true;
+                return TokenType::GREATER_EQ;
+            }
+            
+            return TokenType::GREATER;
+        } break;
+        
+        case '<': {
+            if (line[i+1] == '=') {
+                skip_next = true;
+                return TokenType::LESS_EQ;
+            }
+            
+            return TokenType::LESS;
+        } break;
+        
+        case '+': {
+            if (line[i+1] == '+') {
+                skip_next = true;
+                return TokenType::D_PLUS;
+            }
+            
+            return TokenType::PLUS;
+        } break;
+        
+        case '*': {
+            if (line[i+1] == '*') {
+                skip_next = true;
+                return TokenType::D_MUL;
+            }
+            
+            return TokenType::MUL;
+        } break;
+        
+        case '&': {
+            if (line[i+1] == '&') {
+                skip_next = true;
+                return TokenType::AND;
+            }
+        } break;
+        
+        case '?': {
+            if (line[i+1] == '?') {
+                skip_next = true;
+                return TokenType::XOR;
+            }
+            
+            return TokenType::OR;
+        } break;
+    }
+
+    return TokenType::NONE;
+}
+
+TokenType Scanner::getNext(std::string line) {
+    return TokenType::NONE;
+}
+
 //Tokenize a string
-std::vector<Token> tokenize(std::string line) {
+std::vector<Token> Scanner::tokenize(std::string line) {
 	line += " ";	//No purpose, makes my life easier :)
 	
 	std::vector<Token> tokens;
 	std::string current = "";
 	bool in_quote = false;
-	bool skip_next = false;
 	char last = 0;
 	
 	for (int i = 0; i<line.length(); i++) {
@@ -168,273 +323,25 @@ std::vector<Token> tokenize(std::string line) {
 				continue;
 			}
 			
-			//Check for keywords
-			//Function keywords
-			if (current == "func") {
-				t.type = TokenType::FUNC_DEC;
-				tokens.push_back(t);
-			} else if (current == "extern") {
-				t.type = TokenType::EXTERN;
-				tokens.push_back(t);
-			} else if (current == "global") {
-				t.type = TokenType::GLOBAL;
-				tokens.push_back(t);
-			} else if (current == "end") {
-				t.type = TokenType::END;
-				tokens.push_back(t);
-			} else if (current == "return") {
-				t.type = TokenType::RETURN;
-				tokens.push_back(t);
-				
-			//Structure
-			} else if (current == "struct") {
-				t.type = TokenType::STRUCT;
-				tokens.push_back(t);
-				
-			//Variable types
-			} else if (current == "byte") {
-				t.type = TokenType::T_BYTE;
-				tokens.push_back(t);
-			} else if (current == "char") {
-				t.type = TokenType::T_CHAR;
-				tokens.push_back(t);
-			} else if (current == "short") {
-				t.type = TokenType::T_SHORT;
-				tokens.push_back(t);
-			} else if (current == "bool") {
-				t.type = TokenType::T_BOOL;
-				tokens.push_back(t);
-			} else if (current == "str") {
-				t.type = TokenType::T_STR;
-				tokens.push_back(t);
-				
-			//Integer types
-			} else if (current == "int") {
-				t.type = TokenType::T_INT;
-				tokens.push_back(t);
-			} else if (current == "int64") {
-				t.type = TokenType::INT_64;
-				tokens.push_back(t);
-			} else if (current == "int128") {
-				t.type = TokenType::INT_128;
-				tokens.push_back(t);
-			} else if (current == "int256") {
-				t.type = TokenType::INT_256;
-				tokens.push_back(t);
-				
-			//Floating-point types
-			} else if (current == "float") {
-				t.type = TokenType::T_FLOAT;
-				tokens.push_back(t);
-			} else if (current == "float64") {
-				t.type = TokenType::FLOAT_64;
-				tokens.push_back(t);
-			} else if (current == "float128") {
-				t.type = TokenType::FLOAT_128;
-				tokens.push_back(t);
-			} else if (current == "float256") {
-				t.type = TokenType::FLOAT_256;
-				tokens.push_back(t);
-				
-			//Double types
-			} else if (current == "double") {
-				t.type = TokenType::T_DOUBLE;
-				tokens.push_back(t);
-			} else if (current == "double128") {
-				t.type = TokenType::DOUBLE_128;
-				tokens.push_back(t);
-			} else if (current == "double256") {
-				t.type = TokenType::DOUBLE_256;
-				tokens.push_back(t);
-				
-			//Unsigned integers
-			} else if (current == "uint") {
-				t.type = TokenType::T_UINT;
-				tokens.push_back(t);
-			} else if (current == "uint64") {
-				t.type = TokenType::UINT_64;
-				tokens.push_back(t);
-			} else if (current == "uint128") {
-				t.type = TokenType::UINT_128;
-				tokens.push_back(t);
-			} else if (current == "uint256") {
-				t.type = TokenType::UINT_256;
-				tokens.push_back(t);
-				
-			//Conditional stuff
-			} else if (current == "if") {
-				t.type = TokenType::IF;
-				tokens.push_back(t);
-			} else if (current == "elif") {
-				t.type = TokenType::ELIF;
-				tokens.push_back(t);
-			} else if (current == "else") {
-				t.type = TokenType::ELSE;
-				tokens.push_back(t);
-				
-			//Loops
-			} else if (current == "while") {
-				t.type = TokenType::WHILE;
-				tokens.push_back(t);
-			} else if (current == "loop") {
-				t.type = TokenType::LOOP;
-				tokens.push_back(t);
-			} else if (current == "foreach") {
-				t.type = TokenType::FOREACH;
-				tokens.push_back(t);
-				
-			//Booleans
-			} else if (current == "true") {
-				t.type = TokenType::B_TRUE;
-				tokens.push_back(t);
-			} else if (current == "false") {
-				t.type = TokenType::B_FALSE;
-				tokens.push_back(t);
-				
-			//Check the dot operator
-			/*} else if (c == '.') {
-				char nx = line[i+1];
-				
-				if (is_int(current) && isdigit(nx)) {
-					current += c;
-					continue;
-				}*/
-				
-			//If no keyword, and its not empty, then we have an identifier
-			} else if (current.size() > 0) {
-				if (is_int(current)) {
-					t.type = TokenType::NO;
-				} else if (is_dec(current)) {
-					t.type = TokenType::DEC;
-				} else if (is_hex(current)) {
-					t.type = TokenType::HEX;
-				} else {
-					t.type = TokenType::ID;
-				}
-				
-				t.id = current;
-				tokens.push_back(t);
-			}
+            if (current.size() > 0) {
+			    t.type = getKeyword(current);
+                
+                switch (t.type) {
+                    case TokenType::NO:
+                    case TokenType::HEX:
+                    case TokenType::DEC:
+                    case TokenType::ID: t.id = current;
+                }
+                
+                tokens.push_back(t);
+    			current = "";
+            }
 			
-			current = "";
-			
-			//Check to see if the separator is also a token
-			if (c == '.') {
-				Token t;
-				t.type = TokenType::DOT;
-				tokens.push_back(t);
-			} else if (c == '(') {
-				Token t;
-				t.type = TokenType::LEFT_PAREN;
-				tokens.push_back(t);
-			} else if (c == ')') {
-				Token t;
-				t.type = TokenType::RIGHT_PAREN;
-				tokens.push_back(t);
-			} else if (c == '[') {
-				Token t;
-				t.type = TokenType::L_BRACKET;
-				tokens.push_back(t);
-			} else if (c == ']') {
-				Token t;
-				t.type = TokenType::R_BRACKET;
-				tokens.push_back(t);
-			} else if (c == ',') {
-				Token t;
-				t.type = TokenType::COMMA;
-				tokens.push_back(t);
-			} else if (c == ':') {
-				Token t;
-				t.type = TokenType::COLON;
-				tokens.push_back(t);
-			} else if (c == '=' && line[i+1] == '=') {
-				Token t;
-				t.type = TokenType::EQUALS;
-				tokens.push_back(t);
-				skip_next = true;
-			} else if (c == '=') {
-				Token t;
-				t.type = TokenType::ASSIGN;
-				tokens.push_back(t);
-			} else if (c == '!' && line[i+1] == '=') {
-				Token t;
-				t.type = TokenType::NOT_EQUAL;
-				tokens.push_back(t);
-				skip_next = true;
-			} else if (c == '!') {
-				Token t;
-				t.type = TokenType::NOT;
-				tokens.push_back(t);
-			} else if (c == '>' && line[i+1] == '=') {
-				Token t;
-				t.type = TokenType::GREATER_EQ;
-				tokens.push_back(t);
-				skip_next = true;
-			} else if (c == '>') {
-				Token t;
-				t.type = TokenType::GREATER;
-				tokens.push_back(t);
-			} else if (c == '<' && line[i+1] == '=') {
-				Token t;
-				t.type = TokenType::LESS_EQ;
-				tokens.push_back(t);
-				skip_next = true;
-			} else if (c == '<') {
-				Token t;
-				t.type = TokenType::LESS;
-				tokens.push_back(t);
-			} else if (c == '+' && line[i+1] == '+') {
-				Token t;
-				t.type = TokenType::D_PLUS;
-				tokens.push_back(t);
-				skip_next = true;
-			} else if (c == '+') {
-				Token t;
-				t.type = TokenType::PLUS;
-				tokens.push_back(t);
-			} else if (c == '-') {
-				Token t;
-				t.type = TokenType::MINUS;
-				tokens.push_back(t);
-			} else if (c == '*' && line[i+1] == '*') {
-				Token t;
-				t.type = TokenType::D_MUL;
-				tokens.push_back(t);
-				skip_next = true;
-			} else if (c == '*') {
-				Token t;
-				t.type = TokenType::MUL;
-				tokens.push_back(t);
-			} else if (c == '/') {
-				Token t;
-				t.type = TokenType::DIV;
-				tokens.push_back(t);
-			} else if (c == '%') {
-				Token t;
-				t.type = TokenType::MOD;
-				tokens.push_back(t);
-			} else if (c == ',') {
-				Token t;
-				t.type = TokenType::COMMA;
-				tokens.push_back(t);
-				
-			//Logical operators
-			} else if (c == '&' && line[i+1] == '&') {
-				Token t;
-				t.type = TokenType::AND;
-				tokens.push_back(t);
-				skip_next = true;
-			} else if (c == '?' && line[i+1] == '?') {
-				Token t;
-				t.type = TokenType::XOR;
-				tokens.push_back(t);
-				skip_next = true;
-			} else if (c == '?') {
-				Token t;
-				t.type = TokenType::OR;
-				tokens.push_back(t);
-				skip_next = true;
-			}
+			TokenType tt = getSymbol(c, i, line);
+            if (tt != TokenType::NONE) {
+                t.type = tt;
+                tokens.push_back(t);
+            }
 		} else {
 			current += c;
 		}
@@ -446,7 +353,7 @@ std::vector<Token> tokenize(std::string line) {
 }
 
 //Convert a string to a token
-TokenType str2type(std::string in) {
+TokenType Scanner::str2type(std::string in) {
 	if (in == "ID") return TokenType::ID;
 	else if (in == "FUNC_DEC") return TokenType::FUNC_DEC;
 	else if (in == "(") return TokenType::LEFT_PAREN;

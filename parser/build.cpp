@@ -91,10 +91,14 @@ std::vector<Line> load_source(const char *path) {
 	} while (found_include);
 	
 	//Now tokenize
+    Scanner *scanner = new Scanner;
+    
 	for (int i = 0; i<lines.size(); i++) {
 		Line *l = &lines.at(i);
-		l->tokens = tokenize(l->original);
+		l->tokens = scanner->tokenize(l->original);
 	}
+    
+    delete scanner;
 	
 	return lines;
 }
