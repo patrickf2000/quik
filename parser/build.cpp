@@ -89,16 +89,79 @@ std::vector<Line> load_source(const char *path) {
 			}
 		}
 	} while (found_include);
+    
+    // Write the lines back to a temporary file
+    std::ofstream writer("tmp.qk");
+    
+    for (auto ln : lines) {
+        writer << ln.original << std::endl;
+    }
+    
+    writer.close();
 	
 	//Now tokenize
     Scanner *scanner = new Scanner;
     
+    // Use the new method
+    auto lines2 = scanner->tokenize2("tmp.qk");
+    
+    // Use the old method
 	for (int i = 0; i<lines.size(); i++) {
 		Line *l = &lines.at(i);
 		l->tokens = scanner->tokenize(l->original);
 	}
     
     delete scanner;
+    
+    // Run the check
+    std::cout << "Running lexical check..." << std::endl;
+    
+    if (lines2.size() != lines.size()) {
+        std::cout << "Error: Lexical check failed- invalid line size." << std::endl;
+        std::cout << "Expected: " << lines.size() << std::endl;
+        std::cout << "Actual: " << lines2.size() << std::endl;
+    } else {
+        for (int i = 0; i<lines.size(); i++) {
+            auto l1 = lines[i];
+            auto l2 = lines2[i];
+            
+            if (l1.tokens.size() != l2.tokens.size()) {
+                std::cout << "Error: Lexical check failed- invalid token size." << std::endl;
+                std::cout << "Expected: " << l1.tokens.size() << std::endl;
+                std::cout << "Actual: " << l2.tokens.size() << std::endl;
+                std::cout << std::endl;
+                std::cout << "Error is at: " << i << std::endl;
+                break;
+            }
+            
+            for (int j = 0; j<l1.tokens.size(); j++) {
+                auto t1 = l1.tokens[j];
+                auto t2 = l2.tokens[j];
+                
+                if (t1.type != t2.type) {
+                    std::cout << "Error: Token at " << j << " is invalid." << std::endl;
+                    std::cout << "Expected: " << t1.type << std::endl;
+                    std::cout << "Actual: " << t2.type << std::endl;
+                    std::cout << std::endl;
+                }
+                
+                switch (t1.type) {
+                    case TokenType::NO:
+                    case TokenType::DEC:
+                    case TokenType::HEX:
+                    case TokenType::STRING:
+                    case TokenType::CHAR: {
+                        if (t1.id != t2.id) {
+                            std::cout << "Error: Token ID at " << j << " is invalid." << std::endl;
+                            std::cout << "Expected: " << t1.id << std::endl;
+                            std::cout << "Actual: " << t2.id << std::endl;
+                            std::cout << std::endl;  
+                        }
+                    } break;
+                }
+            }
+        }
+    }
 	
 	return lines;
 }

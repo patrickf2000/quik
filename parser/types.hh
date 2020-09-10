@@ -5,6 +5,7 @@
 
 enum TokenType {
 	NONE,
+    NL,
 	
 	//Keywords
 	FUNC_DEC,

@@ -6,7 +6,7 @@
 #include "strutils.hh"
 
 bool is_separator(char c) {
-	if (c == ' ' || c == '(' || c == ')'
+	if (c == ' ' || c == '\n' || c == '(' || c == ')'
 		|| c == '[' || c == ']' || c == '&' || c == '?'
 		|| c == '=' || c == ',' || c == ':' || c == '.'
 		|| c == '+' || c == '-' || c == '*' || c == '/'
@@ -163,6 +163,203 @@ TokenType getKeyword(std::string current) {
 }
 
 //Check to see if the separator is also a token
+TokenType Scanner::getSymbol2(char c) {
+    char nc = 0;
+    reader.get(nc);
+        
+    switch (c) {
+        case '\n': reader.putback(nc); return TokenType::NL;
+        case '.': reader.putback(nc); return TokenType::DOT;
+        case '(': reader.putback(nc); return TokenType::LEFT_PAREN;
+        case ')': reader.putback(nc); return TokenType::RIGHT_PAREN;
+        case '[': reader.putback(nc); return TokenType::L_BRACKET;
+        case ']': reader.putback(nc); return TokenType::R_BRACKET;
+        case ',': reader.putback(nc); return TokenType::COMMA;
+        case ':': reader.putback(nc); return TokenType::COLON;
+        case '-': reader.putback(nc); return TokenType::MINUS;
+        case '/': reader.putback(nc); return TokenType::DIV;
+        case '%': reader.putback(nc); return TokenType::MOD;
+        
+        case '=': {
+            if (nc == '=')
+                return TokenType::EQUALS;
+            
+            reader.putback(nc);
+            return TokenType::ASSIGN;
+        } break;
+        
+        case '!': {
+            if (nc == '=')
+                return TokenType::NOT_EQUAL;
+            
+            reader.putback(nc);
+            return TokenType::NOT;
+        } break;
+        
+        case '>': {
+            if (nc == '=')
+                return TokenType::GREATER_EQ;
+            
+            reader.putback(nc);
+            return TokenType::GREATER;
+        } break;
+        
+        case '<': {
+            if (nc == '=')
+                return TokenType::LESS_EQ;
+            
+            reader.putback(nc);
+            return TokenType::LESS;
+        } break;
+        
+        case '+': {
+            if (nc == '+')
+                return TokenType::D_PLUS;
+            
+            reader.putback(nc);
+            return TokenType::PLUS;
+        } break;
+        
+        case '*': {
+            if (nc == '*')
+                return TokenType::D_MUL;
+            
+            reader.putback(nc);
+            return TokenType::MUL;
+        } break;
+        
+        case '&': {
+            if (nc == '&')
+                return TokenType::AND;
+            
+            reader.putback(nc);
+        } break;
+        
+        case '?': {
+            if (nc == '?')
+                return TokenType::XOR;
+            
+            reader.putback(nc);
+            return TokenType::OR;
+        } break;
+    }
+
+    reader.putback(nc);
+    return TokenType::NONE;
+}
+
+TokenType Scanner::getNext() {
+    if (tokenStack.size() > 0) {
+        auto t = tokenStack.top();
+        tokenStack.pop();
+        return t;
+    }
+
+    char c = 0;
+    std::string current = "";
+    bool inQuote = false;
+    
+    while (!reader.eof()) {
+        reader.get(c);
+        currentLn += c;
+        
+        if (c == '\"' || c == '\'') {
+            if (inQuote) {
+                sval = current;
+                inQuote = false;
+                
+                if (c == '\'')
+                    return TokenType::CHAR;
+                    
+                return TokenType::STRING;
+            } else {
+                inQuote = true;
+                continue;
+            }
+        }
+        
+        if (inQuote) {
+            current += c;
+            continue;
+        }
+        
+        if (c == ' ' || c == '\t') {
+            if (current.length() > 0) {
+                sval = current;
+                return getKeyword(current);
+            }
+        } else if (c == '\n') {
+            if (current.length() > 0) {
+                tokenStack.push(TokenType::NL);
+                
+                sval = current;
+                return getKeyword(current);
+            }
+            
+            return TokenType::NL;
+        } else if (is_separator(c)) {
+            TokenType token = getSymbol2(c);
+        
+            if (current.length() > 0) {
+                if (token != TokenType::NONE)
+                    tokenStack.push(token);
+                    
+                sval = current;
+                token = getKeyword(current);
+            }
+            
+            return token;
+        } else {
+            current += c;
+        }
+    }
+
+    return TokenType::NONE;
+}
+
+std::vector<Line> Scanner::tokenize2(std::string file) {
+    std::vector<Line> lines;
+    reader = std::ifstream(file);
+    
+    if (!reader.is_open()) {
+        std::cout << "Error: Unable to open input file." << std::endl;
+        std::exit(1);
+    }
+    
+    TokenType token = getNext();
+    Line ln;
+    Token t;
+    
+    while (token != TokenType::NONE) {
+        switch (token) {
+            case TokenType::NL: {
+                ln.original = currentLn;
+                ++ln.no;
+                currentLn = "";
+                
+                lines.push_back(ln);
+                ln.tokens.clear();
+                
+                token = getNext();
+                continue;
+             } break;
+            
+            case TokenType::NO:
+            case TokenType::HEX:
+            case TokenType::ID:
+            case TokenType::STRING:
+            case TokenType::CHAR: t.id = sval; break;
+        }
+        
+        t.type = token;
+        ln.tokens.push_back(t);
+        token = getNext();
+    }
+    
+    return lines;
+}
+
+//Check to see if the separator is also a token
 TokenType Scanner::getSymbol(char c, int i, std::string line) {
     switch (c) {
         case '.': return TokenType::DOT;
@@ -247,10 +444,6 @@ TokenType Scanner::getSymbol(char c, int i, std::string line) {
         } break;
     }
 
-    return TokenType::NONE;
-}
-
-TokenType Scanner::getNext(std::string line) {
     return TokenType::NONE;
 }
 
