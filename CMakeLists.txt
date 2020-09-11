@@ -17,6 +17,7 @@ set(PARSER_SRC
 	parser/parse.cpp
 	parser/strutils.cpp
 	parser/syntax.cpp
+    parser/utils.cpp
 	parser/vars.cpp
 	parser/optimization/funcs.cpp
 	parser/ltac/ltac.cpp

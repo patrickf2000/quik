@@ -150,32 +150,36 @@ AstFuncCall *QkParser::build_func_call(Line ln) {
 }
 
 //Builds a return statement
-AstReturn *QkParser::build_ret(Line ln) {
-	auto tokens = ln.tokens;
+AstReturn *QkParser::build_ret() {
 	AstReturn *node = new AstReturn;
-	
-	for (int i = 1; i<tokens.size(); i++) {
-		auto t = tokens.at(i);
-		
-		switch (t.type) {
+    auto token = getNext();
+    
+    while (token != TokenType::NL) {
+        switch (token) {
 			case TokenType::ID: {
-				AstID *id = new AstID(t.id);
+                auto name = getSVal();
+                
+				AstID *id = new AstID(name);
 				node->children.push_back(id);
 			} break;
 			
 			case TokenType::NO: {
-				int val = std::stoi(t.id);
+				int val = getIVal();
+                
 				AstInt *i = new AstInt(val);
 				node->children.push_back(i);
 			} break;
 			
 			case TokenType::DEC: {
-				double val = std::stod(t.id);
+				double val = getFloatL();
+                
 				AstFloat *f = new AstFloat(val);
 				node->children.push_back(f);
 			} break;
 		}
-	}
+        
+        token = getNext();
+    }
 
 	return node;
 }

@@ -17,7 +17,7 @@ public:
 	//Function stuff
 	AstFuncDec *build_func_dec(Line ln);
 	AstFuncCall *build_func_call(Line ln);
-	AstReturn *build_ret(Line ln);
+	AstReturn *build_ret();
 	
 	//Variables
 	AstVarDec *basic_var_dec(Line ln);
@@ -42,4 +42,14 @@ protected:
 	void find_assign(AstNode *top, AstScope *scope);
 	void find_cond(AstNode *top);
 	void check_return(AstNode *top);
+private:
+    // Most of this is temporary as we re-work the parser
+    Line currentLn;
+    int currentIndex = 1;
+    
+    TokenType getNext();
+    std::string getSVal();
+    int getIVal();
+    double getFloatL();
+    int getLnNo();
 };

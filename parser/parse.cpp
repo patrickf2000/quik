@@ -38,6 +38,10 @@ DataType ttype2dtype(TokenType t) {
 
 //Builds an AST node from a string of tokens
 AstNode *QkParser::build_node(Line ln) {
+    // For the temporary parser functions
+    currentLn = ln;
+    currentIndex = 1;
+    
 	auto tokens = ln.tokens;
 	if (tokens.size() == 0)
 		return nullptr;
@@ -58,7 +62,7 @@ AstNode *QkParser::build_node(Line ln) {
 		}
 		
 		//Build a return statement
-		case TokenType::RETURN: return build_ret(ln);
+		case TokenType::RETURN: return build_ret();
 		
 		//Build structure statements
 		case TokenType::STRUCT: {
