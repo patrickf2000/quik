@@ -2,38 +2,38 @@
 
 //Builds a loop statement
 AstLoop *QkParser::build_loop() {
-	AstLoop *lp = new AstLoop;
-	lp->param = nullptr;
+    AstLoop *lp = new AstLoop;
+    lp->param = nullptr;
     
     auto token = getNext();
-	
-	if (token != TokenType::NL) {
-		switch (token) {
-			case TokenType::NO: {
-				int i = getIVal();
-				lp->param = new AstInt(i);
-			} break;
-			
-			case TokenType::ID: {
-				AstID *id = new AstID(getSVal());
-				lp->param = id;
-			} break;
-			
-			default: {
-				std::string er_msg = "Error: Only integers and integer variables ";
-				er_msg += "may be used with the loop statement.";
-				syntax_error(getLnNo(), getCurrentLn(), er_msg);
-			}
-		}
-	}
+    
+    if (token != TokenType::NL) {
+        switch (token) {
+            case TokenType::NO: {
+                int i = getIVal();
+                lp->param = new AstInt(i);
+            } break;
+            
+            case TokenType::ID: {
+                AstID *id = new AstID(getSVal());
+                lp->param = id;
+            } break;
+            
+            default: {
+                std::string er_msg = "Error: Only integers and integer variables ";
+                er_msg += "may be used with the loop statement.";
+                syntax_error(getLnNo(), getCurrentLn(), er_msg);
+            }
+        }
+    }
     
     token = getNext();
     if (token != TokenType::NL) {
         syntax_error(getLnNo(), getCurrentLn(),
             "Too many arguments for loop statement.");
     }
-	
-	return lp;
+    
+    return lp;
 }
 
 //Builds a foreach statement
@@ -83,7 +83,7 @@ AstForEach *QkParser::build_foreach() {
         syntax_error(getLnNo(), getCurrentLn(),
             "Invalid foreach syntax. Expected \')\' and \'\\n\' at end.");
     }
-	
-	return fe;
+    
+    return fe;
 }
 

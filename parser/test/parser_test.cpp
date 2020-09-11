@@ -10,10 +10,10 @@
 #include "parse.hh"
 
 int main(int argc, char *argv[]) {
-	if (argc == 1) {
-		std::cout << "Error: No input file." << std::endl;
+    if (argc == 1) {
+        std::cout << "Error: No input file." << std::endl;
         return 1;
-	}
+    }
     
     bool optimize = false;
     if (argc == 3) {
@@ -21,7 +21,7 @@ int main(int argc, char *argv[]) {
             optimize = true;
         }
     }
-	
+    
     auto lines = load_source(argv[1]);
     AstTree *tree = build_ast(lines, false, optimize);
     
@@ -30,8 +30,8 @@ int main(int argc, char *argv[]) {
     writer.close();
     
     system("dot ast.dot -Tpng -o ast.png");
-		
+        
     delete tree;
-	
-	return 0;
+    
+    return 0;
 }

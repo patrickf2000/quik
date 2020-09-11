@@ -7,13 +7,13 @@
 
 class OptimizeEngine {
 public:
-	explicit OptimizeEngine(AstNode *top) {
-		tree = top;	
-	}
+    explicit OptimizeEngine(AstNode *top) {
+        tree = top;    
+    }
 
-	void remove_uncalled();
+    void remove_uncalled();
 protected:
-	void scan_tree(AstNode *node, AstType t, std::vector<std::string> *vals);
+    void scan_tree(AstNode *node, AstType t, std::vector<std::string> *vals);
 private:
-	AstNode *tree;
+    AstNode *tree;
 };

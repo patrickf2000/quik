@@ -158,79 +158,79 @@ std::vector<Line> Scanner::tokenize(std::string file, bool preFile) {
 }
 
 bool Scanner::isSeparator(char c) {
-	if (c == ' ' || c == '\n' || c == '(' || c == ')'
-		|| c == '[' || c == ']' || c == '&' || c == '?'
-		|| c == '=' || c == ',' || c == ':' || c == '.'
-		|| c == '+' || c == '-' || c == '*' || c == '/'
-		|| c == '%' || c == '!' || c == '>' || c == '<') {
-		return true;
-	}
-	
-	return false;
+    if (c == ' ' || c == '\n' || c == '(' || c == ')'
+        || c == '[' || c == ']' || c == '&' || c == '?'
+        || c == '=' || c == ',' || c == ':' || c == '.'
+        || c == '+' || c == '-' || c == '*' || c == '/'
+        || c == '%' || c == '!' || c == '>' || c == '<') {
+        return true;
+    }
+    
+    return false;
 }
 
 bool Scanner::isInt(std::string s) {
     if (s.length() == 0)
         return false;
     
-	int index = 0;
-	
-	for (char c : s) {
-		if (c == '-') {
-			if (index > 0) {
-				return false;
-			}
-			
-			++index;
-			continue;
-		}
-		
-		if (!isdigit(c))
-			return false;
-			
-		++index;
-	}
-	return true;
+    int index = 0;
+    
+    for (char c : s) {
+        if (c == '-') {
+            if (index > 0) {
+                return false;
+            }
+            
+            ++index;
+            continue;
+        }
+        
+        if (!isdigit(c))
+            return false;
+            
+        ++index;
+    }
+    return true;
 }
 
 bool Scanner::isFloatL(std::string s) {
-	int index = 0;
+    int index = 0;
 
-	for (char c : s) {
-		if (c == '-') {
-			if (index > 0) {
-				return false;
-			}
-			
-			++index;
-			continue;
-		}
-	
-		if (!isdigit(c) && c != '.')
-			return false;
-			
-		++index;
-	}
-	
-	return true;
+    for (char c : s) {
+        if (c == '-') {
+            if (index > 0) {
+                return false;
+            }
+            
+            ++index;
+            continue;
+        }
+    
+        if (!isdigit(c) && c != '.')
+            return false;
+            
+        ++index;
+    }
+    
+    return true;
 }
 
 bool Scanner::isHex(std::string s) {
-	if (s.length() < 3)
-		return false;
-		
-	if (s[0] != '0' || s[1] != 'x') {
-		return false;
-	}
-	
-	for (int i = 2; i<s.length(); i++) {
-		char c = s[i];
-		
-		if (!isxdigit(c))
-			return false;
-	}
-	
-	return true;
+    if (s.length() < 3)
+        return false;
+        
+    if (s[0] != '0' || s[1] != 'x') {
+        return false;
+    }
+    
+    for (int i = 2; i<s.length(); i++) {
+        char c = s[i];
+        
+        if (!isxdigit(c))
+            return false;
+    }
+    
+    return true;
 }
 
 //Check to see if the separator is also a token
@@ -333,17 +333,17 @@ TokenType Scanner::getKeyword(std::string current) {
     else if (current == "global") return TokenType::GLOBAL;
     else if (current == "end") return TokenType::END;
     else if (current == "return") return TokenType::RETURN;
-    				
+                    
     //Structure
     else if (current == "struct") return TokenType::STRUCT;
-    		
+            
     //Variable types
     else if (current == "byte") return TokenType::T_BYTE;
     else if (current == "char") return TokenType::T_CHAR;
     else if (current == "short") return TokenType::T_SHORT;
     else if (current == "bool") return TokenType::T_BOOL;
     else if (current == "str") return TokenType::T_STR;
-    	
+        
     //Integer types
     else if (current == "int") return TokenType::T_INT;
     else if (current == "int64") return TokenType::INT_64;
@@ -360,18 +360,18 @@ TokenType Scanner::getKeyword(std::string current) {
     else if (current == "double") return TokenType::T_DOUBLE;
     else if (current == "double128") return TokenType::DOUBLE_128;
     else if (current == "double256") return TokenType::DOUBLE_256;
-				
+                
     //Unsigned integers
     else if (current == "uint") return TokenType::T_UINT;
     else if (current == "uint64") return TokenType::UINT_64;
     else if (current == "uint128") return TokenType::UINT_128;
     else if (current == "uint256") return TokenType::UINT_256;
-    	
+        
     //Conditional stuff
     else if (current == "if") return TokenType::IF;
     else if (current == "elif") return TokenType::ELIF;
     else if (current == "else") return TokenType::ELSE;
-    	
+        
     //Loops
     else if (current == "while") return TokenType::WHILE;
     else if (current == "loop") return TokenType::LOOP;
