@@ -43,7 +43,7 @@ void SyntaxCheck::check_vars(AstNode *top, std::map<std::string, Var> vars) {
 			if (vars.find(va->get_name()) == vars.end()) {
 				Error er;
 				er.ln = node->ln;
-				er.msg = "Use of undeclared variable.";
+				er.msg = "Use of undeclared variable: " + va->get_name();
 				errors.push_back(er);
 			}
 		}

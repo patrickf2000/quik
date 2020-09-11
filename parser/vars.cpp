@@ -23,6 +23,9 @@ AstVarDec *QkParser::basic_var_dec(Line ln) {
 
 //Translates each part into tokens for variable declarations and assignments
 void QkParser::build_var_parts(AstNode *vd, int start, std::vector<Token> tokens) {
+    currentLn.tokens = tokens;
+    currentIndex = 0;
+    
 	bool array_dec = false;
 
 	for (int i = start; i<tokens.size(); i++) {
@@ -55,7 +58,7 @@ void QkParser::build_var_parts(AstNode *vd, int start, std::vector<Token> tokens
             std::string name = tokens[i].id;
             currentIndex = i + 1;
 			
-			for (int j = i; j<tokens.size(); j++) {
+			for (int j = i + 1; j<tokens.size(); j++) {
 				sub_tokens.push_back(tokens.at(j));
 			
 				if (tokens[j].type == TokenType::RIGHT_PAREN) {

@@ -11,6 +11,7 @@ set(PARSER_SRC
 	parser/build.cpp
 	parser/conditional.cpp
 	parser/data.cpp
+    parser/debug.cpp
 	parser/funcs.cpp
 	parser/lex.cpp
 	parser/loop.cpp

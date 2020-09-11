@@ -86,6 +86,46 @@ std::string AstFuncCall::writeDot(std::string prefix) {
 }
 
 //=================================================
+// AstReturn -> Represents a return statement
+
+std::string AstReturn::writeDot(std::string prefix) {
+    if (this->children.size() == 0)
+        return writeDotStd(prefix, "Ret");
+    return writeDotParent(prefix, "Ret");
+}
+
+//=================================================
+// AstVarDec-> Represents a variable declaration
+
+std::string AstVarDec::writeDot(std::string prefix) {
+    std::string lbl = "var " + this->name;
+    
+    std::string typeStr = "";
+    
+    switch (this->dtype) {
+        case DataType::Void: typeStr = "void"; break;
+        case DataType::Char: typeStr = "char"; break;
+        case DataType::Int: typeStr = "int"; break;
+        case DataType::Float: typeStr = "float"; break;
+    }
+    
+    //for (int i = 0; i<ptr; i++) typeStr = "*" + typeStr;
+    //if (typeFlags & USigned) typeStr = "u" + typeStr;
+    
+    lbl += " (" + typeStr + ")";
+
+    return writeDotParent(prefix, lbl);
+}
+
+//=================================================
+// AstVarAssign-> Represents a variable declaration
+
+std::string AstVarAssign::writeDot(std::string prefix) {
+    std::string lbl = this->name;
+    return writeDotParent(prefix, lbl);
+}
+
+//=================================================
 // AstId-> Represents an ID (ie, variable) value
 
 std::string AstID::writeDot(std::string prefix) {

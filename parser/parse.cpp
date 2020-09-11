@@ -94,7 +94,7 @@ AstNode *QkParser::build_node(Line ln) {
 		case TokenType::FOREACH: return build_foreach();
 		
 		//Handle if the first node is an ID
-		case TokenType::ID: return build_id(ln);
+		case TokenType::ID: return build_id(getSVal());
 		
 		//Build variable declarations
 		//Build a byte assignment
@@ -134,85 +134,135 @@ AstNode *QkParser::build_node(Line ln) {
 }
 
 //Builds a node based on an ID value
-AstNode *QkParser::build_id(Line ln) {
-	auto tokens = ln.tokens;
-	auto first = tokens.at(0);
+AstNode *QkParser::build_id(std::string name) {
+	auto token = getNext();
 
-	if (tokens.size() < 2) {
-		syntax_error(ln, "Only an ID was specified!");
+	if (token == TokenType::NL) {
+		syntax_error(getLnNo(), getCurrentLn(), 
+            "Invalid assignment.");
 	}
 
 	//Check for an array assignment
-	if (tokens.size() >= 6) {
-		auto t1 = tokens.at(1).type;
-		auto t2 = tokens.at(3).type;
-		auto t3 = tokens.at(4).type;
-		
-		if (t1 == TokenType::L_BRACKET && t2 == TokenType::R_BRACKET
-			&& t3 == TokenType::ASSIGN) {
-			Token index = tokens.at(2);
-			AstArrayAssign *assign = new AstArrayAssign(first.id);
-			
-			switch (index.type) {
-				case TokenType::ID: {
-					AstID *id = new AstID(index.id);
-					assign->index = id;
-				} break;
+	if (token == TokenType::L_BRACKET) {
+        AstArrayAssign *assign = new AstArrayAssign(name);
+        token = getNext();
+        
+        switch (token) {
+            case TokenType::ID: {
+                auto val = getSVal();
+                AstID *id = new AstID(val);
+                assign->index = id;
+            } break;
 				
-				case TokenType::NO: {
-					int val = std::stoi(index.id);
-					AstInt *i = new AstInt(val);
-					assign->index = i;
-				} break;
+            case TokenType::NO: {
+                int val = getIVal();
+                AstInt *i = new AstInt(val);
+                assign->index = i;
+            } break;
 				
-				default: syntax_error(ln, "Invalid array access.");
-			}
-			
-			build_var_parts(assign, 5, tokens);
-			return assign;
-		}
+            default: syntax_error(getLnNo(), getCurrentLn(), 
+                        "Invalid array access.");
+        }
+        
+        token = getNext();
+        auto next = getNext();
+        
+        if (token != TokenType::R_BRACKET || next != TokenType::ASSIGN) {
+            syntax_error(getLnNo(), getCurrentLn(),
+                "Invalid array access.");
+        }
+        
+        //TODO: Replace this
+        token = getNext();
+        std::vector<Token> sub_tokens;
+        
+        while (token != TokenType::NL && token != TokenType::NONE) {
+            Token t;
+            t.type = token;
+            t.id = getSVal();
+            sub_tokens.push_back(t);
+            
+            token = getNext();
+        }
+        
+        build_var_parts(assign, 0, sub_tokens);
+        return assign;
 	}
 
 	//Build a function call
-	if (tokens.at(1).type == TokenType::LEFT_PAREN) {
-        std::string name = getSVal();
-        getNext();
+	if (token == TokenType::LEFT_PAREN) {
+        //getNext();
 		return build_func_call(name);
 		
 	//Build an assignment
-	} else if (tokens.at(1).type == TokenType::ASSIGN) {
-		if (tokens.size() < 3) {
-			syntax_error(ln, "Missing elements.");
+	} else if (token == TokenType::ASSIGN) {
+        token = getNext();
+		if (token == TokenType::NL) {
+			syntax_error(getLnNo(), getCurrentLn(),
+                "Missing elements.");
 		}
+        
+        // TODO: Replace this loop
+        std::vector<Token> sub_tokens;
+        
+        while (token != TokenType::NL && token != TokenType::NONE) {
+            Token t;
+            t.type = token;
+            t.id = getSVal();
+            sub_tokens.push_back(t);
+            
+            token = getNext();
+        }
 
-		AstVarAssign *va = new AstVarAssign(tokens.at(0).id);
-		build_var_parts(va, 2, tokens);
+        // Build the assignment
+		AstVarAssign *va = new AstVarAssign(name);
+		build_var_parts(va, 0, sub_tokens);
 		return va;
 		
 	//Build a multiple variable assignment
-	} else if (tokens.at(1).type == TokenType::COMMA) {
+	} else if (token == TokenType::COMMA) {
 		auto mva = new AstMultiVarAssign;
-		int start = 1;
+        
+        auto var1 = new AstID(name);
+        mva->vars.push_back(var1);
+        
+        auto token = getNext();
+        
+        while (token != TokenType::ASSIGN && token != TokenType::NONE) {
+            if (token == TokenType::COMMA) {
+                token = getNext();
+                continue;
+            } else if (token == TokenType::ID) {
+                auto val = getSVal();
+                auto var = new AstID(val);
+                mva->vars.push_back(var);
+            } else {
+                syntax_error(getLnNo(), getCurrentLn(),
+                    "Invalid multi-variable assignment.");
+            }
+            
+            token = getNext();
+        }
+        
+        // TODO: Replace this
+        token = getNext();
+        std::vector<Token> sub_tokens;
+        
+        while (token != TokenType::NL && token != TokenType::NONE) {
+            Token t;
+            t.type = token;
+            t.id = getSVal();
+            sub_tokens.push_back(t);
+            
+            token = getNext();
+        }
 		
-		for (int i = 0; i<tokens.size(); i+=2) {
-			Token v = tokens.at(i);
-			Token sym = tokens.at(i+1);
-				
-			AstID *var = new AstID(v.id);
-			mva->vars.push_back(var);
-			
-			if (sym.type == TokenType::ASSIGN) {
-				start = i + 1;
-				break;
-			}
-		}
-		
-		build_var_parts(mva, start + 1, tokens);
+		build_var_parts(mva, 0, sub_tokens);
 		return mva;
 		
 	//Build a structure assignment
-	} else if (tokens.at(1).type == TokenType::DOT) {
-		if (tokens.size() < 5)
+	} else if (token == TokenType::DOT) {
+		/*if (tokens.size() < 5)
 			syntax_error(ln, "Missing elements.");
 		
 		if (tokens.at(3).type != TokenType::ASSIGN)
@@ -232,11 +282,11 @@ AstNode *QkParser::build_id(Line ln) {
 		mod->var_name = i_var.id;
 		
 		build_var_parts(mod, 4, tokens);
-		return mod;
+		return mod;*/
 
 	//Build an increment
-	} else if (tokens.at(1).type == TokenType::D_PLUS) {
-		AstVarAssign *va = new AstVarAssign(tokens.at(0).id);
+	} else if (token == TokenType::D_PLUS) {
+		AstVarAssign *va = new AstVarAssign(name);
 		AstNode *inc = new AstNode(AstType::Inc);
 		va->children.push_back(inc);
 		return va;

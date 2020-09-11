@@ -175,7 +175,7 @@ class AstReturn : public AstNode {
 public:
 	AstReturn() { type = AstType::Return; }
     
-    std::string writeDot(std::string prefix = "") { return ""; }
+    std::string writeDot(std::string prefix = "");
 };
 
 //Structure declarations
@@ -285,7 +285,7 @@ public:
 		name = n;
 	}
     
-    std::string writeDot(std::string prefix = "") { return ""; }
+    std::string writeDot(std::string prefix = "");
 	
 	DataType get_type() { return dtype; }
 	void set_type(DataType t) { dtype = t; }
@@ -302,7 +302,7 @@ public:
 		name = n;
 	}
     
-    std::string writeDot(std::string prefix = "") { return ""; }
+    std::string writeDot(std::string prefix = "");
 };
 
 //Represents a math operation

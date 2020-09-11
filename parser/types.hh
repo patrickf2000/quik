@@ -149,3 +149,6 @@ struct Line {
 	int no;
 	std::string original;
 };
+
+// Temporary
+std::string token2str(TokenType t);

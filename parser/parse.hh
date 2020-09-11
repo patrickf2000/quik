@@ -12,7 +12,7 @@ DataType ttype2dtype(TokenType t);
 class QkParser {
 public:
 	AstNode *build_node(Line ln);
-	AstNode *build_id(Line ln);
+	AstNode *build_id(std::string name);
 	int build_tree(std::vector<AstNode *> nodes, AstNode *top, int index = 0, bool in_if = false);
 	
 	//Function stuff
