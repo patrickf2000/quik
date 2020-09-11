@@ -1,23 +1,30 @@
 ## Quik
 
-### Important Note
-I am in the process of a significant backend redesign. Basically, I'm developing a low-level IR between the Quik AST and the assembly code; as a result, the compiler is not fully working. I moved the original code into the backend.old folder.
+This repository contains the compiler for my Quik programming language. I've recently restarted work on the project after a long break to dive into some different things. At the time of writing, my most recent work was getting the lexical analyzer cleaned up, the pre-processor partly cleaned up, and laying the base for the new AST visualization system.
 
-Update: So while it's not currently at the same position as the v0.5 release, the backend is starting to work and can generate some Intel x86-64 Assembly and a little Arm v7 Assembly. I'm trying to keep all the architectures at the same level of support, but Intel x86-64 is going to get first priority. I'm hoping to get the Intel x86-64 back to where the original was within a week or two.
-
-Some new features: Function overloading is now supported, and PIC code can be generated for the Intel x86-64 architecture; as a result, I rewrote the standard library in Quik (it's a shared library, which the compiler is also capable of doing).
-
-If you wish to use the last working version, please visit the v0.5 branch.
-
-### Introduction
 This is the third version of my Quik programming language. Quik is a simple general-purpose systems programming language. Its similar to C in that its basically portable assembler, but its different in that its intended to be somewhat easier to use and understand, which still being able to interface with the underlying system libraries. This project contains the compiler, standard library, and tests. The compiler in turn is split into two parts: the parser library, which loads a source file and generates an AST; and the compiler, which calls the parser and generates Assembly.
 
 I wrote the entire thing from scratch. I don't intend for Quik to fill any special need or be the next big thing; I wrote this primarily as a learning experience, which is why I wrote the whole thing from scratch. Not to mention, its been a really fun hobby project.
 
-Currently, the compiler is capable of generating 32-bit/64-bit x86 Intel Assembly code and Arm v7 Assembly code. By default, it will generate Intel 64-bit.
+Currently, the compiler is capable of generating 64-bit x86 Intel Assembly code and Arm v7 Assembly code. By default, it will generate Intel 64-bit.
+
+### New features
+
+Here are some of the new features since v0.5:   
+* Function overloading   
+* PIC code for the Intel x86-64 architecture   
+* The (basic) standard library is now written in Quik and compiled as a shared library   
+* I'm moving the AST viewer to generate DOT graphs instead of that hard-to-read system I formerly had   
+
+As far as technical goes, here are some of the internal changes:   
+* I've been working on the new LTAC system   
+* The lexical analyzer has been mostly re-written   
+* The pre-processor has some improvements   
+
+If you wish to use the last working version, please visit the v0.5 branch.
 
 ### The Language
-You can find the language specs here on my website: https://patrickflynn.co/quik-language/. The specs and examples folder has some practical examples of most of the language parts. 
+The specs and examples folder has some practical examples of most of the language parts. I'll eventually create a better language specs.
 
 For some example programs and what the Assembly code looks like, see the examples folder.
 
@@ -36,9 +43,10 @@ The data for vectorization is declared using the int128, int256, float128, and f
 I'll expand the documentation on this a little later on my site. For now, keep an eye on the test and examples folder.
 
 ### Architectures
-Quik currently has complete support for the Intel x86-64 architecture, almost-complete support for the Intel x86 32-bit (i386) architecture, and some support for the Arm architecture. The i386 architecture was what was originally supported, but it fell behind as I focused on x86-64 support. This is the platform supported by default, and honestly I feel like it gives access to the most features.
 
-I recently began work on Assembly generation for the Arm v7 architecture. Arm is a new architecture for me, but I'm interested in learning how it works, which is partially why I began this part of the project. The only Arm device (other than my Androids) I own is a Raspberry Pi 3, and since this can run complete a Linux system and has newer processor, I'm working on this. Currently I'm writing my code and eyeballing the Assembly on my Intel laptop before copying and testing the code on the Pi over SSH, which is very inefficient... If anyone has other suggestions please let me know (other than working directly on the Pi).
+Quik primarily targets the Intel x86-64 architecture. The older versions (v0.5 and earlier) had some basic support for the Intel i386 architecture, but when I began re-working the midend and backend, most of that went away. I'm probably not going to bring that back honestly.
+
+There is some basic support for the Arm v7 architecture, but I haven't worked on this portion in a while. Arm is a new architecture for me, and while its something I really want to learn and bring Quik over to, I'm probably going to wait until I can get a better Arm-based computer before I continue work in this area (not to mention the compiler itself needs a lot of work). Currently, the only Arm device other than my Androids I have is a Raspberry Pi 3. Yes, the Pi 3's do have AArch64, but have yet to find a Linux system that runs well enough on it to be usable. I'll probably just wait and get a Pi 4 at this point. 
 
 ### Building
 To build, you simply need CMake, a C++ compiler, and Python 3 (for testing). Quik does not use any libraries other than the standard C++ library. A compiler supporting at least the C++11 standard is necessary.
@@ -46,7 +54,7 @@ To build, you simply need CMake, a C++ compiler, and Python 3 (for testing). Qui
 ### Running
 To build, the only external dependencies you need are the GNU binutils (specifically, GAS and ld). Originally, I used NASM as the assembler for the x86 architecture, but I decided to switch to GAS since thats what I was using on the ARM architecture. Honestly, GAS doesn't really have any big advantages over NASM, but using it allows consistency across architectures. Eventually, I would like to incorporate my own assembler.
 
-Three programs are generated: quikc, qkast, and lextest. Quikc is the actual compiler. Simply specify your input. By default, the executable will be named "out" and put in the current directory, but you can change this behavior with the -o switch. Multiple inputs are sort of supported, but there's problems with the standard library when you do this. You can still interface with the underlying system without including any part of the standard library. The qkast program generates a visual representation of the abstract syntax tree (it just prints it to the console). I wrote this primarily for development purposes, but its interesting to understand how the frontend works. The lextest tests the lexical analyzer component. You should have no need to run this unless you plan to work on the language.
+Three programs are generated: quikc, and qkast. Quikc is the actual compiler. Simply specify your input. By default, the executable will be named "out" and put in the current directory, but you can change this behavior with the -o switch. Multiple inputs are sort of supported, but there's problems with the standard library when you do this. You can still interface with the underlying system without including any part of the standard library. The qkast program generates a visual representation of the abstract syntax tree in DOT and PNG format (this is new and still under development).
 
 Please note that you need to run the "install-stdlib.sh" script before trying to run or build anything.
 

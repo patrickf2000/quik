@@ -1,19 +1,21 @@
-Redesign float argument passing
-	- The method of using the x87 stack only works with local functions
-	
-Include with multiple input files
-	- Include be used twice- include a control
-	
-Add print_bool function
+SHORT TERM
+=====================================
 
-Add print_char function
+Lexical analyzer/parser
+    * We need to change the way we handle negative numbers- currently it doesn't work
+    * The preprocessor needs a lot of love
+    
+MID-TERM
+=====================================
 
-Add break keyword
+I really want all the x86-64 assembly to be ported to my Asmx86 project.
 
-Add continue keyword
+I don't want to re-write the parser, but it needs a lot of work
 
-Nested conditionals seem to have an issue
+I think blocks need work
 
-**** SYNTAX CHECKING ****
+LONG-TERM
+=====================================
 
-Make increment operator valid within equations
+Replace that token structure with something more conventional (I don't love how we currently pass structures around)
+    -> That said, I do kind of like how we parse line-by-line; it fits the syntax of the language
