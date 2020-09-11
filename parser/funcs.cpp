@@ -1,108 +1,109 @@
 #include "parse.hh"
 
 //Builds a variable declaration
-AstFuncDec *QkParser::build_func_dec(Line ln) {
-	auto tokens = ln.tokens;
-	bool is_extern = false;
-	bool is_global = false;
+AstFuncDec *QkParser::buildFuncDec(bool isGlobal, bool isExtern) {
+    // First, perform a syntax check
+    // If the function has the global or extern modifier, the func keyword should be next
+    auto token = getNext();
+    
+    if (isGlobal || isExtern) {
+        if (token != TokenType::FUNC_DEC) {
+            syntax_error(getLnNo(), getCurrentLn(),
+                "Invalid external or global function declaration.");
+        }
+        
+        token = getNext();
+    }
 
-	//Perform checks
-	if (tokens.at(0).type == TokenType::EXTERN) {
-		is_extern = true;
-		tokens.erase(tokens.begin());
-	} else if (tokens.at(0).type == TokenType::GLOBAL) {
-		is_global = true;
-		tokens.erase(tokens.begin());
+    // The next should be an ID
+    std::string name = getSVal();
+    
+	if (token != TokenType::ID) {
+		syntax_error(getLnNo(), getCurrentLn(),
+            "No function name specified!");
 	}
 	
-	if (tokens.size() < 2) {
-		syntax_error(ln, "Invalid size.");
-	}
-
-	Token id = tokens.at(1);
-	if (id.type != TokenType::ID) {
-		syntax_error(ln, "No function name specified!");
-	}
+    // Create the object
+	AstFuncDec *fd = new AstFuncDec(name);
+	fd->is_global = isGlobal;
 	
-	AstFuncDec *fd = new AstFuncDec(id.id);
-	fd->is_global = is_global;
-	
-	if (is_extern)
-		fd = new AstExternFunc(id.id);
+	if (isExtern)
+		fd = new AstExternFunc(name);
 
-	//Generic syntax check
-	if (tokens.size() > 2) {
-		//Make sure we start and end with parantheses
-		auto t1 = tokens.at(2).type;
-		auto t2 = tokens.at(tokens.size() - 1).type;
-		
-		if (t1 != TokenType::LEFT_PAREN || t2 != TokenType::RIGHT_PAREN) {
-			syntax_error(ln, "Expected opening or closing parantheses.");
-		}
+	//Check for and load any arguments
+    token = getNext();
+    
+	if (token == TokenType::LEFT_PAREN) {
 		
 		//Iterate through and build our info
 		TokenType last;
 		Var v;
 		v.is_param = true;
 		v.is_array = false;
+        
+        token = getNext();
 		
-		for (int i = 3; i<tokens.size(); i++) {
-			auto t = tokens.at(i);
-			
-			if (t.type == TokenType::RIGHT_PAREN) {
-				if (v.name != "" && v.type != DataType::None) {
-					fd->args.push_back(v);
-				}
-				
-				break;
-			} else if (t.type == TokenType::COLON) {
+		while (token != TokenType::RIGHT_PAREN && token != TokenType::NONE) {
+        
+			if (token == TokenType::COLON) {
 				if (last != TokenType::ID) {
-					syntax_error(ln, "Invalid parameter syntax");
+					syntax_error(getLnNo(), getCurrentLn(),
+                        "Invalid function parameter syntax");
 				}
 				
-				last = t.type;
+				last = token;
+                token = getNext();
 				continue;
-			} else if (t.type == TokenType::COMMA) {
+			} else if (token == TokenType::COMMA) {
 				if (v.type == DataType::None || last == TokenType::ID) {
-					syntax_error(ln, "No datatype specified in parameter");
+					syntax_error(getLnNo(), getCurrentLn(),
+                        "No datatype specified in parameter");
 				}
 				
 				fd->args.push_back(v);
 				v.is_array = false;
 				v.name = "";
 				v.type = DataType::None;
-			} else if (t.type == TokenType::ID) {
-				v.name = t.id;
+			} else if (token == TokenType::ID) {
+				v.name = getSVal();
 			} else if (last == TokenType::COLON) {
-				v.type = ttype2dtype(t.type);
+				v.type = ttype2dtype(token);
 				
 				if (v.type == DataType::None) {
-					syntax_error(ln, "Invalid parameter syntax.");
+					syntax_error(getLnNo(), getCurrentLn(),
+                        "Invalid parameter syntax.");
 				}
-				
-                if (i+2 >= tokens.size()) {
-                    continue;
+                
+                last = token;
+                token = getNext();
+                
+                if (token == TokenType::L_BRACKET) {
+                    token = getNext();
+                    if (token != TokenType::R_BRACKET) {
+                        syntax_error(getLnNo(), getCurrentLn(),
+                            "Invalid parameter syntax.");
+                    }
+                    
+                    v.is_array = true;
                 }
                 
-				Token nt1 = tokens[i+1];
-				Token nt2 = tokens[i+2];
-				
-				if (nt1.type == TokenType::L_BRACKET && 
-					nt2.type == TokenType::R_BRACKET) {
-					v.is_array = true;
-					i += 2;
-				}
+                continue;
 			}
 				
-			last = t.type;
+			last = token;
+            token = getNext();
 		}
+        
+        if (v.name != "" && v.type != DataType::None) {
+            fd->args.push_back(v);
+        }
 	}
 
 	return fd;
 }
 
 //Builds a function call
-AstFuncCall *QkParser::build_func_call(std::string name) {
+AstFuncCall *QkParser::buildFuncCall(std::string name) {
 	AstFuncCall *call = new AstFuncCall(name);
     TokenType token = getNext();
     
@@ -140,7 +141,7 @@ AstFuncCall *QkParser::build_func_call(std::string name) {
 }
 
 //Builds a return statement
-AstReturn *QkParser::build_ret() {
+AstReturn *QkParser::buildRet() {
 	AstReturn *node = new AstReturn;
     auto token = getNext();
     

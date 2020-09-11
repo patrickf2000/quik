@@ -53,7 +53,7 @@ AstCond *QkParser::build_conditional(TokenType loopType) {
             token = getNext();
             
             if (token == TokenType::LEFT_PAREN) {
-    			AstFuncCall *call = build_func_call(name);
+    			AstFuncCall *call = buildFuncCall(name);
     			if (found_op)
     				cond->rval = call;
     			else

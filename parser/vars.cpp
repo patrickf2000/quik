@@ -46,7 +46,7 @@ void QkParser::buildVarParts(AstNode *vd) {
             
             // Function declaration
             if (token == TokenType::LEFT_PAREN) {
-    			AstFuncCall *call = build_func_call(name);
+    			AstFuncCall *call = buildFuncCall(name);
     			vd->children.push_back(call);
                     
                 token = getNext();

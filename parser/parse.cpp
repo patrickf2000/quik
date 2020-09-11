@@ -59,9 +59,9 @@ AstNode *QkParser::build_node(Line ln) {
 	//Build an include node
 	switch (first.type) {
 		//Build a function declaration node
-		case TokenType::EXTERN:
-		case TokenType::GLOBAL:
-		case TokenType::FUNC_DEC: return build_func_dec(ln);
+		case TokenType::EXTERN: return buildFuncDec(false, true);
+		case TokenType::GLOBAL: return buildFuncDec(true, false);
+		case TokenType::FUNC_DEC: return buildFuncDec();
 	
 		//Build an End statement
 		case TokenType::END: {
@@ -70,7 +70,7 @@ AstNode *QkParser::build_node(Line ln) {
 		}
 		
 		//Build a return statement
-		case TokenType::RETURN: return build_ret();
+		case TokenType::RETURN: return buildRet();
 		
 		//Build structure statements
 		case TokenType::STRUCT: {
@@ -179,7 +179,7 @@ AstNode *QkParser::build_id(std::string name) {
 
 	//Build a function call
 	if (token == TokenType::LEFT_PAREN) {
-		return build_func_call(name);
+		return buildFuncCall(name);
 		
 	//Build an assignment
 	} else if (token == TokenType::ASSIGN) {

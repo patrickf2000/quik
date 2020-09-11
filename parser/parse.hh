@@ -16,9 +16,9 @@ public:
 	int build_tree(std::vector<AstNode *> nodes, AstNode *top, int index = 0, bool in_if = false);
 	
 	//Function stuff
-	AstFuncDec *build_func_dec(Line ln);
-	AstFuncCall *build_func_call(std::string name);
-	AstReturn *build_ret();
+	AstFuncDec *buildFuncDec(bool isGlobal = false, bool isExtern = false);
+	AstFuncCall *buildFuncCall(std::string name);
+	AstReturn *buildRet();
 	
 	//Variables
 	AstVarDec *basic_var_dec(Line ln);
