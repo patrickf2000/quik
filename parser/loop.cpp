@@ -37,26 +37,52 @@ AstLoop *QkParser::build_loop() {
 }
 
 //Builds a foreach statement
-AstForEach *QkParser::build_foreach(Line ln) {
-	auto tokens = ln.tokens;
-	if (tokens.size() != 4)
-		syntax_error(ln, "Insufficient or too many arguments.");
-		
-	if (tokens.at(2).type != TokenType::COLON)
-		syntax_error(ln, "Invalid foreach syntax.");
-
-	AstForEach *fe = new AstForEach;
-	auto i_var = tokens.at(1);
-	auto r_var = tokens.at(3);
-	
-	if (i_var.type != TokenType::ID)
-		syntax_error(ln, "Iterator must be a variable.");
-		
-	if (r_var.type != TokenType::ID)
-		syntax_error(ln, "Range must be an array or vector variable.");
-		
-	fe->i_var = i_var.id;
-	fe->r_var = r_var.id;
+AstForEach *QkParser::build_foreach() {   
+    auto token = getNext();
+    
+    if (token != TokenType::LEFT_PAREN) {
+        syntax_error(getLnNo(), getCurrentLn(),
+            "Invalid foreach syntax: Expected \'(\'");
+    }
+    
+    AstForEach *fe = new AstForEach;
+    
+    // The iterator
+    token = getNext();
+    
+    if (token != TokenType::ID) {
+        syntax_error(getLnNo(), getCurrentLn(),
+            "Iterator must be a variable.");
+    }
+    
+    fe->i_var = getSVal();
+    
+    // The middle token
+    token = getNext();
+    
+    if (token != TokenType::COLON) {
+        syntax_error(getLnNo(), getCurrentLn(),
+            "Invalid foreach syntax: Expected \':\'");
+    }
+    
+    // The range variable
+    token = getNext();
+    
+    if (token != TokenType::ID) {
+        syntax_error(getLnNo(), getCurrentLn(),
+            "Range must be an array or vector variable.");
+    }
+    
+    fe->r_var = getSVal();
+    
+    // Final syntax check
+    token = getNext();
+    auto end = getNext();
+    
+    if (token != TokenType::RIGHT_PAREN || token != TokenType::NL) {
+        syntax_error(getLnNo(), getCurrentLn(),
+            "Invalid foreach syntax. Expected \')\' and \'\\n\' at end.");
+    }
 	
 	return fe;
 }

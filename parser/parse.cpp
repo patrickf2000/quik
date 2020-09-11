@@ -81,17 +81,17 @@ AstNode *QkParser::build_node(Line ln) {
 		}
 		
 		//Build conditional statements
-		case TokenType::IF:
-		case TokenType::ELIF: return build_conditional(ln);
+		case TokenType::IF: return build_conditional(TokenType::IF);
+		case TokenType::ELIF: return build_conditional(TokenType::ELIF);
 		case TokenType::ELSE: {
 			AstElse *node = new AstElse;
 			return node;
 		}
 		
 		//Build loops
-		case TokenType::WHILE: return build_conditional(ln);
+		case TokenType::WHILE: return build_conditional(TokenType::WHILE);
 		case TokenType::LOOP: return build_loop();
-		case TokenType::FOREACH: return build_foreach(ln);
+		case TokenType::FOREACH: return build_foreach();
 		
 		//Handle if the first node is an ID
 		case TokenType::ID: return build_id(ln);

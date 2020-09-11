@@ -25,11 +25,11 @@ public:
 	void build_var_parts(AstNode *vd, int start, std::vector<Token> tokens);
 	
 	//Conditionals
-	AstCond *build_conditional(Line ln);
+	AstCond *build_conditional(TokenType loopType);
 	
 	//Loops
 	AstLoop *build_loop();
-	AstForEach *build_foreach(Line ln);
+	AstForEach *build_foreach();
 	
 	//Arrays and structures
 	AstArrayDec *build_array(Line ln, bool is_float);

@@ -1,26 +1,25 @@
 #include "parse.hh"
 
 //Builds a conditional statement
-AstCond *QkParser::build_conditional(Line ln) {
-	auto tokens = ln.tokens;
-	auto type = tokens.at(0).type;
-	
-	//Make sure the syntax is correct
-	auto t1 = tokens.at(1).type;
-	auto t2 = tokens.at(tokens.size() - 1).type;
-	
-	if (t1 != TokenType::LEFT_PAREN || t2 != TokenType::RIGHT_PAREN) {
-		syntax_error(ln, "Incorrect conditional syntax.");
-	}
+AstCond *QkParser::build_conditional(TokenType loopType) {
+    // The first token should be a left parantheses
+    auto token = getNext();
+    
+    if (token != TokenType::LEFT_PAREN) {
+        syntax_error(getLnNo(), getCurrentLn(),
+            "Incorrect conditional syntax.");
+    }
+    
+    token = getNext();
 	
 	//Create the right type
 	AstCond *cond = new AstCond;
 	
-	if (type == TokenType::IF) {
+	if (loopType == TokenType::IF) {
 		cond = new AstIf;
-	} else if (type == TokenType::ELIF) {
+	} else if (loopType == TokenType::ELIF) {
 		cond = new AstElif;
-	} else if (type == TokenType::WHILE) {
+	} else if (loopType == TokenType::WHILE) {
 		cond = new AstWhile;
 	}
 	
@@ -31,24 +30,27 @@ AstCond *QkParser::build_conditional(Line ln) {
 	//Parse the expression
 	bool found_op = false;
 	
-	for (int i = 2; i<tokens.size()-1; i++) {
-		Token t = tokens.at(i);
+	while (token != TokenType::NL && token != TokenType::NONE) {
 		
-		if (tokens[i].type == TokenType::LEFT_PAREN) {
+        // First, check to see if we are within an inner math statement or function call
+		if (token == TokenType::LEFT_PAREN) {
+            token = getNext();
 			std::vector<Token> sub_tokens;
 			int layer = 1;
 			
-			for (int j = i+1; j<tokens.size(); j++) {
-				if (tokens[j].type == TokenType::LEFT_PAREN) {
+			while (token != TokenType::RIGHT_PAREN && layer > 1) {
+				if (token == TokenType::LEFT_PAREN) {
 					++layer;
-				} else if (tokens[j].type == TokenType::RIGHT_PAREN && layer > 1) {
+				} else if (token == TokenType::RIGHT_PAREN && layer > 1) {
 					--layer;
-				} else if (tokens[j].type == TokenType::RIGHT_PAREN) {
-					i = j;
+				} else if (token == TokenType::RIGHT_PAREN) {
 					break;
 				}
 				
-				sub_tokens.push_back(tokens.at(j));
+                Token t;
+                t.type = token;
+                t.id = getSVal();
+				sub_tokens.push_back(t);
 			}
 			
 			AstMath *math = new AstMath;
@@ -58,49 +60,41 @@ AstCond *QkParser::build_conditional(Line ln) {
 				cond->rval = math;
 			else
 				cond->lval = math;
+                
+            token = getNext();
 			continue;
-		} else if (tokens[i+1].type == TokenType::LEFT_PAREN
-			&& tokens[i].type == TokenType::ID) {
-			std::vector<Token> sub_tokens;
             
-            std::string name = tokens[i].id;
-            currentIndex = i + 1;
-			
-			for (int j = i; j<tokens.size(); j++) {
-				sub_tokens.push_back(tokens.at(j));
-			
-				if (tokens[j].type == TokenType::RIGHT_PAREN) {
-					i = j;
-					break;
-				}
-			}
-			
-			Line l;
-			l.tokens = sub_tokens;
-			
-			AstFuncCall *call = build_func_call(name);
-			if (found_op)
-				cond->rval = call;
-			else
-				cond->lval = call;
-			continue;
-		}
-		
-		switch (t.type) {
-			//Types
-			//Variables
-			case TokenType::ID: {
-				AstID *id = new AstID(t.id);
+        // Now, check on function calls
+		} else if (token == TokenType::ID) {
+            std::string name = getSVal();
+            token = getNext();
+            
+            if (token == TokenType::LEFT_PAREN) {
+    			AstFuncCall *call = build_func_call(name);
+    			if (found_op)
+    				cond->rval = call;
+    			else
+    				cond->lval = call;
+                    
+                token = getNext();
+            } else {
+                AstID *id = new AstID(name);
 				
 				if (found_op)
 					cond->rval = id;
 				else
 					cond->lval = id;
-			} break;
-			
+            }
+            
+			continue;
+		}
+		
+        //Types
+		switch (token) {
 			//Values
 			case TokenType::NO: {
-				AstInt *i = new AstInt(std::stoi(t.id));
+                int val = getIVal();
+				AstInt *i = new AstInt(val);
 				
 				if (found_op)
 					cond->rval = i;
@@ -109,7 +103,8 @@ AstCond *QkParser::build_conditional(Line ln) {
 			} break;
 			
 			case TokenType::CHAR: {
-				AstChar *ch = new AstChar(t.id[0]);
+                auto val = getSVal();
+				AstChar *ch = new AstChar(val[0]);
 				
 				if (found_op)
 					cond->rval = ch;
@@ -167,6 +162,8 @@ AstCond *QkParser::build_conditional(Line ln) {
 				found_op = true;
 			} break;
 		}
+        
+        token = getNext();
 	}
 	
 	//Return
