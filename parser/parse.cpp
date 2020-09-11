@@ -48,16 +48,17 @@ DataType ttype2dtype(TokenType t) {
 AstNode *QkParser::build_node(Line ln) {
     // For the temporary parser functions
     currentLn = ln;
-    currentIndex = 1;
+    currentIndex = 0;
     
 	auto tokens = ln.tokens;
 	if (tokens.size() == 0)
 		return nullptr;
 		
-	auto first = tokens.at(0);
+    // This is where the fun begins
+	auto first = getNext();
 	
 	//Build an include node
-	switch (first.type) {
+	switch (first) {
 		//Build a function declaration node
 		case TokenType::EXTERN: return buildFuncDec(false, true);
 		case TokenType::GLOBAL: return buildFuncDec(true, false);
@@ -73,12 +74,12 @@ AstNode *QkParser::build_node(Line ln) {
 		case TokenType::RETURN: return buildRet();
 		
 		//Build structure statements
-		case TokenType::STRUCT: {
+		/*case TokenType::STRUCT: {
 			if (ln.tokens.size() == 2)
 				return build_struct_dec(ln);
 			else
 				return build_struct_var(ln);
-		}
+		}*/
 		
 		//Build conditional statements
 		case TokenType::IF: return build_conditional(TokenType::IF);
@@ -114,11 +115,11 @@ AstNode *QkParser::build_node(Line ln) {
             auto token = getNext();
             
 			if (token == TokenType::L_BRACKET) {
-                AstArrayDec *arr = buildArray(first.type);
+                AstArrayDec *arr = buildArray(first);
                 return arr;
 			}
 			
-			auto vd = buildVarDec(first.type);
+			auto vd = buildVarDec(first);
             buildVarParts(vd);
 			
 			return vd;

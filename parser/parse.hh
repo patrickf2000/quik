@@ -33,8 +33,8 @@ public:
 	
 	//Arrays and structures
 	AstArrayDec *buildArray(TokenType dataType);
-	AstStructDec *build_struct_dec(Line ln);
-	AstStruct *build_struct_var(Line ln);
+	/*AstStructDec *build_struct_dec(Line ln);
+	AstStruct *build_struct_var(Line ln);*/
 	
 	void analyze_and_check(AstScope *top);
 protected:
