@@ -111,20 +111,14 @@ AstNode *QkParser::build_node(Line ln) {
 		case TokenType::FLOAT_64:
 		case TokenType::FLOAT_128:
 		case TokenType::FLOAT_256: {
-			if (tokens.size() > 4) {
-				auto t1 = tokens[1].type;
-				auto t2 = tokens[3].type;
-				
-				if (t1 == TokenType::L_BRACKET && t2 == TokenType::R_BRACKET) {
-					AstArrayDec *arr = build_array(ln, false);
-					return arr;
-				}
+            auto token = getNext();
+            
+			if (token == TokenType::L_BRACKET) {
+                AstArrayDec *arr = buildArray(first.type);
+                return arr;
 			}
 			
-			auto vd = basic_var_dec(ln);
-			vd->set_type(ttype2dtype(first.type));
-			
-            currentIndex = 3;
+			auto vd = buildVarDec(first.type);
             buildVarParts(vd);
 			
 			return vd;

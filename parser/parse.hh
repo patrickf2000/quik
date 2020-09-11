@@ -21,7 +21,7 @@ public:
 	AstReturn *buildRet();
 	
 	//Variables
-	AstVarDec *basic_var_dec(Line ln);
+	AstVarDec *buildVarDec(TokenType dataType);
     void buildVarParts(AstNode *vd);
 	
 	//Conditionals
@@ -32,7 +32,7 @@ public:
 	AstForEach *build_foreach();
 	
 	//Arrays and structures
-	AstArrayDec *build_array(Line ln, bool is_float);
+	AstArrayDec *buildArray(TokenType dataType);
 	AstStructDec *build_struct_dec(Line ln);
 	AstStruct *build_struct_var(Line ln);
 	

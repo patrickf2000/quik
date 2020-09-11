@@ -1,72 +1,50 @@
 #include "parse.hh"
 
 //Build an array node
-AstArrayDec *QkParser::build_array(Line ln, bool is_float) {
-	auto tokens = ln.tokens;
-	auto type = tokens.at(0).type;
-
-	AstArrayDec *arr = new AstArrayDec;
-	arr->set_type(ttype2dtype(type));
-	
-	//Syntax checking
-	auto lb = tokens.at(1).type;
-	auto count = tokens.at(2);
-	auto rb = tokens.at(3).type;
-	auto name = tokens.at(4);
-	
-	if (lb != TokenType::L_BRACKET || rb != TokenType::R_BRACKET)
-		syntax_error(ln, "Invalid array declaration syntax.");
-		
-	if (count.type != TokenType::NO)
-		syntax_error(ln, "No or invalid size specified for array.");
-		
-	//Set the name and size
-	arr->set_name(name.id);
-	arr->set_size(std::stoi(count.id));
-	
-	//Set the elements
-	for (int i = 6; i<tokens.size(); i++) {
-		auto t = tokens.at(i);
-		
-		switch (t.type) {
-			case TokenType::NO: {
-				int no = std::stoi(t.id);
-				AstInt *i = new AstInt(no);
-				arr->children.push_back(i);
-			} break;
-			
-			case TokenType::DEC: {
-				double no = std::stod(t.id);
-				AstFloat *i = new AstFloat(no);
-				arr->children.push_back(i);
-			} break;
-			
-			case TokenType::B_TRUE: {
-				AstBool *bl = new AstBool(true);
-				arr->children.push_back(bl);
-			} break;	
-			
-			case TokenType::B_FALSE: {
-				AstBool *bl = new AstBool(false);
-				arr->children.push_back(bl);
-				
-			} break;
-			
-			case TokenType::STRING: {
-				AstString *i = new AstString(t.id);
-				arr->children.push_back(i);
-			} break;
-			
-			case TokenType::ID: {
-				AstID *id = new AstID(t.id);
-				arr->children.push_back(id);
-			} break;
-			
-			case TokenType::COMMA: continue;
-		}
-	}
-	
-	return arr;
+AstArrayDec *QkParser::buildArray(TokenType dataType) {
+    AstArrayDec *arr = new AstArrayDec;
+    arr->set_type(ttype2dtype(dataType));
+    
+    // Get the array count element
+    auto token = getNext();
+    
+    if (token != TokenType::NO) {
+        syntax_error(getLnNo(), getCurrentLn(),
+            "No or invalid size specified for array.");
+    }
+    
+    int val = getIVal();
+    arr->set_size(val);
+    
+    // The next token should be the right bracket
+    token = getNext();
+    
+    if (token != TokenType::R_BRACKET) {
+        syntax_error(getLnNo(), getCurrentLn(),
+            "Invalid array declaration syntax.");
+    }
+    
+    // The next token should be the name
+    token = getNext();
+    
+    if (token != TokenType::ID) {
+        syntax_error(getLnNo(), getCurrentLn(),
+            "Invalid array declaration syntax: Missing name");
+    }
+    
+    auto name = getSVal();
+    arr->set_name(name);
+    
+    // The next token should be the assignment operator
+    token = getNext();
+    
+    if (token != TokenType::ASSIGN) {
+        syntax_error(getLnNo(), getCurrentLn(),
+            "Invalid array declaration syntax.");
+    }
+    
+    buildVarParts(arr);
+    return arr;
 }
 
 //Builds a structure declaration

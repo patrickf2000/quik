@@ -1,24 +1,19 @@
 #include "parse.hh"
 
 //This performs common checking on variable declarations
-AstVarDec *QkParser::basic_var_dec(Line ln) {
-	if (ln.tokens.size() < 4) {
-		syntax_error(ln, "Missing elements in declaration!");
-	}
-
-	Token id = ln.tokens.at(1);
-	Token ival = ln.tokens.at(3);
-
-	if (id.type != TokenType::ID) {
-		syntax_error(ln, "A name must be specified for a variable.");
-	}
-
-	if (ln.tokens.at(2).type != TokenType::ASSIGN) {
-		syntax_error(ln, "Expected \'=\'");
-	}
-
-	AstVarDec *vd = new AstVarDec(id.id);
-	return vd;
+// Note: The ID token is the current token when called from the main parse loop
+AstVarDec *QkParser::buildVarDec(TokenType dataType) {
+    std::string name = getSVal();
+    auto token = getNext();
+    
+    if (token != TokenType::ASSIGN) {
+        syntax_error(getLnNo(), getCurrentLn(),
+            "Invalid variable declaration.");
+    }
+    
+    AstVarDec *vd = new AstVarDec(name);
+    vd->set_type(ttype2dtype(dataType));
+    return vd;
 }
 
 //Translates each part into tokens for variable declarations and assignments
