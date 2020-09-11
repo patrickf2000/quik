@@ -74,7 +74,14 @@ TokenType Scanner::getNext() {
     return TokenType::NONE;
 }
 
-std::vector<Line> Scanner::tokenize(std::string file) {
+// TODO: Is there a way we can clean this up a little bit?
+//
+// The whole pre-file thing is only applicable for files run through the pre-processor
+// Files run through the pre-processor will have this format:
+// <no>| <the code>
+//
+// The number is an integer corresponding to the original line in the source file
+std::vector<Line> Scanner::tokenize(std::string file, bool preFile) {
     std::vector<Line> lines;
     reader = std::ifstream(file);
     
@@ -83,19 +90,52 @@ std::vector<Line> Scanner::tokenize(std::string file) {
         std::exit(1);
     }
     
-    TokenType token = getNext();
     Line ln;
     Token t;
+    
+    char c = 0;
+    std::string numBuf = "";
+    
+    if (preFile) {
+        reader.get(c);
+        
+        while (!reader.eof() && c != '|') {
+            numBuf += c;
+            reader.get(c);
+        }
+        
+        if (isInt(numBuf)) {
+            ln.no = std::stoi(numBuf);
+            numBuf = "";
+            c = 0;
+        }
+    }
+    
+    TokenType token = getNext();
     
     while (token != TokenType::NONE) {
         switch (token) {
             case TokenType::NL: {
                 ln.original = currentLn;
-                ++ln.no;
                 currentLn = "";
                 
                 lines.push_back(ln);
                 ln.tokens.clear();
+                
+                if (preFile) {
+                    reader.get(c);
+                    
+                    while (!reader.eof() && c != '|') {
+                        numBuf += c;
+                        reader.get(c);
+                    }
+                    
+                    if (isInt(numBuf)) {
+                        ln.no = std::stoi(numBuf);
+                        numBuf = "";
+                        c = 0;
+                    }
+                }
                 
                 token = getNext();
                 continue;

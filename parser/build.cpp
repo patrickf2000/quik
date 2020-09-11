@@ -79,6 +79,7 @@ std::vector<Line> load_source(const char *path) {
 					if (ln.length() > 0 && ln[0] != '#') {
 						Line l2;
 						l2.original = ln;
+                        l2.no = -1;
 						lines.push_back(l2);
 					}
 				}
@@ -91,19 +92,20 @@ std::vector<Line> load_source(const char *path) {
 	} while (found_include);
     
     // Write the lines back to a temporary file
-    std::ofstream writer("tmp.qk");
+    std::ofstream writer("/tmp/tmp.qki");
     
     for (auto ln : lines) {
-        writer << ln.original << std::endl;
+        writer << ln.no << "|" << ln.original << std::endl;
     }
     
     writer.close();
 	
 	//Now tokenize
     Scanner *scanner = new Scanner;
-    auto lines2 = scanner->tokenize("tmp.qk");
+    auto lines2 = scanner->tokenize("/tmp/tmp.qki", true);
     
     delete scanner;
+    remove("/tmp/tmp.qki");
 	
 	return lines2;
 }

@@ -10,7 +10,7 @@
 class Scanner {
 public:
     TokenType getNext();
-    std::vector<Line> tokenize(std::string file);
+    std::vector<Line> tokenize(std::string file, bool preFile = false);
 protected:
     bool isSeparator(char c);
     bool isInt(std::string s);
