@@ -22,7 +22,7 @@ public:
 	
 	//Variables
 	AstVarDec *basic_var_dec(Line ln);
-	void build_var_parts(AstNode *vd, int start, std::vector<Token> tokens);
+    void buildVarParts(AstNode *vd);
 	
 	//Conditionals
 	AstCond *build_conditional(TokenType loopType);

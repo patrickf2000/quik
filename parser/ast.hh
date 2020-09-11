@@ -92,9 +92,7 @@ public:
 	explicit AstNode(AstType t) { type = t; }
 	virtual ~AstNode() {}
     
-    virtual std::string writeDot(std::string prefix = "") {
-        return "";
-    }
+    virtual std::string writeDot(std::string prefix = "");
     
     std::string writeDotStd(std::string prefix, std::string val, std::string color = "");
     std::string writeDotParent(std::string prefix, std::string nodeName, std::string shape = "");
@@ -309,7 +307,7 @@ public:
 class AstMath : public AstNode {
 public:
 	explicit AstMath() { type = AstType::Math; }
-    std::string writeDot(std::string prefix = "") { return ""; }
+    std::string writeDot(std::string prefix = "");
 };
 
 //The ID type

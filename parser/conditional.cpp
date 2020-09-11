@@ -35,26 +35,9 @@ AstCond *QkParser::build_conditional(TokenType loopType) {
         // First, check to see if we are within an inner math statement or function call
 		if (token == TokenType::LEFT_PAREN) {
             token = getNext();
-			std::vector<Token> sub_tokens;
-			int layer = 1;
-			
-			while (token != TokenType::RIGHT_PAREN && layer > 1) {
-				if (token == TokenType::LEFT_PAREN) {
-					++layer;
-				} else if (token == TokenType::RIGHT_PAREN && layer > 1) {
-					--layer;
-				} else if (token == TokenType::RIGHT_PAREN) {
-					break;
-				}
-				
-                Token t;
-                t.type = token;
-                t.id = getSVal();
-				sub_tokens.push_back(t);
-			}
 			
 			AstMath *math = new AstMath;
-			build_var_parts(math, 0, sub_tokens);
+            buildVarParts(math);
 			
 			if (found_op)
 				cond->rval = math;

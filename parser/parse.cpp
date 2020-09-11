@@ -124,7 +124,8 @@ AstNode *QkParser::build_node(Line ln) {
 			auto vd = basic_var_dec(ln);
 			vd->set_type(ttype2dtype(first.type));
 			
-			build_var_parts(vd, 3, tokens);
+            currentIndex = 3;
+            buildVarParts(vd);
 			
 			return vd;
 		}
@@ -172,51 +173,18 @@ AstNode *QkParser::build_id(std::string name) {
                 "Invalid array access.");
         }
         
-        //TODO: Replace this
-        token = getNext();
-        std::vector<Token> sub_tokens;
-        
-        while (token != TokenType::NL && token != TokenType::NONE) {
-            Token t;
-            t.type = token;
-            t.id = getSVal();
-            sub_tokens.push_back(t);
-            
-            token = getNext();
-        }
-        
-        build_var_parts(assign, 0, sub_tokens);
+        buildVarParts(assign);
         return assign;
 	}
 
 	//Build a function call
 	if (token == TokenType::LEFT_PAREN) {
-        //getNext();
 		return build_func_call(name);
 		
 	//Build an assignment
 	} else if (token == TokenType::ASSIGN) {
-        token = getNext();
-		if (token == TokenType::NL) {
-			syntax_error(getLnNo(), getCurrentLn(),
-                "Missing elements.");
-		}
-        
-        // TODO: Replace this loop
-        std::vector<Token> sub_tokens;
-        
-        while (token != TokenType::NL && token != TokenType::NONE) {
-            Token t;
-            t.type = token;
-            t.id = getSVal();
-            sub_tokens.push_back(t);
-            
-            token = getNext();
-        }
-
-        // Build the assignment
-		AstVarAssign *va = new AstVarAssign(name);
-		build_var_parts(va, 0, sub_tokens);
+        AstVarAssign *va = new AstVarAssign(name);
+        buildVarParts(va);
 		return va;
 		
 	//Build a multiple variable assignment
@@ -244,21 +212,8 @@ AstNode *QkParser::build_id(std::string name) {
             token = getNext();
         }
         
-        // TODO: Replace this
-        token = getNext();
-        std::vector<Token> sub_tokens;
-        
-        while (token != TokenType::NL && token != TokenType::NONE) {
-            Token t;
-            t.type = token;
-            t.id = getSVal();
-            sub_tokens.push_back(t);
-            
-            token = getNext();
-        }
-		
-		build_var_parts(mva, 0, sub_tokens);
-		return mva;
+        buildVarParts(mva);
+        return mva;
 		
 	//Build a structure assignment
 	} else if (token == TokenType::DOT) {

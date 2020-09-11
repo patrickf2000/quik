@@ -36,6 +36,20 @@ std::string AstNode::writeDotParent(std::string prefix, std::string nodeName, st
     return content;
 }
 
+std::string AstNode::writeDot(std::string prefix) {
+    std::string opStr = "";
+    switch (type) {
+        case AstType::Add: opStr = "+"; break;
+        case AstType::Sub: opStr = "-"; break;
+        case AstType::Mul: opStr = "*"; break;
+        case AstType::Div: opStr = "/"; break;
+        case AstType::Inc: opStr = "++"; break;
+        case AstType::DMul: opStr = "--"; break;
+    }
+    
+    return writeDotStd(prefix, opStr, "green");
+}
+
 //=============================================
 // AstTree-> Represents the file itself
 
@@ -57,6 +71,13 @@ std::string AstTree::writeDot() {
 
 std::string AstScope::writeDot(std::string prefix) {
     return writeDotParent(prefix, "Scope", "box");
+}
+
+//============================================
+// AstMath-> Represents a math expression
+
+std::string AstMath::writeDot(std::string prefix) {
+    return writeDotParent(prefix, "Math", "box");
 }
 
 //====================================================
