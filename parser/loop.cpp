@@ -1,35 +1,37 @@
 #include "parse.hh"
 
 //Builds a loop statement
-AstLoop *QkParser::build_loop(Line ln) {
-	auto tokens = ln.tokens;
-	if (tokens.size() > 2)
-		syntax_error(ln, "Too many arguments in loop statement.");
-
+AstLoop *QkParser::build_loop() {
 	AstLoop *lp = new AstLoop;
 	lp->param = nullptr;
+    
+    auto token = getNext();
 	
-	if (tokens.size() > 1) {
-		auto arg = tokens.at(1);
-		
-		switch (arg.type) {
+	if (token != TokenType::NL) {
+		switch (token) {
 			case TokenType::NO: {
-				int i = std::stoi(arg.id);
+				int i = getIVal();
 				lp->param = new AstInt(i);
 			} break;
 			
 			case TokenType::ID: {
-				AstID *id = new AstID(arg.id);
+				AstID *id = new AstID(getSVal());
 				lp->param = id;
 			} break;
 			
 			default: {
 				std::string er_msg = "Error: Only integers and integer variables ";
 				er_msg += "may be used with the loop statement.";
-				syntax_error(ln, er_msg);
+				syntax_error(getLnNo(), getCurrentLn(), er_msg);
 			}
 		}
 	}
+    
+    token = getNext();
+    if (token != TokenType::NL) {
+        syntax_error(getLnNo(), getCurrentLn(),
+            "Too many arguments for loop statement.");
+    }
 	
 	return lp;
 }

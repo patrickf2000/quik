@@ -62,6 +62,9 @@ AstCond *QkParser::build_conditional(Line ln) {
 		} else if (tokens[i+1].type == TokenType::LEFT_PAREN
 			&& tokens[i].type == TokenType::ID) {
 			std::vector<Token> sub_tokens;
+            
+            std::string name = tokens[i].id;
+            currentIndex = i + 1;
 			
 			for (int j = i; j<tokens.size(); j++) {
 				sub_tokens.push_back(tokens.at(j));
@@ -75,7 +78,7 @@ AstCond *QkParser::build_conditional(Line ln) {
 			Line l;
 			l.tokens = sub_tokens;
 			
-			AstFuncCall *call = build_func_call(l);
+			AstFuncCall *call = build_func_call(name);
 			if (found_op)
 				cond->rval = call;
 			else

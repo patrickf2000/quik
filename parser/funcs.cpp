@@ -102,49 +102,39 @@ AstFuncDec *QkParser::build_func_dec(Line ln) {
 }
 
 //Builds a function call
-AstFuncCall *QkParser::build_func_call(Line ln) {
-	auto tokens = ln.tokens;
-	std::string name = tokens.at(0).id;
+AstFuncCall *QkParser::build_func_call(std::string name) {
 	AstFuncCall *call = new AstFuncCall(name);
-	Token last;
-
-	for (int i = 2; i<tokens.size(); i++) {
-		auto t = tokens.at(i);
-		last = t;
-
-		if (t.type == TokenType::RIGHT_PAREN) {
-			break;
-		} else if (t.type == TokenType::COMMA) {
-			continue;
-		} else if (t.type == TokenType::STRING) {
-			AstString *v_str = new AstString(t.id);
+    TokenType token = getNext();
+    
+    while (token != TokenType::RIGHT_PAREN && token != TokenType::NONE) {
+        if (token == TokenType::STRING) {
+			AstString *v_str = new AstString(getSVal());
 			call->children.push_back(v_str);
-		} else if (t.type == TokenType::NO) {
-			AstInt *v_int = new AstInt(std::stoi(t.id));
+		} else if (token == TokenType::NO) {
+			AstInt *v_int = new AstInt(getIVal());
 			call->children.push_back(v_int);
-		} else if (t.type == TokenType::CHAR) {
-			AstChar *v_ch = new AstChar(t.id[0]);
+		} else if (token == TokenType::CHAR) {
+            auto val = getSVal();
+			AstChar *v_ch = new AstChar(val[0]);
 			call->children.push_back(v_ch);
-		} else if (t.type == TokenType::DEC) {
-			AstFloat *v_flt = new AstFloat(std::stod(t.id));
+		} else if (token == TokenType::DEC) {
+			AstFloat *v_flt = new AstFloat(getFloatL());
 			call->children.push_back(v_flt);
-		} else if (t.type == TokenType::B_TRUE) {
+		} else if (token == TokenType::B_TRUE) {
 			AstBool *bl = new AstBool(true);
 			call->children.push_back(bl);
-		} else if (t.type == TokenType::B_FALSE) {
+		} else if (token == TokenType::B_FALSE) {
 			AstBool *bl = new AstBool(false);
 			call->children.push_back(bl);
-		} else if (t.type == TokenType::CHAR) {
+		} else if (token == TokenType::CHAR) {
 		
-		} else if (t.type == TokenType::ID) {
-			AstID *v_id = new AstID(t.id);
+		} else if (token == TokenType::ID) {
+			AstID *v_id = new AstID(getSVal());
 			call->children.push_back(v_id);
 		}
-	}
-
-	if (last.type != TokenType::RIGHT_PAREN) {
-		syntax_error(ln, "No closing token");
-	}
+        
+        token = getNext();
+    }
 
 	return call;
 }

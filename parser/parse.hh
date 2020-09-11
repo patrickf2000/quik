@@ -6,6 +6,7 @@
 #include "ast.hh"
 
 void syntax_error(Line ln, std::string msg, bool exit = true);
+void syntax_error(int no, std::string ln, std::string msg, bool exit = true);
 DataType ttype2dtype(TokenType t);
 
 class QkParser {
@@ -16,7 +17,7 @@ public:
 	
 	//Function stuff
 	AstFuncDec *build_func_dec(Line ln);
-	AstFuncCall *build_func_call(Line ln);
+	AstFuncCall *build_func_call(std::string name);
 	AstReturn *build_ret();
 	
 	//Variables
@@ -27,7 +28,7 @@ public:
 	AstCond *build_conditional(Line ln);
 	
 	//Loops
-	AstLoop *build_loop(Line ln);
+	AstLoop *build_loop();
 	AstForEach *build_foreach(Line ln);
 	
 	//Arrays and structures
@@ -52,4 +53,5 @@ private:
     int getIVal();
     double getFloatL();
     int getLnNo();
+    std::string getCurrentLn();
 };

@@ -35,3 +35,7 @@ double QkParser::getFloatL() {
 int QkParser::getLnNo() {
     return currentLn.no;
 }
+
+std::string QkParser::getCurrentLn() {
+    return currentLn.original;
+}

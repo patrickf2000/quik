@@ -13,6 +13,14 @@ void syntax_error(Line ln, std::string msg, bool exit) {
 	errors.push_back(e);
 }
 
+void syntax_error(int no, std::string ln, std::string msg, bool exit) {
+    Error e;
+	e.ln.no = no;
+    e.ln.original = ln;
+	e.msg = msg;
+	errors.push_back(e);
+}
+
 //Translates a token type to a datatype
 DataType ttype2dtype(TokenType t) {
 	switch (t) {
@@ -82,7 +90,7 @@ AstNode *QkParser::build_node(Line ln) {
 		
 		//Build loops
 		case TokenType::WHILE: return build_conditional(ln);
-		case TokenType::LOOP: return build_loop(ln);
+		case TokenType::LOOP: return build_loop();
 		case TokenType::FOREACH: return build_foreach(ln);
 		
 		//Handle if the first node is an ID
@@ -167,7 +175,9 @@ AstNode *QkParser::build_id(Line ln) {
 
 	//Build a function call
 	if (tokens.at(1).type == TokenType::LEFT_PAREN) {
-		return build_func_call(ln);
+        std::string name = getSVal();
+        getNext();
+		return build_func_call(name);
 		
 	//Build an assignment
 	} else if (tokens.at(1).type == TokenType::ASSIGN) {

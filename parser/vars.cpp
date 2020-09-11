@@ -51,6 +51,9 @@ void QkParser::build_var_parts(AstNode *vd, int start, std::vector<Token> tokens
 			vd->children.push_back(math);
 		} else if (tokens[i+1].type == TokenType::LEFT_PAREN && tokens[i].type == TokenType::ID) {
 			std::vector<Token> sub_tokens;
+            
+            std::string name = tokens[i].id;
+            currentIndex = i + 1;
 			
 			for (int j = i; j<tokens.size(); j++) {
 				sub_tokens.push_back(tokens.at(j));
@@ -64,7 +67,7 @@ void QkParser::build_var_parts(AstNode *vd, int start, std::vector<Token> tokens
 			Line l;
 			l.tokens = sub_tokens;
 			
-			AstFuncCall *call = build_func_call(l);
+			AstFuncCall *call = build_func_call(name);
 			vd->children.push_back(call);
 		} else if (tokens[i+1].type == TokenType::L_BRACKET) {
 			auto index_t = tokens[i+2];
