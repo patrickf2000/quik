@@ -3,6 +3,7 @@
 #include <string>
 #include <fstream>
 #include <vector>
+#include <map>
 
 #include "types.hh"
 
@@ -41,9 +42,10 @@ enum class AstType {
     None,
     Tree,
     Scope,
-    Expr,
+    Math,
     
     Func,
+    End,
     ArgList,
     Arg,
     VArg,
@@ -52,9 +54,12 @@ enum class AstType {
     Return,
     
     Var,
+    MultiVarAssign,
     ArrayDec,
     ArrayAssign,
     ArrayAccess,
+    
+    StructDec,
     
     Cond,
     While,
@@ -69,6 +74,7 @@ enum class AstType {
     Char,
     Octal,
     Int,
+    Bool,
     Float,
     String,
     Id,
@@ -157,10 +163,10 @@ private:
     std::map<std::string, Var> vars;
 };
 
-// Represents an expression
-class AstExpr : public AstNode {
+// Represents a math expression
+class AstMath : public AstNode {
 public:
-    AstExpr() { type = AstType::Expr; }
+    AstMath() { type = AstType::Math; }
     std::string writeDot(std::string prefix);
 };
 
@@ -170,9 +176,10 @@ class AstFunc : public AstNode {
 public:
     explicit AstFunc();
     explicit AstFunc(std::string name);
+    explicit AstFunc(std::string name, int tf);
     explicit AstFunc(std::string name, DataType type, int tf);
     
-    void addVar(Var v);
+    void addArg(Var v);
     std::vector<Var> getArgs();
     
     std::string getName() {
@@ -287,10 +294,29 @@ public:
     DataType getDataType();
     void setDataType(DataType dt);
     
+    std::string getName();
+    void setName(std::string name);
+    
     std::string writeDot(std::string prefix = "");
 private:
     int size = 0;
     DataType dataType = DataType::None;
+    std::string name = "";
+};
+
+//Array assignment
+class AstArrayAssign : public AstNode {
+public:
+    explicit AstArrayAssign();
+    explicit AstArrayAssign(std::string n);
+    
+    void setIndex(AstNode *index);
+    AstNode *getIndex();
+    
+    std::string writeDot(std::string prefix);
+private:
+    std::string name = "";
+    AstNode *index = nullptr;
 };
 
 // Represents a conditional statement
@@ -314,6 +340,11 @@ protected:
 // Represents a while loop
 class AstWhile : public AstCondStm {
 public:
+    explicit AstWhile() {
+        type = AstType::While;
+        condName = "While";
+    }
+    
     explicit AstWhile(AstCond *cond) : AstCondStm(cond) {
         type = AstType::While;
         condName = "While";
@@ -323,6 +354,11 @@ public:
 // Represents an if statement
 class AstIf : public AstCondStm {
 public:
+    explicit AstIf() {
+        type = AstType::If;
+        condName = "If";
+    }
+    
     explicit AstIf(AstCond *cond) : AstCondStm(cond) {
         type = AstType::If;
         condName = "If";
@@ -332,6 +368,11 @@ public:
 // Represents an elif statement
 class AstElif : public AstCondStm {
 public:
+    explicit AstElif() {
+        type = AstType::Elif;
+        condName = "Elif";
+    }
+    
     explicit AstElif(AstCond *cond) : AstCondStm(cond) {
         type = AstType::Elif;
         condName = "Elif";
@@ -348,18 +389,21 @@ public:
 //The loop keyword
 class AstLoop : public AstNode {
 public:
-    AstLoop() { type = AstType::Loop; }
-    std::string writeDot(std::string prefix);
+    AstLoop();
     
+    void setParam(AstNode *param);
+    AstNode *getParam();
+    
+    std::string writeDot(std::string prefix);
 private:
-    AstNode *param;
+    AstNode *param = nullptr;
     std::string i_var = "";
 };
 
 // Represents a for-each loop
 class AstForEach : public AstNode {
 public:
-    AstForEach() { type = AstType::ForEach; }
+    AstForEach();
     std::string writeDot(std::string prefix = "");
     
     std::string i_var = "";        //Index
@@ -403,6 +447,17 @@ public:
     int getVal() { return val; }
 private:
     int val = 0;
+};
+
+// Represents a boolean
+class AstBool : public AstNode {
+public:
+    explicit AstBool(bool val);
+    std::string writeDot(std::string prefix);
+    
+    bool getVal() { return val; }
+private:
+    bool val = false;
 };
 
 // Represents a float
@@ -458,6 +513,21 @@ public:
     std::string getVal() { return val; }
 private:
     std::string val = "";
+};
+
+//Mutli-variable assignment
+class AstMultiVarAssign : public AstNode {
+public:
+    explicit AstMultiVarAssign() { 
+        type = AstType::MultiVarAssign;
+    }
+    
+    void addVar(AstId *var);
+    std::vector<AstId *> getVars();
+    
+    std::string writeDot(std::string prefix); 
+private:
+    std::vector<AstId *> vars;
 };
 
 // Represents a math operator

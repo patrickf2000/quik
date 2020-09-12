@@ -102,10 +102,10 @@ std::string AstScope::writeDot(std::string prefix) {
 }
 
 //============================================
-// AstExpr-> Represents an expression (usually math)
+// AstMath-> Represents an math
 
-std::string AstExpr::writeDot(std::string prefix) {
-    return writeDotParent(prefix, "Expr", "box");
+std::string AstMath::writeDot(std::string prefix) {
+    return writeDotParent(prefix, "Math", "box");
 }
 
 //====================================================
@@ -116,8 +116,14 @@ AstFunc::AstFunc() {
 }
 
 AstFunc::AstFunc(std::string name) {
-    type = AstType::FuncDec;
+    type = AstType::Func;
     this->name = name;
+}
+
+AstFunc::AstFunc(std::string name, int tf) {
+    type = AstType::Func;
+    this->name = name;
+    this->typeFlags = tf;
 }
 
 AstFunc::AstFunc(std::string name, DataType type, int tf) {
@@ -127,16 +133,12 @@ AstFunc::AstFunc(std::string name, DataType type, int tf) {
     this->typeFlags = tf;
 }
 
-void AstFunc::addVar(Var v) {
-    this->vars.push_back(v);
-}
-
-void AstFunc::addVars(std::map<std::string, Var> newVars) {
-    this->vars.insert(newVars.begin(), newVars.end());
+void AstFunc::addArg(Var v) {
+    this->args.push_back(v);
 }
 
 std::vector<Var> AstFunc::getArgs() {
-    return vars;
+    return args;
 }
 
 std::string AstFunc::writeDot(std::string prefix) {
@@ -244,7 +246,7 @@ std::string AstFuncCall::writeDot(std::string prefix) {
 // AstRet -> Represents a return statement
 
 AstReturn::AstReturn() {
-    type = AstType::Ret;
+    type = AstType::Return;
 }
 
 std::string AstReturn::writeDot(std::string prefix) {
@@ -369,12 +371,20 @@ void AstArrayDec::setSize(int s) {
     this->size = s;
 }
 
-DataType AstVar::getDataType() {
+DataType AstArrayDec::getDataType() {
     return this->dataType;
 }
 
-void AstVar::setDataType(DataType dt) {
+void AstArrayDec::setDataType(DataType dt) {
     this->dataType = dt;
+}
+
+std::string AstArrayDec::getName() {
+    return name;
+}
+
+void AstArrayDec::setName(std::string name) {
+    this->name = name;
 }
     
 std::string AstArrayDec::writeDot(std::string prefix) {
@@ -391,6 +401,31 @@ std::string AstArrayDec::writeDot(std::string prefix) {
     
     lbl += " (" + typeStr + ")";
 
+    return writeDotParent(prefix, lbl);
+}
+
+//=================================================
+// AstArrayAssign -> Represents an array assignment
+
+AstArrayAssign::AstArrayAssign() {
+    type = AstType::ArrayAssign;
+}
+
+AstArrayAssign::AstArrayAssign(std::string n) {
+    type = AstType::ArrayAssign;
+    name = n;
+}
+    
+void AstArrayAssign::setIndex(AstNode *index) {
+    this->index = index;
+}
+
+AstNode *AstArrayAssign::getIndex() {
+    return index;
+}
+    
+std::string AstArrayAssign::writeDot(std::string prefix) {
+    std::string lbl = name + "[]";
     return writeDotParent(prefix, lbl);
 }
 
@@ -451,6 +486,14 @@ AstLoop::AstLoop() {
     type = AstType::Loop;
 }
 
+void AstLoop::setParam(AstNode *param) {
+    this->param = param;
+}
+
+AstNode *AstLoop::getParam() {
+    return param;
+}
+
 std::string AstLoop::writeDot(std::string prefix) {
     return writeDotParent(prefix, "Loop");
 }
@@ -467,6 +510,7 @@ std::string AstForEach::writeDot(std::string prefix) {
 }
 
 //=================================================
+// AstByte-> Represents a byte value
 
 AstByte::AstByte(unsigned char val) {
     type = AstType::Byte;
@@ -517,6 +561,18 @@ AstInt::AstInt(int val) {
 
 std::string AstInt::writeDot(std::string prefix) {
     return writeDotStd(prefix, std::to_string(val), "deepskyblue");
+}
+
+//=================================================
+// AstBool -> Represents a boolean
+
+AstBool::AstBool(bool val) {
+    type = AstType::Bool;
+    this->val = val;
+}
+
+std::string AstBool::writeDot(std::string prefix) {
+    return writeDotStd(prefix, std::to_string(val), "dimgray");
 }
 
 //=================================================
@@ -586,6 +642,24 @@ AstString::AstString(std::string val) {
 
 std::string AstString::writeDot(std::string prefix) {
     return writeDotStd(prefix, val, "coral");
+}
+
+//=================================================
+// AstMultiVarAssign -> Represents an array assignment
+
+void AstMultiVarAssign::addVar(AstId *var) {
+    vars.push_back(var);
+}
+
+std::vector<AstId *> AstMultiVarAssign::getVars() {
+    return vars;
+}
+    
+std::string AstMultiVarAssign::writeDot(std::string prefix) {
+    std::string lbl = "= " + vars.at(0)->getVal() + "\n";
+    for (int i = 1; i<vars.size(); i++)
+        lbl += "  " + vars.at(i)->getVal() + "\n";
+    return writeDotParent(prefix, lbl);
 }
 
 //=================================================

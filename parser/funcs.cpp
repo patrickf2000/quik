@@ -14,6 +14,11 @@ AstFunc *QkParser::buildFuncDec(bool isGlobal, bool isExtern) {
         
         token = getNext();
     }
+    
+    // Check flags
+    int flags = 0;
+    if (isGlobal) flags |= Global;
+    if (isExtern) flags |= Extern;
 
     // The next should be an ID
     std::string name = getSVal();
@@ -24,11 +29,7 @@ AstFunc *QkParser::buildFuncDec(bool isGlobal, bool isExtern) {
     }
     
     // Create the object
-    AstFuncDec *fd = new AstFunc(name);
-    fd->is_global = isGlobal;
-    
-    if (isExtern)
-        fd = new AstExternFunc(name);
+    auto *fd = new AstFunc(name, flags);
 
     //Check for and load any arguments
     token = getNext();
@@ -60,7 +61,7 @@ AstFunc *QkParser::buildFuncDec(bool isGlobal, bool isExtern) {
                         "No datatype specified in parameter");
                 }
                 
-                fd->args.push_back(v);
+                fd->addArg(v);
                 v.is_array = false;
                 v.name = "";
                 v.type = DataType::None;
@@ -95,7 +96,7 @@ AstFunc *QkParser::buildFuncDec(bool isGlobal, bool isExtern) {
         }
         
         if (v.name != "" && v.type != DataType::None) {
-            fd->args.push_back(v);
+            fd->addArg(v);
         }
     }
 
@@ -110,28 +111,28 @@ AstFuncCall *QkParser::buildFuncCall(std::string name) {
     while (token != TokenType::RIGHT_PAREN && token != TokenType::NONE) {
         if (token == TokenType::STRING) {
             AstString *v_str = new AstString(getSVal());
-            call->children.push_back(v_str);
+            call->addChild(v_str);
         } else if (token == TokenType::NO) {
             AstInt *v_int = new AstInt(getIVal());
-            call->children.push_back(v_int);
+            call->addChild(v_int);
         } else if (token == TokenType::CHAR) {
             auto val = getSVal();
             AstChar *v_ch = new AstChar(val[0]);
-            call->children.push_back(v_ch);
+            call->addChild(v_ch);
         } else if (token == TokenType::DEC) {
             AstFloat *v_flt = new AstFloat(getFloatL());
-            call->children.push_back(v_flt);
+            call->addChild(v_flt);
         } else if (token == TokenType::B_TRUE) {
             AstBool *bl = new AstBool(true);
-            call->children.push_back(bl);
+            call->addChild(bl);
         } else if (token == TokenType::B_FALSE) {
             AstBool *bl = new AstBool(false);
-            call->children.push_back(bl);
+            call->addChild(bl);
         } else if (token == TokenType::CHAR) {
         
         } else if (token == TokenType::ID) {
-            AstID *v_id = new AstID(getSVal());
-            call->children.push_back(v_id);
+            AstId *v_id = new AstId(getSVal());
+            call->addChild(v_id);
         }
         
         token = getNext();
@@ -150,22 +151,22 @@ AstReturn *QkParser::buildRet() {
             case TokenType::ID: {
                 auto name = getSVal();
                 
-                AstID *id = new AstID(name);
-                node->children.push_back(id);
+                auto *id = new AstId(name);
+                node->addChild(id);
             } break;
             
             case TokenType::NO: {
                 int val = getIVal();
                 
-                AstInt *i = new AstInt(val);
-                node->children.push_back(i);
+                auto *i = new AstInt(val);
+                node->addChild(i);
             } break;
             
             case TokenType::DEC: {
                 double val = getFloatL();
                 
-                AstFloat *f = new AstFloat(val);
-                node->children.push_back(f);
+                auto *f = new AstFloat(val);
+                node->addChild(f);
             } break;
         }
         

@@ -10,21 +10,20 @@ std::vector<Error> errors;
 // Only function declarations and variable declarations are allowed
 // on the global scope
 void SyntaxCheck::check_global(AstNode *top) {
-    if (top->type != AstType::Scope) {
+    if (top->getType() != AstType::Scope) {
         return;
     }
     
-    for (auto node : top->children) {
-        switch (node->type) {
-            case AstType::FuncDec:
-            case AstType::ExternFunc:
-            case AstType::VarDec: 
+    for (auto node : top->getChildren()) {
+        switch (node->getType()) {
+            case AstType::Func:
+            case AstType::Var: 
             case AstType::EndIf: 
             case AstType::StructDec: continue;
         }
             
         Error er;
-        er.ln = node->ln;
+        er.ln = node->getLine();
         er.msg = "Invalid token on the global scope.";
         errors.push_back(er);
     }
@@ -32,15 +31,20 @@ void SyntaxCheck::check_global(AstNode *top) {
 
 //Scans from all the scopes, and makes sure there are no undeclared variables
 void SyntaxCheck::check_vars(AstNode *top, std::map<std::string, Var> vars) {
-    if (top->type == AstType::Scope) {
+    if (top->getType() == AstType::Scope) {
         AstScope *scope = static_cast<AstScope *>(top);
-        vars = scope->vars;
+        vars = scope->getVars();
     }
     
-    for (auto node : top->children) {
-        if (node->type == AstType::VarAssign || node->type == AstType::Id) {
-            AstAttrNode *va = static_cast<AstAttrNode *>(node);
-            if (vars.find(va->get_name()) == vars.end()) {
+    for (auto node : top->getChildren()) {
+        if (node->getType() == AstType::VarAssign || node->getType() == AstType::Id) {
+            std::string name = "";
+            if (node->getType() == AstType::Var)
+                name = static_cast<AstVar *>(node)->getName();
+            else if (node->getType() == AstType::Id)
+                name = static_cast<AstId *>(node)->getVak();
+                
+            if (!scope->varExists(name)) {
                 Error er;
                 er.ln = node->ln;
                 er.msg = "Use of undeclared variable: " + va->get_name();
@@ -48,7 +52,7 @@ void SyntaxCheck::check_vars(AstNode *top, std::map<std::string, Var> vars) {
             }
         }
         
-        if (node->children.size() > 0) {
+        if (node->getChildren().size() > 0) {
             check_vars(node, vars);
         }
     }
@@ -56,16 +60,16 @@ void SyntaxCheck::check_vars(AstNode *top, std::map<std::string, Var> vars) {
 
 //Scans the tree to check for invalid variable types in the loop keyword
 void SyntaxCheck::check_lp_vars(AstNode *top, std::map<std::string, Var> vars) {
-    if (top->type == AstType::Scope) {
+    if (top->getType() == AstType::Scope) {
         AstScope *scope = static_cast<AstScope *>(top);
         vars = scope->vars;
     }
     
     for (auto node : top->children) {
-        if (node->type == AstType::Loop) {
+        if (node->getType() == AstType::Loop) {
             AstLoop *lp = static_cast<AstLoop *>(node);
             
-            if (lp->param->type == AstType::Id) {
+            if (lp->param->getType() == AstType::Id) {
                 AstAttrNode *va = static_cast<AstAttrNode *>(lp->param);
                 
                 if (vars.find(va->get_name()) == vars.end()) {
@@ -75,7 +79,7 @@ void SyntaxCheck::check_lp_vars(AstNode *top, std::map<std::string, Var> vars) {
                     errors.push_back(er);
                 } else {
                     Var v = vars[va->get_name()];
-                    if (v.type != DataType::Int) {
+                    if (v.getType() != DataType::Int) {
                         Error er;
                         er.ln = node->ln;
                         er.msg = "Only integer variables may be used with the loop statement.";

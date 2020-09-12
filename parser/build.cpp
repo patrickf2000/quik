@@ -118,11 +118,12 @@ AstTree *build_ast(std::vector<Line> lines, bool fail, bool optimize) {
     
     for (auto ln : lines) {
         auto n = parser->build_node(ln);
-        n->ln = ln;
+        n->setLine(ln);
         
-        if (n->children.size() > 0) {
-            for (int i = 0; i<n->children.size(); i++) {
-                n->children.at(i)->ln = ln;
+        auto children = n->getChildren();
+        if (children.size() > 0) {
+            for (int i = 0; i < children.size(); i++) {
+                children.at(i)->setLine(ln);
             }
         }
         
@@ -130,7 +131,7 @@ AstTree *build_ast(std::vector<Line> lines, bool fail, bool optimize) {
             syntax_error(ln, "Unknown input");
         } else {
             //This inserts an end statement before an elif statementn
-            if (n->type == AstType::Elif || n->type == AstType::Else) {
+            if (n->getType() == AstType::Elif || n->getType() == AstType::Else) {
                 AstNode *end = new AstNode(AstType::End);
                 nodes.push_back(end);
             }
@@ -147,8 +148,8 @@ AstTree *build_ast(std::vector<Line> lines, bool fail, bool optimize) {
     //Perform syntax checking
     SyntaxCheck check;
     check.check_global(top);
-    check.check_vars(top, top->vars);
-    check.check_lp_vars(top, top->vars);
+    check.check_vars(top, top->getVars());
+    check.check_lp_vars(top, top->getVars());
     check.evaluate(fail);        //TODO: Something else rather than bomb out in function?
     
     //Optimize
@@ -160,6 +161,6 @@ AstTree *build_ast(std::vector<Line> lines, bool fail, bool optimize) {
     }
     
     AstTree *tree = new AstTree("file");
-    tree->children.push_back(top);
+    tree->addChild(top);
     return tree;
 }

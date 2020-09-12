@@ -126,7 +126,8 @@ enum class DataType {
     Double128,
     Double256,
     Matrix,
-    Str
+    Str,
+    Any
 };
 
 enum class CondOp {

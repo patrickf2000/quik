@@ -1,7 +1,7 @@
 #include "parse.hh"
 
 //Builds a conditional statement
-AstCond *QkParser::build_conditional(TokenType loopType) {
+AstCondStm *QkParser::build_conditional(TokenType loopType) {
     // The first token should be a left parantheses
     auto token = getNext();
     
@@ -13,7 +13,8 @@ AstCond *QkParser::build_conditional(TokenType loopType) {
     token = getNext();
     
     //Create the right type
-    AstCond *cond = new AstCond;
+    AstCondStm *cond = new AstCondStm;
+    AstCond *cmp = new AstCond;
     
     if (loopType == TokenType::IF) {
         cond = new AstIf;
@@ -23,13 +24,6 @@ AstCond *QkParser::build_conditional(TokenType loopType) {
         cond = new AstWhile;
     }
     
-    //By default, make the operator equal and rval true
-    cond->set_op(CondOp::Equals);
-    cond->rval = new AstBool(true);
-    
-    //Parse the expression
-    bool found_op = false;
-    
     while (token != TokenType::NL && token != TokenType::NONE) {
         
         // First, check to see if we are within an inner math statement or function call
@@ -38,11 +32,7 @@ AstCond *QkParser::build_conditional(TokenType loopType) {
             
             AstMath *math = new AstMath;
             buildVarParts(math);
-            
-            if (found_op)
-                cond->rval = math;
-            else
-                cond->lval = math;
+            cmp->addChild(math);
                 
             token = getNext();
             continue;
@@ -54,19 +44,12 @@ AstCond *QkParser::build_conditional(TokenType loopType) {
             
             if (token == TokenType::LEFT_PAREN) {
                 AstFuncCall *call = buildFuncCall(name);
-                if (found_op)
-                    cond->rval = call;
-                else
-                    cond->lval = call;
+                cmp->addChild(call);
                     
                 token = getNext();
             } else {
-                AstID *id = new AstID(name);
-                
-                if (found_op)
-                    cond->rval = id;
-                else
-                    cond->lval = id;
+                auto *id = new AstId(name);
+                cmp->addChild(id);
             }
             
             continue;
@@ -78,71 +61,49 @@ AstCond *QkParser::build_conditional(TokenType loopType) {
             case TokenType::NO: {
                 int val = getIVal();
                 AstInt *i = new AstInt(val);
-                
-                if (found_op)
-                    cond->rval = i;
-                else
-                    cond->lval = i;
+                cmp->addChild(i);
             } break;
             
             case TokenType::CHAR: {
                 auto val = getSVal();
                 AstChar *ch = new AstChar(val[0]);
-                
-                if (found_op)
-                    cond->rval = ch;
-                else
-                    cond->lval = ch;
+                cmp->addChild(ch);
             } break;
             
             //Booleans
             case TokenType::B_TRUE: {
                 AstBool *bl = new AstBool(true);
-                
-                if (found_op)
-                    cond->rval = bl;
-                else
-                    cond->lval = bl;
+                cmp->addChild(bl);
             } break;
             
             case TokenType::B_FALSE: {
                 AstBool *bl = new AstBool(false);
-                
-                if (found_op)
-                    cond->rval = bl;
-                else
-                    cond->lval = bl;
+                cmp->addChild(bl);
             } break;
         
             //Operators
             case TokenType::EQUALS: {
-                cond->set_op(CondOp::Equals);
-                found_op = true;
+                cmp->addChild(new AstCmpOp(CmpType::Eq));
             } break;
             
             case TokenType::NOT_EQUAL: {
-                cond->set_op(CondOp::NotEquals);
-                found_op = true;
+                cmp->addChild(new AstCmpOp(CmpType::Neq));
             } break;
             
             case TokenType::GREATER: {
-                cond->set_op(CondOp::Greater);
-                found_op = true;
+                cmp->addChild(new AstCmpOp(CmpType::Gt));
             } break;
             
             case TokenType::GREATER_EQ: {
-                cond->set_op(CondOp::GreaterEq);
-                found_op = true;
+                cmp->addChild(new AstCmpOp(CmpType::Gte));
             } break;
             
             case TokenType::LESS: {
-                cond->set_op(CondOp::Less);
-                found_op = true;
+                cmp->addChild(new AstCmpOp(CmpType::Lt));
             } break;
             
             case TokenType::LESS_EQ: {
-                cond->set_op(CondOp::LessEq);
-                found_op = true;
+                cmp->addChild(new AstCmpOp(CmpType::Lte));
             } break;
         }
         

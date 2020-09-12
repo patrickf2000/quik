@@ -140,20 +140,20 @@ AstNode *QkParser::build_id(std::string name) {
 
     //Check for an array assignment
     if (token == TokenType::L_BRACKET) {
-        AstArrayAssign *assign = new AstArrayAssign(name);
+        auto *assign = new AstArrayAssign(name);
         token = getNext();
         
         switch (token) {
             case TokenType::ID: {
                 auto val = getSVal();
-                AstID *id = new AstID(val);
-                assign->index = id;
+                auto *id = new AstId(val);
+                assign->setIndex(id);
             } break;
                 
             case TokenType::NO: {
                 int val = getIVal();
-                AstInt *i = new AstInt(val);
-                assign->index = i;
+                auto *i = new AstInt(val);
+                assign->setIndex(i);
             } break;
                 
             default: syntax_error(getLnNo(), getCurrentLn(), 
@@ -178,7 +178,7 @@ AstNode *QkParser::build_id(std::string name) {
         
     //Build an assignment
     } else if (token == TokenType::ASSIGN) {
-        AstVarAssign *va = new AstVarAssign(name);
+        auto *va = new AstVar(name, false);
         buildVarParts(va);
         return va;
         
@@ -186,8 +186,8 @@ AstNode *QkParser::build_id(std::string name) {
     } else if (token == TokenType::COMMA) {
         auto mva = new AstMultiVarAssign;
         
-        auto var1 = new AstID(name);
-        mva->vars.push_back(var1);
+        auto var1 = new AstId(name);
+        mva->addVar(var1);
         
         auto token = getNext();
         
@@ -197,8 +197,8 @@ AstNode *QkParser::build_id(std::string name) {
                 continue;
             } else if (token == TokenType::ID) {
                 auto val = getSVal();
-                auto var = new AstID(val);
-                mva->vars.push_back(var);
+                auto var = new AstId(val);
+                mva->addVar(var);
             } else {
                 syntax_error(getLnNo(), getCurrentLn(),
                     "Invalid multi-variable assignment.");
@@ -236,9 +236,9 @@ AstNode *QkParser::build_id(std::string name) {
 
     //Build an increment
     } else if (token == TokenType::D_PLUS) {
-        AstVarAssign *va = new AstVarAssign(name);
-        AstNode *inc = new AstNode(AstType::Inc);
-        va->children.push_back(inc);
+        auto *va = new AstVar(name, false);
+        auto *inc = new AstMathOp(MathType::Inc);
+        va->addChild(inc);
         return va;
     }
     
@@ -253,26 +253,25 @@ int QkParser::build_tree(std::vector<AstNode *> nodes, AstNode *top, int index, 
     for (; i<nodes.size(); i++) {
         auto c = nodes.at(i);
         
-        if (c->type == AstType::FuncDec) {
-            AstFuncDec *fd = dynamic_cast<AstFuncDec *>(c);
+        if (c->getType() == AstType::Func) {
+            auto *fd = static_cast<AstFunc *>(c);
         
-            AstScope *s = new AstScope;
-            s->set_name(fd->get_name());
+            auto *s = new AstScope;
             
-            top->children.push_back(c);
-            c->children.push_back(s);
+            top->addChild(c);
+            c->addChild(s);
             
             i = build_tree(nodes, s, i+1);
-        } else if (c->type == AstType::If || c->type == AstType::Elif 
-                || c->type == AstType::Else || c->type == AstType::While
-                || c->type == AstType::Loop || c->type == AstType::ForEach
-                || c->type == AstType::StructDec) {
-            top->children.push_back(c);
+        } else if (c->getType() == AstType::If || c->getType() == AstType::Elif 
+                || c->getType() == AstType::Else || c->getType() == AstType::While
+                || c->getType() == AstType::Loop || c->getType() == AstType::ForEach
+                || c->getType() == AstType::StructDec) {
+            top->addChild(c);
             i = build_tree(nodes, c, i+1, true);
-        } else if (c->type == AstType::End) {
+        } else if (c->getType() == AstType::End) {
             return i;
         } else {
-            top->children.push_back(c);
+            top->addChild(c);
         }
     }
     

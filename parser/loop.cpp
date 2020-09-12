@@ -3,7 +3,6 @@
 //Builds a loop statement
 AstLoop *QkParser::build_loop() {
     AstLoop *lp = new AstLoop;
-    lp->param = nullptr;
     
     auto token = getNext();
     
@@ -11,12 +10,12 @@ AstLoop *QkParser::build_loop() {
         switch (token) {
             case TokenType::NO: {
                 int i = getIVal();
-                lp->param = new AstInt(i);
+                lp->setParam(new AstInt(i));
             } break;
             
             case TokenType::ID: {
-                AstID *id = new AstID(getSVal());
-                lp->param = id;
+                auto *id = new AstId(getSVal());
+                lp->setParam(id);
             } break;
             
             default: {

@@ -25,7 +25,7 @@ public:
     void buildVarParts(AstNode *vd);
     
     //Conditionals
-    AstCond *build_conditional(TokenType loopType);
+    AstCondStm *build_conditional(TokenType loopType);
     
     //Loops
     AstLoop *build_loop();

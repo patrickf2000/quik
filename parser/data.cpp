@@ -3,7 +3,7 @@
 //Build an array node
 AstArrayDec *QkParser::buildArray(TokenType dataType) {
     AstArrayDec *arr = new AstArrayDec;
-    arr->set_type(ttype2dtype(dataType));
+    arr->setDataType(ttype2dtype(dataType));
     
     // Get the array count element
     auto token = getNext();
@@ -14,7 +14,7 @@ AstArrayDec *QkParser::buildArray(TokenType dataType) {
     }
     
     int val = getIVal();
-    arr->set_size(val);
+    arr->setSize(val);
     
     // The next token should be the right bracket
     token = getNext();
@@ -33,7 +33,7 @@ AstArrayDec *QkParser::buildArray(TokenType dataType) {
     }
     
     auto name = getSVal();
-    arr->set_name(name);
+    arr->setName(name);
     
     // The next token should be the assignment operator
     token = getNext();
