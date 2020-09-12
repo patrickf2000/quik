@@ -1,7 +1,7 @@
 #include "parse.hh"
 
 //Builds a variable declaration
-AstFuncDec *QkParser::buildFuncDec(bool isGlobal, bool isExtern) {
+AstFunc *QkParser::buildFuncDec(bool isGlobal, bool isExtern) {
     // First, perform a syntax check
     // If the function has the global or extern modifier, the func keyword should be next
     auto token = getNext();
@@ -24,7 +24,7 @@ AstFuncDec *QkParser::buildFuncDec(bool isGlobal, bool isExtern) {
     }
     
     // Create the object
-    AstFuncDec *fd = new AstFuncDec(name);
+    AstFuncDec *fd = new AstFunc(name);
     fd->is_global = isGlobal;
     
     if (isExtern)

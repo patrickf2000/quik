@@ -2,7 +2,7 @@
 
 //This performs common checking on variable declarations
 // Note: The ID token is the current token when called from the main parse loop
-AstVarDec *QkParser::buildVarDec(TokenType dataType) {
+AstVar *QkParser::buildVarDec(TokenType dataType) {
     std::string name = getSVal();
     auto token = getNext();
     
@@ -11,8 +11,7 @@ AstVarDec *QkParser::buildVarDec(TokenType dataType) {
             "Invalid variable declaration.");
     }
     
-    AstVarDec *vd = new AstVarDec(name);
-    vd->set_type(ttype2dtype(dataType));
+    auto *vd = new AstVar(name, true, ttype2dtype(dataType));
     return vd;
 }
 

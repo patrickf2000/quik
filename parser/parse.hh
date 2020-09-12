@@ -16,12 +16,12 @@ public:
     int build_tree(std::vector<AstNode *> nodes, AstNode *top, int index = 0, bool in_if = false);
     
     //Function stuff
-    AstFuncDec *buildFuncDec(bool isGlobal = false, bool isExtern = false);
+    AstFunc *buildFuncDec(bool isGlobal = false, bool isExtern = false);
     AstFuncCall *buildFuncCall(std::string name);
     AstReturn *buildRet();
     
     //Variables
-    AstVarDec *buildVarDec(TokenType dataType);
+    AstVar *buildVarDec(TokenType dataType);
     void buildVarParts(AstNode *vd);
     
     //Conditionals

@@ -1,76 +1,82 @@
 #pragma once
 
-#include <vector>
 #include <string>
-#include <map>
-#include <sstream>
+#include <fstream>
+#include <vector>
 
-#include <lex.hh>
+#include "types.hh"
 
-//Denotes the types of our nodes so we can upcast
-enum AstType {
-    Scope,
-    
-    //Function stuff
-    FuncDec,
-    ExternFunc,
-    FuncCall,
-    End,
-    Return,
-    
-    //Structure stuff
-    Struct,
-    StructDec,
-    StructAcc,
-    StructMod,
-    
-    //Conditional stuff
-    If,
-    Elif,
-    Else,
-    EndIf,
-    
-    //Loop stuff
-    While,
-    Loop,
-    ForEach,
-    
-    //Variable stuff
-    VarDec,
-    VarAssign,
-    MultiVarAssign,
-    Id,
-    Int,
-    Hex,
-    Char,
-    Bool,
-    Float,
-    Int64,
-    Int128,
-    Int256,
-    Float64,
-    Float80,
-    Float128,
-    Float256,
-    Str,
-    ArrayDec,
-    ArrayAccess,
-    ArrayAssign,
-    Math,
-    
-    //Operator
+enum {
+    None = 1 << 0,
+    Ptr = 1 << 1,
+    Ref = 1 << 2,
+    Signed = 1 << 3,
+    USigned = 1 << 4,
+    Extern = 1 << 5,
+    Global = 1 << 6,
+    Func = 1 << 7
+};
+
+enum class MathType {
+    None,
     Add,
     Sub,
     Mul,
     Div,
-    Mod,
     Inc,
-    DMul,
+    Dec
+};
+
+enum class CmpType {
+    None,
+    Eq,
+    Neq,
+    Gt,
+    Lt,
+    Gte,
+    Lte
+};
+
+enum class AstType {
+    None,
+    Tree,
+    Scope,
+    Expr,
     
-    //Logical operators
-    And,
-    Or,
-    Xor
+    Func,
+    ArgList,
+    Arg,
+    VArg,
+    
+    FuncCall,
+    Return,
+    
+    Var,
+    ArrayDec,
+    ArrayAssign,
+    ArrayAccess,
+    
+    Cond,
+    While,
+    If,
+    Elif,
+    Else,
+    EndIf,
+    Loop,
+    ForEach,
+    
+    Byte,
+    Char,
+    Octal,
+    Int,
+    Float,
+    String,
+    Id,
+    Ref,
+    Ptr,
+    
+    MathOp,
+    CmpOp
 };
 
 //Holds variable information
@@ -85,18 +91,41 @@ struct Var {
     int size;
 };
 
-//The base of all our nodes
+// The base of all nodes
 class AstNode {
 public:
-    explicit AstNode() {}
-    explicit AstNode(AstType t) { type = t; }
-    virtual ~AstNode() {}
+    AstNode() {}
+    AstNode(AstType type) {
+        this->type = type;
+    }
     
-    virtual std::string writeDot(std::string prefix = "");
+    virtual std::string writeDot(std::string prefix) {
+        return "";
+    }
     
     std::string writeDotStd(std::string prefix, std::string val, std::string color = "");
     std::string writeDotParent(std::string prefix, std::string nodeName, std::string shape = "");
     
+    void addChild(AstNode *node);
+    void addChild(AstNode *node, int pos);
+    void addChildren(std::vector<AstNode *> list);
+    
+    std::vector<AstNode *> getChildren() {
+        return children;
+    }
+    
+    AstType getType() {
+        return type;
+    }
+    
+    void setLine(Line ln) {
+        this->ln = ln;
+    }
+        
+    Line getLine() {
+        return this->ln;
+    }
+protected:
     AstType type;
     std::vector<AstNode *> children;
     Line ln;
@@ -105,467 +134,349 @@ public:
 // The top-most AST node
 class AstTree : public AstNode {
 public:
-    AstTree(std::string file) { this->file = file; }
+    AstTree(std::string file);
     std::string writeDot();
 private:
     std::string file;
 };
 
-//The base class for nodes that have a string attribute
-class AstAttrNode : public AstNode {
+// Represents a scope
+class AstScope : public AstNode {
 public:
-    std::string get_name() { return name; }
-    void set_name(std::string n) { name = n; }
+    AstScope() { type = AstType::Scope; }
+    
+    void addVar(Var v);
+    void addVars(std::map<std::string, Var> newVars);
+    void setVars(std::map<std::string, Var> vars);
+    Var getVar(std::string name);
+    std::map<std::string, Var> getVars();
+    bool varExists(std::string name);
+    
+    std::string writeDot(std::string prefix);
+private:
+    std::map<std::string, Var> vars;
+};
+
+// Represents an expression
+class AstExpr : public AstNode {
+public:
+    AstExpr() { type = AstType::Expr; }
+    std::string writeDot(std::string prefix);
+};
+
+// Represents a function declaration
+// TODO: I eventually want to use the types below instead of the Var list
+class AstFunc : public AstNode {
+public:
+    explicit AstFunc();
+    explicit AstFunc(std::string name);
+    explicit AstFunc(std::string name, DataType type, int tf);
+    
+    void addVar(Var v);
+    std::vector<Var> getArgs();
+    
+    std::string getName() {
+        return name;
+    }
+    
+    int getTypeFlags() {
+        return typeFlags;
+    }
+    
+    std::string writeDot(std::string prefix);
+private:
+    std::string name = "";
+    DataType retType = DataType::Void;
+    int typeFlags = 0;
+    std::vector<Var> args;
+};
+
+// Represents an argument list
+class AstArgList : public AstNode {
+public:
+    AstArgList();
+    std::string writeDot(std::string prefix);
+};
+
+// Represents an argument
+class AstArg : public AstNode {
+public:
+    explicit AstArg(std::string name, DataType dt, int tf);
+    void setPtr(int ptrLevel);
+    
+    std::string getName() { return name; }
+    DataType getDataType() { return dataType; }
+    int getTypeFlags() { return typeFlags; }
+    
+    std::string writeDot(std::string prefix);
 protected:
+    explicit AstArg() {}
+    std::string name = "";
+    DataType dataType = DataType::None;
+    int typeFlags = None;
+    int ptrLevel = 0;
+};
+
+// Represents a variadic argument
+class AstVArg : public AstArg {
+public:
+    AstVArg();
+    std::string writeDot(std::string prefix);
+};
+
+// Represents a function call
+class AstFuncCall : public AstNode {
+public:
+    explicit AstFuncCall(std::string name);
+    std::string writeDot(std::string prefix);
+    
+    std::string getName() { return name; }
+private:
     std::string name = "";
 };
 
-//Represents a scope
-class AstScope : public AstAttrNode {
-public:
-    AstScope() { type = AstType::Scope; }
-    std::map<std::string, Var> vars;
-    
-    std::string writeDot(std::string prefix = "");
-};
-
-//The function declaration type
-class AstFuncDec : public AstAttrNode {
-public:
-    explicit AstFuncDec() { type = AstType::FuncDec; }
-    explicit AstFuncDec(std::string n) {
-        type = AstType::FuncDec;
-        name = n;
-    }
-    
-    std::string writeDot(std::string prefix = "");
-
-    std::vector<Var> args;
-    bool is_global = false;
-};
-
-//Extern function declarations
-class AstExternFunc : public AstFuncDec {
-public:
-    explicit AstExternFunc() { type = AstType::ExternFunc; }
-    explicit AstExternFunc(std::string n) {
-        type = AstType::ExternFunc;
-        name = n;
-    }
-    
-    std::string writeDot(std::string prefix = "") { return ""; }
-};
-
-//The function call type
-class AstFuncCall : public AstAttrNode {
-public:
-    explicit AstFuncCall() { type = AstType::FuncCall; }
-    explicit AstFuncCall(std::string n) {
-        type = AstType::FuncCall;
-        name = n;
-    }
-    
-    std::string writeDot(std::string prefix = "");
-};
-
-//The return keyword
+// Represents a return statement
 class AstReturn : public AstNode {
 public:
-    AstReturn() { type = AstType::Return; }
+    AstReturn();
+    std::string writeDot(std::string prefix);
+};
+
+// Represents a variable
+class AstVar : public AstNode {
+public:
+    explicit AstVar(std::string name);
+    explicit AstVar(std::string name, bool dec);
+    explicit AstVar(std::string name, bool dec, DataType dt);
+    explicit AstVar(std::string name, bool dec, DataType dt, int tf);
+    
+    bool isDeclaration();
+    void setDeclaration(bool dec);
+    
+    int ptrLevel();
+    void setPtr(int ptr);
+    
+    DataType getDataType();
+    void setDataType(DataType dt);
+    
+    int getTypeFlags();
+    void setTypeFlags(int tf);
+    
+    std::string getName();
+    void setName(std::string name);
+    
+    std::string writeDot(std::string prefix);
+private:
+    std::string name = "";
+    bool declaration = false;
+    int ptr = 0;                        // Represents pointer level; if 0, variable is not a pointer
+    DataType dataType = DataType::None;
+    int typeFlags = None;
+};
+
+//The array type
+class AstArrayDec : public AstNode {
+public:
+    explicit AstArrayDec();
+    explicit AstArrayDec(int size);
+    explicit AstArrayDec(int size, DataType dt);
+    
+    int getSize();
+    void setSize(int s);
+    
+    DataType getDataType();
+    void setDataType(DataType dt);
     
     std::string writeDot(std::string prefix = "");
+private:
+    int size = 0;
+    DataType dataType = DataType::None;
 };
 
-//Structure declarations
-class AstStructDec : public AstAttrNode {
-public:
-    explicit AstStructDec() { type = AstType::StructDec; }
-    explicit AstStructDec(std::string n) {
-        type = AstType::StructDec;
-        name = n;
-    }
-    
-    std::string writeDot(std::string prefix = "") { return ""; }
-};
-
-//A struct variable
-class AstStruct : public AstNode {
-public:
-    explicit AstStruct() { type = AstType::Struct; }
-    
-    std::string writeDot(std::string prefix = "") { return ""; }
-    
-    std::string str_name = "";        //Refers to the structure being used
-    std::string var_name = "";        //The name of our structure variable
-};
-
-//A struct access
-class AstStructAcc : public AstStruct {
-public:
-    explicit AstStructAcc() { type = AstType::StructAcc; }
-    std::string writeDot(std::string prefix = "") { return ""; }
-};
-
-//A struct modification
-class AstStructMod : public AstStruct {
-public:
-    explicit AstStructMod() { type = AstType::StructMod; }
-    std::string writeDot(std::string prefix = "") { return ""; }
-};
-
-//The base class for conditionals
+// Represents a conditional statement
 class AstCond : public AstNode {
 public:
-    CondOp get_op() { return op; }
-    void set_op(CondOp o) { op = o; }
-    
-    AstNode *lval;
-    AstNode *rval;
-private:
-    CondOp op;
+    explicit AstCond();
+    std::string writeDot(std::string prefix);
 };
 
-//The If keyword
-class AstIf : public AstCond {
+// Represents a generic conditional-based statement
+class AstCondStm : public AstNode {
 public:
-    AstIf() { type = AstType::If; }
-    std::string writeDot(std::string prefix = "") { return ""; }
+    explicit AstCondStm();
+    explicit AstCondStm(AstCond *cond);
+    std::string writeDot(std::string prefix);
+protected:
+    AstCond *cond;
+    std::string condName = "";
 };
 
-class AstElif : public AstCond {
+// Represents a while loop
+class AstWhile : public AstCondStm {
 public:
-    AstElif() { type = AstType::Elif; }
-    std::string writeDot(std::string prefix = "") { return ""; }
+    explicit AstWhile(AstCond *cond) : AstCondStm(cond) {
+        type = AstType::While;
+        condName = "While";
+    }
 };
 
-//The else keyword
+// Represents an if statement
+class AstIf : public AstCondStm {
+public:
+    explicit AstIf(AstCond *cond) : AstCondStm(cond) {
+        type = AstType::If;
+        condName = "If";
+    }
+};
+
+// Represents an elif statement
+class AstElif : public AstCondStm {
+public:
+    explicit AstElif(AstCond *cond) : AstCondStm(cond) {
+        type = AstType::Elif;
+        condName = "Elif";
+    }
+};
+
+// Represents an else statement
 class AstElse : public AstNode {
 public:
-    AstElse() { type = AstType::Else; }
-    std::string writeDot(std::string prefix = "") { return ""; }
-};
-
-//The while keyword
-class AstWhile : public AstCond {
-public:
-    AstWhile() { type = AstType::While; }
-    std::string writeDot(std::string prefix = "") { return ""; }
+    explicit AstElse();
+    std::string writeDot(std::string prefix);
 };
 
 //The loop keyword
 class AstLoop : public AstNode {
 public:
     AstLoop() { type = AstType::Loop; }
-    std::string writeDot(std::string prefix = "") { return ""; }
+    std::string writeDot(std::string prefix);
     
+private:
     AstNode *param;
     std::string i_var = "";
 };
 
-//The foreach keyword
-class AstForEach : public AstAttrNode {
+// Represents a for-each loop
+class AstForEach : public AstNode {
 public:
     AstForEach() { type = AstType::ForEach; }
-    std::string writeDot(std::string prefix = "") { return ""; }
+    std::string writeDot(std::string prefix = "");
     
     std::string i_var = "";        //Index
     std::string r_var = "";        //Range
     std::string i_var_in = "";    //Internal index counter
 };
 
-//Variable declaration
-//initial value go as children
-class AstVarDec : public AstAttrNode {
+// Represents a byte literal (otherwise known as a hex value)
+class AstByte : public AstNode {
 public:
-    explicit AstVarDec() { type = AstType::VarDec; }
-    explicit AstVarDec(std::string n) {
-        type = AstType::VarDec;
-        name = n;
-    }
-    
-    std::string writeDot(std::string prefix = "");
-    
-    DataType get_type() { return dtype; }
-    void set_type(DataType t) { dtype = t; }
-protected:
-    DataType dtype;
-};
-
-//Variable assignment/operation
-class AstVarAssign : public AstVarDec {
-public:
-    explicit AstVarAssign() { type = AstType::VarAssign; }
-    explicit AstVarAssign(std::string n) {
-        type = AstType::VarAssign;
-        name = n;
-    }
-    
-    std::string writeDot(std::string prefix = "");
-};
-
-//Represents a math operation
-class AstMath : public AstNode {
-public:
-    explicit AstMath() { type = AstType::Math; }
-    std::string writeDot(std::string prefix = "");
-};
-
-//The ID type
-class AstID : public AstAttrNode {
-public:
-    explicit AstID() { type = AstType::Id; }
-    explicit AstID(std::string n) {
-        type = AstType::Id;
-        name = n;
-    }
-    
-    std::string writeDot(std::string prefix = "");
-};
-
-//The Integer type
-class AstInt : public AstNode {
-public:
-    explicit AstInt() { type = AstType::Int; }
-    explicit AstInt(int i) {
-        type = AstType::Int;
-        no = i;
-    }
-    
-    int get_val() { return no; }
-    void set_val(int i) { no = i; }
-    
-    std::string writeDot(std::string prefix = "");
-    
+    explicit AstByte(unsigned char val);
+    std::string writeDot(std::string prefix);
 private:
-    int no = 0;
+    unsigned char val = 0;
 };
 
-//The hex type
-class AstHex : public AstNode {
-public:
-    explicit AstHex() { type = AstType::Hex; }
-    explicit AstHex(unsigned short b) {
-        type = AstType::Hex;
-        byte = b;
-    }
-    
-    unsigned short get_val() { return byte; }
-    void set_val(unsigned short b) { byte = b; }
-    
-    void set_val(std::string str) {
-        std::stringstream ss(str);
-        ss.flags(std::ios_base::hex);
-        ss >> byte;
-    }
-    
-    std::string writeDot(std::string prefix = "") { return ""; }
-    
-private:
-    unsigned short byte;
-};
-
-//The char type
+// Represents a character literal
 class AstChar : public AstNode {
 public:
-    explicit AstChar() { type = AstType::Char; }
-    explicit AstChar(char c) {
-        type = AstType::Char;
-        ch = c;
-    }
-    
-    char get_val() { return ch; }
-    void set_val(char c) { ch = c; }
-    
-    std::string writeDot(std::string prefix = "") { return ""; }
+    explicit AstChar(char val);
+    std::string writeDot(std::string prefix);
 private:
-    char ch = 0;
+    char val = 0;
 };
 
-//The bool types
-class AstBool : public AstNode {
+// Represents an octal literal
+class AstOctal : public AstNode {
 public:
-    explicit AstBool() { type = AstType::Bool; }
-    explicit AstBool(bool b) {
-        type = AstType::Bool;
-        val = b;
-    }
-    
-    bool get_val() { return val; }
-    void set_val(bool b) { val = b; }
-    
-    std::string writeDot(std::string prefix = "") { return ""; }
-private:
-    bool val = false;
-};
-
-//The float type
-class AstFloat : public AstNode {
-public:
-    explicit AstFloat() { type = AstType::Float; }
-    explicit AstFloat(float n) {
-        type = AstType::Float;
-        no = n;
-    }
-    
-    float get_val() { return no; }
-    void set_val(float n) { no = n; }
-    
-    std::string writeDot(std::string prefix = "") { return ""; }
-protected:
-    float no = 0;
-};
-
-//The int-64 type
-//Holds two integer types
-class AstInt64 : public AstVarDec {
-public:
-    explicit AstInt64() { 
-        type = AstType::Int64;
-        dtype = DataType::Int64;
-    }
-    
-    std::string writeDot(std::string prefix = "") { return ""; }
-};
-
-//The int-128 type
-//Tells the compiler to use SSE extensions (with integers)
-class AstInt128 : public AstVarDec {
-public:
-    explicit AstInt128() { 
-        type = AstType::Int128;
-        dtype = DataType::Int128;
-    }
-    
-    std::string writeDot(std::string prefix = "") { return ""; }
-};
-
-//The int-256 type
-//Tells the compiler to use AVX extensions (with integers)
-class AstInt256 : public AstVarDec {
-public:
-    explicit AstInt256() {
-        type = AstType::Int256;
-        dtype = DataType::Int256;
-    }
-    
-    std::string writeDot(std::string prefix = "") { return ""; }
-};
-
-//The float-64 type
-//Holds two floating-point values
-class AstFloat64 : public AstVarDec {
-public:
-    explicit AstFloat64() { 
-        type = AstType::Float64;
-        dtype = DataType::Float64;
-    }
-    
-    std::string writeDot(std::string prefix = "") { return ""; }
-};
-
-//The float-80 type
-//This tells the compiler to use the FPU unit, which handles
-// 80-bit types (hence the name)
-class AstFloat80: public AstFloat {
-public:
-    explicit AstFloat80() { type = AstType::Float80; }
-    explicit AstFloat80(double n) {
-        type = AstType::Float80;
-        no = n;
-    }
-    
-    std::string writeDot(std::string prefix = "") { return ""; }
-};
-
-//The float-128 type
-//Tells the compiler to use SSE extensions
-class AstFloat128 : public AstVarDec {
-public:
-    explicit AstFloat128() { 
-        type = AstType::Float128;
-        dtype = DataType::Float128;
-    }
-    
-    std::string writeDot(std::string prefix = "") { return ""; }
-};
-
-//The float-256 type
-//Tells the compiler to use AVX extensions
-class AstFloat256 : public AstVarDec {
-public:
-    explicit AstFloat256() {
-        type = AstType::Float256;
-        dtype = DataType::Float256;
-    }
-    
-    std::string writeDot(std::string prefix = "") { return ""; }
-};
-
-//The string type
-class AstString : public AstNode {
-public:
-    explicit AstString() { type = AstType::Str; }
-    explicit AstString(std::string s) {
-        type = AstType::Str;
-        val = s;
-    }
-    
-    std::string get_val() { return val; }
-    void set_val(std::string s) { val = s; }
-    
-    std::string writeDot(std::string prefix = "");
+    explicit AstOctal(std::string val);
+    std::string writeDot(std::string prefix);
 private:
     std::string val = "";
 };
 
-//Mutli-variable assignment
-class AstMultiVarAssign : public AstNode {
+// Represents an integer
+class AstInt : public AstNode {
 public:
-    explicit AstMultiVarAssign() { 
-        type = AstType::MultiVarAssign;
-    }
+    explicit AstInt(int val);
+    std::string writeDot(std::string prefix);
     
-    std::string writeDot(std::string prefix = "") { return ""; }
-    
-    std::vector<AstID *> vars;
-};
-
-//The array type
-class AstArrayDec : public AstVarDec {
-public:
-    explicit AstArrayDec() { type = AstType::ArrayDec; }
-    
-    int get_size() { return size; }
-    void set_size(int s) { size = s; }
-    
-    std::string writeDot(std::string prefix = "") { return ""; }
+    int getVal() { return val; }
 private:
-    int size;
+    int val = 0;
 };
 
-//Array access
-class AstArrayAcc : public AstVarDec {
+// Represents a float
+class AstFloat : public AstNode {
 public:
-    explicit AstArrayAcc() { type = AstType::ArrayAccess; }
-    explicit AstArrayAcc(std::string n) {
-        type = AstType::ArrayAccess;
-        name = n;
-    }
-    
-    std::string writeDot(std::string prefix = "") { return ""; }
+    explicit AstFloat(float val);
+    std::string writeDot(std::string prefix);
+private:
+    float val = 0;
 };
 
-//Array assignment
-class AstArrayAssign : public AstVarDec {
+// Represents an ID
+class AstId : public AstNode {
 public:
-    explicit AstArrayAssign() { type = AstType::ArrayAssign; }
-    explicit AstArrayAssign(std::string n) {
-        type = AstType::ArrayAssign;
-        name = n;
-    }
+    explicit AstId(std::string val);
+    std::string writeDot(std::string prefix);
     
-    std::string writeDot(std::string prefix = "") { return ""; }
+    std::string getVal() { return val; }
+private:
+    std::string val = "";
+};
+
+// Represents a memory reference
+class AstRef : public AstNode {
+public:
+    explicit AstRef(std::string val);
+    std::string writeDot(std::string prefix);
     
-    AstNode *index;
+    std::string getVal() { return val; }
+private:
+    std::string val = "";
+};
+
+// Represents a pointer to memory
+class AstPtr : public AstNode {
+public:
+    explicit AstPtr(std::string val, int ptrLevel);
+    std::string writeDot(std::string prefix);
+    
+    std::string getVal() { return val; }
+    int getPtr() { return ptrLevel; }
+private:
+    std::string val = "";
+    int ptrLevel = 0;
+};
+
+// Represents a string
+class AstString : public AstNode {
+public:
+    explicit AstString(std::string val);
+    std::string writeDot(std::string prefix);
+    
+    std::string getVal() { return val; }
+private:
+    std::string val = "";
+};
+
+// Represents a math operator
+class AstMathOp : public AstNode {
+public:
+    explicit AstMathOp(MathType op);
+    std::string writeDot(std::string prefix);
+    
+    MathType getOpType() { return op; }
+private:
+    MathType op = MathType::None;
+};
+
+// Represents a comparison operator
+class AstCmpOp : public AstNode {
+public:
+    explicit AstCmpOp(CmpType op);
+    std::string writeDot(std::string prefix);
+private:
+    CmpType op = CmpType::None;
 };
 

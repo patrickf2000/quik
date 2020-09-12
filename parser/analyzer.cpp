@@ -5,21 +5,21 @@
 
 //Scans the tree for variable declarations
 void QkParser::find_variables(AstNode *top) {
-    if (top->type != AstType::Scope) {
+    if (top->getType() != AstType::Scope) {
         return;
     }
     
     AstScope *scope = static_cast<AstScope *>(top);
 
-    for (auto node : top->children) {
-        switch (node->type) {
-            case AstType::FuncDec: {
-                AstFuncDec *fd = static_cast<AstFuncDec *>(node);
-                AstScope *next = static_cast<AstScope *>(fd->children.at(0));
-                next->vars = scope->vars;
+    for (auto node : top->getChildren()) {
+        switch (node->getType()) {
+            case AstType::Func: {
+                AstFunc *fd = static_cast<AstFunc *>(node);
+                AstScope *next = static_cast<AstScope *>(fd->getChildren().at(0));
+                next->setVars(scope->getVars());
                 
-                for (auto v : fd->args) {
-                    next->vars[v.name] = v;
+                for (auto v : fd->getArgs()) {
+                    next->addVar(v);
                 }
                 
                 find_variables(next);
@@ -30,42 +30,45 @@ void QkParser::find_variables(AstNode *top) {
             case AstType::Else:
             case AstType::While: {
                 AstScope *s = new AstScope;
-                s->vars = scope->vars;
-                s->children = node->children;
+                s->setVars(scope->getVars());
+                s->addChildren(node->getChildren());
                 
                 find_variables(s);
-                scope->vars.insert(s->vars.begin(), s->vars.end());
+                //scope->vars.insert(s->vars.begin(), s->vars.end());
+                scope->addVars(s->getVars());
             } break;
             
             case AstType::ForEach: {
                 AstScope *s = new AstScope;
-                s->children = node->children;
+                s->addChildren(node->getChildren());
                 
                 find_variables(s);
-                scope->vars.insert(s->vars.begin(), s->vars.end());
+                //scope->vars.insert(s->vars.begin(), s->vars.end());
+                scope->addVars(s->getVars());
                 
                 AstForEach *fe = static_cast<AstForEach *>(node);
                 Var v;
                 v.name = fe->i_var;
                 v.is_param = false;
                 v.is_array = false;
-                scope->vars[fe->i_var] = v;
+                scope->addVar(v);
             } break;
             
             case AstType::ArrayDec:
-            case AstType::VarDec: {
-                AstVarDec *vd = static_cast<AstVarDec *>(node);
-                auto name = vd->get_name();
+            case AstType::Var: {
+                AstVar *vd = static_cast<AstVar *>(node);
+                if (!vd->isDeclaration()) break;
+                auto name = vd->getName();
                 
-                if (scope->vars.find(name) != scope->vars.end()) {
-                    syntax_error(node->ln, "Duplicate variable declaration.");
+                if (scope->varExists(name)) {
+                    syntax_error(node->getLine(), "Duplicate variable declaration.");
                 }
             
                 Var v;
                 v.name = name;
-                v.type = vd->get_type();
+                v.type = vd->getDataType();
                 v.is_param = false;
-                scope->vars[name] = v;
+                scope->addVar(v);
             } break;
         }
     }
@@ -74,24 +77,25 @@ void QkParser::find_variables(AstNode *top) {
 //Locates variable assignments and assigns the right type to them
 // We also make sure there are no undeclared variables here
 void QkParser::find_assign(AstNode *top, AstScope *scope) {
-    for (auto node : top->children) {
-        switch (node->type) {
-            case AstType::FuncDec: {
-                auto child = node->children.at(0);
+    for (auto node : top->getChildren()) {
+        switch (node->getType()) {
+            case AstType::Func: {
+                auto child = node->getChildren().at(0);
                 auto n_scope = static_cast<AstScope *>(child);
                 find_assign(child, n_scope); 
             } break;
             
             case AstType::ArrayAssign:
             case AstType::ArrayAccess:
-            case AstType::VarAssign: {
-                AstVarDec *va = static_cast<AstVarDec *>(node);
+            case AstType::Var: {
+                AstVar *va = static_cast<AstVar *>(node);
+                if (va->isDeclaration()) break;
             
-                Var v = scope->vars[va->get_name()];
-                va->set_type(v.type);
+                Var v = scope->getVar(va->getName());
+                va->setDataType(v.type);
             } break;
             default: {
-                if (node->children.size() > 0) {
+                if (node->getChildren().size() > 0) {
                     find_assign(node, scope);
                 }
             }
@@ -102,54 +106,57 @@ void QkParser::find_assign(AstNode *top, AstScope *scope) {
 //Finds conditional nodes, and adds end-if blocks
 void QkParser::find_cond(AstNode *top) {
     AstType last_type;
+    auto children = top->getChildren();
 
-    for (int i = 0; i<top->children.size(); i++) {
-        auto node = top->children.at(i);
+    for (int i = 0; i < children.size(); i++) {
+        auto node = children.at(i);
         
-        if (node->type == AstType::FuncDec) {
-            AstScope *next = static_cast<AstScope *>(node->children.at(0));
+        if (node->getType() == AstType::Func) {
+            AstScope *next = static_cast<AstScope *>(node->getChildren().at(0));
             find_cond(next);
-        } else if (node->type == AstType::While) {
+        } else if (node->getType() == AstType::While) {
             find_cond(node);
-        } else if (node->type == AstType::If || node->type == AstType::Elif || node->type == AstType::Else) {
-            if (node->type == AstType::Elif && last_type != AstType::If) {
-                syntax_error(node->ln, "Elif without previous If statement.");
+        } else if (node->getType() == AstType::If || node->getType() == AstType::Elif || node->getType() == AstType::Else) {
+            if (node->getType() == AstType::Elif && last_type != AstType::If) {
+                syntax_error(node->getLine(), "Elif without previous If statement.");
             }
         
-            if (node->type == AstType::If || node->type == AstType::Elif) {
+            if (node->getType() == AstType::If || node->getType() == AstType::Elif) {
                 find_cond(node);
             }
         
-            if (i+1 >= top->children.size()) {
+            if (i+1 >= top->getChildren().size()) {
                 AstNode *end = new AstNode(AstType::EndIf);
-                top->children.insert(top->children.begin()+i+1, end);
+                //top->children.insert(top->getChildren().begin()+i+1, end);
+                top->addChild(end, i+1);
                 
                 continue;
             }
             
-            auto next = top->children.at(i+1);
-            if (next->type != AstType::Elif && next->type != AstType::Else) {
+            auto next = top->getChildren().at(i+1);
+            if (next->getType() != AstType::Elif && next->getType() != AstType::Else) {
                 AstNode *end = new AstNode(AstType::EndIf);
-                top->children.insert(top->children.begin()+i+1, end);
+                //top->children.insert(top->getChildren().begin()+i+1, end);
+                top->addChild(end, i+1);
             }
         }
         
-        last_type = node->type;
+        last_type = node->getType();
     }
 }
 
 //Scans the tree and adds empty return statements to
 // functions that don't have any (needed for the backend)
 void QkParser::check_return(AstNode *top) {
-    for (auto node : top->children) {
-        if (node->type == AstType::FuncDec && node->children.size() > 0) {
-            auto scope = node->children.at(0);
-            auto children = scope->children;
+    for (auto node : top->getChildren()) {
+        if (node->getType() == AstType::Func && node->getChildren().size() > 0) {
+            auto scope = node->getChildren().at(0);
+            auto children = scope->getChildren();
             auto last = children.at(children.size()-1);
             
-            if (last->type != AstType::Return) {
+            if (last->getType() != AstType::Return) {
                 AstReturn *ret = new AstReturn;
-                scope->children.push_back(ret);
+                scope->addChild(ret);
             }
         }
     }
