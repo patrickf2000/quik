@@ -140,7 +140,7 @@ LtacFuncCall *LTAC_Builder::build_func_call(AstNode *node) {
 
 //Builds a return statement
 void LTAC_Builder::build_ret(AstNode *node) {
-    auto rnode = new LtacNode(ltac::Ret);
+    auto rnode = new LtacRet;
     file->addCode(rnode);
     
     //Build any return statement values

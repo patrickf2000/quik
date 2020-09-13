@@ -38,6 +38,11 @@ std::string LtacFunc::printInstr() {
     return content;
 }
 
+// Build a return statement
+std::string LtacRet::printInstr() {
+    return "  ret\n";
+}
+
 // Prints a string data element
 std::string LtacString::printInstr() {
     return name + " .string \"" + val + "\"";

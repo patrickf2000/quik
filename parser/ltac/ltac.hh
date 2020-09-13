@@ -151,6 +151,13 @@ public:
     bool is_extern = false;
 };
 
+// Function return
+class LtacRet : public LtacNode {
+public:
+    explicit LtacRet() { type = ltac::Ret; }
+    std::string printInstr();
+};
+
 //Variable assignment/declaration/operation
 class LtacVar : public LtacNode {
 public:
