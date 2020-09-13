@@ -43,7 +43,7 @@ void LTAC_Builder::build_var_assign(AstNode *node) {
     auto lval = convert_ast_var(val);
     var->children.push_back(lval);
     
-    file->code->children.push_back(var);
+    file->addCode(var);
 }
 
 //Build a multi-var variable assignment
@@ -62,7 +62,7 @@ void LTAC_Builder::build_multi_var_assign(AstNode *node) {
         fc->ret_dest.push_back(lvar);
     }
     
-    file->code->children.push_back(fc);
+    file->addCode(fc);
 }
 
 //Converts an AST node to an LTAC node
@@ -192,7 +192,7 @@ void LTAC_Builder::build_vector_dec(AstVarAssign *va) {
         vector->children.push_back(node);
     }
     
-    file->code->children.push_back(vector);
+    file->addCode(vector);
 }
 
 

@@ -82,18 +82,6 @@ public:
     std::vector<LtacNode *> children;
 };
 
-//The base class for the data section
-class LtacDataSec : public LtacNode {
-public:
-    explicit LtacDataSec() { node_type = LtacType::Data; }
-};
-
-//The base class for the for code section
-class LtacCodeSec : public LtacNode {
-public:
-    explicit LtacCodeSec() { node_type = LtacType::Code; }
-};
-
 //This is the base class for the file
 class LtacFile : public LtacNode {
 public:
@@ -106,10 +94,27 @@ public:
         name = n;
     }
     
+    std::vector<LtacNode *> getData() {
+        return data;
+    }
+    
+    void addData(LtacNode *data) {
+        this->data.push_back(data);
+    }
+    
+    std::vector<LtacNode *> getCode() {
+        return code;
+    }
+    
+    void addCode(LtacNode *code) {
+        this->code.push_back(code);
+    }
+    
     std::string name = "";
     
-    LtacDataSec *data;
-    LtacCodeSec *code;
+private:
+    std::vector<LtacNode *> data;
+    std::vector<LtacNode *> code;
 };
 
 //Labels

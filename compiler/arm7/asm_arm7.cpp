@@ -1,8 +1,8 @@
 #include "asm_arm7.hh"
 
 //Build the data section
-void Asm_Arm7::build_data(LtacDataSec *data) {
-	for (auto node : data->children) {
+void Asm_Arm7::buildData(LtacFile *file) {
+	for (auto node : file->getData()) {
 		switch (node->type) {
 			case ltac::String: {
 				auto str = static_cast<LtacString *>(node);
@@ -21,8 +21,8 @@ void Asm_Arm7::build_data(LtacDataSec *data) {
 }
 
 //Build the code section
-void Asm_Arm7::build_code(LtacCodeSec *code) {
-	for (auto ln : code->children) {
+void Asm_Arm7::buildCode(LtacFile *file) {
+	for (auto ln : file->getCode()) {
 		switch (ln->type) {
 			case ltac::Func: build_func(ln); break;
 			case ltac::FuncCall: build_func_call(ln); break;

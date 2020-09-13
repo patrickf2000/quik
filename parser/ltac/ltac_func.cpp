@@ -49,7 +49,7 @@ LtacFunc *LTAC_Builder::build_func(AstNode *node, bool is_extern) {
     
     //Start building
     auto l_fd = new LtacFunc(fn_name);
-    file->code->children.push_back(l_fd);
+    file->addCode(l_fd);
     l_fd->is_global = fd->is_global;
     
     //If its extern, build that
@@ -141,7 +141,7 @@ LtacFuncCall *LTAC_Builder::build_func_call(AstNode *node) {
 //Builds a return statement
 void LTAC_Builder::build_ret(AstNode *node) {
     auto rnode = new LtacNode(ltac::Ret);
-    file->code->children.push_back(rnode);
+    file->addCode(rnode);
     
     //Build any return statement values
     for (auto arg : node->children) {

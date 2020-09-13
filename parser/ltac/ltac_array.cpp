@@ -18,7 +18,7 @@ void LTAC_Builder::build_array_dec(AstNode *node) {
         l_array->children.push_back(node);
     }
     
-    file->code->children.push_back(l_array);
+    file->addCode(l_array);
     
     //Save the array to the variables array
     Var v;

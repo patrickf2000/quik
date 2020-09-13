@@ -14,8 +14,8 @@ std::string var_regs[] = {
 };
 
 //Build the data section
-void Asm_x64::build_data(LtacDataSec *data) {
-	for (auto ln : data->children) {
+void Asm_x64::buildData(LtacFile *file) {
+	for (auto ln : file->getData()) {
 		switch (ln->type) {
 			//Floats
 			case ltac::Float: {
@@ -35,8 +35,8 @@ void Asm_x64::build_data(LtacDataSec *data) {
 }
 
 //Build the code section
-void Asm_x64::build_code(LtacCodeSec *code) {
-	for (auto ln : code->children) {
+void Asm_x64::buildCode(LtacFile *file) {
+	for (auto ln : file->getCode()) {
 		switch (ln->type) {
 			case ltac::Label: {
 				auto label = static_cast<LtacLabel *>(ln);

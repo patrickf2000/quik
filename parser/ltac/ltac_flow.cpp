@@ -36,17 +36,17 @@ void LTAC_Builder::build_while(AstNode *node) {
     //Jump to the comparison label
     auto jmp = new LtacJmp;
     jmp->dest = cmp_lbl;
-    file->code->children.push_back(jmp);
+    file->addCode(jmp);
 
     auto lbl = new LtacLabel(top_lbl);
-    file->code->children.push_back(lbl);
+    file->addCode(lbl);
 
     //Assemble the body
     assemble(node);
 
     //Insert the comparison label
     lbl = new LtacLabel(cmp_lbl);
-    file->code->children.push_back(lbl);
+    file->addCode(lbl);
 
     //Build the comparison
     build_cmp(node, true);
@@ -80,11 +80,11 @@ void LTAC_Builder::build_loop(AstNode *node) {
     ivar->d_type = DataType::Int;
     ivar->children.push_back(new LtacInt(0));
     
-    file->code->children.push_back(ivar);
+    file->addCode(ivar);
     
     //Generate the top label
     auto lbl = new LtacLabel(top_lbl);
-    file->code->children.push_back(lbl);
+    file->addCode(lbl);
     
     //Assemble the body
     assemble(node);
@@ -110,22 +110,22 @@ void LTAC_Builder::build_loop(AstNode *node) {
     }
     
     ivar2->children.push_back(math);
-    file->code->children.push_back(ivar2);
+    file->addCode(ivar2);
 
     //Insert the comparison label
     lbl = new LtacLabel(cmp_lbl);
-    file->code->children.push_back(lbl);
+    file->addCode(lbl);
 
     //Build the comparison
     auto cmp = new LtacICmp;
     cmp->lval = ivar;
     cmp->rval = convert_ast_var(loop->param);
-    file->code->children.push_back(cmp);
+    file->addCode(cmp);
     
     auto jmp = new LtacJmp;
     jmp->op = Operator::Less;
     jmp->dest = top_lbl;
-    file->code->children.push_back(jmp);
+    file->addCode(jmp);
 }
 
 //Builds conditional statements
@@ -159,7 +159,7 @@ void LTAC_Builder::build_cmp(AstNode *node, bool is_loop) {
     //Set everything
     lcmp->lval = lval;
     lcmp->rval = rval;
-    file->code->children.push_back(lcmp);
+    file->addCode(lcmp);
     
     //Add the comparison
     if (is_loop)
@@ -187,9 +187,9 @@ void LTAC_Builder::build_cond_cmp(AstCond *cmp) {
     
     labels.pop();
     
-    file->code->children.push_back(jmp);
+    file->addCode(jmp);
     assemble(cmp);
-    file->code->children.push_back(default_jmp);
+    file->addCode(default_jmp);
 }
 
 //Builds a loop-style conditional
@@ -208,6 +208,6 @@ void LTAC_Builder::build_loop_cmp(AstCond *cmp) {
         case CondOp::LessEq: jmp->op = Operator::LessEq; break;
     }
     
-    file->code->children.push_back(jmp);
+    file->addCode(jmp);
 }
 

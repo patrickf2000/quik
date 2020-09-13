@@ -3,6 +3,11 @@
 
 #include "ltac.hh"
 
+// ======================================================
+// LtacFile-> The base of the LTAC IR
+
+// ======================================================
+// Print instructions
 std::string code2str(LtacNode *code_ln, bool child=false) {
     std::string content = "";
 
@@ -197,7 +202,7 @@ std::string ltac2str(LtacFile *file) {
     content += ".data\n";
     
     //Print the data
-    for (auto code_ln : file->data->children) {
+    for (auto code_ln : file->getData()) {
         switch (code_ln->type) {
             //Floats
             case ltac::Float: {
@@ -219,7 +224,7 @@ std::string ltac2str(LtacFile *file) {
     content += "\n.code\n";
     
     //Print the code
-    for (auto code_ln : file->code->children) {
+    for (auto code_ln : file->getCode()) {
         content += code2str(code_ln);
     }
     

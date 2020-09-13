@@ -11,13 +11,13 @@ void AsmGen::write(bool x86) {
 		writer << ".intel_syntax noprefix" << std::endl;
 	writer << ".data" << std::endl;
 	
-	build_data(file->data);
+	buildData(file);
 	
 	writer << std::endl;
 	writer << ".text" << std::endl;
 	writer << std::endl;
 	
-	build_code(file->code);
+	buildCode(file);
 	
 	writer << std::endl;
 	writer.close();

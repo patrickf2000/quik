@@ -27,6 +27,7 @@ set(PARSER_SRC
 	parser/ltac/ltac_flow.cpp
 	parser/ltac/ltac_func.cpp
 	parser/ltac/ltac_vars.cpp
+    parser/ltac/printer.cpp
 )
 
 set(COMPILER_SRC

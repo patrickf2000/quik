@@ -4,12 +4,6 @@
 LtacFile *LTAC_Builder::build_file(AstNode *top) {
     file = new LtacFile("out");
     
-    auto data = new LtacDataSec;
-    auto code = new LtacCodeSec;
-    
-    file->data = data;
-    file->code = code;
-    
     assemble(top);
     
     return file;
@@ -47,8 +41,8 @@ void LTAC_Builder::assemble(AstNode *top) {
             case AstType::Return: build_ret(node); break;
             
             case AstType::FuncCall: {
-                auto l_fc = build_func_call(node);
-                file->code->children.push_back(l_fc);
+                auto fc = build_func_call(node);
+                file->addCode(fc);
             } break;
             
             //Variables
@@ -81,7 +75,7 @@ void LTAC_Builder::assemble(AstNode *top) {
                     assemble(node);
                 
                 auto lbl = new LtacLabel(name);
-                file->code->children.push_back(lbl);
+                file->addCode(lbl);
             } break;
             
             case AstType::EndIf: {
@@ -89,7 +83,7 @@ void LTAC_Builder::assemble(AstNode *top) {
                 end_lbls.pop();
                 
                 auto lbl = new LtacLabel(name);
-                file->code->children.push_back(lbl);
+                file->addCode(lbl);
             } break;
             
             //Loops
@@ -119,7 +113,7 @@ LtacNode *LTAC_Builder::build_string(AstNode *node) {
     
     dec_strings[lstr->val] = lstr->name;
 
-    file->data->children.push_back(lstr);
+    file->addData(lstr);
     return lstr;
 }
 
@@ -141,7 +135,7 @@ LtacNode *LTAC_Builder::build_float(AstNode *node) {
     
     dec_flt[val] = l_flt->name;
     
-    file->data->children.push_back(l_flt);
+    file->addData(l_flt);
     return l_flt;
 }
 

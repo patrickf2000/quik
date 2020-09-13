@@ -15,6 +15,6 @@ protected:
 	bool pic = false;
 	std::ofstream writer;
 	
-	virtual void build_data(LtacDataSec *data) {}
-	virtual void build_code(LtacCodeSec *code) {}
+	virtual void buildData(LtacFile *file) {}
+	virtual void buildCode(LtacFile *file) {}
 };
