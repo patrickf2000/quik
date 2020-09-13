@@ -76,6 +76,10 @@ class LtacNode {
 public:
     explicit LtacNode() {}
     explicit LtacNode(ltac t) { type = t; }
+    
+    virtual std::string printInstr() {
+        return "";
+    }
 
     LtacType node_type;
     ltac type = ltac::None;        //Because most nodes are code/instruction nodes, we want this
@@ -126,6 +130,8 @@ public:
         name = n;
     }
     
+    std::string printInstr();
+    
     std::string name = "";
 };
 
@@ -137,6 +143,8 @@ public:
         type = ltac::Func;
         name = n;
     }
+    
+    std::string printInstr();
 
     int stack_size = 0;
     bool is_global = false;
@@ -212,6 +220,8 @@ public:
         val = v;
     }
     
+    std::string printInstr();
+    
     std::string name = "";
     std::string val = "";
 };
@@ -277,4 +287,5 @@ public:
 
 //Useful functions
 void print_ltac(LtacFile *file);
+void printLtac(LtacFile *file, std::string output);
 

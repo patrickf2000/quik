@@ -18,7 +18,7 @@ int main(int argc, char *argv[]) {
     LTAC_Builder *builder = new LTAC_Builder;
     LtacFile *file = builder->build_file(top);
     
-    print_ltac(file);
+    printLtac(file, "ltac.asm");
     
     delete builder;
     delete file;

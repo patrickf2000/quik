@@ -4,9 +4,6 @@
 #include "ltac.hh"
 
 // ======================================================
-// LtacFile-> The base of the LTAC IR
-
-// ======================================================
 // Print instructions
 std::string code2str(LtacNode *code_ln, bool child=false) {
     std::string content = "";
